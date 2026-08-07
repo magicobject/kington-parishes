@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Churches — Kington Parishes</title>
+<meta name="description" content="The five churches of Kington Parishes: St Mary's Kington, St Peter's Titley, St Stephen's Old Radnor, St Mary's Kinnerton, and St Thomas à Becket Huntington.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Kington Parishes — shared styles
+   Palette: limestone / hill-mist slate / old brass / heather / ink
+   Type: Spectral (display) + Public Sans (body) */
+
+:root {
+  --limestone: #EDE9DF;
+  --parchment: #F8F5EE;
+  --slate: #46596A;
+  --slate-dark: #2E3C48;
+  --brass: #A8813C;
+  --brass-dark: #7C5E28;
+  --heather: #7C5F72;
+  --heather-dark: #5E4657;
+  --ink: #262521;
+  --ink-soft: #4A473F;
+  --line: rgba(38,37,33,0.16);
+  --radius: 4px;
+  --max: 1080px;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
+
+body {
+  margin: 0;
+  background: var(--limestone);
+  color: var(--ink);
+  font-family: 'Public Sans', sans-serif;
+  font-size: 19px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, .display { font-family: 'Spectral', serif; color: var(--ink); margin: 0 0 0.5em; line-height: 1.2; }
+p { margin: 0 0 1em; }
+img { max-width: 100%; height: auto; display: block; }
+
+a { color: var(--brass-dark); text-underline-offset: 3px; }
+a:hover { color: var(--slate-dark); }
+a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
+  outline: 3px solid var(--heather);
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: auto;
+  background: var(--slate-dark);
+  color: #fff;
+  padding: 12px 20px;
+  z-index: 100;
+  border-radius: var(--radius);
+}
+.skip-link:focus {
+  left: 16px;
+  top: 16px;
+}
+
+.wrap { max-width: var(--max); margin: 0 auto; padding: 0 28px; }
+
+/* ---------- Header / Nav ---------- */
+header.site {
+  background: var(--slate-dark);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.nav-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 16px 28px;
+  max-width: var(--max);
+  margin: 0 auto;
+  flex-wrap: wrap;
+}
+.brand {
+  font-family: 'Spectral', serif;
+  font-weight: 600;
+  font-size: 1.3rem;
+  color: #F8F5EE;
+  text-decoration: none;
+}
+nav.links {
+  display: flex;
+  gap: 22px;
+  flex-wrap: wrap;
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+nav.links a {
+  color: #D6D0BF;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  padding-bottom: 3px;
+}
+nav.links a:hover, nav.links a[aria-current="page"] {
+  color: #fff;
+  border-color: var(--brass);
+}
+.btn-donate {
+  background: var(--brass);
+  color: #2E2610;
+  font-weight: 700;
+  padding: 9px 18px;
+  border-radius: var(--radius);
+  text-decoration: none;
+  font-size: 0.88rem;
+}
+.btn-donate:hover { background: #C09A4E; color: #2E2610; }
+
+/* ---------- Page header banner (non-home pages) ---------- */
+.page-header {
+  background: var(--slate-dark);
+  padding: 56px 0 46px;
+  position: relative;
+  overflow: hidden;
+}
+.page-header .wrap { position: relative; z-index: 1; }
+.page-header .kicker { color: #C9BEA0; }
+.page-header h1 { color: #F8F5EE; font-size: clamp(1.9rem, 4vw, 2.6rem); max-width: 22ch; }
+.page-header p.lede { color: #C4BFAF; max-width: 52ch; margin-top: 14px; font-size: 1.08rem; }
+.page-header .ridge-watermark {
+  position: absolute;
+  left: 0; right: 0; bottom: -6px;
+  width: 100%; height: 56px;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* ---------- Sections ---------- */
+section { padding: 60px 0; }
+section.alt { background: var(--parchment); }
+section + section { border-top: 1px solid var(--line); }
+
+.kicker {
+  display: inline-block;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  color: var(--heather-dark);
+  margin-bottom: 10px;
+}
+.section-head { max-width: 60ch; margin-bottom: 36px; }
+.section-head h2 { font-size: clamp(1.6rem, 3vw, 2.1rem); font-weight: 600; }
+.section-head p { color: var(--ink-soft); margin-top: 12px; }
+
+/* ---------- Cards ---------- */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 22px;
+}
+.card {
+  background: var(--parchment);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 26px 24px;
+  box-shadow: 0 1px 0 rgba(38,37,33,0.03);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 26px -16px rgba(38,37,33,0.28);
+}
+.card h3 { font-size: 1.25rem; font-weight: 600; }
+.card p { color: var(--ink-soft); margin: 10px 0 14px; }
+.card .meta { font-size: 0.9rem; color: var(--slate); font-weight: 600; }
+.card .tags { font-size: 0.82rem; color: var(--brass-dark); font-weight: 700; margin-bottom: 8px; }
+
+.icon-badge {
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  background: var(--limestone);
+  border: 1px solid var(--line);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 16px;
+}
+.icon-badge svg { width: 22px; height: 22px; }
+
+.reveal { opacity: 0; transform: translateY(14px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.in { opacity: 1; transform: translateY(0); }
+
+.noticeboard-card {
+  background: var(--parchment);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.noticeboard-card .thumb {
+  aspect-ratio: 4 / 3;
+  background: linear-gradient(135deg, var(--heather) 0%, var(--slate) 100%);
+  display: flex; align-items: center; justify-content: center;
+}
+.noticeboard-card .thumb svg { width: 44px; height: 44px; opacity: 0.9; }
+.noticeboard-card .body { padding: 16px 18px 18px; }
+.noticeboard-card h3 { font-size: 1.02rem; font-weight: 600; margin-bottom: 4px; }
+.noticeboard-card .date { font-size: 0.8rem; color: var(--ink-soft); }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-block;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.96rem;
+  padding: 13px 24px;
+  border-radius: var(--radius);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.btn-primary {
+  background: var(--slate);
+  color: #F8F5EE;
+  box-shadow: 0 3px 0 var(--slate-dark);
+}
+.btn-primary:hover { color: #F8F5EE; transform: translateY(-2px); box-shadow: 0 5px 0 var(--slate-dark); }
+.btn-secondary {
+  background: transparent;
+  color: var(--slate-dark);
+  border: 2px solid var(--slate-dark);
+}
+.btn-secondary:hover { background: var(--slate-dark); color: #F8F5EE; }
+
+/* ---------- Safeguarding banner (footer link, not full text everywhere) ---------- */
+.safeguard-strip {
+  background: var(--heather-dark);
+  color: #F3EEEF;
+  padding: 18px 0;
+}
+.safeguard-strip .wrap { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; justify-content: space-between; }
+.safeguard-strip p { margin: 0; font-size: 0.95rem; }
+.safeguard-strip a { color: #fff; font-weight: 700; text-decoration: underline; }
+
+/* ---------- Footer ---------- */
+footer.site {
+  background: var(--slate-dark);
+  color: #C9C3B2;
+  padding: 52px 0 28px;
+}
+footer.site h4 { color: #F8F5EE; font-size: 1.05rem; font-weight: 600; margin-bottom: 12px; }
+footer.site a { color: #C9C3B2; text-decoration: none; }
+footer.site a:hover { color: #fff; }
+.foot-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr 1fr;
+  gap: 30px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+}
+@media (max-width: 700px) { .foot-grid { grid-template-columns: 1fr; } }
+.fine { padding-top: 18px; font-size: 0.82rem; color: #8D8778; }
+
+/* ---------- Ridge SVG (home hero signature) ---------- */
+.ridge-label { font-family: 'Spectral', serif; font-size: 13px; fill: #E7E2D6; }
+
+/* ---------- Utility ---------- */
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+</style>
+<style>
+  .parish {
+    padding: 56px 0;
+    scroll-margin-top: 24px;
+  }
+  .parish + .parish { border-top: 1px solid var(--line); }
+  .parish.alt { background: var(--parchment); }
+  .parish h2 { font-size: clamp(1.6rem, 3vw, 2.1rem); }
+  .parish .dedication { color: var(--brass-dark); font-weight: 700; font-size: 0.92rem; margin-bottom: 6px; }
+  .parish .body-text { max-width: 66ch; color: var(--ink-soft); }
+  .parish .facts {
+    display: flex; gap: 24px; flex-wrap: wrap; margin-top: 20px;
+    font-size: 0.92rem;
+  }
+  .parish .facts div { color: var(--slate); font-weight: 600; }
+  .jump-row {
+    display: flex; gap: 10px; flex-wrap: wrap; margin-top: 24px;
+  }
+  .jump-row a {
+    text-decoration: none; font-size: 0.86rem; font-weight: 700;
+    padding: 7px 14px; border: 1px solid var(--line); border-radius: 100px;
+    color: var(--slate-dark);
+  }
+  .jump-row a:hover { background: var(--slate-dark); color: #fff; border-color: var(--slate-dark); }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site">
+  <div class="nav-row">
+    <a class="brand" href="index.html">Kington Parishes</a>
+    <nav class="links" aria-label="Primary">
+      <a href="index.html">Home</a>
+      <a href="our-churches.html" aria-current="page">Our Churches</a>
+      <a href="services.html">Services &amp; Events</a>
+      <a href="parish-news.html">Parish News</a>
+      <a href="life-events.html">Life Events</a>
+      <a href="get-involved.html">Get Involved</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <a class="btn-donate" href="https://www.parishgiving.org.uk/donate" target="_blank" rel="noopener">Donate Now <span class="visually-hidden">(opens Parish Giving Scheme in a new tab)</span></a>
+  </div>
+</header>
+
+<main id="main">
+
+  <div class="page-header">
+    <svg class="ridge-watermark" viewBox="0 0 1200 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <path d="M0 60 C 100 45, 160 20, 220 30 S 320 70, 380 40 S 480 5, 540 20 S 640 65, 710 45 S 820 10, 880 25 S 980 68, 1040 48 S 1140 15, 1200 35" fill="none" stroke="#B8A98C" stroke-width="2"/>
+    </svg>
+    <div class="wrap">
+      <div class="kicker">Our churches</div>
+      <h1>Five churches, one benefice</h1>
+      <p class="lede">United in faith, fellowship and service — each with its own character, its own pace of worship, and its own place in this landscape.</p>
+      <nav class="jump-row" aria-label="Jump to a church">
+        <a href="#kington">Kington</a>
+        <a href="#titley">Titley</a>
+        <a href="#old-radnor">Old Radnor</a>
+        <a href="#kinnerton">Kinnerton</a>
+        <a href="#huntington">Huntington</a>
+      </nav>
+    </div>
+  </div>
+
+  <article class="parish reveal" id="kington">
+    <div class="wrap">
+      <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#46596A" stroke-width="1.5"><path d="M5 21V11c0-3.87 3.13-7 7-7s7 3.13 7 7v10"/><path d="M5 21h14"/></svg></div>
+      <div class="dedication">St Mary the Virgin, Kington</div>
+      <h2>Kington</h2>
+      <p class="body-text">A regular act of worship every Sunday at 10:00am — normally a Common Worship Order One Service of Holy Communion. We're fortunate to have the services of our organist and a talented choir; the aim behind all our worship is to offer the best we can in thanksgiving, welcoming and engaging while retaining a real sense of awe.</p>
+      <div class="facts">
+        <div>Sundays, 10:00am — Holy Communion</div>
+        <div>Livestreamed</div>
+      </div>
+    </div>
+  </article>
+
+  <article class="parish alt reveal" id="titley">
+    <div class="wrap">
+      <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#46596A" stroke-width="1.5"><path d="M5 21V11c0-3.87 3.13-7 7-7s7 3.13 7 7v10"/><path d="M5 21h14"/></svg></div>
+      <div class="dedication">St Peter's, Titley</div>
+      <h2>Titley</h2>
+      <p class="body-text">A welcoming balance of the traditional and contemporary. Early morning Communion follows Common Worship Order Two, in the language used by Shakespeare and loved by so many; on the third Sunday of the month we use Common Worship Order One. Afterwards, we're normally welcomed by Tony and June at "The Old Priory" next to the church for coffee and fellowship.</p>
+      <p class="body-text" style="margin-top:16px; font-style:italic;">"To create a place of worship that is relevant to life in 21st century England — even somewhere as quiet as Titley."</p>
+      <div class="facts">
+        <div>Third Sunday — Common Worship Order One</div>
+        <div><a href="#">Titley Pilgrim Path walk leaflet</a></div>
+      </div>
+    </div>
+  </article>
+
+  <article class="parish reveal" id="old-radnor">
+    <div class="wrap">
+      <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#46596A" stroke-width="1.5"><path d="M5 21V11c0-3.87 3.13-7 7-7s7 3.13 7 7v10"/><path d="M5 21h14"/></svg></div>
+      <div class="dedication">St Stephen's, Old Radnor</div>
+      <h2>Old Radnor</h2>
+      <p class="body-text">Worship follows Common Worship Order One for Communion Services. We're privileged to possess an extremely fine organ, with the oldest free-standing organ case in the UK. Ruth, our talented organist (shared with Kinnerton), leads the singing. On the third Sunday, our evening worship — "Junior Praise" — is less formal and designed to be relevant to the young and young at heart.</p>
+      <div class="facts">
+        <div>Third Sunday evening — Junior Praise</div>
+        <div>Home of the UK's oldest free-standing organ case</div>
+      </div>
+    </div>
+  </article>
+
+  <article class="parish alt reveal" id="kinnerton">
+    <div class="wrap">
+      <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#46596A" stroke-width="1.5"><path d="M5 21V11c0-3.87 3.13-7 7-7s7 3.13 7 7v10"/><path d="M5 21h14"/></svg></div>
+      <div class="dedication">St Mary's, Kinnerton</div>
+      <h2>Kinnerton</h2>
+      <p class="body-text">A very small church down in the Radnor Valley, surrounded by hills, firmly over the border. Ring the bell to call our handful of worshippers to church, and you can hear the ewes and lambs just over the churchyard wall — handy for praying for the farm when you can hear it going on all around you. We are small, but there is life here.</p>
+      <div class="facts">
+        <div><a href="#">Kinnerton 5-mile route map</a></div>
+      </div>
+    </div>
+  </article>
+
+  <article class="parish reveal" id="huntington">
+    <div class="wrap">
+      <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#46596A" stroke-width="1.5"><path d="M5 21V11c0-3.87 3.13-7 7-7s7 3.13 7 7v10"/><path d="M5 21h14"/></svg></div>
+      <div class="dedication">St Thomas à Becket, Huntington</div>
+      <h2>Huntington</h2>
+      <p class="body-text">A Grade II* listed building with ancient oak pews and stained glass by the acclaimed Henry Payne. Its organ was originally built by the Positive Organ Company of London, founded by Thomas Casson — a banker turned organ builder whose ideas were advanced for the time — and has recently undergone a substantial upgrade. Huntington is a predominantly farming community, three miles west of Kington on the Welsh border, first recorded in the Domesday Book of 1086.</p>
+      <p class="body-text" style="margin-top:16px; font-style:italic;">"We live in a peaceful part of the world, but entering the church takes you to a quieter place still."</p>
+      <div class="facts">
+        <div>Holy Eucharist, every 2nd Sunday — Evensong, every 4th Sunday</div>
+        <div>Silence &amp; prayer, alternate Wednesdays</div>
+        <div>Grade II* listed</div>
+      </div>
+    </div>
+  </article>
+
+</main>
+
+<div class="safeguard-strip">
+  <div class="wrap">
+    <p>Concerned about a child or adult's safety? Call <strong>999</strong> in an emergency.</p>
+    <a href="safeguarding.html">Safeguarding information &amp; contacts →</a>
+  </div>
+</div>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <h4>Kington Parishes</h4>
+        <p>The Vicarage, Church Road<br>Kington, Herefordshire HR5 3AG</p>
+        <p>St Mary's Kington · St Peter's Titley · St Stephen's Old Radnor · St Mary's Kinnerton · St Thomas à Becket Huntington</p>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <p><a href="our-churches.html">Our Churches</a><br>
+        <a href="services.html">Services &amp; Events</a><br>
+        <a href="parish-news.html">Parish News</a><br>
+        <a href="safeguarding.html">Safeguarding</a></p>
+      </div>
+      <div>
+        <h4>Get in touch</h4>
+        <p><a href="mailto:office@kingtonparishes.org.uk">office@kingtonparishes.org.uk</a><br>
+        <a href="tel:+441544230525">01544 230525</a></p>
+      </div>
+    </div>
+    <div class="fine">&copy; <span id="year"></span> Kington Parishes. St Mary's Church Kington PCC is registered charity no. 1185453.</div>
+  </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var year = document.getElementById('year');
+  if (year) { year.textContent = new Date().getFullYear(); }
+
+  var revealEls = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window && revealEls.length) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    revealEls.forEach(function (el) { io.observe(el); });
+  } else {
+    revealEls.forEach(function (el) { el.classList.add('in'); });
+  }
+});
+
+</script>
+</body>
+</html>
