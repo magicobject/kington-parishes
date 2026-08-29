@@ -23,5 +23,5 @@ test("the 404 page's recovery links lead back into the real site", async ({ page
 
 test('the 404 page is not indexed by search engines', async ({ page }) => {
   await page.goto('/this-page-does-not-exist.html');
-  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex');
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex, nofollow');
 });

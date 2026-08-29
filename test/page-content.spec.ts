@@ -22,3 +22,13 @@ test('every page links to a unique canonical URL matching its own filename', asy
     );
   }
 });
+
+// This whole site is a proof-of-concept build, not the parishes' real
+// production website, and must never get indexed or confused with it —
+// every page (not just 404) needs the noindex signal.
+test('every page is noindex — this is a proof-of-concept build, not the real site', async ({ page }) => {
+  for (const sitePage of [...ALL_PAGES.map((p) => p.path), '/404.html']) {
+    await page.goto(sitePage);
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex, nofollow');
+  }
+});

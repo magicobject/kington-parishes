@@ -2,6 +2,8 @@
 
 Static site for the five parishes of Kington, Titley, Old Radnor, Kinnerton and Huntington, deployed to Cloudflare Workers at [kington-parishes.magicobject.workers.dev](https://kington-parishes.magicobject.workers.dev) (auto-deploys on push to `main`). Same lightweight build pipeline as [wrightmaths.uk](https://github.com/magicobject/WrightMaths), [kingtonfoodbank.org.uk](https://github.com/magicobject/kingtonfoodbank) and [lovinggod.uk](https://github.com/magicobject/LovingGod) — see their READMEs for the full explanation; the short version is below.
 
+**This is a proof-of-concept build showcased in the MediaWright portfolio, not the parishes' real production website.** Every page carries `<meta name="robots" content="noindex, nofollow">` so it can never get indexed or mistaken for the genuine site in search results — see "Proof-of-concept: noindex everywhere" below before removing that from anywhere.
+
 ## Quick start
 
 ```bash
@@ -33,11 +35,17 @@ Running `npm run build` reads all four and writes the finished files into `publi
 | Styling | `public/css/style.css` (this one genuinely lives in `public/` — it isn't generated) | — |
 | The reveal-on-scroll / footer-year script | `public/js/main.js` (also not generated) | — |
 | Favicon | `public/img/favicon.svg` (also not generated) | — |
-| Robots, sitemap | `public/robots.txt`, `public/sitemap.xml` (hand-maintained, not generated) | — |
+| Robots.txt | `public/robots.txt` (hand-maintained, not generated) | — |
 
 **`public/*.html` is a build artefact.** Every one of those files opens with an auto-generated `DO-NOT-EDIT` HTML comment banner for exactly this reason: a hand-edit made directly to a file in `public/` will be **silently overwritten** the next time anyone runs `npm run build` — which happens automatically on every commit (see below).
 
 If you're not sure whether a file in `public/` is generated or hand-maintained, check whether it has a same-named counterpart under `src/pages/` — if it does, it's generated.
+
+## Proof-of-concept: noindex everywhere
+
+This site exists to demonstrate the build pipeline in the MediaWright portfolio — it is **not** the real Kington Parishes website, and must never be confused with or outrank the genuine one in search results. Every page in `src/pages.config.mjs` sets `robots: 'noindex, nofollow'` (there's no sitewide default in `scripts/build.mjs` — it's explicit per page, so a new page added without it would fail the `page-content.spec.ts` test that checks every page for this).
+
+`public/robots.txt` still says `Allow: /` rather than `Disallow: /` — that's deliberate, not an oversight. If crawling were blocked at the robots.txt level, a search engine could still index the bare URL from a link elsewhere without ever seeing the `noindex` tag on the page itself, since it would never be allowed to fetch and read it. Allowing crawl but marking every page `noindex` is the combination search engines actually document as reliable for keeping a site out of results entirely. There's no `sitemap.xml` for the same reason — publishing one would actively invite indexing of exactly the URLs this site needs to stay out of.
 
 ## What changed from the original hand-written site
 

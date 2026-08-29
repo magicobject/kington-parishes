@@ -1,4 +1,10 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://kington-parishes.magicobject.workers.dev/sitemap.xml
+# This is a proof-of-concept build, not the parishes' real production
+# website — every page also carries <meta name="robots" content="noindex,
+# nofollow">. Crawling is deliberately still allowed (rather than
+# Disallow: /) so that meta tag is actually seen and honoured; blocking
+# crawling here would risk the bare URL still getting indexed with no
+# noindex signal visible. No sitemap is published, since nothing on this
+# site should be indexed.
