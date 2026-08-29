@@ -46,6 +46,25 @@ function replaceTokens(html, tokens) {
   return out;
 }
 
+// Turns each character into a numeric HTML entity (e.g. "a" -> "&#97;").
+// Browsers decode these back to plain text/attribute values automatically,
+// so real visitors and the mailto: link both work exactly as normal — but
+// the page's raw source never contains the literal email address, which
+// stops the simple regex-over-raw-HTML scrapers most bulk email harvesters
+// use. It does NOT stop a scraper that actually parses the HTML (anything
+// using a real DOM/HTML parser sees the decoded value just like a browser
+// does) — there's no way to hide a mailto: link from that class of scraper
+// and still have it work as a link.
+function encodeEntities(str) {
+  return [...str].map((ch) => `&#${ch.codePointAt(0)};`).join('');
+}
+
+// Page content can write {{OBFUSCATE_MAILTO:someone@example.com}} instead of
+// a plain mailto: href, and the build turns it into an entity-encoded one.
+function obfuscateMailtoLinks(html) {
+  return html.replace(/\{\{OBFUSCATE_MAILTO:([^}]+)\}\}/g, (_, email) => encodeEntities(`mailto:${email}`));
+}
+
 function renderNavItems(links, activeHref) {
   return links
     .map(({ href, label }) => {
@@ -92,6 +111,7 @@ for (const page of PAGES) {
     .replace('{{FOOTER}}', pageFooter);
 
   html = replaceTokens(html, tokens);
+  html = obfuscateMailtoLinks(html);
 
   writeFileSync(join(root, 'public', `${page.slug}.html`), html);
   console.log(`built public/${page.slug}.html`);
