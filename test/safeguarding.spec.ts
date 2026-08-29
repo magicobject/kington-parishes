@@ -63,3 +63,28 @@ test('the officer email addresses never appear in plain text in the page source'
   // to read, as opposed to just hiding the text visually.
   expect(html).toMatch(/href="(&#\d+;)+"/);
 });
+
+test('every national helpline name links to that organisation\'s own website, alongside its phone number', async ({
+  page,
+}) => {
+  await page.goto('/safeguarding.html');
+
+  const expected: Record<string, string> = {
+    NSPCC: 'https://www.nspcc.org.uk',
+    Childline: 'https://www.childline.org.uk',
+    'Stop It Now': 'https://www.stopitnow.org.uk',
+    NAPAC: 'https://napac.org.uk',
+    Samaritans: 'https://www.samaritans.org',
+    'Family Lives': 'https://www.familylives.org.uk',
+    'National Domestic Violence Helpline': 'https://www.nationaldahelpline.org.uk',
+    'Action on Elder Abuse': 'https://wearehourglass.org',
+  };
+
+  for (const [name, url] of Object.entries(expected)) {
+    const item = page.locator('.helpline-list li', { hasText: name });
+    const nameLink = item.getByRole('link', { name, exact: true });
+    await expect(nameLink).toHaveAttribute('href', url);
+    await expect(nameLink).toHaveAttribute('target', '_blank');
+    await expect(nameLink).toHaveAttribute('rel', 'noopener');
+  }
+});
