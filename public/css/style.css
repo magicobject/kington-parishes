@@ -253,7 +253,19 @@ footer.site a:hover { color: #fff; }
   border-bottom: 1px solid rgba(255,255,255,0.12);
 }
 @media (max-width: 700px) { .foot-grid { grid-template-columns: 1fr; } }
-.fine { padding-top: 18px; font-size: 0.82rem; color: #8D8778; }
+.fine {
+  padding-top: 18px;
+  font-size: 0.82rem;
+  color: #8D8778;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.fine a { color: #C9C3B2; }
+.fine a:hover { color: #fff; }
+.build-number { white-space: nowrap; }
 
 /* ---------- Ridge SVG (home hero signature) ---------- */
 .ridge-label { font-family: 'Spectral', serif; font-size: 13px; fill: #E7E2D6; }
@@ -263,3 +275,78 @@ footer.site a:hover { color: #fff; }
   position: absolute; width: 1px; height: 1px; overflow: hidden;
   clip: rect(0 0 0 0); white-space: nowrap;
 }
+
+/* ---------- Home hero ---------- */
+.hero { background: var(--slate-dark); padding: 64px 0 0; overflow: hidden; }
+.hero .eyebrow { color: #C9BEA0; }
+.hero h1 { color: #F8F5EE; font-size: clamp(2.1rem, 5vw, 3.1rem); max-width: 17ch; font-weight: 600; }
+.hero p.lede { color: #C4BFAF; max-width: 50ch; margin-top: 16px; font-size: 1.1rem; }
+.hero .cta-row { margin-top: 26px; display: flex; gap: 14px; flex-wrap: wrap; }
+.ridge-nav { margin-top: 44px; }
+.ridge-nav svg { display: block; width: 100%; height: auto; }
+.ridge-nav a { cursor: pointer; }
+.ridge-nav a:focus-visible circle { stroke: #F8F5EE; stroke-width: 3; }
+.ridge-sub { font-family: 'Public Sans', sans-serif; font-size: 10.5px; fill: #96907E; }
+
+/* ---------- Our Churches ---------- */
+.parish {
+  padding: 56px 0;
+  scroll-margin-top: 24px;
+}
+.parish + .parish { border-top: 1px solid var(--line); }
+.parish.alt { background: var(--parchment); }
+.parish h2 { font-size: clamp(1.6rem, 3vw, 2.1rem); }
+.parish .dedication { color: var(--brass-dark); font-weight: 700; font-size: 0.92rem; margin-bottom: 6px; }
+.parish .body-text { max-width: 66ch; color: var(--ink-soft); }
+.parish .facts {
+  display: flex; gap: 24px; flex-wrap: wrap; margin-top: 20px;
+  font-size: 0.92rem;
+}
+.parish .facts div { color: var(--slate); font-weight: 600; }
+/* Both current uses of .jump-row sit inside the dark .page-header banner
+   (Our Churches' church list, Life Events' baptisms/weddings/funerals
+   list), so it's styled light-on-dark by default rather than needing a
+   per-instance override. */
+.jump-row {
+  display: flex; gap: 10px; flex-wrap: wrap; margin-top: 24px;
+}
+.jump-row a {
+  text-decoration: none; font-size: 0.86rem; font-weight: 700;
+  padding: 7px 14px; border: 1px solid rgba(255,255,255,0.3); border-radius: 100px;
+  color: #F8F5EE;
+}
+.jump-row a:hover { background: #F8F5EE; color: var(--slate-dark); border-color: #F8F5EE; }
+
+/* ---------- Life Events ---------- */
+.event-block { padding: 50px 0; }
+.event-block + .event-block { border-top: 1px solid var(--line); }
+.event-block.alt { background: var(--parchment); }
+.event-block .body-text { max-width: 66ch; color: var(--ink-soft); }
+
+/* ---------- Safeguarding ---------- */
+.helpline-list { list-style: none; padding: 0; margin: 0; }
+.helpline-list li {
+  display: flex; justify-content: space-between; gap: 16px;
+  padding: 12px 0; border-bottom: 1px solid var(--line);
+  font-size: 0.98rem; flex-wrap: wrap;
+}
+.helpline-list a { font-weight: 700; }
+.emergency-box {
+  background: var(--heather-dark); color: #F3EEEF;
+  padding: 24px 26px; border-radius: var(--radius); margin-bottom: 32px;
+}
+.emergency-box strong { font-size: 1.2rem; }
+
+/* ---------- 404 ---------- */
+.notfound {
+  min-height: 60vh;
+  display: flex; align-items: center; justify-content: center;
+  padding: 40px 24px;
+}
+.notfound-card {
+  max-width: 540px; width: 100%;
+  background: var(--parchment); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 46px 40px; text-align: center;
+}
+.notfound-card .arch { margin: 0 auto 20px; width: 64px; height: 64px; }
+.notfound-card .cta-row { margin-top: 28px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }

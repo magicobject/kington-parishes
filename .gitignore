@@ -1,0 +1,36 @@
+# OS cruft
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editor/IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment / secrets — never commit these
+.env
+.env.*
+!.env.example
+
+# Node
+node_modules/
+
+# Cloudflare
+.wrangler/
+wrangler.toml.bak
+
+# Playwright test output
+test-results/
+playwright-report/
+blob-report/
+
+# Zip bundles / backups you might drop in this folder while working
+*.zip
+*.bak

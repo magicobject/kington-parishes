@@ -1,0 +1,7 @@
+#!/bin/sh
+# Bump the daily build number, then regenerate public/*.html from
+# templates/ + src/ before every commit, so the committed output can never
+# drift from the source it was built from.
+node scripts/bump-build-number.mjs || exit 1
+node scripts/build.mjs || exit 1
+git add public build-number.json

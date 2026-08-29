@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kington-parishes.magicobject.workers.dev/sitemap.xml

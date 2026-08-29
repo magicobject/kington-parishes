@@ -2,7 +2,7 @@
   "name": "kingtonparishes",
   "compatibility_date": "2026-08-07",
   "assets": {
-    "directory": "./",
+    "directory": "./public",
     "not_found_handling": "404-page",
     "html_handling": "auto-trailing-slash"
   }
