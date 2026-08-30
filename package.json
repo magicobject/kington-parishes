@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/magicobject/kington-parishes#readme",
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@playwright/test": "^1.62.1",
     "@types/node": "^26.3.0",
     "tsx": "^4.23.12",

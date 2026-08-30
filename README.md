@@ -108,6 +108,24 @@ The CSP is `default-src 'self'` plus the minimum extra it actually needs: `https
 
 This file has no effect from `npm run serve` — the local static test server doesn't apply it, since `_headers` is a Cloudflare-only convention. It was checked before ever going live by pointing a throwaway local server at `public/` that applies the same rules and watching the browser console for CSP violations across the pages most likely to break (the homepage's inline styles, the calendar's external scripts) — worth repeating that check (or the equivalent on a preview deploy) after any change to `_headers` or to what a page loads.
 
+## Accessibility
+
+Every page is scanned with [axe-core](https://github.com/dequelabs/axe-core) (via `@axe-core/playwright`) in [test/accessibility.spec.ts](test/accessibility.spec.ts) — part of `npm test`, so a real regression fails the suite, not just a one-off manual check.
+
+One gotcha worth knowing if this ever needs re-running by hand: the reveal-on-scroll animation (`.reveal` / `main.js`) means elements below the fold are still at `opacity: 0` — or mid-transition — when a scan runs immediately after `page.goto()`. Axe reads that as a real color-contrast failure (a link fading in from transparent genuinely does compute as low-contrast at that instant), which it isn't. The spec force-settles every `.reveal` element (adds the `.in` class *and* kills the transition outright, since toggling the class alone just starts a fresh 0.6s animation rather than jumping to the end state) before scanning, so it tests the real final state a visitor actually sees.
+
+Fixes that came out of the last full pass — kept here since axe won't re-explain *why* if one of these regresses:
+
+- **Two critical ARIA bugs on the calendar.** The month grid had `role="grid"`/`role="gridcell"` without the row-grouping structure the ARIA grid pattern requires (`grid` > `row` > `gridcell`), and would need real roving-tabindex/arrow-key handling to do properly. Rather than build that out, the incomplete roles were removed — a plain `<button>` per day with a descriptive `aria-label` (now including the weekday name, e.g. "Sunday 9 August, 1 event", since the visual weekday header is `aria-hidden`) is fully accessible via standard Tab order without needing grid semantics at all. A broken ARIA role is worse than none.
+- **A dark-background link with no color override.** The calendar's page-header lede links to Services & Events using the site's default link color, meant for light backgrounds — nearly invisible against the dark banner. Same class of bug the homepage hero already had fixed elsewhere; the fix is now shared via `.page-header p.lede a`.
+- **An `<svg role="img">` with real links inside it.** The homepage's ridge-line church-jump navigation labelled its whole `<svg>` as a single flattened image while five real `<a>` elements sat inside it — invalid, since an "img" role shouldn't have focusable descendants. Removed the role/label (the links' own visible text already names them) and wrapped it in `<nav aria-label="Jump to a church">` instead.
+- **Landmark gaps.** The safeguard-strip banner (between `<main>` and `<footer>` on every page) sat outside any landmark; 404 had no `<main>` at all. Both fixed.
+- **Footer heading levels.** The footer's "Kington Parishes" / "Explore" / "Get in touch" labels were real `<h4>`s, which skips a level on any page whose last real heading was an `<h1>` or `<h2>` — true on most pages here. They're group labels, not part of the content outline, so they're `<p class="foot-heading">` now (identical styling, no heading semantics). The same skip existed on Contact, Get Involved, Safeguarding and the Parish News Archive, one level up — their card titles were `<h3>` directly under the page `<h1>` with nothing in between; bumped to `<h2>`.
+- **Three real color-contrast failures** (not the animation artifact above): the header's "Donate Now" button, the footer's muted copyright/build-number text, and the footer's "mediawright.uk" credit link, which also had no non-color styling to distinguish it from the surrounding text (it does now — underlined — though that rule took two attempts, since `footer.site a { text-decoration: none }` is more specific than a `.fine a` rule and silently won).
+- **Faded "other month" calendar days** used `opacity: 0.4` on the whole cell, which happened to wash a light-gray day number down to 2.39:1. Same visual de-emphasis, delivered instead by a specific `color` on just the day number, comfortably compliant.
+
+## Tests
+
 [Playwright](https://playwright.dev) specs in `test/` cover:
 
 - **[nav.spec.ts](test/nav.spec.ts)** — the primary nav highlights the right page, the donate button appears everywhere and points at the Parish Giving Scheme, and Safeguarding (reachable only from the footer) never shows as "current" in the primary nav.
@@ -116,6 +134,7 @@ This file has no effect from `npm run serve` — the local static test server do
 - **[page-content.spec.ts](test/page-content.spec.ts)** — each page shows its own title/heading/canonical URL, not another page's.
 - **[not-found.spec.ts](test/not-found.spec.ts)** — unknown URLs get a real 404 status and the branded 404 page, which is `noindex`, has no main nav, but does still show the footer.
 - **[calendar.spec.ts](test/calendar.spec.ts)** — the calendar defaults to the current month, Prev/Next/Today navigate correctly (including year rollover), selecting a day populates the agenda panel, a day with two or more events shows them correctly (capped chips in the grid, the full uncapped list in the agenda), and the grid never causes the page to scroll horizontally on mobile or desktop.
+- **[accessibility.spec.ts](test/accessibility.spec.ts)** — an axe-core scan of every page with zero tolerated violations (see "Accessibility" above for what that's already caught and how the reveal-on-scroll animation is worked around).
 
 `test/support/pages.ts` is the shared list of page metadata used across specs; add an entry there when adding a new page.
 

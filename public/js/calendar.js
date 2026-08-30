@@ -54,10 +54,10 @@
       '<button type="button" class="cal-nav" id="cal-next" aria-label="Next month">›</button>' +
       '<button type="button" class="cal-today-btn" id="cal-today">Today</button>' +
     '</div>' +
-    '<div class="cal-weekdays" role="row">' +
+    '<div class="cal-weekdays" aria-hidden="true">' +
       WEEKDAY_SHORT.map(function (w) { return '<div class="cal-weekday">' + w + '</div>'; }).join('') +
     '</div>' +
-    '<div class="cal-grid" id="cal-grid" role="grid" aria-labelledby="cal-month-label"></div>' +
+    '<div class="cal-grid" id="cal-grid"></div>' +
     '<div class="cal-agenda" id="cal-agenda" aria-live="polite"></div>';
 
   var monthLabel = document.getElementById('cal-month-label');
@@ -118,10 +118,12 @@
       }
       var dot = evs.length ? '<span class="cal-day-dot" aria-hidden="true"></span>' : '';
 
-      var label = cellDate.getDate() + ' ' + MONTH_NAMES[cellDate.getMonth()] + (evs.length ? ', ' + evs.length + ' event' + (evs.length > 1 ? 's' : '') : '');
+      var label = WEEKDAY_LONG[(cellDate.getDay() + 6) % 7] + ' ' + cellDate.getDate() + ' ' + MONTH_NAMES[cellDate.getMonth()] +
+        (isToday ? ' (today)' : '') +
+        (evs.length ? ', ' + evs.length + ' event' + (evs.length > 1 ? 's' : '') : '');
 
       cellsHtml +=
-        '<button type="button" class="' + classes.join(' ') + '" data-date="' + cds + '" role="gridcell" aria-label="' + label + '">' +
+        '<button type="button" class="' + classes.join(' ') + '" data-date="' + cds + '" aria-label="' + label + '">' +
           '<span class="cal-day-num">' + cellDate.getDate() + dot + '</span>' +
           '<span class="cal-day-chips">' + chipsHtml + '</span>' +
         '</button>';

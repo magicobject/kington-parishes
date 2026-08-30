@@ -110,14 +110,14 @@ nav.links a:hover, nav.links a[aria-current="page"] {
 }
 .btn-donate {
   background: var(--brass);
-  color: #2E2610;
+  color: #1F1A0B;
   font-weight: 700;
   padding: 9px 18px;
   border-radius: var(--radius);
   text-decoration: none;
   font-size: 0.88rem;
 }
-.btn-donate:hover { background: #C09A4E; color: #2E2610; }
+.btn-donate:hover { background: #C09A4E; color: #1F1A0B; }
 
 /* ---------- Page header banner (non-home pages) ---------- */
 .page-header {
@@ -130,6 +130,8 @@ nav.links a:hover, nav.links a[aria-current="page"] {
 .page-header .kicker { color: #C9BEA0; }
 .page-header h1 { color: #F8F5EE; font-size: clamp(1.9rem, 4vw, 2.6rem); max-width: 22ch; }
 .page-header p.lede { color: #C4BFAF; max-width: 52ch; margin-top: 14px; font-size: 1.08rem; }
+.page-header p.lede a { color: #F8F5EE; text-decoration: underline; text-underline-offset: 3px; }
+.page-header p.lede a:hover { color: #D8B978; }
 .page-header .ridge-watermark {
   position: absolute;
   left: 0; right: 0; bottom: -6px;
@@ -175,7 +177,7 @@ section + section { border-top: 1px solid var(--line); }
   transform: translateY(-3px);
   box-shadow: 0 14px 26px -16px rgba(38,37,33,0.28);
 }
-.card h3 { font-size: 1.25rem; font-weight: 600; }
+.card h2, .card h3 { font-size: 1.25rem; font-weight: 600; }
 .card p { color: var(--ink-soft); margin: 10px 0 14px; }
 .card .meta { font-size: 0.9rem; color: var(--slate); font-weight: 600; }
 .card .tags { font-size: 0.82rem; color: var(--brass-dark); font-weight: 700; margin-bottom: 8px; }
@@ -225,7 +227,7 @@ section + section { border-top: 1px solid var(--line); }
 .pilgrim-card .thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; transition: transform 0.3s ease; }
 .pilgrim-card:hover .thumb img { transform: scale(1.04); }
 .pilgrim-card .body { padding: 18px 20px 20px; }
-.pilgrim-card h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 2px; }
+.pilgrim-card h2, .pilgrim-card h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 2px; }
 .pilgrim-card .dedication { font-size: 0.85rem; color: var(--ink-soft); }
 .pilgrim-card p { color: var(--ink-soft); margin: 10px 0 14px; font-size: 0.95rem; }
 .pilgrim-card .tags { font-size: 0.78rem; color: var(--brass-dark); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
@@ -276,7 +278,7 @@ footer.site {
   color: #C9C3B2;
   padding: 52px 0 28px;
 }
-footer.site h4 { color: #F8F5EE; font-size: 1.05rem; font-weight: 600; margin-bottom: 12px; }
+footer.site .foot-heading { color: #F8F5EE; font-size: 1.05rem; font-weight: 600; margin-bottom: 12px; }
 footer.site a { color: #C9C3B2; text-decoration: none; }
 footer.site a:hover { color: #fff; }
 .foot-grid {
@@ -290,14 +292,14 @@ footer.site a:hover { color: #fff; }
 .fine {
   padding-top: 18px;
   font-size: 0.82rem;
-  color: #8D8778;
+  color: #B0AA98;
   display: flex;
   justify-content: space-between;
   align-items: baseline;
   flex-wrap: wrap;
   gap: 8px;
 }
-.fine a { color: #C9C3B2; }
+footer.site .fine a { color: #C9C3B2; text-decoration: underline; text-underline-offset: 2px; }
 .fine a:hover { color: #fff; }
 .build-number { white-space: nowrap; }
 
@@ -424,7 +426,7 @@ footer.site a:hover { color: #fff; }
   transition: background 0.15s ease, border-color 0.15s ease;
 }
 .cal-day:hover:not(.cal-day--selected) { background: var(--limestone); }
-.cal-day--outside { opacity: 0.4; }
+.cal-day--outside .cal-day-num { color: var(--ink-soft); font-weight: 600; }
 .cal-day--today { border-color: var(--brass); border-width: 2px; padding: 5px 5px 4px; }
 .cal-day--selected { background: var(--slate-dark); border-color: var(--slate-dark); }
 .cal-day--selected .cal-day-num { color: #F8F5EE; }
