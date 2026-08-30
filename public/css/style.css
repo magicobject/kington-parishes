@@ -198,12 +198,16 @@ section + section { border-top: 1px solid var(--line); }
   border: 1px solid var(--line);
   border-radius: var(--radius);
   overflow: hidden;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
+.noticeboard-card:hover { transform: translateY(-3px); box-shadow: 0 14px 26px -16px rgba(38,37,33,0.28); }
 .noticeboard-card .thumb {
-  aspect-ratio: 4 / 3;
-  background: linear-gradient(135deg, var(--heather) 0%, var(--slate) 100%);
+  height: 230px;
+  background: var(--limestone);
   display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
 }
+.noticeboard-card .thumb img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
 .noticeboard-card .thumb svg { width: 44px; height: 44px; opacity: 0.9; }
 .noticeboard-card .body { padding: 16px 18px 18px; }
 .noticeboard-card h3 { font-size: 1.02rem; font-weight: 600; margin-bottom: 4px; }
