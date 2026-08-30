@@ -369,6 +369,18 @@ footer.site .fine a { color: #C9C3B2; text-decoration: underline; text-underline
 .ridge-sub { font-family: 'Public Sans', sans-serif; font-size: 10.5px; fill: #96907E; }
 
 /* ---------- Our Churches ---------- */
+.church-skyline {
+  background: var(--parchment);
+  padding: 40px 0 32px;
+  border-bottom: 1px solid var(--line);
+}
+.church-skyline img {
+  display: block;
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  height: auto;
+}
 .parish {
   padding: 56px 0;
   scroll-margin-top: 24px;
