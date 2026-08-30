@@ -21,16 +21,16 @@ test('the parish office email and phone number are correct and consistent everyw
   page,
 }) => {
   await page.goto('/contact.html');
-  await expect(page.locator('a[href="mailto:office@kingtonparishes.org.uk"]').first()).toBeVisible();
+  await expect(page.locator('a[href="mailto:vicar@kingtonparishes.org.uk"]').first()).toBeVisible();
   await expect(page.locator('a[href="tel:+441544230525"]').first()).toBeVisible();
 
   await page.goto('/parish-news.html');
   // 2 in the body content ("Write for us" / "Get the paper edition") + 1 in the footer.
-  const mailtoLinks = page.locator('a[href="mailto:office@kingtonparishes.org.uk"]');
+  const mailtoLinks = page.locator('a[href="mailto:vicar@kingtonparishes.org.uk"]');
   await expect(mailtoLinks).toHaveCount(3);
 
   await page.goto('/index.html');
-  await expect(page.locator('footer.site a[href="mailto:office@kingtonparishes.org.uk"]')).toBeVisible();
+  await expect(page.locator('footer.site a[href="mailto:vicar@kingtonparishes.org.uk"]')).toBeVisible();
   await expect(page.locator('footer.site a[href="tel:+441544230525"]')).toBeVisible();
 });
 

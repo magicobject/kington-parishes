@@ -8,7 +8,7 @@ export const SITE = {
   orgName: 'Kington Parishes',
   charityNumber: '1185453',
 
-  email: 'office@kingtonparishes.org.uk',
+  email: 'vicar@kingtonparishes.org.uk',
   phoneDisplay: '01544 230525',
   phoneTel: '+441544230525',
 
