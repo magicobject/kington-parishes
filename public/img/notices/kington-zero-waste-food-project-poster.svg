@@ -1,0 +1,194 @@
+<svg viewBox="0 0 1024 1536" width="1024" height="1536" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="kzwfp-poster-title kzwfp-poster-desc">
+  <title id="kzwfp-poster-title">Kington Zero Waste Food Project poster</title>
+  <desc id="kzwfp-poster-desc">Fighting food waste. Feeding our community. Local businesses in Kington are donating surplus food, and we're giving it away to anyone who wants it. No forms, no fuss, no cost. Just good food, freely shared. All are welcome. Everything is free. Located at St Mary's Parish Hall. Mondays 12:15 to 13:00. Fridays 10:00 to 11:00.</desc>
+
+  <defs>
+    <filter id="cardShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#20140a" flood-opacity="0.28"/>
+    </filter>
+    <radialGradient id="glow" cx="50%" cy="30%" r="55%">
+      <stop offset="0" stop-color="#FFF8E4" stop-opacity="0.65"/>
+      <stop offset="1" stop-color="#FFF8E4" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="bananaGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F6D24C"/>
+      <stop offset="1" stop-color="#E8B326"/>
+    </linearGradient>
+  </defs>
+
+  <!-- base -->
+  <rect width="1024" height="1536" fill="#F4E4B8"/>
+
+  <!-- ================= sunburst ================= -->
+  <g>
+    <g transform="rotate(0 512 460)"><polygon points="512,460 300,-900 724,-900" fill="#E8B23D"/></g>
+    <g transform="rotate(22.5 512 460)"><polygon points="512,460 300,-900 724,-900" fill="#D9736B"/></g>
+    <g transform="rotate(45 512 460)"><polygon points="512,460 300,-900 724,-900" fill="#8FA07C"/></g>
+    <g transform="rotate(67.5 512 460)"><polygon points="512,460 300,-900 724,-900" fill="#7A93A8"/></g>
+    <g transform="rotate(90 512 460)"><polygon points="512,460 300,-900 724,-900" fill="#C9622E"/></g>
+    <g transform="rotate(112.5 512 460)"><polygon points="512,460 300,-900 724,-900" fill="#E8B23D"/></g>
+    <g transform="rotate(135 512 460)"><polygon points="512,460 300,-900 724,-900" fill="#D9736B"/></g>
+    <g transform="rotate(157.5 512 460)"><polygon points="512,460 300,-900 724,-900" fill="#8FA07C"/></g>
+    <g transform="rotate(180 512 460)"><polygon points="512,460 300,-900 724,-900" fill="#7A93A8"/></g>
+    <g transform="rotate(202.5 512 460)"><polygon points="512,460 300,-900 724,-900" fill="#C9622E"/></g>
+    <g transform="rotate(225 512 460)"><polygon points="512,460 300,-900 724,-900" fill="#E8B23D"/></g>
+    <g transform="rotate(247.5 512 460)"><polygon points="512,460 300,-900 724,-900" fill="#D9736B"/></g>
+    <g transform="rotate(270 512 460)"><polygon points="512,460 300,-900 724,-900" fill="#8FA07C"/></g>
+    <g transform="rotate(292.5 512 460)"><polygon points="512,460 300,-900 724,-900" fill="#7A93A8"/></g>
+    <g transform="rotate(315 512 460)"><polygon points="512,460 300,-900 724,-900" fill="#C9622E"/></g>
+    <g transform="rotate(337.5 512 460)"><polygon points="512,460 300,-900 724,-900" fill="#E8B23D"/></g>
+  </g>
+  <rect width="1024" height="1536" fill="url(#glow)"/>
+
+  <!-- ================= produce, behind the card so it "spills" out from under it ================= -->
+
+  <!-- apple, upper-left -->
+  <g stroke="#1E3A22" stroke-width="4" stroke-linejoin="round">
+    <path d="M60,640 C60,600 95,575 130,590 C165,575 200,600 200,640 C200,690 165,730 130,730 C95,730 60,690 60,640 Z" fill="#E8622C"/>
+    <path d="M130,590 C126,575 128,560 138,548" fill="none" stroke="#5C3A22" stroke-width="7" stroke-linecap="round"/>
+    <ellipse cx="150" cy="552" rx="20" ry="11" fill="#4E7A3C" transform="rotate(-20 150 552)"/>
+  </g>
+
+  <!-- bread loaf, left, diagonal -->
+  <g stroke="#5C3E1C" stroke-width="4" stroke-linejoin="round">
+    <ellipse cx="150" cy="905" rx="130" ry="78" fill="#C08A44" transform="rotate(-18 150 905)"/>
+    <g stroke="#7C5A28" stroke-width="5" stroke-linecap="round" opacity="0.7">
+      <path d="M70,870 Q150,845 235,880"/>
+      <path d="M65,905 Q150,880 240,915"/>
+      <path d="M75,940 Q150,918 230,948"/>
+    </g>
+  </g>
+
+  <!-- apple, lower-left -->
+  <g stroke="#1E3A22" stroke-width="4" stroke-linejoin="round">
+    <path d="M55,1145 C55,1105 90,1080 125,1095 C160,1080 195,1105 195,1145 C195,1195 160,1235 125,1235 C90,1235 55,1195 55,1145 Z" fill="#D4293A"/>
+    <path d="M125,1095 C121,1080 123,1065 133,1053" fill="none" stroke="#5C3A22" stroke-width="7" stroke-linecap="round"/>
+    <ellipse cx="145" cy="1057" rx="19" ry="10" fill="#4E7A3C" transform="rotate(-20 145 1057)"/>
+  </g>
+
+  <!-- bread heel, bottom-left -->
+  <g stroke="#5C3E1C" stroke-width="4" stroke-linejoin="round">
+    <path d="M40,1330 C40,1290 75,1270 130,1272 C185,1274 220,1300 220,1340 C220,1390 180,1420 120,1418 C65,1416 40,1375 40,1330 Z" fill="#B87D3C"/>
+    <path d="M40,1330 C42,1300 75,1282 122,1284" fill="none" stroke="#8C6430" stroke-width="4" opacity="0.6"/>
+  </g>
+
+  <!-- broccoli x2, right -->
+  <g stroke="#173B1E" stroke-width="4" stroke-linejoin="round">
+    <g>
+      <rect x="905" y="700" width="34" height="70" rx="10" fill="#7C9A56"/>
+      <g fill="#2E6B34">
+        <circle cx="905" cy="655" r="34"/>
+        <circle cx="940" cy="640" r="38"/>
+        <circle cx="975" cy="662" r="32"/>
+        <circle cx="940" cy="695" r="36"/>
+      </g>
+      <g fill="#3E8244" stroke="none">
+        <circle cx="915" cy="645" r="10"/>
+        <circle cx="945" cy="628" r="10"/>
+        <circle cx="968" cy="655" r="9"/>
+      </g>
+    </g>
+    <g transform="translate(-40,150) scale(0.82)">
+      <rect x="905" y="700" width="34" height="70" rx="10" fill="#7C9A56"/>
+      <g fill="#2E6B34">
+        <circle cx="905" cy="655" r="34"/>
+        <circle cx="940" cy="640" r="38"/>
+        <circle cx="975" cy="662" r="32"/>
+        <circle cx="940" cy="695" r="36"/>
+      </g>
+      <g fill="#3E8244" stroke="none">
+        <circle cx="915" cy="645" r="10"/>
+        <circle cx="945" cy="628" r="10"/>
+        <circle cx="968" cy="655" r="9"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- carrot, right -->
+  <g stroke="#7A3B10" stroke-width="4" stroke-linejoin="round">
+    <path d="M955,795 C955,782 968,775 980,780 C1000,788 1008,815 1000,860 C994,895 975,935 955,955 C948,940 945,910 948,875 C950,845 950,815 955,795 Z" fill="#E8822C"/>
+    <g stroke="#3E8244" stroke-width="8" stroke-linecap="round" fill="none">
+      <path d="M972,780 Q960,745 940,720"/>
+      <path d="M980,780 Q985,742 1000,715"/>
+      <path d="M965,782 Q948,755 928,745"/>
+    </g>
+  </g>
+
+  <!-- ================= headline card ================= -->
+  <rect x="65" y="65" width="894" height="960" rx="26" fill="#F6E7B6" filter="url(#cardShadow)"/>
+
+  <g text-anchor="middle" font-family="'Arial Black', Arial, sans-serif" font-weight="900" fill="#1B4D2E">
+    <text x="512" y="190" font-size="92">KINGTON</text>
+    <text x="512" y="292" font-size="92">ZERO WASTE</text>
+    <text x="512" y="394" font-size="92">FOOD PROJECT</text>
+  </g>
+
+  <g text-anchor="middle" font-family="'Arial Black', Arial, sans-serif" font-weight="900" fill="#D9481F">
+    <text x="512" y="462" font-size="46">FIGHTING FOOD WASTE.</text>
+    <text x="512" y="516" font-size="46">FEEDING OUR COMMUNITY.</text>
+  </g>
+
+  <g text-anchor="middle" font-family="'Public Sans', Arial, sans-serif" font-weight="700" font-size="32" fill="#1E5631">
+    <text x="512" y="580">Local businesses in Kington are</text>
+    <text x="512" y="620">donating surplus food — and</text>
+    <text x="512" y="660">we’re giving it away to anyone</text>
+    <text x="512" y="700">who wants it.</text>
+    <text x="512" y="758">No forms, no fuss, no</text>
+    <text x="512" y="798">cost. Just good food,</text>
+    <text x="512" y="838">freely shared.</text>
+  </g>
+
+  <g text-anchor="middle" font-family="'Arial Black', Arial, sans-serif" font-weight="900" font-size="42" fill="#1B4D2E">
+    <text x="512" y="912">ALL ARE WELCOME.</text>
+    <text x="512" y="962">EVERYTHING IS FREE.</text>
+  </g>
+
+  <!-- ================= location & times, on the sunburst below the card ================= -->
+  <g font-family="'Arial Black', Arial, sans-serif" font-weight="900" fill="#1B4D2E" paint-order="stroke" stroke="#F6E7B6" stroke-width="10" stroke-linejoin="round">
+    <text x="150" y="1105" font-size="34">LOCATED AT</text>
+    <text x="150" y="1162" font-size="50">ST MARY’S</text>
+    <text x="150" y="1218" font-size="50">PARISH HALL</text>
+    <text x="150" y="1290" font-size="40">MONDAYS 12:15–13:00</text>
+    <text x="150" y="1345" font-size="40">FRIDAYS 10:00–11:00</text>
+  </g>
+
+  <!-- paper bag of produce, bottom-right -->
+  <g stroke="#5C3E1C" stroke-width="4" stroke-linejoin="round" transform="translate(70,10)">
+    <path d="M660,1420 L700,1200 L940,1200 L980,1420 Z" fill="#C9A063"/>
+    <path d="M660,1420 Q700,1440 700,1420 M700,1420 Q740,1440 740,1420 M740,1420 Q780,1440 780,1420 M780,1420 Q820,1440 820,1420 M820,1420 Q860,1440 860,1420 M860,1420 Q900,1440 900,1420 M900,1420 Q940,1440 940,1420 M940,1420 Q980,1440 980,1420" fill="none"/>
+    <line x1="740" y1="1200" x2="748" y2="1418" stroke="#A9793F" stroke-width="3" opacity="0.6"/>
+    <line x1="820" y1="1200" x2="822" y2="1418" stroke="#A9793F" stroke-width="3" opacity="0.6"/>
+    <line x1="900" y1="1200" x2="894" y2="1418" stroke="#A9793F" stroke-width="3" opacity="0.6"/>
+
+    <!-- leafy greens -->
+    <g fill="#3E8244">
+      <path d="M700,1210 C670,1180 665,1130 690,1095 C710,1130 712,1175 700,1210 Z"/>
+      <path d="M735,1200 C712,1165 715,1120 745,1092 C760,1128 758,1170 735,1200 Z"/>
+    </g>
+
+    <!-- tomato -->
+    <g>
+      <circle cx="790" cy="1175" r="42" fill="#D9432E"/>
+      <path d="M775,1140 Q790,1120 805,1140" fill="none" stroke="#3E8244" stroke-width="6" stroke-linecap="round"/>
+    </g>
+
+    <!-- carrot poking out -->
+    <g stroke="#7A3B10" stroke-width="4">
+      <path d="M700,1250 C685,1245 672,1255 672,1272 C672,1300 700,1345 725,1360 C730,1335 728,1300 720,1275 C715,1258 712,1250 700,1250 Z" fill="#E8822C"/>
+      <path d="M700,1250 Q690,1225 670,1210" fill="none" stroke="#3E8244" stroke-width="7" stroke-linecap="round"/>
+    </g>
+
+    <!-- bananas -->
+    <g fill="url(#bananaGrad)" stroke="#8A6A16" stroke-width="4" stroke-linejoin="round">
+      <path d="M800,1150 C815,1080 860,1030 915,1015 C930,1010 940,1020 933,1035 C905,1075 880,1110 862,1155 C850,1183 815,1180 800,1150 Z"/>
+      <path d="M830,1160 C852,1095 900,1050 950,1040 C965,1037 972,1050 962,1063 C930,1098 900,1130 878,1170 C862,1195 838,1188 830,1160 Z"/>
+      <path d="M765,1165 C775,1095 815,1042 865,1020 C880,1013 891,1024 882,1040 C855,1085 832,1122 818,1168 C808,1197 775,1195 765,1165 Z"/>
+    </g>
+    <g fill="#8A6A16" stroke="none">
+      <circle cx="912" cy="1018" r="7"/>
+      <circle cx="948" cy="1043" r="6"/>
+      <circle cx="879" cy="1024" r="6"/>
+    </g>
+  </g>
+
+</svg>

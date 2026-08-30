@@ -1,0 +1,155 @@
+<svg viewBox="0 0 900 1400" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="kzwfp-title kzwfp-desc">
+  <title id="kzwfp-title">Kington Zero Waste Food Project — weekly on Mondays &amp; Fridays</title>
+  <desc id="kzwfp-desc">Every week, local businesses in Kington donate surplus food that would otherwise go to waste. We’re making it available, completely free, to anyone who wants it. This isn’t a food bank. It’s a community effort to reduce waste. Whether you’re passing by, feeding a family, or just fancy a loaf of bread or a bag of veg, come and take what you’ll use. No forms, no questions, no stigma. St Mary’s Parish Hall. Fridays 10:00 to 11:00. Mondays 12:15 to 13:00. Let’s stop good food from being thrown away. Let’s share it instead.</desc>
+
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F8F5EE"/>
+      <stop offset="1" stop-color="#EDE9DF"/>
+    </linearGradient>
+    <clipPath id="illusClip">
+      <rect x="70" y="200" width="760" height="320" rx="14"/>
+    </clipPath>
+  </defs>
+
+  <!-- background -->
+  <rect width="900" height="1400" fill="url(#bg)"/>
+  <circle cx="860" cy="1360" r="260" fill="#A8813C" opacity="0.05"/>
+  <circle cx="40" cy="700" r="220" fill="#7C5F72" opacity="0.04"/>
+
+  <!-- ================= header ================= -->
+  <rect x="0" y="0" width="900" height="170" fill="#2E3C48"/>
+  <text x="70" y="55" font-family="'Public Sans', Arial, sans-serif" font-size="18" font-weight="600" letter-spacing="3" fill="#D8B978">WEEKLY ON MONDAYS &amp; FRIDAYS</text>
+  <text x="70" y="118" font-family="Spectral, Georgia, serif" font-size="40" font-weight="700" fill="#F8F5EE">Kington Zero Waste Food Project</text>
+  <path d="M0 170 C 130 155, 230 185, 360 165 S 600 145, 730 168 S 860 182, 900 170"
+        fill="none" stroke="#A8813C" stroke-width="2" opacity="0.3"/>
+
+  <!-- ================= illustration banner ================= -->
+  <g clip-path="url(#illusClip)">
+    <rect x="70" y="200" width="760" height="320" fill="#F8F5EE"/>
+    <svg x="70" y="200" width="760" height="320" viewBox="15 155 770 420" preserveAspectRatio="xMidYMid slice">
+
+      <path d="M-20 70 C 60 52, 130 30, 190 42 S 300 82, 360 50 S 470 12, 540 30 S 650 78, 720 55 S 830 20, 900 40"
+            fill="none" stroke="#A8813C" stroke-width="2" opacity="0.22"/>
+      <circle cx="90" cy="90" r="220" fill="#7C5F72" opacity="0.05"/>
+      <circle cx="730" cy="540" r="260" fill="#A8813C" opacity="0.06"/>
+      <ellipse cx="400" cy="527" rx="235" ry="26" fill="#262521" opacity="0.12"/>
+
+      <polygon points="580,378 616,352 616,500 580,524" fill="#7C5E28"/>
+      <rect x="193" y="378" width="16" height="148" fill="#7C5E28" opacity="0.55"/>
+      <rect x="566" y="378" width="16" height="148" fill="#7C5E28" opacity="0.55"/>
+      <rect x="195" y="378" width="385" height="148" rx="8" fill="#A8813C"/>
+      <line x1="207" y1="418" x2="568" y2="418" stroke="#7C5E28" stroke-width="5" opacity="0.55" stroke-linecap="round"/>
+      <line x1="207" y1="458" x2="568" y2="458" stroke="#7C5E28" stroke-width="5" opacity="0.55" stroke-linecap="round"/>
+      <line x1="207" y1="498" x2="568" y2="498" stroke="#7C5E28" stroke-width="5" opacity="0.55" stroke-linecap="round"/>
+      <rect x="184" y="362" width="412" height="24" rx="7" fill="#7C5E28"/>
+      <rect x="184" y="362" width="412" height="8" rx="4" fill="#B8965A" opacity="0.6"/>
+      <ellipse cx="258" cy="374" rx="20" ry="9" fill="#EDE9DF"/>
+      <ellipse cx="518" cy="374" rx="20" ry="9" fill="#EDE9DF"/>
+
+      <g stroke="#4E5A34" stroke-width="1" stroke-opacity="0.25">
+        <ellipse cx="248" cy="304" rx="72" ry="54" fill="#6E7B4C"/>
+        <ellipse cx="208" cy="276" rx="46" ry="38" fill="#7C8A57" transform="rotate(-12 208 276)"/>
+        <ellipse cx="292" cy="270" rx="44" ry="36" fill="#5C6840" transform="rotate(16 292 270)"/>
+        <ellipse cx="250" cy="252" rx="40" ry="30" fill="#8B9863"/>
+      </g>
+
+      <g>
+        <circle cx="404" cy="272" r="64" fill="#8C6A34"/>
+        <ellipse cx="392" cy="238" rx="40" ry="22" fill="#A8813C" opacity="0.55"/>
+        <path d="M366 250 Q404 300 356 316" stroke="#5C4420" stroke-width="3" fill="none" opacity="0.55" stroke-linecap="round"/>
+        <path d="M404 236 Q432 292 388 324" stroke="#5C4420" stroke-width="3" fill="none" opacity="0.55" stroke-linecap="round"/>
+        <path d="M436 250 Q452 302 412 322" stroke="#5C4420" stroke-width="3" fill="none" opacity="0.5" stroke-linecap="round"/>
+      </g>
+
+      <g transform="rotate(-18 520 250)">
+        <rect x="420" y="231" width="200" height="38" rx="19" fill="#B48A46"/>
+        <line x1="452" y1="234" x2="444" y2="266" stroke="#6B4E20" stroke-width="3" opacity="0.55" stroke-linecap="round"/>
+        <line x1="486" y1="234" x2="478" y2="266" stroke="#6B4E20" stroke-width="3" opacity="0.55" stroke-linecap="round"/>
+        <line x1="520" y1="234" x2="512" y2="266" stroke="#6B4E20" stroke-width="3" opacity="0.55" stroke-linecap="round"/>
+        <line x1="554" y1="234" x2="546" y2="266" stroke="#6B4E20" stroke-width="3" opacity="0.55" stroke-linecap="round"/>
+        <line x1="588" y1="234" x2="580" y2="266" stroke="#6B4E20" stroke-width="3" opacity="0.55" stroke-linecap="round"/>
+      </g>
+
+      <g>
+        <g>
+          <circle cx="198" cy="352" r="21" fill="#B5573A"/>
+          <path d="M198 331 q-2 -8 6 -10" stroke="#5C3A22" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <ellipse cx="207" cy="323" rx="7" ry="4" fill="#6E7B4C" transform="rotate(-25 207 323)"/>
+        </g>
+        <g>
+          <circle cx="228" cy="366" r="18" fill="#A14A30"/>
+          <path d="M228 348 q-2 -7 5 -9" stroke="#5C3A22" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        </g>
+        <g>
+          <circle cx="182" cy="372" r="16" fill="#C46A46"/>
+          <path d="M182 356 q-2 -6 5 -8" stroke="#5C3A22" stroke-width="2" fill="none" stroke-linecap="round"/>
+        </g>
+      </g>
+
+      <g>
+        <path d="M544 300 C544 295 549 292 552 292 C555 292 560 295 560 300 L556 380 C556 385 552 389 552 389 C551 389 548 385 548 380 Z" fill="#C97A35"/>
+        <path d="M562 296 C562 291 567 288 570 288 C573 288 578 291 578 296 L573 386 C573 391 570 395 570 395 C569 395 565 391 565 386 Z" fill="#D68644"/>
+        <path d="M580 302 C580 297 585 294 588 294 C591 294 596 297 596 302 L591 372 C591 377 588 381 588 381 C587 381 583 377 583 372 Z" fill="#C97A35"/>
+        <g stroke="#5C6840" stroke-width="3" stroke-linecap="round" opacity="0.85">
+          <path d="M552 292 Q546 270 536 258"/>
+          <path d="M552 292 Q552 266 552 252"/>
+          <path d="M570 288 Q572 264 580 250"/>
+          <path d="M588 294 Q596 274 604 262"/>
+        </g>
+        <rect x="540" y="300" width="60" height="14" rx="4" fill="#7C5F72" transform="rotate(4 570 307)"/>
+      </g>
+
+      <g>
+        <rect x="622" y="332" width="52" height="72" rx="8" fill="#EDE9DF" stroke="#46596A" stroke-width="2"/>
+        <rect x="624" y="322" width="48" height="16" rx="4" fill="#7C5E28"/>
+        <rect x="626" y="348" width="44" height="52" rx="6" fill="#7C5F72" opacity="0.55"/>
+      </g>
+
+      <path d="M258 378 Q205 392 165 402" fill="none" stroke="#8A8065" stroke-width="2" stroke-linecap="round"/>
+      <g transform="rotate(-9 118 428)">
+        <rect x="72" y="402" width="92" height="52" rx="7" fill="#F0E6C8" stroke="#7C5E28" stroke-width="2"/>
+        <circle cx="92" cy="418" r="3.5" fill="none" stroke="#7C5E28" stroke-width="1.5"/>
+        <text x="129" y="437" text-anchor="middle" font-family="Spectral, Georgia, serif" font-weight="600" font-size="24" fill="#262521">FREE</text>
+      </g>
+    </svg>
+  </g>
+  <rect x="70" y="200" width="760" height="320" rx="14" fill="none" stroke="#7C5E28" stroke-opacity="0.25" stroke-width="2"/>
+
+  <!-- ================= intro copy ================= -->
+  <g font-family="'Public Sans', Arial, sans-serif" font-size="26" fill="#262521">
+    <text x="70" y="590">Every week, local businesses in Kington donate surplus</text>
+    <text x="70" y="626">food that would otherwise go to waste. We’re making it</text>
+    <text x="70" y="662">available — completely free — to anyone who wants it.</text>
+  </g>
+
+  <g font-family="Spectral, Georgia, serif" font-size="28" font-weight="600" font-style="italic" fill="#5E4657" text-anchor="middle">
+    <text x="450" y="734">This isn’t a food bank. It’s a community effort</text>
+    <text x="450" y="772">to reduce waste.</text>
+  </g>
+
+  <line x1="70" y1="816" x2="830" y2="816" stroke="#A8813C" stroke-width="2" opacity="0.35"/>
+
+  <g font-family="'Public Sans', Arial, sans-serif" font-size="26" fill="#262521">
+    <text x="70" y="872">Whether you’re passing by, feeding a family, or just</text>
+    <text x="70" y="908">fancy a loaf of bread or a bag of veg — come and take</text>
+    <text x="70" y="944">what you’ll use. No forms, no questions, no stigma.</text>
+  </g>
+
+  <!-- ================= where &amp; when card ================= -->
+  <rect x="70" y="994" width="760" height="194" rx="12" fill="#EDE9DF" stroke="#A8813C" stroke-opacity="0.35" stroke-width="2"/>
+  <text x="106" y="1044" font-family="Spectral, Georgia, serif" font-size="34" font-weight="700" fill="#262521">St Mary’s Parish Hall</text>
+
+  <circle cx="118" cy="1085" r="6" fill="#A8813C"/>
+  <text x="140" y="1094" font-family="'Public Sans', Arial, sans-serif" font-size="26" fill="#4A473F"><tspan font-weight="600">Fridays</tspan>  10:00–11:00</text>
+
+  <circle cx="118" cy="1129" r="6" fill="#A8813C"/>
+  <text x="140" y="1138" font-family="'Public Sans', Arial, sans-serif" font-size="26" fill="#4A473F"><tspan font-weight="600">Mondays</tspan>  12:15–13:00</text>
+
+  <!-- ================= closing ================= -->
+  <g font-family="Spectral, Georgia, serif" font-size="32" font-style="italic" font-weight="600" fill="#7C5E28" text-anchor="middle">
+    <text x="450" y="1276">Let’s stop good food from being thrown away.</text>
+    <text x="450" y="1318">Let’s share it instead.</text>
+  </g>
+
+</svg>
