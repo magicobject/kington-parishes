@@ -33,6 +33,17 @@ export const SAFEGUARDING_PAGE: SitePage = {
   heading: /safeguarding, care and nurture/i,
 };
 
+// Same pattern as Safeguarding: reachable from the footer's "Explore" list
+// (labelled "Parish News", same text as the NAV_PAGES entry above but
+// pointing at the archive instead) and from the Parish News page — not the
+// primary nav.
+export const PARISH_NEWS_ARCHIVE_PAGE: SitePage = {
+  path: '/parish-news-archive.html',
+  navLabel: 'Parish News',
+  titleContains: 'Parish News Archive',
+  heading: /the parish news archive/i,
+};
+
 // Every generated page, including the ones without primary nav — used by
 // specs that should run against literally everything (footer, tokens).
-export const ALL_PAGES: SitePage[] = [...NAV_PAGES, SAFEGUARDING_PAGE];
+export const ALL_PAGES: SitePage[] = [...NAV_PAGES, SAFEGUARDING_PAGE, PARISH_NEWS_ARCHIVE_PAGE];

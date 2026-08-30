@@ -25,7 +25,7 @@ export const NAV = [
 export const FOOTER_NAV = [
   { href: 'our-churches.html', label: 'Our Churches' },
   { href: 'services.html', label: 'Services &amp; Events' },
-  { href: 'parish-news.html', label: 'Parish News' },
+  { href: 'parish-news-archive.html', label: 'Parish News' },
   { href: 'safeguarding.html', label: 'Safeguarding' },
   { href: 'https://www.youtube.com/@KingtonStMaryLive', label: 'Our YouTube Channel' },
 ];
@@ -60,6 +60,16 @@ export const PAGES = [
     title: 'Parish News — Kington Parishes',
     description: 'The family magazine of the Churches of Kington, Huntington, Old Radnor, Kinnerton and Titley.',
     active: 'parish-news.html',
+    header: true,
+    robots: 'noindex, nofollow',
+  },
+  {
+    slug: 'parish-news-archive',
+    title: 'Parish News Archive — Kington Parishes',
+    description: 'Back issues of Parish News, the monthly magazine of Kington, Huntington, Old Radnor, Kinnerton and Titley — download any issue as a PDF.',
+    // Reachable from the Parish News page and the footer's Explore list,
+    // not from the primary nav — same pattern as Safeguarding.
+    active: null,
     header: true,
     robots: 'noindex, nofollow',
   },
