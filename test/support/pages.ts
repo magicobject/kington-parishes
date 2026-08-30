@@ -21,6 +21,7 @@ export const NAV_PAGES: SitePage[] = [
   { path: '/parish-news.html', navLabel: 'Parish News', titleContains: 'Parish News', heading: /family magazine/i },
   { path: '/life-events.html', navLabel: 'Life Events', titleContains: 'Life Events', heading: /baptisms, weddings/i },
   { path: '/get-involved.html', navLabel: 'Get Involved', titleContains: 'Get Involved', heading: /support, hire, and take part/i },
+  { path: '/calendar.html', navLabel: 'Calendar', titleContains: 'Calendar', heading: /what's on/i },
   { path: '/contact.html', navLabel: 'Contact', titleContains: 'Contact', heading: /we'd love to hear from you/i },
 ];
 

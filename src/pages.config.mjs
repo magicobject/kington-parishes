@@ -16,6 +16,7 @@ export const NAV = [
   { href: 'parish-news.html', label: 'Parish News' },
   { href: 'life-events.html', label: 'Life Events' },
   { href: 'get-involved.html', label: 'Get Involved' },
+  { href: 'calendar.html', label: 'Calendar' },
   { href: 'contact.html', label: 'Contact' },
 ];
 
@@ -86,6 +87,14 @@ export const PAGES = [
     title: 'Get Involved — Kington Parishes',
     description: 'Hire the Parish Hall, join the church fete, support our fundraising, and find out what drives our mission.',
     active: 'get-involved.html',
+    header: true,
+    robots: 'noindex, nofollow',
+  },
+  {
+    slug: 'calendar',
+    title: 'Calendar — Kington Parishes',
+    description: 'Special services, concerts and one-off events across our five churches, month by month.',
+    active: 'calendar.html',
     header: true,
     robots: 'noindex, nofollow',
   },

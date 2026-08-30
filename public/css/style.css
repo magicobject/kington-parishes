@@ -386,3 +386,82 @@ footer.site a:hover { color: #fff; }
 }
 .notfound-card .arch { margin: 0 auto 20px; width: 64px; height: 64px; }
 .notfound-card .cta-row { margin-top: 28px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+/* ---------- Calendar ---------- */
+.cal-toolbar {
+  display: flex; align-items: center; justify-content: center; gap: 14px;
+  margin-bottom: 18px; flex-wrap: wrap;
+}
+.cal-month-label { font-size: 1.35rem; font-weight: 600; min-width: 15ch; text-align: center; }
+.cal-nav {
+  width: 38px; height: 38px; border-radius: 50%;
+  border: 1px solid var(--line); background: var(--parchment);
+  font-size: 1.3rem; line-height: 1; color: var(--slate-dark); cursor: pointer;
+}
+.cal-nav:hover { background: var(--limestone); }
+.cal-today-btn {
+  border: 1px solid var(--line); background: var(--parchment); color: var(--slate-dark);
+  font-weight: 700; font-size: 0.85rem; padding: 8px 16px; border-radius: var(--radius); cursor: pointer;
+}
+.cal-today-btn:hover { background: var(--limestone); }
+
+.cal-weekdays {
+  display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px;
+  margin-bottom: 6px;
+}
+.cal-weekday {
+  text-align: center; font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-soft);
+  padding-bottom: 4px;
+}
+
+.cal-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
+.cal-day {
+  min-width: 0; min-height: 72px;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 3px;
+  background: var(--parchment); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 6px 6px 5px; text-align: left; cursor: pointer; font: inherit; color: inherit;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.cal-day:hover:not(.cal-day--selected) { background: var(--limestone); }
+.cal-day--outside { opacity: 0.4; }
+.cal-day--today { border-color: var(--brass); border-width: 2px; padding: 5px 5px 4px; }
+.cal-day--selected { background: var(--slate-dark); border-color: var(--slate-dark); }
+.cal-day--selected .cal-day-num { color: #F8F5EE; }
+.cal-day-num {
+  font-weight: 700; font-size: 0.85rem; color: var(--ink);
+  display: flex; align-items: center; gap: 5px;
+}
+.cal-day-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--brass); flex-shrink: 0; }
+.cal-day--selected .cal-day-dot { background: #F8F5EE; }
+.cal-day-chips { display: flex; flex-direction: column; gap: 2px; width: 100%; min-width: 0; }
+.cal-chip {
+  font-size: 0.66rem; line-height: 1.25; color: var(--slate-dark);
+  background: var(--limestone); border-radius: 3px; padding: 1px 4px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;
+}
+.cal-day--selected .cal-chip { background: rgba(248,245,238,0.15); color: #F8F5EE; }
+.cal-chip--more { background: transparent; color: var(--ink-soft); font-weight: 700; padding-left: 2px; }
+.cal-day--selected .cal-chip--more { color: #D8B978; }
+
+.cal-agenda {
+  margin-top: 22px; background: var(--limestone); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 20px 22px;
+}
+.cal-agenda-heading { font-size: 1.1rem; font-weight: 600; margin-bottom: 10px; }
+.cal-agenda-empty { color: var(--ink-soft); font-style: italic; margin: 0; }
+.cal-agenda-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.cal-agenda-list li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+.cal-agenda-time { font-weight: 700; color: var(--brass-dark); min-width: 5.5ch; }
+.cal-agenda-title { font-weight: 600; }
+.cal-agenda-location { color: var(--ink-soft); font-size: 0.92rem; }
+.cal-agenda-location::before { content: "— "; }
+
+/* Below ~560px, cells are too narrow for readable chip text — fall back to a dot indicator only, relying on the agenda panel for detail. */
+@media (max-width: 560px) {
+  .cal-day { min-height: 46px; padding: 5px 4px 4px; }
+  .cal-day-chips { display: none; }
+  .cal-day-num { font-size: 0.8rem; }
+  .cal-month-label { font-size: 1.1rem; min-width: 0; }
+  .cal-nav { width: 34px; height: 34px; }
+}

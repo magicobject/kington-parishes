@@ -15,7 +15,7 @@ npm test          # run the Playwright suite
 
 ## How the build works
 
-Eight real pages (`index`, `our-churches`, `services`, `parish-news`, `life-events`, `get-involved`, `contact`, `safeguarding`) plus the `404` page are assembled from four pieces by [scripts/build.mjs](scripts/build.mjs):
+Ten real pages (`index`, `our-churches`, `services`, `parish-news`, `parish-news-archive`, `life-events`, `get-involved`, `calendar`, `contact`, `safeguarding`) plus the `404` page are assembled from four pieces by [scripts/build.mjs](scripts/build.mjs):
 
 1. **[templates/header.html](templates/header.html)**, **[templates/safeguard-strip.html](templates/safeguard-strip.html)**, **[templates/footer.html](templates/footer.html)**, **[templates/page.html](templates/page.html)** — the shared page shell (nav, the "concerned about a child or adult's safety" banner, footer, `<head>`) with `{{PLACEHOLDER}}` tokens. Each is optional per page — see `header`, `safeguardStrip` and `footer` flags in `src/pages.config.mjs` (the 404 page skips the header and safeguard-strip but keeps the footer, so the build number and mediawright credit still show there; the safeguarding page skips the safeguard-strip since it would just link to itself).
 2. **[src/pages/\*.html](src/pages)** — just the content unique to each page. No `<head>`, no header, no footer — the build script wraps that around it.
@@ -80,6 +80,7 @@ In other words: **you never bump the build number or rebuild `public/` yourself*
 - **[footer.spec.ts](test/footer.spec.ts)** — every page with a footer shows a correctly-formatted build number and the "Site by mediawright.uk" credit.
 - **[page-content.spec.ts](test/page-content.spec.ts)** — each page shows its own title/heading/canonical URL, not another page's.
 - **[not-found.spec.ts](test/not-found.spec.ts)** — unknown URLs get a real 404 status and the branded 404 page, which is `noindex`, has no main nav, but does still show the footer.
+- **[calendar.spec.ts](test/calendar.spec.ts)** — the calendar defaults to the current month, Prev/Next/Today navigate correctly (including year rollover), selecting a day populates the agenda panel, and the grid never causes the page to scroll horizontally on mobile or desktop.
 
 `test/support/pages.ts` is the shared list of page metadata used across specs; add an entry there when adding a new page.
 
