@@ -7,7 +7,7 @@ Static site for the five parishes of Kington, Titley, Old Radnor, Kinnerton and 
 ## Quick start
 
 ```bash
-npm install       # also wires up the pre-commit hook — see below
+npm install       # also wires up the git hooks (build number, npm audit) — see below
 npm run build     # generate public/*.html from templates/ + src/
 npm run serve     # serve public/ locally at http://localhost:4176
 npm test          # run the Playwright suite
@@ -81,15 +81,17 @@ A few real bugs turned up along the way and got fixed as part of this move, not 
 
 One placeholder was deliberately left as-is, not invented: the "Open the calendar" button on Services & Events still points nowhere (`href="#"`). It was left pointing at an external Google Calendar link that doesn't exist yet, on purpose — it's a different thing from the site's own [Calendar](src/pages/calendar.html) page, which now carries real curated events (see "Adding a calendar event" above). The noticeboard and Parish News sections, which used to show sample "replace via the CMS" placeholder content, are now populated with real notices and issues.
 
-## The pre-commit hook and the build number in the footer
+## Git hooks: build number on commit, npm audit on push
 
-Every page's footer shows a build number like `Build 2026.08.29.003` (format `yyyy.mm.dd.NNN`, where `NNN` counts commits made that day, stored in [build-number.json](build-number.json)).
+`npm install` runs the `prepare` script, which points git at the tracked [.githooks/](.githooks) directory (`core.hooksPath`) — so both hooks below are wired up automatically, no manual setup.
 
-This is maintained automatically, not by hand. `npm install` runs the `prepare` script, which points git at the tracked [.githooks/pre-commit](.githooks/pre-commit) hook. On every commit, that hook:
+**[.githooks/pre-commit](.githooks/pre-commit)** — every page's footer shows a build number like `Build 2026.08.29.003` (format `yyyy.mm.dd.NNN`, where `NNN` counts commits made that day, stored in [build-number.json](build-number.json)). This is maintained automatically, not by hand. On every commit, the hook:
 
 1. Runs [scripts/bump-build-number.mjs](scripts/bump-build-number.mjs), which increments today's counter in `build-number.json`.
 2. Runs `npm run build`, regenerating every file in `public/` — including stamping the new build number into each footer and cache-busting `css/style.css?v=...` and `js/main.js?v=...`.
 3. Stages the results (`git add public build-number.json`) so they're included in the commit you're about to make.
+
+**[.githooks/pre-push](.githooks/pre-push)** — runs `npm run audit` (`npm audit --audit-level=high`) and blocks the push if it finds any high or critical severity vulnerability in a dependency. Low/moderate findings don't block — those are worth a look but aren't push-blocking on their own. `npm run audit` can be run any time without pushing; `npm audit fix` will resolve most findings automatically. In the rare case you need to push past a known, already-assessed issue, `git push --no-verify` skips the hook — but treat that as a deliberate, logged exception, not a habit.
 
 In other words: **you never bump the build number or rebuild `public/` yourself** — just edit source files under `src/`/`templates/` and commit as normal.
 

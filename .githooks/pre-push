@@ -1,0 +1,11 @@
+#!/bin/sh
+# Block the push if npm audit finds any high/critical severity vulnerability.
+# Low/moderate findings are left to judgement and don't block — only serious
+# ones do. Run `npm run audit` any time to check without pushing.
+npm run audit || {
+  echo "" >&2
+  echo "pre-push: npm audit found high/critical vulnerabilities — push blocked." >&2
+  echo "Run 'npm audit' for details, 'npm audit fix' to try an automatic fix," >&2
+  echo "or 'git push --no-verify' to push anyway (not recommended)." >&2
+  exit 1
+}

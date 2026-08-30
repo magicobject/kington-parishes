@@ -10,7 +10,8 @@
     "test:ui": "playwright test --ui",
     "test:headed": "playwright test --headed",
     "serve": "tsx test/support/static-server.ts",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "audit": "npm audit --audit-level=high"
   },
   "repository": {
     "type": "git",
