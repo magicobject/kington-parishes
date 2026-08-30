@@ -86,6 +86,11 @@ header.site {
   color: #F8F5EE;
   text-decoration: none;
 }
+.brand:hover {
+  color: #fff;
+  text-decoration: underline;
+  text-decoration-color: var(--brass);
+}
 nav.links {
   display: flex;
   gap: 22px;

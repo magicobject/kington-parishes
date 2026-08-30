@@ -27,6 +27,7 @@ export const FOOTER_NAV = [
   { href: 'services.html', label: 'Services &amp; Events' },
   { href: 'parish-news.html', label: 'Parish News' },
   { href: 'safeguarding.html', label: 'Safeguarding' },
+  { href: 'https://www.youtube.com/@KingtonStMaryLive', label: 'Our YouTube Channel' },
 ];
 
 export const PAGES = [

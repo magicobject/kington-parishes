@@ -74,9 +74,11 @@ function renderNavItems(links, activeHref) {
     .join('\n');
 }
 
-const footerNavItems = FOOTER_NAV.map(({ href, label }) => `<a href="${href}">${label}</a>`).join(
-  '<br>\n        ',
-);
+const footerNavItems = FOOTER_NAV.map(({ href, label }) => {
+  const external = /^https?:\/\//.test(href);
+  const attrs = external ? ' target="_blank" rel="noopener"' : '';
+  return `<a href="${href}"${attrs}>${label}</a>`;
+}).join('<br>\n        ');
 
 const buildNumber = readBuildNumber();
 const tokens = tokensFromSite(SITE, buildNumber);
