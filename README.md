@@ -62,7 +62,11 @@ Array order doesn't matter — the calendar groups events by date and sorts each
 
 **This file is for special/one-off events only** — concerts, recitals, fetes, pilgrimage & tea, and the like. It deliberately excludes the regular weekly pattern of worship at each church (that's covered in prose on [Services & Events](src/pages/services.html) and [Our Churches](src/pages/our-churches.html)) — adding every recurring Sunday service here would make the grid unreadable. The current 19 events were hand-curated from St Mary's Kington's own public Google Calendar feed for exactly this reason: the raw feed also includes daily prayer services, organ/ringing practice, and internal-only entries (committee meetings, rehearsals) that don't belong on a public calendar.
 
-[test/calendar.spec.ts](test/calendar.spec.ts) checks the calendar's behaviour (navigation, selection, no horizontal scroll) but not the content of `calendar-events.js` — a typo'd date or time won't fail a test, so double-check new entries by eye in the browser.
+**There's no recurrence support** — `calendar-events.js` is a flat list of one-off dated entries, with no "every Sunday" or "monthly" concept. A repeating event needs one array entry per occurrence, the way `Summer Family Fun at St Mary's` appears three times (28 July, 11 and 25 August) rather than once with a repeat rule. Fine for a handful of special events; if this ever needs to cover something genuinely recurring on an ongoing basis, that'd be new work in [calendar.js](public/js/calendar.js) (expanding a rule into occurrences at render time), not a data-file change.
+
+**Two or more events can land on the same day** — the grid cell shows up to two as chips, with a `+N more` chip if there are more, but the agenda panel always lists every event for the selected day, uncapped. [test/calendar.spec.ts](test/calendar.spec.ts) covers both the two-event case (19 July, seeded with two real events) and the overflow case (a route-intercepted third event, since no real seeded date currently has three).
+
+[test/calendar.spec.ts](test/calendar.spec.ts) checks the calendar's behaviour (navigation, selection, multi-event days, no horizontal scroll) but not the content of `calendar-events.js` — a typo'd date or time won't fail a test, so double-check new entries by eye in the browser.
 
 ## Proof-of-concept: noindex everywhere
 
@@ -111,7 +115,7 @@ This file has no effect from `npm run serve` — the local static test server do
 - **[footer.spec.ts](test/footer.spec.ts)** — every page with a footer shows a correctly-formatted build number and the "Site by mediawright.uk" credit.
 - **[page-content.spec.ts](test/page-content.spec.ts)** — each page shows its own title/heading/canonical URL, not another page's.
 - **[not-found.spec.ts](test/not-found.spec.ts)** — unknown URLs get a real 404 status and the branded 404 page, which is `noindex`, has no main nav, but does still show the footer.
-- **[calendar.spec.ts](test/calendar.spec.ts)** — the calendar defaults to the current month, Prev/Next/Today navigate correctly (including year rollover), selecting a day populates the agenda panel, and the grid never causes the page to scroll horizontally on mobile or desktop.
+- **[calendar.spec.ts](test/calendar.spec.ts)** — the calendar defaults to the current month, Prev/Next/Today navigate correctly (including year rollover), selecting a day populates the agenda panel, a day with two or more events shows them correctly (capped chips in the grid, the full uncapped list in the agenda), and the grid never causes the page to scroll horizontally on mobile or desktop.
 
 `test/support/pages.ts` is the shared list of page metadata used across specs; add an entry there when adding a new page.
 
