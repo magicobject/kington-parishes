@@ -64,3 +64,66 @@ test('safeguarding is reachable from the footer\'s Explore list, but not highlig
   await expect(page).toHaveTitle(new RegExp(SAFEGUARDING_PAGE.titleContains));
   expect(await activeNavLabel(page)).toBeNull();
 });
+
+// Below 860px the primary nav collapses behind an ellipsis "Menu" toggle
+// (see the matching @media block in style.css) rather than wrapping across
+// three cramped lines.
+test.describe('mobile nav toggle (narrow viewport)', () => {
+  test.use({ viewport: { width: 375, height: 812 } });
+
+  test('the nav is collapsed behind the toggle by default, and the toggle opens it', async ({ page }) => {
+    await page.goto('/index.html');
+
+    const toggle = page.getByRole('button', { name: 'Menu' });
+    const nav = page.locator('nav.links');
+
+    await expect(toggle).toBeVisible();
+    await expect(nav).toBeHidden();
+    await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+
+    await toggle.click();
+    await expect(nav).toBeVisible();
+    await expect(toggle).toHaveAttribute('aria-expanded', 'true');
+    await expect(nav.getByRole('link', { name: 'Our Churches', exact: true })).toBeVisible();
+  });
+
+  test('clicking a link in the open menu navigates there', async ({ page }) => {
+    await page.goto('/index.html');
+    await page.getByRole('button', { name: 'Menu' }).click();
+    await page.locator('nav.links').getByRole('link', { name: 'Contact', exact: true }).click();
+    await expect(page).toHaveURL(/\/contact\.html$/);
+  });
+
+  test('Escape closes the menu and returns focus to the toggle', async ({ page }) => {
+    await page.goto('/index.html');
+    const toggle = page.getByRole('button', { name: 'Menu' });
+    const nav = page.locator('nav.links');
+
+    await toggle.click();
+    await expect(nav).toBeVisible();
+
+    await page.keyboard.press('Escape');
+    await expect(nav).toBeHidden();
+    await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    await expect(toggle).toBeFocused();
+  });
+
+  test('clicking outside the open menu closes it', async ({ page }) => {
+    await page.goto('/index.html');
+    const toggle = page.getByRole('button', { name: 'Menu' });
+    const nav = page.locator('nav.links');
+
+    await toggle.click();
+    await expect(nav).toBeVisible();
+
+    await page.locator('main#main').click({ position: { x: 10, y: 10 } });
+    await expect(nav).toBeHidden();
+    await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+  });
+});
+
+test('at desktop width the nav toggle is hidden and the full nav is always visible', async ({ page }) => {
+  await page.goto('/index.html');
+  await expect(page.getByRole('button', { name: 'Menu' })).toBeHidden();
+  await expect(page.locator('nav.links')).toBeVisible();
+});

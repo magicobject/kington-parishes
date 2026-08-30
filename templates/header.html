@@ -3,7 +3,11 @@
 <header class="site">
   <div class="nav-row">
     <a class="brand" href="index.html">{{ORG_NAME}}</a>
-    <nav class="links" aria-label="Primary">
+    <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="primary-nav">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="5" cy="12" r="2.2" fill="currentColor"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/><circle cx="19" cy="12" r="2.2" fill="currentColor"/></svg>
+      Menu
+    </button>
+    <nav class="links" id="primary-nav" aria-label="Primary">
 {{NAV_ITEMS}}
     </nav>
     <a class="btn-donate" href="{{DONATE_URL}}" target="_blank" rel="noopener">Donate Now <span class="visually-hidden">(opens Parish Giving Scheme in a new tab)</span></a>

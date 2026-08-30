@@ -128,13 +128,13 @@ Fixes that came out of the last full pass — kept here since axe won't re-expla
 
 [Playwright](https://playwright.dev) specs in `test/` cover:
 
-- **[nav.spec.ts](test/nav.spec.ts)** — the primary nav highlights the right page, the donate button appears everywhere and points at the Parish Giving Scheme, and Safeguarding (reachable only from the footer) never shows as "current" in the primary nav.
+- **[nav.spec.ts](test/nav.spec.ts)** — the primary nav highlights the right page, the donate button appears everywhere and points at the Parish Giving Scheme, Safeguarding (reachable only from the footer) never shows as "current" in the primary nav, and below 860px the nav collapses behind an ellipsis "Menu" toggle (closed by default, opens on click, a link click/Escape/click-outside all close it again, focus returns to the toggle on Escape) while staying always-visible above that width.
 - **[contact-details.spec.ts](test/contact-details.spec.ts)** — the DRY-up's regression guard: checks the parish office email/phone, the booking secretary's contact, and the donate link actually got substituted correctly (and that no `{{TOKEN}}` placeholder was ever left un-replaced) across every generated page.
 - **[footer.spec.ts](test/footer.spec.ts)** — every page with a footer shows a correctly-formatted build number and the "Site by mediawright.uk" credit.
 - **[page-content.spec.ts](test/page-content.spec.ts)** — each page shows its own title/heading/canonical URL, not another page's.
 - **[not-found.spec.ts](test/not-found.spec.ts)** — unknown URLs get a real 404 status and the branded 404 page, which is `noindex`, has no main nav, but does still show the footer.
 - **[calendar.spec.ts](test/calendar.spec.ts)** — the calendar defaults to the current month, Prev/Next/Today navigate correctly (including year rollover), selecting a day populates the agenda panel, a day with two or more events shows them correctly (capped chips in the grid, the full uncapped list in the agenda), and the grid never causes the page to scroll horizontally on mobile or desktop.
-- **[accessibility.spec.ts](test/accessibility.spec.ts)** — an axe-core scan of every page with zero tolerated violations (see "Accessibility" above for what that's already caught and how the reveal-on-scroll animation is worked around).
+- **[accessibility.spec.ts](test/accessibility.spec.ts)** — an axe-core scan of every page with zero tolerated violations (see "Accessibility" above for what that's already caught and how the reveal-on-scroll animation is worked around), plus the homepage specifically at mobile viewport width in both the closed and open states of the nav toggle.
 
 `test/support/pages.ts` is the shared list of page metadata used across specs; add an entry there when adding a new page.
 

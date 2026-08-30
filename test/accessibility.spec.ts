@@ -35,3 +35,23 @@ for (const path of ALL_PATHS) {
     expect(results.violations, formatViolations(results.violations)).toEqual([]);
   });
 }
+
+// The primary nav collapses behind an ellipsis "Menu" toggle below 860px —
+// scan both its closed and open states, since axe only sees what's actually
+// in the accessibility tree at scan time.
+test.describe('mobile nav toggle', () => {
+  test.use({ viewport: { width: 375, height: 812 } });
+
+  test('axe: homepage, mobile nav closed', async ({ page }) => {
+    await page.goto('/index.html');
+    const results = await new AxeBuilder({ page }).analyze();
+    expect(results.violations, formatViolations(results.violations)).toEqual([]);
+  });
+
+  test('axe: homepage, mobile nav open', async ({ page }) => {
+    await page.goto('/index.html');
+    await page.getByRole('button', { name: 'Menu' }).click();
+    const results = await new AxeBuilder({ page }).analyze();
+    expect(results.violations, formatViolations(results.violations)).toEqual([]);
+  });
+});
