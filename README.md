@@ -38,6 +38,7 @@ Running `npm run build` reads all four and writes the finished files into `publi
 | Calendar behaviour (month grid, navigation) | `public/js/calendar.js` (also not generated) | — |
 | Favicon | `public/img/favicon.svg` (also not generated) | — |
 | Robots.txt | `public/robots.txt` (hand-maintained, not generated) | — |
+| Security headers (CSP, etc.) | `public/_headers` (hand-maintained, not generated — Cloudflare-specific file, applied to every response) | — |
 
 **`public/*.html` is a build artefact.** Every one of those files opens with an auto-generated `DO-NOT-EDIT` HTML comment banner for exactly this reason: a hand-edit made directly to a file in `public/` will be **silently overwritten** the next time anyone runs `npm run build` — which happens automatically on every commit (see below).
 
@@ -95,7 +96,13 @@ One placeholder was deliberately left as-is, not invented: the "Open the calenda
 
 In other words: **you never bump the build number or rebuild `public/` yourself** — just edit source files under `src/`/`templates/` and commit as normal.
 
-## Tests
+## Security headers
+
+[public/_headers](public/_headers) is a Cloudflare-specific file (same convention as Cloudflare Pages) applied to every response: a Content-Security-Policy, `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin`, a restrictive `Permissions-Policy`, and HSTS.
+
+The CSP is `default-src 'self'` plus the minimum extra it actually needs: `https://fonts.googleapis.com`/`https://fonts.gstatic.com` for the Google Fonts stylesheet, and `'unsafe-inline'` on `style-src` only, because several pages use inline `style="..."` attributes (a full refactor to CSS classes felt like unnecessary scope for a proof-of-concept). `script-src` stays `'self'` with no exceptions — there are no inline `<script>` blocks anywhere in `src/pages/` or `templates/`, only external files (`main.js`, `calendar.js`, `calendar-events.js`), so it doesn't need one.
+
+This file has no effect from `npm run serve` — the local static test server doesn't apply it, since `_headers` is a Cloudflare-only convention. It was checked before ever going live by pointing a throwaway local server at `public/` that applies the same rules and watching the browser console for CSP violations across the pages most likely to break (the homepage's inline styles, the calendar's external scripts) — worth repeating that check (or the equivalent on a preview deploy) after any change to `_headers` or to what a page loads.
 
 [Playwright](https://playwright.dev) specs in `test/` cover:
 

@@ -17,6 +17,19 @@
     eventsByDate[d].sort(function (a, b) { return a.time.localeCompare(b.time); });
   });
 
+  // calendar-events.js is hand-edited, not user input — but escape titles/
+  // locations anyway before they go into innerHTML, on general principle
+  // and in case that ever changes (e.g. a copy-pasted title with a stray
+  // "<" or "&" shouldn't be able to break the markup).
+  function escapeHtml(s) {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
   function pad(n) { return n < 10 ? '0' + n : '' + n; }
   function dateStr(y, m, d) { return y + '-' + pad(m + 1) + '-' + pad(d); }
   function formatTime(t) {
@@ -67,8 +80,8 @@
     } else {
       html += '<ul class="cal-agenda-list">' + evs.map(function (ev) {
         return '<li><span class="cal-agenda-time">' + formatTime(ev.time) + '</span>' +
-          '<span class="cal-agenda-title">' + ev.title + '</span>' +
-          (ev.location ? '<span class="cal-agenda-location">' + ev.location + '</span>' : '') +
+          '<span class="cal-agenda-title">' + escapeHtml(ev.title) + '</span>' +
+          (ev.location ? '<span class="cal-agenda-location">' + escapeHtml(ev.location) + '</span>' : '') +
           '</li>';
       }).join('') + '</ul>';
     }
@@ -98,7 +111,7 @@
       if (evs.length) classes.push('cal-day--has-events');
 
       var chipsHtml = evs.slice(0, 2).map(function (ev) {
-        return '<span class="cal-chip">' + formatTime(ev.time) + ' ' + ev.title + '</span>';
+        return '<span class="cal-chip">' + formatTime(ev.time) + ' ' + escapeHtml(ev.title) + '</span>';
       }).join('');
       if (evs.length > 2) {
         chipsHtml += '<span class="cal-chip cal-chip--more">+' + (evs.length - 2) + ' more</span>';
