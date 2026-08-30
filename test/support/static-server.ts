@@ -18,6 +18,10 @@ const CONTENT_TYPES: Record<string, string> = {
   '.xml': 'application/xml; charset=utf-8',
   '.txt': 'text/plain; charset=utf-8',
   '.json': 'application/json; charset=utf-8',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.png': 'image/png',
+  '.pdf': 'application/pdf',
 };
 
 function resolvePath(urlPath: string): string {
