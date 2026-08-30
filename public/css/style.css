@@ -306,6 +306,8 @@ footer.site a:hover { color: #fff; }
 .hero .eyebrow { color: #C9BEA0; }
 .hero h1 { color: #F8F5EE; font-size: clamp(2.1rem, 5vw, 3.1rem); max-width: 17ch; font-weight: 600; }
 .hero p.lede { color: #C4BFAF; max-width: 50ch; margin-top: 16px; font-size: 1.1rem; }
+.hero p.lede a { color: #F8F5EE; text-decoration: underline; text-underline-offset: 3px; }
+.hero p.lede a:hover { color: #D8B978; }
 .hero .cta-row { margin-top: 26px; display: flex; gap: 14px; flex-wrap: wrap; }
 .ridge-nav { margin-top: 44px; }
 .ridge-nav svg { display: block; width: 100%; height: auto; }
