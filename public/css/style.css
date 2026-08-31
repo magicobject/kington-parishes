@@ -420,6 +420,15 @@ footer.site .fine a { color: #C9C3B2; text-decoration: underline; text-underline
 .parish .links-row { display: flex; gap: 8px 24px; flex-wrap: wrap; margin-top: 20px; }
 .parish .links-row .give-link { margin-top: 0; }
 .parish .links-row .trust-link { font-weight: 700; }
+.parish-photo { max-width: 640px; margin: 20px 0 28px; }
+.parish-photo img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  box-shadow: 0 14px 26px -16px rgba(38,37,33,0.28);
+  display: block;
+}
+.parish-photo figcaption { margin-top: 10px; font-size: 0.85rem; color: var(--ink-soft); }
 
 .changelog { list-style: none; margin: 0; padding: 0; max-width: 70ch; }
 .changelog li { padding: 16px 0; border-bottom: 1px solid var(--line); }
