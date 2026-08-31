@@ -430,6 +430,22 @@ footer.site .fine a { color: #C9C3B2; text-decoration: underline; text-underline
 }
 .parish-photo figcaption { margin-top: 10px; font-size: 0.85rem; color: var(--ink-soft); }
 
+/* ---------- Parish Hall gallery ---------- */
+.hall-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 22px;
+}
+.hall-gallery figure { margin: 0; }
+.hall-gallery img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  box-shadow: 0 14px 26px -16px rgba(38,37,33,0.28);
+  display: block;
+}
+.hall-gallery figcaption { margin-top: 10px; font-size: 0.85rem; color: var(--ink-soft); }
+
 .changelog { list-style: none; margin: 0; padding: 0; max-width: 70ch; }
 .changelog li { padding: 16px 0; border-bottom: 1px solid var(--line); }
 .changelog li:last-child { border-bottom: none; }
