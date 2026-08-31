@@ -290,6 +290,16 @@ section + section { border-top: 1px solid var(--line); }
   display: block;
 }
 
+.people-photo { max-width: 360px; margin: 0 auto 36px; text-align: center; }
+.people-photo img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  box-shadow: 0 14px 26px -16px rgba(38,37,33,0.28);
+  display: block;
+}
+.people-photo figcaption { margin-top: 12px; font-size: 0.88rem; color: var(--ink-soft); }
+
 /* ---------- Buttons ---------- */
 .btn {
   display: inline-block;

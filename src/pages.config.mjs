@@ -14,6 +14,7 @@
 // slot is used for Walkers instead.
 export const NAV = [
   { href: 'our-churches.html', label: 'Our Churches' },
+  { href: 'our-people.html', label: 'Our People' },
   { href: 'walkers.html', label: 'Walkers' },
   { href: 'services.html', label: 'Services &amp; Events' },
   { href: 'parish-news.html', label: 'Parish News' },
@@ -48,6 +49,14 @@ export const PAGES = [
     title: 'Our Churches — Kington Parishes',
     description: "The five churches of Kington Parishes: St Mary's Kington, St Peter's Titley, St Stephen's Old Radnor, St Mary's Kinnerton, and St Thomas à Becket Huntington.",
     active: 'our-churches.html',
+    header: true,
+    robots: 'noindex, nofollow',
+  },
+  {
+    slug: 'our-people',
+    title: 'Our People — Kington Parishes',
+    description: 'Meet our Vicar, Revd Sally Welch, and our Curate, Revd Phillippa Wright, who lead worship and ministry across our five churches.',
+    active: 'our-people.html',
     header: true,
     robots: 'noindex, nofollow',
   },

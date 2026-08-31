@@ -15,7 +15,7 @@ npm test          # run the Playwright suite
 
 ## How the build works
 
-Eleven real pages (`index`, `our-churches`, `walkers`, `services`, `parish-news`, `parish-news-archive`, `life-events`, `get-involved`, `calendar`, `contact`, `safeguarding`) plus the `404` page are assembled from four pieces by [scripts/build.mjs](scripts/build.mjs):
+Twelve real pages (`index`, `our-churches`, `our-people`, `walkers`, `services`, `parish-news`, `parish-news-archive`, `life-events`, `get-involved`, `calendar`, `contact`, `safeguarding`) plus the `404` page are assembled from four pieces by [scripts/build.mjs](scripts/build.mjs):
 
 1. **[templates/header.html](templates/header.html)**, **[templates/safeguard-strip.html](templates/safeguard-strip.html)**, **[templates/footer.html](templates/footer.html)**, **[templates/page.html](templates/page.html)** — the shared page shell (nav, the "concerned about a child or adult's safety" banner, footer, `<head>`) with `{{PLACEHOLDER}}` tokens. Each is optional per page — see `header`, `safeguardStrip` and `footer` flags in `src/pages.config.mjs` (the 404 page skips the header and safeguard-strip but keeps the footer, so the build number and mediawright credit still show there; the safeguarding page skips the safeguard-strip since it would just link to itself).
 2. **[src/pages/\*.html](src/pages)** — just the content unique to each page. No `<head>`, no header, no footer — the build script wraps that around it.
@@ -85,6 +85,10 @@ A few real bugs turned up along the way and got fixed as part of this move, not 
 - The 404 page's links used absolute paths (`/`, `/contact.html`) while every other page used relative ones — made consistent.
 
 One placeholder was deliberately left as-is, not invented: the "Open the calendar" button on Services & Events still points nowhere (`href="#"`). It was left pointing at an external Google Calendar link that doesn't exist yet, on purpose — it's a different thing from the site's own [Calendar](src/pages/calendar.html) page, which now carries real curated events (see "Adding a calendar event" above). The noticeboard and Parish News sections, which used to show sample "replace via the CMS" placeholder content, are now populated with real notices and issues.
+
+## The Our People page
+
+[Our People](src/pages/our-people.html) introduces the clergy team: Revd Sally Welch (Vicar) and Revd Phillippa Wright (Curate), with a shared photo of the two of them and a short card each. It's deliberately built as a small, growing list rather than a one-off pair — the `.card-grid` of `.card` profile cards is the same component used elsewhere on the site (see "Ongoing community programmes" on the homepage), so adding a third or fourth person later, once there's a photo and a couple of lines for them, is a new card in the same grid rather than a page redesign. The photo lives at [public/img/our-people/sally-welch-and-phillippa-wright.jpg](public/img/our-people/sally-welch-and-phillippa-wright.jpg) — not generated, hand-maintained, same as the other images under `public/img/`.
 
 ## The Walkers page, and "Home" not being in the primary nav
 

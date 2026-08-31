@@ -24,9 +24,10 @@ export const HOME_PAGE: SitePage = {
   heading: /vibrant church communities/i,
 };
 
-// The eight pages in the primary header nav.
+// The nine pages in the primary header nav.
 export const NAV_PAGES: SitePage[] = [
   { path: '/our-churches.html', navLabel: 'Our Churches', titleContains: 'Our Churches', heading: /five churches, one benefice/i },
+  { path: '/our-people.html', navLabel: 'Our People', titleContains: 'Our People', heading: /the people who lead and serve us/i },
   { path: '/walkers.html', navLabel: 'Walkers', titleContains: 'Walkers Welcome', heading: /walkers welcome/i },
   { path: '/services.html', navLabel: 'Services & Events', titleContains: 'Services', heading: /worship, week by week/i },
   { path: '/parish-news.html', navLabel: 'Parish News', titleContains: 'Parish News', heading: /family magazine/i },
