@@ -13,10 +13,21 @@ export interface SitePage {
   hasHeader?: boolean;
 }
 
-// The seven pages in the primary header nav.
+// The homepage isn't in NAV_PAGES below: the brand link in the header
+// already goes here, so it has no link of its own in the primary nav (same
+// reasoning as Safeguarding/Parish News Archive, just for the opposite
+// reason — this one has no nav link at all, not a different one).
+export const HOME_PAGE: SitePage = {
+  path: '/index.html',
+  navLabel: 'Home',
+  titleContains: 'Kington Parishes',
+  heading: /vibrant church communities/i,
+};
+
+// The eight pages in the primary header nav.
 export const NAV_PAGES: SitePage[] = [
-  { path: '/index.html', navLabel: 'Home', titleContains: 'Kington Parishes', heading: /vibrant church communities/i },
   { path: '/our-churches.html', navLabel: 'Our Churches', titleContains: 'Our Churches', heading: /five churches, one benefice/i },
+  { path: '/walkers.html', navLabel: 'Walkers', titleContains: 'Walkers Welcome', heading: /walkers welcome/i },
   { path: '/services.html', navLabel: 'Services & Events', titleContains: 'Services', heading: /worship, week by week/i },
   { path: '/parish-news.html', navLabel: 'Parish News', titleContains: 'Parish News', heading: /family magazine/i },
   { path: '/life-events.html', navLabel: 'Life Events', titleContains: 'Life Events', heading: /baptisms, weddings/i },
@@ -47,4 +58,4 @@ export const PARISH_NEWS_ARCHIVE_PAGE: SitePage = {
 
 // Every generated page, including the ones without primary nav — used by
 // specs that should run against literally everything (footer, tokens).
-export const ALL_PAGES: SitePage[] = [...NAV_PAGES, SAFEGUARDING_PAGE, PARISH_NEWS_ARCHIVE_PAGE];
+export const ALL_PAGES: SitePage[] = [HOME_PAGE, ...NAV_PAGES, SAFEGUARDING_PAGE, PARISH_NEWS_ARCHIVE_PAGE];

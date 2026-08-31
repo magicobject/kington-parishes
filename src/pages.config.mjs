@@ -9,9 +9,12 @@
 // genuine site in search results.
 
 // The header's primary nav — every page except 404 shows this.
+// "Home" isn't a link here: the brand link in the header already goes to
+// index.html, so a second link to the same place would be redundant — that
+// slot is used for Walkers instead.
 export const NAV = [
-  { href: 'index.html', label: 'Home' },
   { href: 'our-churches.html', label: 'Our Churches' },
+  { href: 'walkers.html', label: 'Walkers' },
   { href: 'services.html', label: 'Services &amp; Events' },
   { href: 'parish-news.html', label: 'Parish News' },
   { href: 'life-events.html', label: 'Life Events' },
@@ -45,6 +48,14 @@ export const PAGES = [
     title: 'Our Churches — Kington Parishes',
     description: "The five churches of Kington Parishes: St Mary's Kington, St Peter's Titley, St Stephen's Old Radnor, St Mary's Kinnerton, and St Thomas à Becket Huntington.",
     active: 'our-churches.html',
+    header: true,
+    robots: 'noindex, nofollow',
+  },
+  {
+    slug: 'walkers',
+    title: 'Walkers Welcome — Kington Parishes',
+    description: "Walking near Kington: our own way-marked Pilgrim Paths, the Offa's Dyke Path, and other local routes — plus an open invitation to stop at St Mary's, Kington for tea, biscuits and the facilities.",
+    active: 'walkers.html',
     header: true,
     robots: 'noindex, nofollow',
   },

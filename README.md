@@ -15,7 +15,7 @@ npm test          # run the Playwright suite
 
 ## How the build works
 
-Ten real pages (`index`, `our-churches`, `services`, `parish-news`, `parish-news-archive`, `life-events`, `get-involved`, `calendar`, `contact`, `safeguarding`) plus the `404` page are assembled from four pieces by [scripts/build.mjs](scripts/build.mjs):
+Eleven real pages (`index`, `our-churches`, `walkers`, `services`, `parish-news`, `parish-news-archive`, `life-events`, `get-involved`, `calendar`, `contact`, `safeguarding`) plus the `404` page are assembled from four pieces by [scripts/build.mjs](scripts/build.mjs):
 
 1. **[templates/header.html](templates/header.html)**, **[templates/safeguard-strip.html](templates/safeguard-strip.html)**, **[templates/footer.html](templates/footer.html)**, **[templates/page.html](templates/page.html)** — the shared page shell (nav, the "concerned about a child or adult's safety" banner, footer, `<head>`) with `{{PLACEHOLDER}}` tokens. Each is optional per page — see `header`, `safeguardStrip` and `footer` flags in `src/pages.config.mjs` (the 404 page skips the header and safeguard-strip but keeps the footer, so the build number and mediawright credit still show there; the safeguarding page skips the safeguard-strip since it would just link to itself).
 2. **[src/pages/\*.html](src/pages)** — just the content unique to each page. No `<head>`, no header, no footer — the build script wraps that around it.
@@ -85,6 +85,14 @@ A few real bugs turned up along the way and got fixed as part of this move, not 
 - The 404 page's links used absolute paths (`/`, `/contact.html`) while every other page used relative ones — made consistent.
 
 One placeholder was deliberately left as-is, not invented: the "Open the calendar" button on Services & Events still points nowhere (`href="#"`). It was left pointing at an external Google Calendar link that doesn't exist yet, on purpose — it's a different thing from the site's own [Calendar](src/pages/calendar.html) page, which now carries real curated events (see "Adding a calendar event" above). The noticeboard and Parish News sections, which used to show sample "replace via the CMS" placeholder content, are now populated with real notices and issues.
+
+## The Walkers page, and "Home" not being in the primary nav
+
+The primary nav has no "Home" link — the brand link in the header (the "Kington Parishes" text, top left of every page) already goes to `index.html`, so a second link to the same place would just be redundant. That slot is used for [Walkers](src/pages/walkers.html) instead: an open invitation to walkers on the Offa's Dyke Path and our own Pilgrim Paths to stop at St Mary's, Kington for tea, biscuits and the facilities, plus links out to [Kington Walks](https://www.kingtonwalks.org/) and [Visit Herefordshire's Kington walks guide](https://www.visitherefordshire.co.uk/discover/kington-walks).
+
+Because Home has no nav link, `test/support/pages.ts` keeps it as a standalone `HOME_PAGE` export rather than the first entry in `NAV_PAGES` — the same pattern already used for Safeguarding and the Parish News Archive (pages that are real and tested but aren't primary-nav destinations), just for the opposite reason: those two have a *different* link elsewhere (the footer), Home has none at all. `ALL_PAGES` (used by the specs that test every page regardless of nav status) still includes it.
+
+The homepage also gained a **Find Us** section just above the footer: a full-width Google Maps embed pinned on St Mary's, Kington, using the same `.map-full`/`.map-full-embed` pattern as the [kingtonfoodbank](https://github.com/magicobject/kingtonfoodbank) site's map, for a consistent look across the two.
 
 ## Git hooks: build number on commit, npm audit on push
 

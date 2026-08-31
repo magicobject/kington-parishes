@@ -1,5 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
-import { NAV_PAGES, SAFEGUARDING_PAGE } from './support/pages';
+import { HOME_PAGE, NAV_PAGES, SAFEGUARDING_PAGE } from './support/pages';
 
 async function activeNavLabel(page: Page): Promise<string | null> {
   const active = page.locator('nav.links a[aria-current="page"]');
@@ -9,13 +9,15 @@ async function activeNavLabel(page: Page): Promise<string | null> {
   return (await active.textContent())?.trim() ?? '';
 }
 
-test('landing on the site shows the homepage with Home highlighted in the nav', async ({ page }) => {
+test('landing on the site shows the homepage with no primary nav item highlighted', async ({ page }) => {
   await page.goto('/');
 
   await expect(page).toHaveTitle(/Kington Parishes/);
   await expect(page.locator('h1')).toBeVisible();
   await expect(page.locator('nav.links')).toBeVisible();
-  expect(await activeNavLabel(page)).toBe('Home');
+  // Home has no link of its own in the primary nav — the brand link already
+  // goes here — so nothing should be marked aria-current on the homepage.
+  expect(await activeNavLabel(page)).toBeNull();
 
   const links = page.locator('nav.links a');
   await expect(links).toHaveText(NAV_PAGES.map((p) => p.navLabel));
@@ -37,15 +39,15 @@ for (const target of NAV_PAGES) {
 }
 
 test('the brand logo links back to the homepage from every page in the nav', async ({ page }) => {
-  for (const sitePage of NAV_PAGES.filter((p) => p.path !== '/index.html')) {
+  for (const sitePage of NAV_PAGES) {
     await page.goto(sitePage.path);
     await page.locator('a.brand').click();
     await expect(page).toHaveURL(/\/index\.html$/);
   }
 });
 
-test('the donate button appears on every nav page and points at the Parish Giving Scheme', async ({ page }) => {
-  for (const sitePage of NAV_PAGES) {
+test('the donate button appears on the homepage and every nav page, and points at the Parish Giving Scheme', async ({ page }) => {
+  for (const sitePage of [HOME_PAGE, ...NAV_PAGES]) {
     await page.goto(sitePage.path);
     await expect(page.locator('a.btn-donate')).toHaveAttribute(
       'href',
