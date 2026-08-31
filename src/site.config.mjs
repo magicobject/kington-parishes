@@ -18,7 +18,7 @@ export const SITE = {
   county: 'Herefordshire',
   postcode: 'HR5 3AG',
 
-  donateUrl: 'https://www.parishgiving.org.uk/donate',
+  donateUrl: 'https://www.parishgiving.org.uk/donors/find-your-parish/kington-st-mary-herefordshire',
 
   bookingName: 'Penny Halcrow',
   bookingEmail: 'p.s.halcrow@gmail.com',

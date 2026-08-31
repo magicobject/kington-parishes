@@ -51,7 +51,7 @@ test('the donate button appears on the homepage and every nav page, and points a
     await page.goto(sitePage.path);
     await expect(page.locator('a.btn-donate')).toHaveAttribute(
       'href',
-      'https://www.parishgiving.org.uk/donate',
+      'https://www.parishgiving.org.uk/donors/find-your-parish/kington-st-mary-herefordshire',
     );
   }
 });

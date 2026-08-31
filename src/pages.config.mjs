@@ -55,7 +55,7 @@ export const PAGES = [
   {
     slug: 'our-people',
     title: 'Our People — Kington Parishes',
-    description: 'Meet our Vicar, Revd Sally Welch, and our Curate, Revd Phillippa Wright, who lead worship and ministry across our five churches.',
+    description: 'Meet the clergy and the volunteer wardens and officers who run our parishes: Revd Sally Welch, Revd Phillippa Wright, and the churchwardens, safeguarding, health & safety and treasury team at St Mary\'s, Kington.',
     active: 'our-people.html',
     header: true,
     robots: 'noindex, nofollow',

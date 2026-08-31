@@ -46,7 +46,7 @@ test('the booking secretary\'s contact is consistent between get-involved and co
 test('the Parish Giving Scheme donate link is identical in the header and on Get Involved', async ({ page }) => {
   await page.goto('/get-involved.html');
 
-  const donateUrl = 'https://www.parishgiving.org.uk/donate';
+  const donateUrl = 'https://www.parishgiving.org.uk/donors/find-your-parish/kington-st-mary-herefordshire';
   await expect(page.locator('a.btn-donate')).toHaveAttribute('href', donateUrl);
   await expect(page.getByRole('link', { name: 'Donate via Parish Giving Scheme →' })).toHaveAttribute(
     'href',
