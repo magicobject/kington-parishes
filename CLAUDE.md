@@ -15,7 +15,7 @@ These apply to every change here, not just when explicitly asked for.
 
 ## Security
 - Keep `npm run audit` clean (no unresolved high/critical) before any push.
-- Don't add third-party scripts, trackers, or embeds without checking what they contribute to CSP/privacy first.
+- Don't add third-party scripts, trackers, or embeds (iframes included) without adding whatever they need to `public/_headers`' CSP first — and actually verifying it. `npm run serve` does NOT apply `_headers` (it's a Cloudflare-only convention), so a CSP gap won't show up there; it shipped silently once already (a Google Maps embed with no `frame-src`, rendering as "This content is blocked" in production). Verify with `npx wrangler dev`, which serves `public/` through the real asset handler, `_headers` included — check the browser console for CSP violations after any change to `_headers` or to what a page loads/embeds.
 
 ## Build pipeline
 - `public/*.html` is generated from `templates/*.html` + `src/pages/*.html` + `src/pages.config.mjs` + `src/site.config.mjs` by `scripts/build.mjs` — never hand-edit it, edit the source and run `npm run build`.
