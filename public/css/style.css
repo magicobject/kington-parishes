@@ -342,6 +342,7 @@ footer.site {
 footer.site .foot-heading { color: #F8F5EE; font-size: 1.05rem; font-weight: 600; margin-bottom: 12px; }
 footer.site a { color: #C9C3B2; text-decoration: none; }
 footer.site a:hover { color: #fff; }
+footer.site .foot-churches a { text-decoration: underline; text-underline-offset: 2px; }
 .foot-grid {
   display: grid;
   grid-template-columns: 1.3fr 1fr 1fr;
