@@ -120,6 +120,12 @@ The homepage also gained a **Find Us** section just above the footer: a full-wid
 
 In other words: **you never bump the build number or rebuild `public/` yourself** — just edit source files under `src/`/`templates/` and commit as normal.
 
+## Build tags and the /updates changelog
+
+Every commit gets a matching git tag, `build-<date>.<NNN>` (e.g. `build-2026.08.31.007`) — the same value as the footer's "Build ..." text for that commit, so any deployed build is checkoutable by name (`git checkout build-2026.08.31.007`) without digging through `git log`.
+
+[src/pages/updates.html](src/pages/updates.html) (served at `/updates.html`) is a hand-maintained changelog, one entry per build number, newest first — the human-readable counterpart to the git tags. It's a real page, built by the normal pipeline like any other, but it's deliberately not linked from NAV, FOOTER_NAV, or anywhere else on the site, and is `robots: noindex, nofollow` in `src/pages.config.mjs` (matching this site's sitewide noindex policy) — a build log for whoever knows the URL, not user-facing content.
+
 ## Security headers
 
 [public/_headers](public/_headers) is a Cloudflare-specific file (same convention as Cloudflare Pages) applied to every response: a Content-Security-Policy, `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin`, a restrictive `Permissions-Policy`, and HSTS.

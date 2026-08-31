@@ -420,6 +420,14 @@ footer.site .fine a { color: #C9C3B2; text-decoration: underline; text-underline
 .parish .links-row { display: flex; gap: 8px 24px; flex-wrap: wrap; margin-top: 20px; }
 .parish .links-row .give-link { margin-top: 0; }
 .parish .links-row .trust-link { font-weight: 700; }
+
+.changelog { list-style: none; margin: 0; padding: 0; max-width: 70ch; }
+.changelog li { padding: 16px 0; border-bottom: 1px solid var(--line); }
+.changelog li:last-child { border-bottom: none; }
+.changelog-meta { display: flex; gap: 14px; align-items: baseline; flex-wrap: wrap; margin-bottom: 4px; }
+.changelog-build { font-weight: 700; color: var(--brass-dark); font-variant-numeric: tabular-nums; }
+.changelog-date { font-size: 0.85rem; color: var(--ink-soft); }
+.changelog p { margin: 0; color: var(--ink-soft); }
 /* Both current uses of .jump-row sit inside the dark .page-header banner
    (Our Churches' church list, Life Events' baptisms/weddings/funerals
    list), so it's styled light-on-dark by default rather than needing a

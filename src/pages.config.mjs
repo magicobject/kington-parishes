@@ -137,6 +137,17 @@ export const PAGES = [
     robots: 'noindex, nofollow',
   },
   {
+    slug: 'updates',
+    title: 'Site Updates — Kington Parishes',
+    description: 'Internal build changelog for this site — not linked from anywhere on the site.',
+    active: null,
+    header: true,
+    // Not pastoral content — skip the safeguard-strip banner, same
+    // reasoning as the 404 page.
+    safeguardStrip: false,
+    robots: 'noindex, nofollow',
+  },
+  {
     slug: '404',
     title: 'Page not found — Kington Parishes',
     description: "This page couldn't be found. Find your way back to Kington Parishes' home page.",
