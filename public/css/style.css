@@ -417,6 +417,9 @@ footer.site .fine a { color: #C9C3B2; text-decoration: underline; text-underline
 .parish .facts div { color: var(--slate); font-weight: 600; }
 .parish .give-link { display: inline-block; margin-top: 20px; font-weight: 700; }
 .parish .give-note { margin-top: 20px; color: var(--ink-soft); font-size: 0.92rem; }
+.parish .links-row { display: flex; gap: 8px 24px; flex-wrap: wrap; margin-top: 20px; }
+.parish .links-row .give-link { margin-top: 0; }
+.parish .links-row .trust-link { font-weight: 700; }
 /* Both current uses of .jump-row sit inside the dark .page-header banner
    (Our Churches' church list, Life Events' baptisms/weddings/funerals
    list), so it's styled light-on-dark by default rather than needing a

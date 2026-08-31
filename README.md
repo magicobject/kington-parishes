@@ -94,6 +94,8 @@ One placeholder was deliberately left as-is, not invented: the "Open the calenda
 
 Each church on [Our Churches](src/pages/our-churches.html) links to its own page on the Parish Giving Scheme site, since each of the five is a separate legal parish with its own giving page there — a single site-wide `{{DONATE_URL}}` (see below) wouldn't be correct here, unlike the header's donate button and Get Involved, which both point at St Mary's, Kington specifically. Kington, Titley, Old Radnor and Huntington each get a `Give to <church> →` link; Kinnerton doesn't have its own Parish Giving Scheme page, so its entry is a short note pointing to Old Radnor's instead, rather than a broken or missing link.
 
+Titley, Old Radnor and Huntington also link out to their [National Churches Trust](https://www.nationalchurchestrust.org) listing, alongside the giving link in a `.links-row`. Kington and Kinnerton don't have one, so — same as the giving link — there's no placeholder or broken link for either.
+
 The footer's list of the five church names (in [templates/footer.html](templates/footer.html)) links each one to its matching section on Our Churches (`our-churches.html#kington`, `#titley`, `#old-radnor`, `#kinnerton`, `#huntington` — the same anchor IDs the page-header jump-row already used). These sit inline in a sentence-like list rather than each on its own line, so — same fix as the footer's "mediawright.uk" credit link, see "Accessibility" below — they're underlined (`.foot-churches a`), not distinguished by color alone.
 
 ## The Walkers page, and "Home" not being in the primary nav
