@@ -83,7 +83,6 @@ window.CALENDAR_EVENTS = [
   { date: '2026-10-13', time: '14:00', title: 'Marches Voices Choir', location: 'Kington Parish Hall' },
   { date: '2026-10-20', time: '09:15', title: 'Stay and Play', location: "St Mary's Parish Hall" },
   { date: '2026-10-20', time: '14:00', title: 'Marches Voices Choir', location: 'Kington Parish Hall' },
-  { date: '2026-10-27', time: '09:15', title: 'Stay and Play', location: "St Mary's Parish Hall" },
   { date: '2026-10-27', time: '14:00', title: 'Marches Voices Choir', location: 'Kington Parish Hall' },
   { date: '2026-11-03', time: '09:15', title: 'Stay and Play', location: "St Mary's Parish Hall" },
   { date: '2026-11-03', time: '14:00', title: 'Marches Voices Choir', location: 'Kington Parish Hall' },
@@ -99,8 +98,6 @@ window.CALENDAR_EVENTS = [
   { date: '2026-12-08', time: '14:00', title: 'Marches Voices Choir', location: 'Kington Parish Hall' },
   { date: '2026-12-15', time: '09:15', title: 'Stay and Play', location: "St Mary's Parish Hall" },
   { date: '2026-12-15', time: '14:00', title: 'Marches Voices Choir', location: 'Kington Parish Hall' },
-  { date: '2026-12-22', time: '09:15', title: 'Stay and Play', location: "St Mary's Parish Hall" },
   { date: '2026-12-22', time: '14:00', title: 'Marches Voices Choir', location: 'Kington Parish Hall' },
-  { date: '2026-12-29', time: '09:15', title: 'Stay and Play', location: "St Mary's Parish Hall" },
   { date: '2026-12-29', time: '14:00', title: 'Marches Voices Choir', location: 'Kington Parish Hall' },
 ];
