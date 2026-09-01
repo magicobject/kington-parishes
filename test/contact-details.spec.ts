@@ -1,5 +1,7 @@
 import { test, expect } from './support/fixtures';
 import { ALL_PAGES } from './support/pages';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
 // Regression guard for the DRY-up of contact details: the parish office
 // email/phone, the booking secretary's contact, and the donate link all
@@ -39,8 +41,17 @@ test('the booking secretary\'s contact is consistent between get-involved and co
   await expect(page.locator('a[href="mailto:p.s.halcrow@gmail.com"]')).toContainText('Penny Halcrow');
 
   await page.goto('/contact.html');
-  await expect(page.getByText('Penny Halcrow')).toBeVisible();
-  await expect(page.locator('a[href="mailto:p.s.halcrow@gmail.com"]')).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Penny Halcrow' })).toHaveAttribute(
+    'href',
+    'mailto:p.s.halcrow@gmail.com',
+  );
+});
+
+test("the booking secretary's email never appears in plain text in the page source", async () => {
+  for (const path of ['contact.html', 'get-involved.html', 'parish-hall.html']) {
+    const html = readFileSync(join(__dirname, '..', 'public', path), 'utf8');
+    expect(html).not.toContain('p.s.halcrow@gmail.com');
+  }
 });
 
 test('the donate link is identical in the header and on Get Involved, and points at the church-picker page', async ({

@@ -4,8 +4,7 @@
 // (assets.not_found_handling = "404-page").
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
-import { extname, join, resolve } from 'node:path';
-import { normalize as posixNormalize } from 'node:path/posix';
+import { extname, join, relative, resolve, sep } from 'node:path';
 
 const ROOT = resolve(__dirname, '..', '..', 'public');
 const PORT = Number(process.env.PORT ?? 4176);
@@ -24,17 +23,29 @@ const CONTENT_TYPES: Record<string, string> = {
   '.pdf': 'application/pdf',
 };
 
-function resolvePath(urlPath: string): string {
+function decodedUrlPath(urlPath: string): string {
   const decoded = decodeURIComponent(urlPath.split('?')[0].split('#')[0]);
-  const clean = posixNormalize(decoded).replace(/^(\.\.\/)+/, '');
-  return clean === '/' || clean === '' ? '/index.html' : clean;
+  return decoded === '/' || decoded === '' ? '/index.html' : decoded;
+}
+
+// Resolve the request path against ROOT and verify the *fully resolved*
+// absolute path is still inside it, rather than trying to sanitise the
+// input string first — `path.normalize`/`resolve` follow the current
+// platform's separator rules, and on Windows that includes backslash, so a
+// POSIX-only string check (stripping literal "../") can be defeated with
+// "..\\" or its URL-encoded form ("..%5c") and walk the server out of
+// public/ entirely. Checking the resolved output is safe regardless of
+// which separator or encoding the traversal attempt used.
+function resolveWithinRoot(urlPath: string): string | null {
+  const filePath = resolve(join(ROOT, decodedUrlPath(urlPath)));
+  return filePath === ROOT || filePath.startsWith(ROOT + sep) ? filePath : null;
 }
 
 const server = createServer(async (req, res) => {
-  const requestPath = resolvePath(req.url ?? '/');
-  const filePath = join(ROOT, requestPath);
+  const filePath = resolveWithinRoot(req.url ?? '/');
 
   try {
+    if (!filePath) throw new Error('path escapes public/');
     const body = await readFile(filePath);
     const type = CONTENT_TYPES[extname(filePath)] ?? 'application/octet-stream';
     res.writeHead(200, { 'Content-Type': type });
@@ -51,6 +62,9 @@ const server = createServer(async (req, res) => {
   }
 });
 
-server.listen(PORT, () => {
+// Bind to loopback only — this is dev/test tooling standing in for the
+// Cloudflare Workers assets handler, not something that should be reachable
+// from the rest of the network while `npm test`/`npm run serve` is running.
+server.listen(PORT, '127.0.0.1', () => {
   console.log(`Static test server serving ${ROOT} at http://localhost:${PORT}`);
 });
