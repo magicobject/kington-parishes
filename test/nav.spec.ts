@@ -53,6 +53,18 @@ test('the donate button appears on the homepage and every nav page, and points a
   }
 });
 
+test('the Live Stream button appears on the homepage and every nav page, and opens the YouTube streams tab in a new tab', async ({
+  page,
+}) => {
+  for (const sitePage of [HOME_PAGE, ...NAV_PAGES]) {
+    await page.goto(sitePage.path);
+    const liveStream = page.locator('a.btn-livestream');
+    await expect(liveStream).toHaveAttribute('href', 'https://www.youtube.com/@KingtonStMaryLive/streams');
+    await expect(liveStream).toHaveAttribute('target', '_blank');
+    await expect(liveStream).toHaveAttribute('rel', 'noopener');
+  }
+});
+
 test('safeguarding is reachable from the footer\'s Explore list, but not highlighted in the primary nav', async ({
   page,
 }) => {

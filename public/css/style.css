@@ -129,7 +129,7 @@ nav.links a:hover, nav.links a[aria-current="page"] {
    collapse it behind the ellipsis toggle instead. */
 @media (max-width: 860px) {
   .nav-toggle { display: flex; }
-  .btn-donate { order: 2; }
+  .header-ctas { order: 2; }
   nav.links {
     display: none;
     order: 3;
@@ -150,6 +150,8 @@ nav.links a:hover, nav.links a[aria-current="page"] {
   nav.links a[aria-current="page"] { color: #D8B978; }
 }
 
+.header-ctas { display: flex; align-items: center; gap: 10px; }
+
 .btn-donate {
   background: var(--brass);
   color: #1F1A0B;
@@ -160,6 +162,22 @@ nav.links a:hover, nav.links a[aria-current="page"] {
   font-size: 0.88rem;
 }
 .btn-donate:hover { background: #C09A4E; color: #1F1A0B; }
+
+.btn-livestream {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: var(--radius);
+  color: #F8F5EE;
+  font-weight: 600;
+  font-size: 0.88rem;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+.btn-livestream:hover { background: rgba(255,255,255,0.08); }
+.btn-livestream svg { flex-shrink: 0; }
 
 /* ---------- Page header banner (non-home pages) ---------- */
 .page-header {
