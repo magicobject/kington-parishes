@@ -113,6 +113,17 @@ export const PAGES = [
     robots: 'noindex, nofollow',
   },
   {
+    slug: 'donate',
+    title: 'Donate — Kington Parishes',
+    description: 'Choose which of our five churches to support via the Parish Giving Scheme.',
+    // Reachable via the header's Donate Now button and Get Involved's Give
+    // card everywhere — not in the primary nav, same reasoning as
+    // Safeguarding/Parish News Archive.
+    active: null,
+    header: true,
+    robots: 'noindex, nofollow',
+  },
+  {
     slug: 'parish-hall',
     title: 'Parish Hall — Kington Parishes',
     description: "Our parish hall, next to St Mary's, Kington, is available for hire — see inside and get in touch to book.",

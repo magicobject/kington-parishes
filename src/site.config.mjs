@@ -18,7 +18,10 @@ export const SITE = {
   county: 'Herefordshire',
   postcode: 'HR5 3AG',
 
-  donateUrl: 'https://www.parishgiving.org.uk/donors/find-your-parish/kington-st-mary-herefordshire',
+  // Points at our own church-picker page, not a single church's Parish
+  // Giving Scheme link — donating should never default to one church over
+  // the other four. See src/pages/donate.html for the actual PGS links.
+  donateUrl: 'donate.html',
 
   bookingName: 'Penny Halcrow',
   bookingEmail: 'p.s.halcrow@gmail.com',

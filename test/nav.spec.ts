@@ -46,13 +46,10 @@ test('the brand logo links back to the homepage from every page in the nav', asy
   }
 });
 
-test('the donate button appears on the homepage and every nav page, and points at the Parish Giving Scheme', async ({ page }) => {
+test('the donate button appears on the homepage and every nav page, and points at the church-picker page', async ({ page }) => {
   for (const sitePage of [HOME_PAGE, ...NAV_PAGES]) {
     await page.goto(sitePage.path);
-    await expect(page.locator('a.btn-donate')).toHaveAttribute(
-      'href',
-      'https://www.parishgiving.org.uk/donors/find-your-parish/kington-st-mary-herefordshire',
-    );
+    await expect(page.locator('a.btn-donate')).toHaveAttribute('href', 'donate.html');
   }
 });
 

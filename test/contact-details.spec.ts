@@ -43,13 +43,37 @@ test('the booking secretary\'s contact is consistent between get-involved and co
   await expect(page.locator('a[href="mailto:p.s.halcrow@gmail.com"]')).toBeVisible();
 });
 
-test('the Parish Giving Scheme donate link is identical in the header and on Get Involved', async ({ page }) => {
+test('the donate link is identical in the header and on Get Involved, and points at the church-picker page', async ({
+  page,
+}) => {
   await page.goto('/get-involved.html');
 
-  const donateUrl = 'https://www.parishgiving.org.uk/donors/find-your-parish/kington-st-mary-herefordshire';
-  await expect(page.locator('a.btn-donate')).toHaveAttribute('href', donateUrl);
-  await expect(page.getByRole('link', { name: 'Donate via Parish Giving Scheme →' })).toHaveAttribute(
+  await expect(page.locator('a.btn-donate')).toHaveAttribute('href', 'donate.html');
+  await expect(page.getByRole('link', { name: 'Choose a church to support →' })).toHaveAttribute(
     'href',
-    donateUrl,
+    'donate.html',
+  );
+});
+
+test('donate.html links each church (and the combined Old Radnor/Kinnerton entry) to its own Parish Giving Scheme page', async ({
+  page,
+}) => {
+  await page.goto('/donate.html');
+
+  await expect(page.getByRole('link', { name: "Donate to St Mary's, Kington →" })).toHaveAttribute(
+    'href',
+    'https://www.parishgiving.org.uk/donors/find-your-parish/kington-st-mary-herefordshire',
+  );
+  await expect(page.getByRole('link', { name: "Donate to St Peter's, Titley →" })).toHaveAttribute(
+    'href',
+    'https://www.parishgiving.org.uk/donors/find-your-parish/titley-st-peter-hereford',
+  );
+  await expect(page.getByRole('link', { name: 'Donate to Old Radnor & Kinnerton →' })).toHaveAttribute(
+    'href',
+    'https://www.parishgiving.org.uk/donors/find-your-parish/old-radnor-st-stephen-hereford',
+  );
+  await expect(page.getByRole('link', { name: 'Donate to Huntington →' })).toHaveAttribute(
+    'href',
+    'https://www.parishgiving.org.uk/donors/find-your-parish/huntington-st-thomas-a-becket-hereford',
   );
 });

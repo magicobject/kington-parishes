@@ -58,6 +58,16 @@ export const PARISH_NEWS_ARCHIVE_PAGE: SitePage = {
   heading: /the parish news archive/i,
 };
 
+// Not in the primary nav either — reachable from the header's Donate Now
+// button (every page) and Get Involved's Give card, so it doesn't need its
+// own nav entry.
+export const DONATE_PAGE: SitePage = {
+  path: '/donate.html',
+  navLabel: 'Donate',
+  titleContains: 'Donate',
+  heading: /choose which church to support/i,
+};
+
 // Not in the primary nav, the footer, or anywhere else — a build changelog
 // for whoever knows the URL, not user-facing content. See CLAUDE.md's
 // "Build numbers" section.
@@ -70,4 +80,4 @@ export const UPDATES_PAGE: SitePage = {
 
 // Every generated page, including the ones without primary nav — used by
 // specs that should run against literally everything (footer, tokens).
-export const ALL_PAGES: SitePage[] = [HOME_PAGE, ...NAV_PAGES, SAFEGUARDING_PAGE, PARISH_NEWS_ARCHIVE_PAGE, UPDATES_PAGE];
+export const ALL_PAGES: SitePage[] = [HOME_PAGE, ...NAV_PAGES, SAFEGUARDING_PAGE, PARISH_NEWS_ARCHIVE_PAGE, DONATE_PAGE, UPDATES_PAGE];
