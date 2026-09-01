@@ -4,7 +4,7 @@
 // (assets.not_found_handling = "404-page").
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
-import { extname, join, relative, resolve, sep } from 'node:path';
+import { extname, join, resolve, sep } from 'node:path';
 
 const ROOT = resolve(__dirname, '..', '..', 'public');
 const PORT = Number(process.env.PORT ?? 4176);
