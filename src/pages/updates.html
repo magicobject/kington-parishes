@@ -7,13 +7,17 @@
     <div class="wrap">
       <div class="kicker">Build history</div>
       <h1>Site updates</h1>
-      <p class="lede">An internal changelog: every build number and what changed. This page isn't linked from anywhere else on the site.</p>
+      <p class="lede">An internal changelog: every build number and what changed. This page isn't linked from anywhere else on the site, and refreshes itself every minute.</p>
     </div>
   </div>
 
   <section>
     <div class="wrap">
       <ul class="changelog">
+        <li>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.01.008</span><span class="changelog-date">1 September 2026</span></div>
+          <p>Auto-refresh the Updates page every minute.</p>
+        </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.01.007</span><span class="changelog-date">1 September 2026</span></div>
           <p>Remove Stay and Play calendar entries falling in Herefordshire school holidays (27 Oct, 22 &amp; 29 Dec).</p>
@@ -207,3 +211,5 @@
   </section>
 
 </main>
+
+<script src="/js/updates-refresh.js"></script>
