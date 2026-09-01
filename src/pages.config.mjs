@@ -16,12 +16,12 @@ export const NAV = [
   { href: 'our-churches.html', label: 'Our Churches' },
   { href: 'our-people.html', label: 'Our People' },
   { href: 'services.html', label: 'Services &amp; Events' },
-  { href: 'walkers.html', label: 'Walkers' },
   { href: 'parish-news.html', label: 'Parish News' },
   { href: 'life-events.html', label: 'Life Events' },
   { href: 'get-involved.html', label: 'Get Involved' },
   { href: 'parish-hall.html', label: 'Parish Hall' },
   { href: 'calendar.html', label: 'Calendar' },
+  { href: 'walkers.html', label: 'Walkers' },
   { href: 'contact.html', label: 'Contact' },
 ];
 
