@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './support/fixtures';
 import { ALL_PAGES } from './support/pages';
 
 // Regression guard: each page's file should show its own title and heading,

@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './support/fixtures';
 import { ALL_PAGES } from './support/pages';
 
 const ALL_PATHS = [...ALL_PAGES.map((p) => p.path), '/404.html'];

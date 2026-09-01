@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './support/fixtures';
 import { ALL_PAGES } from './support/pages';
 
 // Regression guard for the DRY-up of contact details: the parish office

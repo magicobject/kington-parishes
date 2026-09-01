@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './support/fixtures';
 
 test('an unknown URL serves the branded 404 page with a 404 status', async ({ page }) => {
   const response = await page.goto('/this-page-does-not-exist.html');

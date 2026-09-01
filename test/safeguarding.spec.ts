@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './support/fixtures';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 

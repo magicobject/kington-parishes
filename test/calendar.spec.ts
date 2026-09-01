@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './support/fixtures';
 
 const MONTH_NAMES = [
   'January', 'February', 'March', 'April', 'May', 'June',
