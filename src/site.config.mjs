@@ -9,8 +9,9 @@ export const SITE = {
   charityNumber: '1185453',
 
   email: 'vicar@kingtonparishes.org.uk',
-  phoneDisplay: '01544 230525',
-  phoneTel: '+441544230525',
+  // Sally's (the vicar's) mobile — the old 01544 landline no longer exists.
+  phoneDisplay: '07974 439630',
+  phoneTel: '+447974439630',
 
   venue: 'The Vicarage',
   street: 'Church Road',

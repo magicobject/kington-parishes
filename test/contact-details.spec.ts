@@ -22,7 +22,7 @@ test('the parish office email and phone number are correct and consistent everyw
 }) => {
   await page.goto('/contact.html');
   await expect(page.locator('a[href="mailto:vicar@kingtonparishes.org.uk"]').first()).toBeVisible();
-  await expect(page.locator('a[href="tel:+441544230525"]').first()).toBeVisible();
+  await expect(page.locator('a[href="tel:+447974439630"]').first()).toBeVisible();
 
   await page.goto('/parish-news.html');
   // 2 in the body content ("Write for us" / "Get the paper edition") + 1 in the footer.
@@ -31,7 +31,7 @@ test('the parish office email and phone number are correct and consistent everyw
 
   await page.goto('/index.html');
   await expect(page.locator('footer.site a[href="mailto:vicar@kingtonparishes.org.uk"]')).toBeVisible();
-  await expect(page.locator('footer.site a[href="tel:+441544230525"]')).toBeVisible();
+  await expect(page.locator('footer.site a[href="tel:+447974439630"]')).toBeVisible();
 });
 
 test('the booking secretary\'s contact is consistent between get-involved and contact', async ({ page }) => {
