@@ -28,8 +28,8 @@ export const HOME_PAGE: SitePage = {
 export const NAV_PAGES: SitePage[] = [
   { path: '/our-churches.html', navLabel: 'Our Churches', titleContains: 'Our Churches', heading: /five churches, one benefice/i },
   { path: '/our-people.html', navLabel: 'Our People', titleContains: 'Our People', heading: /the people who lead and serve us/i },
-  { path: '/walkers.html', navLabel: 'Walkers', titleContains: 'Walkers Welcome', heading: /walkers welcome/i },
   { path: '/services.html', navLabel: 'Services & Events', titleContains: 'Services', heading: /worship, week by week/i },
+  { path: '/walkers.html', navLabel: 'Walkers', titleContains: 'Walkers Welcome', heading: /walkers welcome/i },
   { path: '/parish-news.html', navLabel: 'Parish News', titleContains: 'Parish News', heading: /family magazine/i },
   { path: '/life-events.html', navLabel: 'Life Events', titleContains: 'Life Events', heading: /baptisms, weddings/i },
   { path: '/get-involved.html', navLabel: 'Get Involved', titleContains: 'Get Involved', heading: /support, hire, and take part/i },

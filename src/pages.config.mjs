@@ -15,8 +15,8 @@
 export const NAV = [
   { href: 'our-churches.html', label: 'Our Churches' },
   { href: 'our-people.html', label: 'Our People' },
-  { href: 'walkers.html', label: 'Walkers' },
   { href: 'services.html', label: 'Services &amp; Events' },
+  { href: 'walkers.html', label: 'Walkers' },
   { href: 'parish-news.html', label: 'Parish News' },
   { href: 'life-events.html', label: 'Life Events' },
   { href: 'get-involved.html', label: 'Get Involved' },
