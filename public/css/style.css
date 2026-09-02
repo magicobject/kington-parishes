@@ -321,6 +321,20 @@ section + section { border-top: 1px solid var(--line); }
 .card .meta { font-size: 0.9rem; color: var(--slate); font-weight: 600; }
 .card .tags { font-size: 0.82rem; color: var(--brass-dark); font-weight: 700; margin-bottom: 8px; }
 
+/* ---------- Blog ---------- */
+.blog-list { display: flex; flex-direction: column; gap: 22px; }
+.blog-post {
+  background: var(--parchment);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 28px 26px;
+  overflow-wrap: anywhere;
+}
+.blog-post h2 { font-size: 1.4rem; font-weight: 600; }
+.blog-post .meta { font-size: 0.85rem; color: var(--slate); font-weight: 600; margin: 6px 0 16px; }
+.blog-post p { color: var(--ink-soft); }
+.blog-post p + p { margin-top: 12px; }
+
 .icon-badge {
   width: 46px; height: 46px;
   border-radius: 50%;

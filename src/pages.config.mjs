@@ -17,6 +17,7 @@ export const NAV = [
   { href: 'our-people.html', label: 'Our People' },
   { href: 'services.html', label: 'Services &amp; Events' },
   { href: 'parish-news.html', label: 'Parish News' },
+  { href: 'blog.html', label: 'Blog' },
   { href: 'life-events.html', label: 'Life Events' },
   { href: 'get-involved.html', label: 'Get Involved' },
   { href: 'parish-hall.html', label: 'Parish Hall' },
@@ -176,6 +177,14 @@ export const PAGES = [
     header: true,
     robots: 'noindex, nofollow',
     image: '/img/parish-news/parish-news-2026-09.jpg',
+  },
+  {
+    slug: 'blog',
+    title: 'Blog — Kington Parishes',
+    description: 'Appeals, updates and announcements from across the Kington Parishes — newest post first.',
+    active: 'blog.html',
+    header: true,
+    robots: 'noindex, nofollow',
   },
   {
     slug: 'life-events',
