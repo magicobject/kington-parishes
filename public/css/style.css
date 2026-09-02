@@ -439,12 +439,48 @@ footer.site .fine a { color: #C9C3B2; text-decoration: underline; text-underline
   padding: 40px 0 32px;
   border-bottom: 1px solid var(--line);
 }
+.skyline-map {
+  position: relative;
+  max-width: 760px;
+  margin: 0 auto;
+}
 .church-skyline img {
   display: block;
   width: 100%;
-  max-width: 760px;
-  margin: 0 auto;
   height: auto;
+}
+.skyline-links { position: absolute; inset: 0; }
+.skyline-links a {
+  position: absolute;
+  top: 0; bottom: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  border-radius: var(--radius);
+  text-decoration: none;
+}
+.skyline-links a:hover,
+.skyline-links a:focus-visible {
+  background: rgba(70, 89, 106, 0.1);
+  outline: 2px solid var(--brass);
+  outline-offset: -2px;
+}
+.skyline-tag {
+  opacity: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--slate-dark);
+  background: var(--parchment);
+  padding: 2px 8px;
+  border-radius: 100px;
+  margin-bottom: 6px;
+  white-space: nowrap;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+.skyline-links a:hover .skyline-tag,
+.skyline-links a:focus-visible .skyline-tag {
+  opacity: 1;
 }
 .parish {
   padding: 56px 0;
