@@ -28,7 +28,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/style.css?v=2026.09.02.006">
+<link rel="stylesheet" href="/css/style.css?v=2026.09.02.007">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -52,6 +52,14 @@
       <a href="walkers.html">Walkers</a>
       <a href="contact.html">Contact</a>
     </nav>
+    <div class="header-search">
+      <form role="search" autocomplete="off" id="site-search-form">
+        <label for="site-search-input" class="visually-hidden">Search the site</label>
+        <svg class="search-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="search" id="site-search-input" name="q" placeholder="Search the site" role="combobox" aria-expanded="false" aria-controls="site-search-results" aria-autocomplete="list">
+      </form>
+      <ul id="site-search-results" class="site-search-results" role="listbox" aria-label="Search results" hidden></ul>
+    </div>
     <div class="header-ctas">
       <a class="btn-livestream" href="https://www.youtube.com/@KingtonStMaryLive/streams" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10 8.5v7l6-3.5-6-3.5Z" fill="currentColor" stroke="none"/></svg>
@@ -70,7 +78,7 @@
     </svg>
     <div class="wrap">
       <div class="kicker">Give</div>
-      <h1>Choose which church to support</h1>
+      <h1 id="choose-which-church-to-support">Choose which church to support</h1>
       <p class="lede">The Parish Giving Scheme gives directly to whichever of our five churches you choose below — a simple, secure way to donate by Direct Debit, card, or Apple/Google Pay.</p>
     </div>
   </div>
@@ -80,25 +88,25 @@
       <div class="card-grid">
         <div class="card reveal">
           <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#46596A" stroke-width="1.5"><path d="M5 21V11c0-3.87 3.13-7 7-7s7 3.13 7 7v10"/><path d="M5 21h14"/></svg></div>
-          <h2>St Mary's, Kington</h2>
+          <h2 id="st-mary-s-kington">St Mary's, Kington</h2>
           <p>Support the town centre church, its clergy team, and its choir and organist.</p>
           <a href="https://www.parishgiving.org.uk/donors/find-your-parish/kington-st-mary-herefordshire" target="_blank" rel="noopener">Donate to St Mary's, Kington &rarr;</a>
         </div>
         <div class="card reveal">
           <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#46596A" stroke-width="1.5"><path d="M5 21V11c0-3.87 3.13-7 7-7s7 3.13 7 7v10"/><path d="M5 21h14"/></svg></div>
-          <h2>St Peter's, Titley</h2>
+          <h2 id="st-peter-s-titley">St Peter's, Titley</h2>
           <p>Support a small, welcoming church balancing traditional and contemporary worship.</p>
           <a href="https://www.parishgiving.org.uk/donors/find-your-parish/titley-st-peter-hereford" target="_blank" rel="noopener">Donate to St Peter's, Titley &rarr;</a>
         </div>
         <div class="card reveal">
           <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#46596A" stroke-width="1.5"><path d="M5 21V11c0-3.87 3.13-7 7-7s7 3.13 7 7v10"/><path d="M5 21h14"/></svg></div>
-          <h2>St Stephen's, Old Radnor &amp; St Mary's, Kinnerton</h2>
+          <h2 id="st-stephen-s-old-radnor-st-mary-s-kinnerton">St Stephen's, Old Radnor &amp; St Mary's, Kinnerton</h2>
           <p>These two churches share a single financial entity and Parish Giving Scheme page.</p>
           <a href="https://www.parishgiving.org.uk/donors/find-your-parish/old-radnor-st-stephen-hereford" target="_blank" rel="noopener">Donate to Old Radnor &amp; Kinnerton &rarr;</a>
         </div>
         <div class="card reveal">
           <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#46596A" stroke-width="1.5"><path d="M5 21V11c0-3.87 3.13-7 7-7s7 3.13 7 7v10"/><path d="M5 21h14"/></svg></div>
-          <h2>St Thomas à Becket, Huntington</h2>
+          <h2 id="st-thomas-becket-huntington">St Thomas à Becket, Huntington</h2>
           <p>Support a Grade II* listed church serving a farming community on the Welsh border.</p>
           <a href="https://www.parishgiving.org.uk/donors/find-your-parish/huntington-st-thomas-a-becket-hereford" target="_blank" rel="noopener">Donate to Huntington &rarr;</a>
         </div>
@@ -140,11 +148,13 @@
     </div>
     <div class="fine">
       <span>&copy; <span id="year"></span> Kington Parishes. St Mary's Church Kington PCC is registered charity no. 1185453. Site by <a href="https://mediawright.uk">mediawright.uk</a>.</span>
-      <span class="build-number">Build 2026.09.02.006</span>
+      <span class="build-number">Build 2026.09.02.007</span>
     </div>
   </div>
 </footer>
 
-<script src="/js/main.js?v=2026.09.02.006" defer></script>
+<script src="/js/main.js?v=2026.09.02.007" defer></script>
+<script src="/js/search-match.js?v=2026.09.02.007" defer></script>
+<script src="/js/search-ui.js?v=2026.09.02.007" defer></script>
 </body>
 </html>

@@ -23,9 +23,25 @@ These apply to every change here, not just when explicitly asked for.
 - `public/css/style.css` is the one thing in `public/` that's hand-maintained, not generated.
 - The pre-commit hook bumps the build number and regenerates `public/` automatically on every commit — never do either by hand.
 
+## Site search
+The header search box (`templates/header.html`, `public/js/search-ui.js`, `public/js/search-match.js`) is driven by `public/search-index.json`, which `scripts/build.mjs` regenerates from scratch on every build via `scripts/build-search-index.mjs` — never hand-edit that JSON file.
+
+- **Every `h1`/`h2`/`h3` on a searchable page gets an anchor id, automatically.** `ensureSectionIds` walks each page's rendered HTML at build time and injects an `id="…"` (slugified from the heading's own text) onto any heading that doesn't already have one and isn't already inside an id'd wrapper (an `<article id="…">`, a `<section id="…">`, etc.). If a heading you're editing unexpectedly gains an `id` attribute after a build, this is why — it's not a mistake, it's what makes that heading a stable, deep-linkable search result. Give a section its own explicit `id` if you need control over the exact slug; otherwise leave it to the build.
+- **`/updates.html` and `/404.html` are never indexed** (`isSearchablePage`) — the changelog is deliberately unlisted/noindex build-log content, not something a site visitor should ever be able to search their way into.
+- **Page titles in `pages.config.mjs` are authored pre-escaped for HTML interpolation** (e.g. `'Services &amp; Events — Kington Parishes'`). The indexer decodes that back to a plain `&` before it goes in the JSON — the search dropdown is plain text, not HTML, so it must never end up displaying a literal `&amp;`.
+- **All of this is unit-tested without a browser**: `scripts/build-search-index.mjs`'s indexing logic and `public/js/search-match.js`'s ranking logic are both pure functions, covered by `test-unit/*.test.mjs` (`npm run test:unit`, Node's built-in test runner — fast, no Playwright needed). The end-to-end UI behaviour (typing, keyboard nav, navigation, the updates.html exclusion) is covered separately in `test/search.spec.ts`.
+
 ## Build numbers: tag every commit, and log it on /updates.html
 The pre-commit hook bumps `build-number.json` on every commit (same date → counter +1; new date → counter resets to 1). Two more things go with that, both driven by the *same* build number:
 1. **Before committing**, work out what the new build number will be (read `build-number.json`, apply the same same-date/new-date rule above) and add a new entry at the *top* of the changelog in `src/pages/updates.html` — that build number, today's date, and a one-line summary of the change. Newest entry first. Include this file in the commit like any other source change.
 2. **After committing**, tag it with that same build number and push the tag: `git tag build-<date>.<NNN>` (e.g. `build-2026.08.31.007`, matching the footer's "Build 2026.08.31.007" text exactly), then `git push origin build-<date>.<NNN>`.
 
 `/updates.html` is a real, reachable page — it's just not linked from anywhere on the site (not in NAV, not FOOTER_NAV, not any sitemap), and is marked `robots: noindex, nofollow` in `src/pages.config.mjs` for exactly that reason (matching this site's sitewide noindex policy). It's a build log for whoever knows the URL, not user-facing content.
+
+## Data kept in sync by hand
+Nothing here is generated from the other — each pair below is two separate places that happen to describe the same thing, so editing one without the other goes stale silently.
+
+- **Each church's details live in two places.** The visible `links-row` on `our-churches.html` (Wikipedia/National Churches Trust/what3words links), and that church's `Church` entry in the JSON-LD `@graph` inside the `our-churches` page config in `src/pages.config.mjs` (`name`, `address`, `geo`, `hasMap`, `sameAs`). Adding, removing, or editing a church means updating both.
+- **`calendar.html`'s `<noscript>` fallback list** has to mirror `ONE_OFF_EVENTS` in `public/js/calendar-events.js` by hand — recurring events from `RECURRING_SERIES` don't belong in that list, only genuine one-offs.
+- **what3words → coordinates isn't something Claude can resolve on its own.** The `https://what3words.com/word.word.word` link needs no API. Converting that address to a lat/long for `geo` needs either the what3words API (needs a key we don't have) or the actual coordinates, read off the map by a human — don't spend time trying to scrape/reverse-engineer what3words.com for this, it's been tried and their site blocks it.
+- **`SITE_URL` in `scripts/build.mjs`** is the one constant canonical links, Open Graph tags, and every JSON-LD URL all key off — currently the `*.workers.dev` proof-of-concept address. Update it once, here, when the site goes live on its real domain.

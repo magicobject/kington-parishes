@@ -136,13 +136,16 @@ nav.links a:hover, nav.links a[aria-current="page"] {
 .nav-toggle svg { flex-shrink: 0; }
 
 /* Below this width the primary nav gets cramped onto three wrapped lines —
-   collapse it behind the ellipsis toggle instead. */
+   collapse it behind the ellipsis toggle instead. Search stays visible
+   (its own full-width row) rather than hiding behind that toggle too —
+   it's useful enough not to bury. */
 @media (max-width: 860px) {
   .nav-toggle { display: flex; }
-  .header-ctas { order: 2; }
+  .header-search { order: 2; flex-basis: 100%; }
+  .header-ctas { order: 3; }
   nav.links {
     display: none;
-    order: 3;
+    order: 4;
     flex-basis: 100%;
     flex-direction: column;
     gap: 2px;
@@ -158,9 +161,72 @@ nav.links a:hover, nav.links a[aria-current="page"] {
   }
   nav.links a:hover, nav.links a[aria-current="page"] { border-color: rgba(255,255,255,0.08); }
   nav.links a[aria-current="page"] { color: #D8B978; }
+  #site-search-input { width: 100%; }
+  .site-search-results { width: 100%; }
 }
 
 .header-ctas { display: flex; align-items: center; gap: 10px; }
+
+/* ---------- Header search ---------- */
+.header-search { position: relative; }
+.header-search form { position: relative; display: flex; align-items: center; }
+.header-search .search-icon {
+  position: absolute;
+  left: 12px;
+  color: #C9BEA0;
+  pointer-events: none;
+}
+#site-search-input {
+  width: 190px;
+  padding: 8px 12px 8px 34px;
+  border-radius: 100px;
+  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.08);
+  color: #F8F5EE;
+  font-family: inherit;
+  font-size: 0.88rem;
+}
+#site-search-input::placeholder { color: #C4BFAF; }
+#site-search-input:focus {
+  outline: 2px solid var(--brass);
+  outline-offset: 1px;
+  background: rgba(255,255,255,0.14);
+}
+/* Firefox and older WebKit both need their own selector for this — a
+   combined selector they don't understand invalidates the whole rule. */
+#site-search-input::-webkit-search-cancel-button { filter: invert(1); opacity: 0.7; }
+
+.site-search-results {
+  position: absolute;
+  z-index: 50;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 320px;
+  max-width: 90vw;
+  max-height: 70vh;
+  overflow-y: auto;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  background: var(--parchment);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 14px 34px -14px rgba(38,37,33,0.45);
+}
+.site-search-results a[role="option"] {
+  display: block;
+  padding: 9px 12px;
+  border-radius: 6px;
+  text-decoration: none;
+}
+.site-search-results a[role="option"]:hover,
+.site-search-results a[role="option"]:focus {
+  background: var(--limestone);
+  outline: none;
+}
+.site-search-heading { display: block; font-weight: 700; font-size: 0.92rem; color: var(--ink); }
+.site-search-page { display: block; margin-top: 2px; font-size: 0.78rem; color: var(--ink-soft); }
+.site-search-empty { padding: 10px 12px; color: var(--ink-soft); font-size: 0.88rem; font-style: italic; }
 
 .btn-donate {
   background: var(--brass);

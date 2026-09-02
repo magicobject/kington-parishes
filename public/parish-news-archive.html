@@ -28,7 +28,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/style.css?v=2026.09.02.006">
+<link rel="stylesheet" href="/css/style.css?v=2026.09.02.007">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -52,6 +52,14 @@
       <a href="walkers.html">Walkers</a>
       <a href="contact.html">Contact</a>
     </nav>
+    <div class="header-search">
+      <form role="search" autocomplete="off" id="site-search-form">
+        <label for="site-search-input" class="visually-hidden">Search the site</label>
+        <svg class="search-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="search" id="site-search-input" name="q" placeholder="Search the site" role="combobox" aria-expanded="false" aria-controls="site-search-results" aria-autocomplete="list">
+      </form>
+      <ul id="site-search-results" class="site-search-results" role="listbox" aria-label="Search results" hidden></ul>
+    </div>
     <div class="header-ctas">
       <a class="btn-livestream" href="https://www.youtube.com/@KingtonStMaryLive/streams" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10 8.5v7l6-3.5-6-3.5Z" fill="currentColor" stroke="none"/></svg>
@@ -70,7 +78,7 @@
     </svg>
     <div class="wrap">
       <div class="kicker">Parish news</div>
-      <h1>The Parish News archive</h1>
+      <h1 id="the-parish-news-archive">The Parish News archive</h1>
       <p class="lede">Every back issue of our monthly magazine, free to download as a PDF.</p>
     </div>
   </div>
@@ -84,7 +92,7 @@
           </a>
           <div class="body">
             <div class="tags">Latest issue</div>
-            <h2>September 2026</h2>
+            <h2 id="september-2026">September 2026</h2>
             <a class="btn-download" href="/parish-news/parish-news-2026-09.pdf" target="_blank" rel="noopener">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 19h16"/></svg>
               Download the PDF
@@ -96,7 +104,7 @@
             <img src="/img/parish-news/parish-news-2026-08.jpg" alt="Cover of the August 2026 Parish News" loading="lazy" width="1049" height="1489">
           </a>
           <div class="body">
-            <h2>August 2026</h2>
+            <h2 id="august-2026">August 2026</h2>
             <a class="btn-download" href="/parish-news/parish-news-2026-08.pdf" target="_blank" rel="noopener">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 19h16"/></svg>
               Download the PDF
@@ -108,7 +116,7 @@
             <img src="/img/parish-news/parish-news-2026-07.jpg" alt="Cover of the July 2026 Parish News" loading="lazy" width="1049" height="1489">
           </a>
           <div class="body">
-            <h2>July 2026</h2>
+            <h2 id="july-2026">July 2026</h2>
             <a class="btn-download" href="/parish-news/parish-news-2026-07.pdf" target="_blank" rel="noopener">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 19h16"/></svg>
               Download the PDF
@@ -120,7 +128,7 @@
             <img src="/img/parish-news/parish-news-2026-06.jpg" alt="Cover of the June 2026 Parish News" loading="lazy" width="1049" height="1489">
           </a>
           <div class="body">
-            <h2>June 2026</h2>
+            <h2 id="june-2026">June 2026</h2>
             <a class="btn-download" href="/parish-news/parish-news-2026-06.pdf" target="_blank" rel="noopener">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 19h16"/></svg>
               Download the PDF
@@ -132,7 +140,7 @@
             <img src="/img/parish-news/parish-news-2026-05.jpg" alt="Cover of the May 2026 Parish News" loading="lazy" width="1049" height="1489">
           </a>
           <div class="body">
-            <h2>May 2026</h2>
+            <h2 id="may-2026">May 2026</h2>
             <a class="btn-download" href="/parish-news/parish-news-2026-05.pdf" target="_blank" rel="noopener">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 19h16"/></svg>
               Download the PDF
@@ -144,7 +152,7 @@
             <img src="/img/parish-news/parish-news-2026-04.jpg" alt="Cover of the April 2026 Parish News" loading="lazy" width="1049" height="1489">
           </a>
           <div class="body">
-            <h2>April 2026</h2>
+            <h2 id="april-2026">April 2026</h2>
             <a class="btn-download" href="/parish-news/parish-news-2026-04.pdf" target="_blank" rel="noopener">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 19h16"/></svg>
               Download the PDF
@@ -156,7 +164,7 @@
             <img src="/img/parish-news/parish-news-2026-03.jpg" alt="Cover of the March 2026 Parish News" loading="lazy" width="1049" height="1489">
           </a>
           <div class="body">
-            <h2>March 2026</h2>
+            <h2 id="march-2026">March 2026</h2>
             <a class="btn-download" href="/parish-news/parish-news-2026-03.pdf" target="_blank" rel="noopener">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 19h16"/></svg>
               Download the PDF
@@ -168,7 +176,7 @@
             <img src="/img/parish-news/parish-news-2026-02.jpg" alt="Cover of the February 2026 Parish News" loading="lazy" width="1049" height="1489">
           </a>
           <div class="body">
-            <h2>February 2026</h2>
+            <h2 id="february-2026">February 2026</h2>
             <a class="btn-download" href="/parish-news/parish-news-2026-02.pdf" target="_blank" rel="noopener">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 19h16"/></svg>
               Download the PDF
@@ -180,7 +188,7 @@
             <img src="/img/parish-news/parish-news-2026-01.jpg" alt="Cover of the January 2026 Parish News" loading="lazy" width="1049" height="1489">
           </a>
           <div class="body">
-            <h2>January 2026</h2>
+            <h2 id="january-2026">January 2026</h2>
             <a class="btn-download" href="/parish-news/parish-news-2026-01.pdf" target="_blank" rel="noopener">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 19h16"/></svg>
               Download the PDF
@@ -225,11 +233,13 @@
     </div>
     <div class="fine">
       <span>&copy; <span id="year"></span> Kington Parishes. St Mary's Church Kington PCC is registered charity no. 1185453. Site by <a href="https://mediawright.uk">mediawright.uk</a>.</span>
-      <span class="build-number">Build 2026.09.02.006</span>
+      <span class="build-number">Build 2026.09.02.007</span>
     </div>
   </div>
 </footer>
 
-<script src="/js/main.js?v=2026.09.02.006" defer></script>
+<script src="/js/main.js?v=2026.09.02.007" defer></script>
+<script src="/js/search-match.js?v=2026.09.02.007" defer></script>
+<script src="/js/search-ui.js?v=2026.09.02.007" defer></script>
 </body>
 </html>

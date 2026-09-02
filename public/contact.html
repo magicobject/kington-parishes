@@ -28,7 +28,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/style.css?v=2026.09.02.006">
+<link rel="stylesheet" href="/css/style.css?v=2026.09.02.007">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -52,6 +52,14 @@
       <a href="walkers.html">Walkers</a>
       <a href="contact.html" aria-current="page">Contact</a>
     </nav>
+    <div class="header-search">
+      <form role="search" autocomplete="off" id="site-search-form">
+        <label for="site-search-input" class="visually-hidden">Search the site</label>
+        <svg class="search-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="search" id="site-search-input" name="q" placeholder="Search the site" role="combobox" aria-expanded="false" aria-controls="site-search-results" aria-autocomplete="list">
+      </form>
+      <ul id="site-search-results" class="site-search-results" role="listbox" aria-label="Search results" hidden></ul>
+    </div>
     <div class="header-ctas">
       <a class="btn-livestream" href="https://www.youtube.com/@KingtonStMaryLive/streams" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10 8.5v7l6-3.5-6-3.5Z" fill="currentColor" stroke="none"/></svg>
@@ -70,7 +78,7 @@
     </svg>
     <div class="wrap">
       <div class="kicker">Contact</div>
-      <h1>We'd love to hear from you</h1>
+      <h1 id="we-d-love-to-hear-from-you">We'd love to hear from you</h1>
       <p class="lede">Whether you have a question about our services, want to get involved, or need to book an event — reach out.</p>
     </div>
   </div>
@@ -80,20 +88,20 @@
       <div class="card-grid">
         <div class="card reveal">
           <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#A8813C" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 7l9 6 9-6"/></svg></div>
-          <h2>Parish Office</h2>
+          <h2 id="parish-office">Parish Office</h2>
           <p>The Vicarage, Church Road, Kington, Herefordshire HR5 3AG</p>
           <p><a href="mailto:vicar@kingtonparishes.org.uk">vicar@kingtonparishes.org.uk</a><br>
           <a href="tel:+447974439630">07974 439630</a></p>
         </div>
         <div class="card reveal">
           <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#A8813C" stroke-width="1.6"><path d="M4 10.5 12 4l8 6.5"/><path d="M6 9.5V20h12V9.5"/><path d="M10 20v-6h4v6"/></svg></div>
-          <h2>Parish Hall bookings</h2>
+          <h2 id="parish-hall-bookings">Parish Hall bookings</h2>
           <p>To reserve the hall, contact our booking secretary, Penny Halcrow.</p>
           <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#112;&#46;&#115;&#46;&#104;&#97;&#108;&#99;&#114;&#111;&#119;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;">Penny Halcrow</a>
         </div>
         <div class="card reveal">
           <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#A8813C" stroke-width="1.6"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4Z"/></svg></div>
-          <h2>Safeguarding</h2>
+          <h2 id="safeguarding">Safeguarding</h2>
           <p>If you have a concern about the safety of a child or adult, please see our dedicated safeguarding page for the right contact.</p>
           <a href="safeguarding.html">Safeguarding information →</a>
         </div>
@@ -135,11 +143,13 @@
     </div>
     <div class="fine">
       <span>&copy; <span id="year"></span> Kington Parishes. St Mary's Church Kington PCC is registered charity no. 1185453. Site by <a href="https://mediawright.uk">mediawright.uk</a>.</span>
-      <span class="build-number">Build 2026.09.02.006</span>
+      <span class="build-number">Build 2026.09.02.007</span>
     </div>
   </div>
 </footer>
 
-<script src="/js/main.js?v=2026.09.02.006" defer></script>
+<script src="/js/main.js?v=2026.09.02.007" defer></script>
+<script src="/js/search-match.js?v=2026.09.02.007" defer></script>
+<script src="/js/search-ui.js?v=2026.09.02.007" defer></script>
 </body>
 </html>

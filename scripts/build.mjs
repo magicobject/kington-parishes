@@ -9,6 +9,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { NAV, FOOTER_NAV, PAGES } from '../src/pages.config.mjs';
 import { SITE } from '../src/site.config.mjs';
+import { ensureSectionIds, extractSearchEntries, isSearchablePage } from './build-search-index.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (path) => readFileSync(join(root, path), 'utf8');
@@ -98,8 +99,18 @@ const footer = replaceTokens(
   tokens,
 );
 
+const searchEntries = [];
+
 for (const page of PAGES) {
-  const content = read(`src/pages/${page.slug}.html`).trimEnd();
+  // Every heading gets a real, working anchor before anything else touches
+  // this page's content — search results and the page itself can never
+  // disagree about where a section actually is.
+  const content = ensureSectionIds(read(`src/pages/${page.slug}.html`).trimEnd());
+
+  if (isSearchablePage(page)) {
+    const resolvedForSearch = replaceTokens(content, tokens);
+    searchEntries.push(...extractSearchEntries(resolvedForSearch, page));
+  }
 
   const pageUrl = `${SITE_URL}/${page.slug}.html`;
   const pageImage = `${SITE_URL}${page.image || DEFAULT_OG_IMAGE}`;
@@ -145,3 +156,6 @@ for (const page of PAGES) {
   writeFileSync(join(root, 'public', `${page.slug}.html`), html);
   console.log(`built public/${page.slug}.html`);
 }
+
+writeFileSync(join(root, 'public', 'search-index.json'), JSON.stringify(searchEntries));
+console.log(`built public/search-index.json (${searchEntries.length} entries)`);

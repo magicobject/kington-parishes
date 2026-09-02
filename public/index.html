@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/style.css?v=2026.09.02.006">
+<link rel="stylesheet" href="/css/style.css?v=2026.09.02.007">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -53,6 +53,14 @@
       <a href="walkers.html">Walkers</a>
       <a href="contact.html">Contact</a>
     </nav>
+    <div class="header-search">
+      <form role="search" autocomplete="off" id="site-search-form">
+        <label for="site-search-input" class="visually-hidden">Search the site</label>
+        <svg class="search-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="search" id="site-search-input" name="q" placeholder="Search the site" role="combobox" aria-expanded="false" aria-controls="site-search-results" aria-autocomplete="list">
+      </form>
+      <ul id="site-search-results" class="site-search-results" role="listbox" aria-label="Search results" hidden></ul>
+    </div>
     <div class="header-ctas">
       <a class="btn-livestream" href="https://www.youtube.com/@KingtonStMaryLive/streams" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10 8.5v7l6-3.5-6-3.5Z" fill="currentColor" stroke="none"/></svg>
@@ -68,7 +76,7 @@
   <section class="hero">
     <div class="wrap">
       <div class="kicker eyebrow">Five parishes, one benefice</div>
-      <h1>Vibrant church communities on the Herefordshire/Powys border</h1>
+      <h1 id="vibrant-church-communities-on-the-herefordshire-powys-border">Vibrant church communities on the Herefordshire/Powys border</h1>
       <p class="lede">Whether you're a lifelong resident, a visitor, or looking for a spiritual home, we'd love to welcome you — in person on a Sunday, or <a href="https://www.youtube.com/@KingtonStMaryLive" target="_blank" rel="noopener">online</a>.</p>
       <div class="cta-row">
         <a class="btn btn-primary" href="services.html">Find a service</a>
@@ -116,28 +124,28 @@
     <div class="wrap">
       <div class="section-head">
         <div class="kicker">Every week, every month</div>
-        <h2>Ongoing community programmes</h2>
+        <h2 id="ongoing-community-programmes">Ongoing community programmes</h2>
         <p>These run on a regular schedule year-round — not one-off events, so you'll always find them here.</p>
       </div>
       <div class="card-grid">
         <div class="card reveal">
           <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#A8813C" stroke-width="1.6"><path d="M3 9h18l-1.5 10.5a2 2 0 0 1-2 1.5H6.5a2 2 0 0 1-2-1.5L3 9Z"/><path d="M8 9V6a4 4 0 0 1 8 0v3"/></svg></div>
           <div class="tags">Free · No forms, no questions</div>
-          <h3>Kington Zero Waste Food Project</h3>
+          <h3 id="kington-zero-waste-food-project">Kington Zero Waste Food Project</h3>
           <p>Local businesses donate surplus food that would otherwise go to waste — free to anyone who wants it. This isn't a food bank; it's a community effort to stop good food being thrown away.</p>
           <div class="meta">St Mary's Parish Hall — Mondays 12:15–13:00 &amp; Fridays 10:00–11:00</div>
         </div>
         <div class="card reveal">
           <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#A8813C" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg></div>
           <div class="tags">Crafts &amp; community</div>
-          <h3>The Yarn Barn</h3>
+          <h3 id="the-yarn-barn">The Yarn Barn</h3>
           <p>A wonderful space for crafts — drop in to see demonstrations or learn something new.</p>
           <div class="meta">Mondays 10:00–12:00 (demonstrations) · Wednesdays 10:00–12:00 (lessons)</div>
         </div>
         <div class="card reveal">
           <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#A8813C" stroke-width="1.6"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9Z"/></svg></div>
           <div class="tags">Under-3s &amp; carers</div>
-          <h3>Stay &amp; Play</h3>
+          <h3 id="stay-play">Stay &amp; Play</h3>
           <p>Refreshments, stories, songs and toys for parents and carers with children aged 0–3. No booking required. Term-time only.</p>
           <div class="meta">St Mary's Parish Hall — Tuesdays 9:15–10:45 · suggested donation £2</div>
           <p>For more information please contact <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#112;&#105;&#112;&#119;&#114;&#105;&#103;&#104;&#116;&#50;&#51;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;&#63;&#115;&#117;&#98;&#106;&#101;&#99;&#116;&#61;&#83;&#116;&#97;&#121;&#37;&#50;&#48;&#97;&#110;&#100;&#37;&#50;&#48;&#80;&#108;&#97;&#121;&#37;&#50;&#48;&#101;&#110;&#113;&#117;&#105;&#114;&#121;">Phillippa Wright</a>.</p>
@@ -269,7 +277,7 @@
         </a>
         <div>
           <div class="kicker">Parish News</div>
-          <h2 style="font-size:1.5rem;">The family magazine of our five churches</h2>
+          <h2 style="font-size:1.5rem;" id="the-family-magazine-of-our-five-churches">The family magazine of our five churches</h2>
           <p style="margin-top:4px; color:var(--ink-soft); font-size:0.92rem;">Latest issue: September 2026</p>
         </div>
       </div>
@@ -324,11 +332,13 @@
     </div>
     <div class="fine">
       <span>&copy; <span id="year"></span> Kington Parishes. St Mary's Church Kington PCC is registered charity no. 1185453. Site by <a href="https://mediawright.uk">mediawright.uk</a>.</span>
-      <span class="build-number">Build 2026.09.02.006</span>
+      <span class="build-number">Build 2026.09.02.007</span>
     </div>
   </div>
 </footer>
 
-<script src="/js/main.js?v=2026.09.02.006" defer></script>
+<script src="/js/main.js?v=2026.09.02.007" defer></script>
+<script src="/js/search-match.js?v=2026.09.02.007" defer></script>
+<script src="/js/search-ui.js?v=2026.09.02.007" defer></script>
 </body>
 </html>
