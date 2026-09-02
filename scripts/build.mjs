@@ -13,6 +13,16 @@ import { SITE } from '../src/site.config.mjs';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (path) => readFileSync(join(root, path), 'utf8');
 
+// The proof-of-concept build's own deployed URL — used for canonical links
+// and, now, Open Graph/Twitter Card URLs and images (absolute URLs are
+// required for both). Not the parishes' real domain — see pages.config.mjs's
+// own note on why every page is noindex.
+const SITE_URL = 'https://kington-parishes.magicobject.workers.dev';
+// Falls back for any page that doesn't set its own `image` — the flagship
+// aerial shot of St Mary's, Kington, representative of the benefice as a
+// whole.
+const DEFAULT_OG_IMAGE = '/img/our-churches/kington.webp';
+
 const pageTemplate = read('templates/page.html');
 const headerTemplate = read('templates/header.html').trimEnd();
 const footerTemplate = read('templates/footer.html').trimEnd();
@@ -91,11 +101,28 @@ const footer = replaceTokens(
 for (const page of PAGES) {
   const content = read(`src/pages/${page.slug}.html`).trimEnd();
 
+  const pageUrl = `${SITE_URL}/${page.slug}.html`;
+  const pageImage = `${SITE_URL}${page.image || DEFAULT_OG_IMAGE}`;
+
   let extraHead = '';
   if (page.robots) extraHead += `<meta name="robots" content="${page.robots}">\n`;
   if (page.canonical !== false) {
-    extraHead += `<link rel="canonical" href="https://kington-parishes.magicobject.workers.dev/${page.slug}.html">\n`;
+    extraHead += `<link rel="canonical" href="${pageUrl}">\n`;
   }
+  // Open Graph / Twitter Card metadata — inert while the site stays
+  // noindex, but correct and ready for the day it goes live on the
+  // parishes' real domain (only SITE_URL needs to change).
+  extraHead += `<meta property="og:type" content="website">\n`;
+  extraHead += `<meta property="og:site_name" content="${SITE.orgName}">\n`;
+  extraHead += `<meta property="og:title" content="${page.title}">\n`;
+  extraHead += `<meta property="og:description" content="${page.description}">\n`;
+  extraHead += `<meta property="og:url" content="${pageUrl}">\n`;
+  extraHead += `<meta property="og:image" content="${pageImage}">\n`;
+  extraHead += `<meta name="twitter:card" content="summary_large_image">\n`;
+  extraHead += `<meta name="twitter:title" content="${page.title}">\n`;
+  extraHead += `<meta name="twitter:description" content="${page.description}">\n`;
+  extraHead += `<meta name="twitter:image" content="${pageImage}">\n`;
+  if (page.structuredData) extraHead += `<script type="application/ld+json">${JSON.stringify(page.structuredData)}</script>\n`;
 
   const header = page.header
     ? replaceTokens(headerTemplate.replace('{{NAV_ITEMS}}', renderNavItems(NAV, page.active)), tokens)

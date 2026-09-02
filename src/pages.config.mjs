@@ -45,6 +45,19 @@ export const PAGES = [
     active: 'index.html',
     header: true,
     robots: 'noindex, nofollow',
+    structuredData: {
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      name: 'Kington Parishes',
+      url: 'https://kington-parishes.magicobject.workers.dev/index.html',
+      logo: 'https://kington-parishes.magicobject.workers.dev/img/favicon.svg',
+      email: 'vicar@kingtonparishes.org.uk',
+      telephone: '+447974439630',
+      sameAs: [
+        'https://www.youtube.com/@KingtonStMaryLive',
+        'https://www.facebook.com/kingtonparishes',
+      ],
+    },
   },
   {
     slug: 'our-churches',
@@ -53,6 +66,62 @@ export const PAGES = [
     active: 'our-churches.html',
     header: true,
     robots: 'noindex, nofollow',
+    // One Church entry per parish. Deliberately no `address.addressRegion`
+    // yet (Kington/Titley/Huntington read as Herefordshire, England;
+    // Old Radnor/Kinnerton as Powys, Wales, but that's not confirmed against
+    // an official source here) and no `geo` yet — add GeoCoordinates once
+    // what3words locations are converted to lat/long for each church.
+    structuredData: {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'Church',
+          name: "St Mary the Virgin, Kington",
+          url: 'https://kington-parishes.magicobject.workers.dev/our-churches.html#kington',
+          image: 'https://kington-parishes.magicobject.workers.dev/img/our-churches/kington.webp',
+          address: { '@type': 'PostalAddress', addressLocality: 'Kington', addressCountry: 'GB' },
+          telephone: '+447974439630',
+          email: 'vicar@kingtonparishes.org.uk',
+          sameAs: ['https://en.wikipedia.org/wiki/Church_of_St_Mary,_Kington'],
+        },
+        {
+          '@type': 'Church',
+          name: "St Peter's, Titley",
+          url: 'https://kington-parishes.magicobject.workers.dev/our-churches.html#titley',
+          image: 'https://kington-parishes.magicobject.workers.dev/img/our-churches/titley.webp',
+          address: { '@type': 'PostalAddress', addressLocality: 'Titley', addressCountry: 'GB' },
+          telephone: '+447974439630',
+          email: 'vicar@kingtonparishes.org.uk',
+        },
+        {
+          '@type': 'Church',
+          name: "St Stephen's, Old Radnor",
+          url: 'https://kington-parishes.magicobject.workers.dev/our-churches.html#old-radnor',
+          image: 'https://kington-parishes.magicobject.workers.dev/img/our-churches/old-radnor.webp',
+          address: { '@type': 'PostalAddress', addressLocality: 'Old Radnor', addressCountry: 'GB' },
+          telephone: '+447974439630',
+          email: 'vicar@kingtonparishes.org.uk',
+        },
+        {
+          '@type': 'Church',
+          name: "St Mary's, Kinnerton",
+          url: 'https://kington-parishes.magicobject.workers.dev/our-churches.html#kinnerton',
+          image: 'https://kington-parishes.magicobject.workers.dev/img/our-churches/kinnerton.webp',
+          address: { '@type': 'PostalAddress', addressLocality: 'Kinnerton', addressCountry: 'GB' },
+          telephone: '+447974439630',
+          email: 'vicar@kingtonparishes.org.uk',
+        },
+        {
+          '@type': 'Church',
+          name: 'St Thomas à Becket, Huntington',
+          url: 'https://kington-parishes.magicobject.workers.dev/our-churches.html#huntington',
+          image: 'https://kington-parishes.magicobject.workers.dev/img/our-churches/huntington.webp',
+          address: { '@type': 'PostalAddress', addressLocality: 'Huntington', addressCountry: 'GB' },
+          telephone: '+447974439630',
+          email: 'vicar@kingtonparishes.org.uk',
+        },
+      ],
+    },
   },
   {
     slug: 'our-people',
@@ -85,6 +154,7 @@ export const PAGES = [
     active: 'parish-news.html',
     header: true,
     robots: 'noindex, nofollow',
+    image: '/img/parish-news/parish-news-2026-09.jpg',
   },
   {
     slug: 'parish-news-archive',
@@ -95,6 +165,7 @@ export const PAGES = [
     active: null,
     header: true,
     robots: 'noindex, nofollow',
+    image: '/img/parish-news/parish-news-2026-09.jpg',
   },
   {
     slug: 'life-events',
@@ -130,6 +201,7 @@ export const PAGES = [
     active: 'parish-hall.html',
     header: true,
     robots: 'noindex, nofollow',
+    image: '/img/parish-hall/exterior.webp',
   },
   {
     slug: 'calendar',
