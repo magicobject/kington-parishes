@@ -67,10 +67,10 @@ export const PAGES = [
     header: true,
     robots: 'noindex, nofollow',
     // One Church entry per parish. Deliberately no `address.addressRegion`
-    // yet (Kington/Titley/Huntington read as Herefordshire, England;
+    // (Kington/Titley/Huntington read as Herefordshire, England;
     // Old Radnor/Kinnerton as Powys, Wales, but that's not confirmed against
-    // an official source here) and no `geo` yet — add GeoCoordinates once
-    // what3words locations are converted to lat/long for each church.
+    // an official source here). `geo` and `hasMap` come from each church's
+    // what3words location (see the links on the page itself).
     structuredData: {
       '@context': 'https://schema.org',
       '@graph': [
@@ -80,6 +80,8 @@ export const PAGES = [
           url: 'https://kington-parishes.magicobject.workers.dev/our-churches.html#kington',
           image: 'https://kington-parishes.magicobject.workers.dev/img/our-churches/kington.webp',
           address: { '@type': 'PostalAddress', addressLocality: 'Kington', addressCountry: 'GB' },
+          geo: { '@type': 'GeoCoordinates', latitude: 52.206108727628994, longitude: -3.0260032744928784 },
+          hasMap: 'https://what3words.com/gripes.remark.dimension',
           telephone: '+447974439630',
           email: 'vicar@kingtonparishes.org.uk',
           sameAs: ['https://en.wikipedia.org/wiki/Church_of_St_Mary,_Kington'],
@@ -90,6 +92,8 @@ export const PAGES = [
           url: 'https://kington-parishes.magicobject.workers.dev/our-churches.html#titley',
           image: 'https://kington-parishes.magicobject.workers.dev/img/our-churches/titley.webp',
           address: { '@type': 'PostalAddress', addressLocality: 'Titley', addressCountry: 'GB' },
+          geo: { '@type': 'GeoCoordinates', latitude: 52.23585239448353, longitude: -2.9802284142333035 },
+          hasMap: 'https://what3words.com/wooden.hence.thankful',
           telephone: '+447974439630',
           email: 'vicar@kingtonparishes.org.uk',
         },
@@ -99,6 +103,8 @@ export const PAGES = [
           url: 'https://kington-parishes.magicobject.workers.dev/our-churches.html#old-radnor',
           image: 'https://kington-parishes.magicobject.workers.dev/img/our-churches/old-radnor.webp',
           address: { '@type': 'PostalAddress', addressLocality: 'Old Radnor', addressCountry: 'GB' },
+          geo: { '@type': 'GeoCoordinates', latitude: 52.22531215688683, longitude: -3.097180075965132 },
+          hasMap: 'https://what3words.com/tolerable.shifting.roosters',
           telephone: '+447974439630',
           email: 'vicar@kingtonparishes.org.uk',
         },
@@ -108,6 +114,8 @@ export const PAGES = [
           url: 'https://kington-parishes.magicobject.workers.dev/our-churches.html#kinnerton',
           image: 'https://kington-parishes.magicobject.workers.dev/img/our-churches/kinnerton.webp',
           address: { '@type': 'PostalAddress', addressLocality: 'Kinnerton', addressCountry: 'GB' },
+          geo: { '@type': 'GeoCoordinates', latitude: 52.26131715327042, longitude: -3.1083431994438713 },
+          hasMap: 'https://what3words.com/active.seducing.revolting',
           telephone: '+447974439630',
           email: 'vicar@kingtonparishes.org.uk',
         },
@@ -117,6 +125,8 @@ export const PAGES = [
           url: 'https://kington-parishes.magicobject.workers.dev/our-churches.html#huntington',
           image: 'https://kington-parishes.magicobject.workers.dev/img/our-churches/huntington.webp',
           address: { '@type': 'PostalAddress', addressLocality: 'Huntington', addressCountry: 'GB' },
+          geo: { '@type': 'GeoCoordinates', latitude: 52.176790889307306, longitude: -3.0891223911277272 },
+          hasMap: 'https://what3words.com/handicaps.messy.ranted',
           telephone: '+447974439630',
           email: 'vicar@kingtonparishes.org.uk',
         },
