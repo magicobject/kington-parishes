@@ -1,5 +1,5 @@
 /* Kington Parishes — shared styles
-   Palette: limestone / hill-mist slate / old brass / heather / ink
+   Palette: limestone / hill-mist slate / old brass / heather / dawn amber / ink
    Type: Spectral (display) + Public Sans (body) */
 
 :root {
@@ -11,6 +11,8 @@
   --brass-dark: #7C5E28;
   --heather: #7C5F72;
   --heather-dark: #5E4657;
+  --amber-dark: #5A3D26;
+  --dawn-gold: #E8C27A;
   --ink: #262521;
   --ink-soft: #4A473F;
   --line: rgba(38,37,33,0.16);
@@ -68,6 +70,14 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
 header.site {
   background: var(--slate-dark);
   border-bottom: 1px solid rgba(255,255,255,0.08);
+  position: relative;
+}
+header.site::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--dawn-gold) 0%, var(--brass) 45%, var(--amber-dark) 100%);
 }
 .nav-row {
   display: flex;
@@ -181,7 +191,9 @@ nav.links a:hover, nav.links a[aria-current="page"] {
 
 /* ---------- Page header banner (non-home pages) ---------- */
 .page-header {
-  background: var(--slate-dark);
+  background-image:
+    radial-gradient(ellipse 65% 90% at 92% 130%, rgba(230, 196, 128, 0.65) 0%, rgba(184, 138, 64, 0.32) 38%, rgba(184, 138, 64, 0) 68%),
+    linear-gradient(160deg, var(--slate-dark) 0%, var(--heather-dark) 48%, var(--amber-dark) 100%);
   padding: 56px 0 46px;
   position: relative;
   overflow: hidden;
@@ -196,9 +208,10 @@ nav.links a:hover, nav.links a[aria-current="page"] {
   position: absolute;
   left: 0; right: 0; bottom: -6px;
   width: 100%; height: 56px;
-  opacity: 0.55;
+  opacity: 0.85;
   pointer-events: none;
 }
+.page-header .ridge-watermark path { stroke: var(--dawn-gold); }
 
 /* ---------- Sections ---------- */
 section { padding: 60px 0; }
@@ -353,9 +366,17 @@ section + section { border-top: 1px solid var(--line); }
 
 /* ---------- Footer ---------- */
 footer.site {
-  background: var(--slate-dark);
+  background: var(--amber-dark);
   color: #C9C3B2;
   padding: 52px 0 28px;
+  position: relative;
+}
+footer.site::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--amber-dark) 0%, var(--brass) 55%, var(--dawn-gold) 100%);
 }
 footer.site .foot-heading { color: #F8F5EE; font-size: 1.05rem; font-weight: 600; margin-bottom: 12px; }
 footer.site a { color: #C9C3B2; text-decoration: none; }
@@ -372,7 +393,7 @@ footer.site .foot-churches a { text-decoration: underline; text-underline-offset
 .fine {
   padding-top: 18px;
   font-size: 0.82rem;
-  color: #B0AA98;
+  color: #C9C3B2;
   display: flex;
   justify-content: space-between;
   align-items: baseline;
@@ -393,7 +414,13 @@ footer.site .fine a { color: #C9C3B2; text-decoration: underline; text-underline
 }
 
 /* ---------- Home hero ---------- */
-.hero { background: var(--slate-dark); padding: 64px 0 0; overflow: hidden; }
+.hero {
+  background-image:
+    radial-gradient(ellipse 65% 90% at 92% 130%, rgba(230, 196, 128, 0.65) 0%, rgba(184, 138, 64, 0.32) 38%, rgba(184, 138, 64, 0) 68%),
+    linear-gradient(160deg, var(--slate-dark) 0%, var(--heather-dark) 48%, var(--amber-dark) 100%);
+  padding: 64px 0 0;
+  overflow: hidden;
+}
 .hero .eyebrow { color: #C9BEA0; }
 .hero h1 { color: #F8F5EE; font-size: clamp(2.1rem, 5vw, 3.1rem); max-width: 17ch; font-weight: 600; }
 .hero p.lede { color: #C4BFAF; max-width: 50ch; margin-top: 16px; font-size: 1.1rem; }
