@@ -88,6 +88,16 @@ export const UPDATES_PAGE: SitePage = {
   heading: /site updates/i,
 };
 
+// One portal page per church, reachable only via the "Visit the ... page →"
+// link on each church's section of Our Churches — not the primary nav.
+export const CHURCH_PORTAL_PAGES: SitePage[] = [
+  { path: '/church-kington.html', navLabel: 'Kington', titleContains: 'St Mary the Virgin, Kington', heading: /st mary the virgin, kington/i },
+  { path: '/church-titley.html', navLabel: 'Titley', titleContains: "St Peter's, Titley", heading: /st peter's, titley/i },
+  { path: '/church-old-radnor.html', navLabel: 'Old Radnor', titleContains: "St Stephen's, Old Radnor", heading: /st stephen's, old radnor/i },
+  { path: '/church-kinnerton.html', navLabel: 'Kinnerton', titleContains: "St Mary's, Kinnerton", heading: /st mary's, kinnerton/i },
+  { path: '/church-huntington.html', navLabel: 'Huntington', titleContains: 'St Thomas à Becket, Huntington', heading: /st thomas à becket, huntington/i },
+];
+
 // Every generated page, including the ones without primary nav — used by
 // specs that should run against literally everything (footer, tokens).
-export const ALL_PAGES: SitePage[] = [HOME_PAGE, ...NAV_PAGES, SAFEGUARDING_PAGE, PARISH_NEWS_ARCHIVE_PAGE, DONATE_PAGE, TREASURER_JOB_DESCRIPTION_PAGE, UPDATES_PAGE];
+export const ALL_PAGES: SitePage[] = [HOME_PAGE, ...NAV_PAGES, SAFEGUARDING_PAGE, PARISH_NEWS_ARCHIVE_PAGE, DONATE_PAGE, TREASURER_JOB_DESCRIPTION_PAGE, ...CHURCH_PORTAL_PAGES, UPDATES_PAGE];

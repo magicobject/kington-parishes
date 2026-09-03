@@ -9,6 +9,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { NAV, FOOTER_NAV, PAGES } from '../src/pages.config.mjs';
 import { SITE } from '../src/site.config.mjs';
+import { CLERGY, CHURCH_OFFICERS } from '../src/people.config.mjs';
 import { ensureSectionIds, extractSearchEntries, isSearchablePage } from './build-search-index.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -76,6 +77,37 @@ function obfuscateMailtoLinks(html) {
   return html.replace(/\{\{OBFUSCATE_MAILTO:([^}]+)\}\}/g, (_, email) => encodeEntities(`mailto:${email}`));
 }
 
+// Renders one clergy/officer card. Used via {{PEOPLE:clergy}} and
+// {{PEOPLE:<church-slug>}} tokens (see renderPeopleTokens below) so Our
+// People and each church's portal page share the exact same person data —
+// add someone to src/people.config.mjs once, and every page that lists them
+// picks it up.
+function renderPersonCard({ iconSvg, role, name, bio }) {
+  return `        <div class="card reveal">
+          <div class="icon-badge">${iconSvg}</div>
+          <div class="tags">${role}</div>
+          <h3>${name}</h3>
+          <p>${bio}</p>
+        </div>`;
+}
+
+function renderPeopleCards(list) {
+  return list.map(renderPersonCard).join('\n');
+}
+
+// {{PEOPLE:clergy}} -> everyone in CLERGY; {{PEOPLE:<slug>}} -> that church's
+// entry in CHURCH_OFFICERS (empty/absent slugs just render nothing — a
+// church with no officers listed yet simply gets no cards, not an error).
+// Must run before ensureSectionIds/extractSearchEntries so each rendered
+// person's <h3> is a real heading by the time anchors get injected and the
+// search index gets built — not a token search can't see.
+function renderPeopleTokens(html) {
+  return html.replace(/\{\{PEOPLE:([a-z-]+)\}\}/g, (_, key) => {
+    const list = key === 'clergy' ? CLERGY : CHURCH_OFFICERS[key] || [];
+    return renderPeopleCards(list);
+  });
+}
+
 function renderNavItems(links, activeHref) {
   return links
     .map(({ href, label }) => {
@@ -102,10 +134,12 @@ const footer = replaceTokens(
 const searchEntries = [];
 
 for (const page of PAGES) {
-  // Every heading gets a real, working anchor before anything else touches
-  // this page's content — search results and the page itself can never
-  // disagree about where a section actually is.
-  const content = ensureSectionIds(read(`src/pages/${page.slug}.html`).trimEnd());
+  // {{PEOPLE:...}} tokens expand to real headings first, so the anchor
+  // injection and search indexing below see actual person cards, not
+  // unexpanded tokens. Every heading then gets a real, working anchor
+  // before anything else touches this page's content — search results and
+  // the page itself can never disagree about where a section actually is.
+  const content = ensureSectionIds(renderPeopleTokens(read(`src/pages/${page.slug}.html`).trimEnd()));
 
   if (isSearchablePage(page)) {
     const resolvedForSearch = replaceTokens(content, tokens);

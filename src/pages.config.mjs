@@ -134,6 +134,57 @@ export const PAGES = [
       ],
     },
   },
+  // One portal page per church, linked from each church's "Visit the ..."
+  // page →" link on Our Churches. Not in the primary nav — reachable only
+  // from there, same pattern as Donate/Parish News Archive. Each currently
+  // duplicates that church's descriptive text/photo/links from Our Churches
+  // by hand (see CLAUDE.md's "Data kept in sync by hand"); only the People
+  // cards on church-kington are DRY, via src/people.config.mjs.
+  {
+    slug: 'church-kington',
+    title: "St Mary the Virgin, Kington — Kington Parishes",
+    description: "St Mary the Virgin, Kington: service times, how to give, and the people who lead and serve this church.",
+    active: null,
+    header: true,
+    robots: 'noindex, nofollow',
+    image: '/img/our-churches/kington.webp',
+  },
+  {
+    slug: 'church-titley',
+    title: "St Peter's, Titley — Kington Parishes",
+    description: "St Peter's, Titley: service times, how to give, and how to find this church.",
+    active: null,
+    header: true,
+    robots: 'noindex, nofollow',
+    image: '/img/our-churches/titley.webp',
+  },
+  {
+    slug: 'church-old-radnor',
+    title: "St Stephen's, Old Radnor — Kington Parishes",
+    description: "St Stephen's, Old Radnor: service times, how to give, and how to find this church.",
+    active: null,
+    header: true,
+    robots: 'noindex, nofollow',
+    image: '/img/our-churches/old-radnor.webp',
+  },
+  {
+    slug: 'church-kinnerton',
+    title: "St Mary's, Kinnerton — Kington Parishes",
+    description: "St Mary's, Kinnerton: service times, how to give, and how to find this church.",
+    active: null,
+    header: true,
+    robots: 'noindex, nofollow',
+    image: '/img/our-churches/kinnerton.webp',
+  },
+  {
+    slug: 'church-huntington',
+    title: 'St Thomas à Becket, Huntington — Kington Parishes',
+    description: 'St Thomas à Becket, Huntington: service times, how to give, and how to find this church.',
+    active: null,
+    header: true,
+    robots: 'noindex, nofollow',
+    image: '/img/our-churches/huntington.webp',
+  },
   {
     slug: 'our-people',
     title: 'Our People — Kington Parishes',
