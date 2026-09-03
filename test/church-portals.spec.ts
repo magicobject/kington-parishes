@@ -144,3 +144,12 @@ test('none of the new officers\' email addresses appear in plain text in any pag
     }
   }
 });
+
+test("St Thomas à Becket, Huntington's own website is linked on both Our Churches and its portal page", async ({ page }) => {
+  for (const path of ['/our-churches.html', '/church-huntington.html']) {
+    await page.goto(path);
+    await expect(
+      page.getByRole('link', { name: "St Thomas à Becket, Huntington's website →" }),
+    ).toHaveAttribute('href', 'https://www.huntingtonchurch.co.uk/');
+  }
+});

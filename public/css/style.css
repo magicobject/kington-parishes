@@ -584,7 +584,8 @@ footer.site .fine a { color: #C9C3B2; text-decoration: underline; text-underline
 .parish .links-row .trust-link,
 .parish .links-row .wiki-link,
 .parish .links-row .w3w-link,
-.parish .links-row .portal-link { font-weight: 700; }
+.parish .links-row .portal-link,
+.parish .links-row .website-link { font-weight: 700; }
 .parish-photo { max-width: 640px; margin: 20px 0 28px; }
 .parish-photo a { display: block; border-radius: var(--radius); }
 .parish-photo img {
