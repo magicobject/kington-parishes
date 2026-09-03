@@ -1,0 +1,150 @@
+<!--
+  InSpire Newsletter — email template
+
+  NOT part of the built site (nothing in scripts/build.mjs touches this
+  file, and it's never served by the Worker). This is the source you edit
+  per issue, then paste into MailerLite:
+
+    1. Duplicate the "STORY" block below for each item in this issue (copy
+       everything between one STORY START/STORY END comment pair per story).
+    2. Fill in the placeholder text/links/images. Images need a real,
+       publicly reachable URL (e.g. https://kington-parishes.magicobject.workers.dev/img/...
+       or wherever the final image gets hosted) — email clients cannot
+       load a relative path the way the website can.
+    3. In MailerLite: create a campaign → Custom HTML editor → paste this
+       entire file's contents in.
+    4. Leave {$unsubscribe} exactly as-is — it's MailerLite's own merge tag
+       for the unsubscribe link, and at least one working unsubscribe link
+       is legally required for MailerLite to let you send at all. Likewise
+       {$name} is MailerLite's merge tag for the subscriber's first name.
+    5. Turn on MailerLite's own "Web version" / "view in browser" option in
+       the campaign settings — don't hand-code that link here.
+    6. Send a test to yourself (and anyone else who should proof it) before
+       the real send — see CLAUDE.md's newsletter section for the
+       send-test-issues-then-delete-them workflow.
+
+  Email clients (especially Outlook desktop) don't support CSS custom
+  properties, most modern CSS, or SVG/WebP images — this is deliberately
+  simple, table-based, inline-styled HTML with only Georgia/Arial fallback
+  fonts, not a copy of the website's own stylesheet.
+-->
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>InSpire Newsletter</title>
+<!--[if mso]>
+<style>
+  table { border-collapse: collapse; }
+  .fallback-font { font-family: Georgia, 'Times New Roman', serif !important; }
+</style>
+<![endif]-->
+<style>
+  body, table, td { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+  img { border: 0; line-height: 100%; outline: none; text-decoration: none; }
+  a { color: #7C5E28; }
+  @media only screen and (max-width: 600px) {
+    .email-container { width: 100% !important; }
+    .stack { display: block !important; width: 100% !important; }
+    .px { padding-left: 20px !important; padding-right: 20px !important; }
+  }
+</style>
+</head>
+<body style="margin:0; padding:0; background-color:#EDE9DF;">
+<!-- Preview text: shows in the inbox list, before the subject is opened. Keep under ~90 characters. Hidden from the rendered email itself. -->
+<div style="display:none; max-height:0; overflow:hidden; opacity:0;">
+  ISSUE PREVIEW TEXT GOES HERE — e.g. "This month: harvest festival dates, a new organ for St Mary's, and more."
+</div>
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#EDE9DF;">
+  <tr>
+    <td align="center" style="padding:24px 12px;">
+
+      <table role="presentation" class="email-container" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px; max-width:600px; background-color:#F8F5EE;">
+
+        <!-- Masthead -->
+        <tr>
+          <td align="center" style="background-color:#2E3C48; padding:28px 24px;">
+            <div style="font-family:Arial, Helvetica, sans-serif; font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:#E8C27A; margin-bottom:6px;">Kington Parishes</div>
+            <div class="fallback-font" style="font-family:Georgia, 'Times New Roman', serif; font-size:30px; line-height:1.2; color:#F8F5EE;">InSpire Newsletter</div>
+            <div style="font-family:Arial, Helvetica, sans-serif; font-size:13px; color:#C7CDD3; margin-top:6px;">ISSUE MONTH YEAR — e.g. September 2026</div>
+          </td>
+        </tr>
+
+        <!-- Greeting -->
+        <tr>
+          <td class="px" style="padding:32px 32px 8px 32px; font-family:Arial, Helvetica, sans-serif; font-size:16px; line-height:1.6; color:#262521;">
+            Hello {$name},
+          </td>
+        </tr>
+        <tr>
+          <td class="px" style="padding:0 32px 24px 32px; font-family:Arial, Helvetica, sans-serif; font-size:16px; line-height:1.6; color:#4A473F;">
+            ISSUE INTRO PARAGRAPH GOES HERE — a couple of sentences setting up what's in this issue.
+          </td>
+        </tr>
+
+        <!-- Divider -->
+        <tr>
+          <td class="px" style="padding:0 32px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="border-top:1px solid #D9D3C4; font-size:1px; line-height:1px;">&nbsp;</td></tr></table></td>
+        </tr>
+
+        <!-- ==================== STORY START (duplicate this whole block per story) ==================== -->
+        <tr>
+          <td class="px" style="padding:28px 32px 0 32px;">
+            <!-- Optional image — delete this <img> row entirely if a story has no photo. Must be a real, absolute, publicly-reachable URL; JPG or PNG only (not WebP/SVG — poor email client support). -->
+            <img src="https://kington-parishes.magicobject.workers.dev/img/REPLACE-ME.jpg" width="536" alt="Describe the photo for anyone who can't see it" style="display:block; width:100%; max-width:536px; height:auto; border-radius:4px;">
+          </td>
+        </tr>
+        <tr>
+          <td class="px" style="padding:16px 32px 4px 32px; font-family:Georgia, 'Times New Roman', serif; font-size:21px; line-height:1.3; color:#262521;">
+            STORY HEADLINE GOES HERE
+          </td>
+        </tr>
+        <tr>
+          <td class="px" style="padding:0 32px 16px 32px; font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:1.6; color:#4A473F;">
+            STORY BODY TEXT GOES HERE.
+          </td>
+        </tr>
+        <tr>
+          <td class="px" style="padding:0 32px 28px 32px;">
+            <!-- Bulletproof-ish button: a plain background-coloured table cell, not an image. Renders with square corners in Outlook desktop instead of rounded — an accepted trade-off for keeping this maintainable without VML. Delete this table entirely if a story has no call to action. -->
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td style="background-color:#46596A; border-radius:4px;">
+                  <a href="https://kington-parishes.magicobject.workers.dev/REPLACE-ME.html" style="display:inline-block; padding:12px 22px; font-family:Arial, Helvetica, sans-serif; font-size:14px; font-weight:bold; color:#F8F5EE; text-decoration:none;">READ MORE &rarr;</a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td class="px" style="padding:0 32px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="border-top:1px solid #D9D3C4; font-size:1px; line-height:1px;">&nbsp;</td></tr></table></td>
+        </tr>
+        <!-- ==================== STORY END ==================== -->
+
+        <!-- Sign-off -->
+        <tr>
+          <td class="px" style="padding:28px 32px 32px 32px; font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:1.6; color:#4A473F;">
+            With every blessing,<br>
+            SIGN-OFF NAME GOES HERE
+          </td>
+        </tr>
+
+        <!-- Footer -->
+        <tr>
+          <td align="center" style="background-color:#EDE9DF; padding:24px 32px; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:1.7; color:#4A473F;">
+            Kington Parishes &middot; Registered Charity No. 1185453<br>
+            The Vicarage, Church Road, Kington, Herefordshire HR5 3AG<br>
+            <a href="{$unsubscribe}" style="color:#7C5E28; text-decoration:underline;">Unsubscribe</a> from the InSpire Newsletter
+          </td>
+        </tr>
+
+      </table>
+
+    </td>
+  </tr>
+</table>
+</body>
+</html>
