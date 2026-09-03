@@ -27,9 +27,11 @@ test('the parish office email and phone number are correct and consistent everyw
   await expect(page.locator('a[href="tel:+447974439630"]').first()).toBeVisible();
 
   await page.goto('/parish-news.html');
-  // 2 in the body content ("Write for us" / "Get the paper edition") + 1 in the footer.
+  // 1 in the body content ("Get the paper edition" — "Write for us" now
+  // contacts the Parish News editor directly, a different address) + 1 in
+  // the footer.
   const mailtoLinks = page.locator('a[href="mailto:vicar@kingtonparishes.org.uk"]');
-  await expect(mailtoLinks).toHaveCount(3);
+  await expect(mailtoLinks).toHaveCount(2);
 
   await page.goto('/index.html');
   await expect(page.locator('footer.site a[href="mailto:vicar@kingtonparishes.org.uk"]')).toBeVisible();
@@ -52,6 +54,19 @@ test("the booking secretary's email never appears in plain text in the page sour
     const html = readFileSync(join(__dirname, '..', 'public', path), 'utf8');
     expect(html).not.toContain('p.s.halcrow@gmail.com');
   }
+});
+
+test('Parish News articles, information and adverts go to the editor, David Redmayne', async ({ page }) => {
+  await page.goto('/parish-news.html');
+  await expect(page.getByRole('link', { name: 'David Redmayne' })).toHaveAttribute(
+    'href',
+    'mailto:pn.kingtonparishes@gmail.com',
+  );
+});
+
+test("the Parish News editor's email never appears in plain text in the page source", async () => {
+  const html = readFileSync(join(__dirname, '..', 'public', 'parish-news.html'), 'utf8');
+  expect(html).not.toContain('pn.kingtonparishes@gmail.com');
 });
 
 test('the donate link is identical in the header and on Get Involved, and points at the church-picker page', async ({
