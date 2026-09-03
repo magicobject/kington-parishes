@@ -188,7 +188,7 @@ export const PAGES = [
   {
     slug: 'our-people',
     title: 'Our People — Kington Parishes',
-    description: 'Meet the clergy and the volunteer wardens and officers who run our parishes: Revd Sally Welch, Revd Phillippa Wright, and the churchwardens, safeguarding, health & safety and treasury team at St Mary\'s, Kington.',
+    description: 'Meet the clergy and the volunteer wardens and officers who run our five churches: Revd Sally Welch, Revd Phillippa Wright, and the churchwardens, secretaries, organists and other officers across Kington, Titley, Old Radnor, Kinnerton and Huntington.',
     active: 'our-people.html',
     header: true,
     robots: 'noindex, nofollow',
