@@ -15,6 +15,10 @@
     <div class="wrap">
       <ul class="changelog">
         <li>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.03.013</span><span class="changelog-date">3 September 2026</span></div>
+          <p>Newsletter signup: temporarily surface MailerLite's raw status/response in <code>/api/subscribe</code>'s error message, to verify the live API key without a dashboard log round trip. To be reverted before the public form ships.</p>
+        </li>
+        <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.03.012</span><span class="changelog-date">3 September 2026</span></div>
           <p>Newsletter signup: log MailerLite's own error response server-side (never the request itself) when <code>/api/subscribe</code> fails, so a bad API key vs. a misconfigured group id can be told apart from Cloudflare's log stream.</p>
         </li>
