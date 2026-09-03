@@ -28,7 +28,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/style.css?v=2026.09.03.013">
+<link rel="stylesheet" href="/css/style.css?v=2026.09.03.014">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -87,6 +87,10 @@
   <section>
     <div class="wrap">
       <ul class="changelog">
+        <li>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.03.014</span><span class="changelog-date">3 September 2026</span></div>
+          <p>Newsletter signup: temporarily log the stored API key's length and first/last character (never the key itself) to diagnose a persistent 401 from MailerLite. To be reverted alongside the other debug-only changes.</p>
+        </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.03.013</span><span class="changelog-date">3 September 2026</span></div>
           <p>Newsletter signup: temporarily surface MailerLite's raw status/response in <code>/api/subscribe</code>'s error message, to verify the live API key without a dashboard log round trip. To be reverted before the public form ships.</p>
@@ -418,13 +422,13 @@
     </div>
     <div class="fine">
       <span>&copy; <span id="year"></span> Kington Parishes. St Mary's Church Kington PCC is registered charity no. 1185453. Site by <a href="https://mediawright.uk">mediawright.uk</a>.</span>
-      <span class="build-number">Build 2026.09.03.013</span>
+      <span class="build-number">Build 2026.09.03.014</span>
     </div>
   </div>
 </footer>
 
-<script src="/js/main.js?v=2026.09.03.013" defer></script>
-<script src="/js/search-match.js?v=2026.09.03.013" defer></script>
-<script src="/js/search-ui.js?v=2026.09.03.013" defer></script>
+<script src="/js/main.js?v=2026.09.03.014" defer></script>
+<script src="/js/search-match.js?v=2026.09.03.014" defer></script>
+<script src="/js/search-ui.js?v=2026.09.03.014" defer></script>
 </body>
 </html>
