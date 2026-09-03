@@ -33,6 +33,7 @@ export const FOOTER_NAV = [
   { href: 'our-churches.html', label: 'Our Churches' },
   { href: 'services.html', label: 'Services &amp; Events' },
   { href: 'parish-news-archive.html', label: 'Parish News' },
+  { href: 'newsletter.html', label: 'InSpire Newsletter' },
   { href: 'safeguarding.html', label: 'Safeguarding' },
   { href: 'https://www.youtube.com/@KingtonStMaryLive', label: 'Our YouTube Channel' },
   { href: 'https://www.facebook.com/kingtonparishes', label: 'Our Facebook Community' },
@@ -228,6 +229,26 @@ export const PAGES = [
     header: true,
     robots: 'noindex, nofollow',
     image: '/img/parish-news/parish-news-2026-09.jpg',
+  },
+  {
+    slug: 'newsletter',
+    title: 'InSpire Newsletter — Kington Parishes',
+    description: 'Sign up for the InSpire Newsletter — news, services and events from across the Kington Parishes, straight to your inbox.',
+    // Reachable from the footer's Explore list, not the primary nav — same
+    // pattern as Parish News Archive/Donate/Safeguarding.
+    active: null,
+    header: true,
+    robots: 'noindex, nofollow',
+  },
+  {
+    slug: 'privacy-policy',
+    title: 'Privacy Policy — Kington Parishes',
+    description: 'How Kington Parishes handles the personal details you give us when signing up for the InSpire Newsletter.',
+    // Reachable from the newsletter signup form's consent text, not the
+    // primary nav — same pattern as Parish News Archive/Donate/Safeguarding.
+    active: null,
+    header: true,
+    robots: 'noindex, nofollow',
   },
   {
     slug: 'blog',

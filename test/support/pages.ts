@@ -62,6 +62,25 @@ export const PARISH_NEWS_ARCHIVE_PAGE: SitePage = {
 // Not in the primary nav either — reachable from the header's Donate Now
 // button (every page) and Get Involved's Give card, so it doesn't need its
 // own nav entry.
+// Same pattern as Safeguarding: reachable from the footer's "Explore" list,
+// not the primary nav.
+export const NEWSLETTER_PAGE: SitePage = {
+  path: '/newsletter.html',
+  navLabel: 'InSpire Newsletter',
+  titleContains: 'InSpire Newsletter',
+  heading: /inspire newsletter/i,
+};
+
+// Not in the primary nav or the footer — reachable only via the consent
+// text on the newsletter signup form. Same pattern as Treasurer Job
+// Description (reachable only via a link in page content).
+export const PRIVACY_POLICY_PAGE: SitePage = {
+  path: '/privacy-policy.html',
+  navLabel: 'Privacy Policy',
+  titleContains: 'Privacy Policy',
+  heading: /privacy policy/i,
+};
+
 export const DONATE_PAGE: SitePage = {
   path: '/donate.html',
   navLabel: 'Donate',
@@ -100,4 +119,4 @@ export const CHURCH_PORTAL_PAGES: SitePage[] = [
 
 // Every generated page, including the ones without primary nav — used by
 // specs that should run against literally everything (footer, tokens).
-export const ALL_PAGES: SitePage[] = [HOME_PAGE, ...NAV_PAGES, SAFEGUARDING_PAGE, PARISH_NEWS_ARCHIVE_PAGE, DONATE_PAGE, TREASURER_JOB_DESCRIPTION_PAGE, ...CHURCH_PORTAL_PAGES, UPDATES_PAGE];
+export const ALL_PAGES: SitePage[] = [HOME_PAGE, ...NAV_PAGES, SAFEGUARDING_PAGE, PARISH_NEWS_ARCHIVE_PAGE, NEWSLETTER_PAGE, PRIVACY_POLICY_PAGE, DONATE_PAGE, TREASURER_JOB_DESCRIPTION_PAGE, ...CHURCH_PORTAL_PAGES, UPDATES_PAGE];

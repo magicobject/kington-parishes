@@ -433,6 +433,40 @@ section + section { border-top: 1px solid var(--line); }
   border: 2px solid var(--slate-dark);
 }
 .btn-secondary:hover { background: var(--slate-dark); color: #F8F5EE; }
+button.btn { border: 0; font: inherit; cursor: pointer; }
+button.btn[disabled] { opacity: 0.6; cursor: not-allowed; }
+
+/* ---------- Forms ---------- */
+.form-field { margin-bottom: 18px; max-width: 420px; }
+.form-field label { display: block; font-weight: 600; margin-bottom: 6px; }
+.form-field input[type="text"],
+.form-field input[type="email"] {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--parchment);
+  color: var(--ink);
+  font: inherit;
+}
+.form-consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 22px 0;
+  max-width: 480px;
+}
+.form-consent input[type="checkbox"] { margin-top: 4px; width: 18px; height: 18px; flex-shrink: 0; }
+.form-consent label { color: var(--ink-soft); font-size: 0.95rem; }
+
+/* Off-screen for sighted mouse/keyboard/screen-reader users, but still
+   present in the DOM for generic bots that blindly fill every field. */
+.hp-field { position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+
+.form-message { margin-top: 18px; padding: 14px 16px; border-radius: var(--radius); max-width: 480px; font-weight: 600; }
+.form-message[hidden] { display: none; }
+.form-message.is-success { background: rgba(124,95,114,0.12); color: var(--heather-dark); border: 1px solid var(--heather); }
+.form-message.is-error { background: rgba(90,61,38,0.1); color: var(--amber-dark); border: 1px solid var(--amber-dark); }
 
 /* ---------- Safeguarding banner (footer link, not full text everywhere) ---------- */
 .safeguard-strip {

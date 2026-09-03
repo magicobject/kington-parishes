@@ -6,6 +6,8 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_EMAIL_LENGTH = 254;
 const MAX_NAME_LENGTH = 100;
 
+export const SUCCESS_MESSAGE = 'Almost there — check your email to confirm your subscription.';
+
 // Returns the trimmed, valid email, or null if the input isn't usable.
 export function validateEmail(email) {
   if (typeof email !== 'string') return null;
@@ -43,7 +45,7 @@ export async function subscribeToMailerLite(email, name, env, fetchImpl = fetch)
   });
 
   if (response.ok) {
-    return { ok: true, status: 200, message: 'Almost there — check your email to confirm your subscription.' };
+    return { ok: true, status: 200, message: SUCCESS_MESSAGE };
   }
 
   if (response.status === 422) {

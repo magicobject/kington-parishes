@@ -1,7 +1,7 @@
 // Worker entry point. Everything except /api/* falls straight through to
 // the static site (env.ASSETS) — this repo is still a static site first,
 // with just the newsletter signup endpoint bolted on.
-import { validateEmail, sanitizeName, subscribeToMailerLite } from './subscribe.mjs';
+import { validateEmail, sanitizeName, subscribeToMailerLite, SUCCESS_MESSAGE } from './subscribe.mjs';
 
 export default {
   async fetch(request, env) {
@@ -21,6 +21,14 @@ async function handleSubscribe(request, env) {
     body = await request.json();
   } catch {
     return jsonResponse({ ok: false, message: 'Invalid request.' }, 400);
+  }
+
+  // Honeypot: a field real visitors never see or fill (hidden off-screen in
+  // CSS, see .hp-field), but a generic bot filling every form field will.
+  // Pretend success rather than reject, so bots don't learn to detect and
+  // route around this field.
+  if (typeof body?.website === 'string' && body.website.trim() !== '') {
+    return jsonResponse({ ok: true, message: SUCCESS_MESSAGE }, 200);
   }
 
   const email = validateEmail(body?.email);
