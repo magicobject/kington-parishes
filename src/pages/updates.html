@@ -15,6 +15,10 @@
     <div class="wrap">
       <ul class="changelog">
         <li>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.03.019</span><span class="changelog-date">3 September 2026</span></div>
+          <p>Newsletter signup: revert the temporary verbose 502 message. Root cause of the recurring dropped API key was a leftover build-scoped variable conflicting with the runtime secret, a known Cloudflare Workers Builds issue — this entry doesn't link a page, since it's a process change with no page of its own.</p>
+        </li>
+        <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.03.018</span><span class="changelog-date">3 September 2026</span></div>
           <p>Newsletter signup: temporarily surface MailerLite's raw error again, to diagnose a new 502 reported from a real signup attempt on the live form.</p>
         </li>
