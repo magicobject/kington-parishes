@@ -187,6 +187,16 @@ export const PAGES = [
     robots: 'noindex, nofollow',
   },
   {
+    slug: 'treasurer-job-description',
+    title: 'Treasurer Job Description — Kington Parishes',
+    description: "What the Treasurer role involves at St Mary's, Kington — day to day and across the year.",
+    // Reachable from the blog post announcing the vacancy, not from the
+    // primary nav — same pattern as Donate/Parish News Archive.
+    active: null,
+    header: true,
+    robots: 'noindex, nofollow',
+  },
+  {
     slug: 'life-events',
     title: 'Life Events — Kington Parishes',
     description: 'Baptisms, weddings, funerals and remembrance services across the Kington Parishes.',

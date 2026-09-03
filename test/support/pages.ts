@@ -69,6 +69,15 @@ export const DONATE_PAGE: SitePage = {
   heading: /choose which church to support/i,
 };
 
+// Not in the primary nav — reachable only via the link in the blog post
+// announcing the Treasurer vacancy. Same pattern as Donate.
+export const TREASURER_JOB_DESCRIPTION_PAGE: SitePage = {
+  path: '/treasurer-job-description.html',
+  navLabel: 'Treasurer Job Description',
+  titleContains: 'Treasurer Job Description',
+  heading: /treasurer role description/i,
+};
+
 // Not in the primary nav, the footer, or anywhere else — a build changelog
 // for whoever knows the URL, not user-facing content. See CLAUDE.md's
 // "Build numbers" section.
@@ -81,4 +90,4 @@ export const UPDATES_PAGE: SitePage = {
 
 // Every generated page, including the ones without primary nav — used by
 // specs that should run against literally everything (footer, tokens).
-export const ALL_PAGES: SitePage[] = [HOME_PAGE, ...NAV_PAGES, SAFEGUARDING_PAGE, PARISH_NEWS_ARCHIVE_PAGE, DONATE_PAGE, UPDATES_PAGE];
+export const ALL_PAGES: SitePage[] = [HOME_PAGE, ...NAV_PAGES, SAFEGUARDING_PAGE, PARISH_NEWS_ARCHIVE_PAGE, DONATE_PAGE, TREASURER_JOB_DESCRIPTION_PAGE, UPDATES_PAGE];
