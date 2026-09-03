@@ -32,13 +32,6 @@ export function buildMailerLitePayload(email, groupId, name) {
 // group, see Phase 2) sends its own confirmation email automatically —
 // nothing else to do here for that part.
 export async function subscribeToMailerLite(email, name, env, fetchImpl = fetch) {
-  // TEMPORARY (remove once the 401 investigation is done): logs the key's
-  // shape, never the key itself, to Cloudflare's private log stream — lets
-  // us confirm the stored secret matches what was copied from MailerLite
-  // without ever exposing any of it in the (public) HTTP response.
-  const key = env.MAILERLITE_API_KEY ?? '';
-  console.error('MailerLite key shape', { length: key.length, first: key[0], last: key.at(-1) });
-
   const response = await fetchImpl('https://connect.mailerlite.com/api/subscribers', {
     method: 'POST',
     headers: {
@@ -60,14 +53,6 @@ export async function subscribeToMailerLite(email, name, env, fetchImpl = fetch)
   // Never logs the request itself (so the API key is never at risk of
   // ending up in Cloudflare's log stream) — only MailerLite's own response,
   // for diagnosing things like an auth failure vs. a misconfigured group id.
-  const body = await response.text();
-  console.error('MailerLite subscribe failed', response.status, body);
-  // TEMPORARY (remove before Phase 3's public form ships): surfacing
-  // MailerLite's raw response in the client message so this can be verified
-  // live without a round trip through Cloudflare's log dashboard each time.
-  return {
-    ok: false,
-    status: 502,
-    message: `Something went wrong on our end (MailerLite responded ${response.status}: ${body}) — please try again shortly.`,
-  };
+  console.error('MailerLite subscribe failed', response.status, await response.text());
+  return { ok: false, status: 502, message: 'Something went wrong on our end — please try again shortly.' };
 }
