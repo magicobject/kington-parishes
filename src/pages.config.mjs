@@ -241,6 +241,17 @@ export const PAGES = [
     robots: 'noindex, nofollow',
   },
   {
+    slug: 'newsletter-2026-09',
+    title: 'September 2026 — InSpire Newsletter — Kington Parishes',
+    description: "25 years of ministry for Revd Sally Welch, Revd Phillippa Wright's ordination as priest, a Treasurer vacancy at St Mary's, and September's Wild Church cancelled.",
+    // Reachable from the newsletter page's "Recent issues" list (and later
+    // the newsletter archive) via src/newsletter.config.mjs — not the
+    // primary nav or the footer, same as every other newsletter issue page.
+    active: null,
+    header: true,
+    robots: 'noindex, nofollow',
+  },
+  {
     slug: 'newsletter-archive',
     title: 'InSpire Newsletter Archive — Kington Parishes',
     description: 'Past issues of the InSpire Newsletter, more than six months old — free to read online.',

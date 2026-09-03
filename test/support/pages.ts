@@ -71,6 +71,13 @@ export const NEWSLETTER_PAGE: SitePage = {
   heading: /inspire newsletter/i,
 };
 
+// One entry per newsletter issue page — reachable only via the newsletter
+// page's "Recent issues" list (and, once six months old, the archive), not
+// the primary nav or the footer. Add one line here per new issue.
+export const NEWSLETTER_ISSUE_PAGES: SitePage[] = [
+  { path: '/newsletter-2026-09.html', navLabel: 'September 2026', titleContains: 'September 2026', heading: /september 2026/i },
+];
+
 // Same pattern as Parish News Archive: reachable from the newsletter page's
 // "Browse the full archive" link, not the primary nav or the footer.
 export const NEWSLETTER_ARCHIVE_PAGE: SitePage = {
@@ -128,4 +135,4 @@ export const CHURCH_PORTAL_PAGES: SitePage[] = [
 
 // Every generated page, including the ones without primary nav — used by
 // specs that should run against literally everything (footer, tokens).
-export const ALL_PAGES: SitePage[] = [HOME_PAGE, ...NAV_PAGES, SAFEGUARDING_PAGE, PARISH_NEWS_ARCHIVE_PAGE, NEWSLETTER_PAGE, NEWSLETTER_ARCHIVE_PAGE, PRIVACY_POLICY_PAGE, DONATE_PAGE, TREASURER_JOB_DESCRIPTION_PAGE, ...CHURCH_PORTAL_PAGES, UPDATES_PAGE];
+export const ALL_PAGES: SitePage[] = [HOME_PAGE, ...NAV_PAGES, SAFEGUARDING_PAGE, PARISH_NEWS_ARCHIVE_PAGE, NEWSLETTER_PAGE, ...NEWSLETTER_ISSUE_PAGES, NEWSLETTER_ARCHIVE_PAGE, PRIVACY_POLICY_PAGE, DONATE_PAGE, TREASURER_JOB_DESCRIPTION_PAGE, ...CHURCH_PORTAL_PAGES, UPDATES_PAGE];
