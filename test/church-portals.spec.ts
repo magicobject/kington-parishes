@@ -10,11 +10,11 @@ import { join } from 'node:path';
 // reached both pages, not that someone kept two hand-written lists in sync.
 
 const CHURCHES = [
-  { anchor: 'kington', label: "Visit the St Mary's, Kington page →", portal: '/church-kington.html', heading: /st mary the virgin, kington/i },
-  { anchor: 'titley', label: "Visit the St Peter's, Titley page →", portal: '/church-titley.html', heading: /st peter's, titley/i },
-  { anchor: 'old-radnor', label: "Visit the St Stephen's, Old Radnor page →", portal: '/church-old-radnor.html', heading: /st stephen's, old radnor/i },
-  { anchor: 'kinnerton', label: "Visit the St Mary's, Kinnerton page →", portal: '/church-kinnerton.html', heading: /st mary's, kinnerton/i },
-  { anchor: 'huntington', label: 'Visit the St Thomas à Becket, Huntington page →', portal: '/church-huntington.html', heading: /st thomas à becket, huntington/i },
+  { anchor: 'kington', label: "Visit the St Mary's, Kington page →", photoLabel: "Visit the St Mary's, Kington page", portal: '/church-kington.html', heading: /st mary the virgin, kington/i },
+  { anchor: 'titley', label: "Visit the St Peter's, Titley page →", photoLabel: "Visit the St Peter's, Titley page", portal: '/church-titley.html', heading: /st peter's, titley/i },
+  { anchor: 'old-radnor', label: "Visit the St Stephen's, Old Radnor page →", photoLabel: "Visit the St Stephen's, Old Radnor page", portal: '/church-old-radnor.html', heading: /st stephen's, old radnor/i },
+  { anchor: 'kinnerton', label: "Visit the St Mary's, Kinnerton page →", photoLabel: "Visit the St Mary's, Kinnerton page", portal: '/church-kinnerton.html', heading: /st mary's, kinnerton/i },
+  { anchor: 'huntington', label: 'Visit the St Thomas à Becket, Huntington page →', photoLabel: 'Visit the St Thomas à Becket, Huntington page', portal: '/church-huntington.html', heading: /st thomas à becket, huntington/i },
 ];
 
 for (const church of CHURCHES) {
@@ -24,6 +24,17 @@ for (const church of CHURCHES) {
     await expect(link).toHaveAttribute('href', church.portal.slice(1));
 
     await link.click();
+    await expect(page).toHaveURL(new RegExp(`${church.portal}$`));
+    await expect(page.locator('h1')).toHaveText(church.heading);
+  });
+
+  test(`the church photo for #${church.anchor} also links to ${church.portal}`, async ({ page }) => {
+    await page.goto('/our-churches.html');
+    const photoLink = page.locator(`#${church.anchor} .parish-photo a`);
+    await expect(photoLink).toHaveAttribute('href', church.portal.slice(1));
+    await expect(photoLink).toHaveAccessibleName(church.photoLabel);
+
+    await photoLink.click();
     await expect(page).toHaveURL(new RegExp(`${church.portal}$`));
     await expect(page.locator('h1')).toHaveText(church.heading);
   });
