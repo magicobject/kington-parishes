@@ -94,11 +94,11 @@ test('donate.html links each church (and the combined Old Radnor/Kinnerton entry
     'href',
     'https://www.parishgiving.org.uk/donors/find-your-parish/titley-st-peter-hereford',
   );
-  await expect(page.getByRole('link', { name: 'Donate to Old Radnor & Kinnerton →' })).toHaveAttribute(
+  await expect(page.getByRole('link', { name: "Donate to St Stephen's, Old Radnor and St Mary's, Kinnerton →" })).toHaveAttribute(
     'href',
     'https://www.parishgiving.org.uk/donors/find-your-parish/old-radnor-st-stephen-hereford',
   );
-  await expect(page.getByRole('link', { name: 'Donate to Huntington →' })).toHaveAttribute(
+  await expect(page.getByRole('link', { name: 'Donate to St Thomas à Becket, Huntington →' })).toHaveAttribute(
     'href',
     'https://www.parishgiving.org.uk/donors/find-your-parish/huntington-st-thomas-a-becket-hereford',
   );
