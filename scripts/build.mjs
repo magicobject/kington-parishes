@@ -10,7 +10,9 @@ import { dirname, join } from 'node:path';
 import { NAV, FOOTER_NAV, PAGES } from '../src/pages.config.mjs';
 import { SITE } from '../src/site.config.mjs';
 import { CLERGY, CHURCH_OFFICERS } from '../src/people.config.mjs';
+import { NEWSLETTER_ISSUES } from '../src/newsletter.config.mjs';
 import { ensureSectionIds, extractSearchEntries, isSearchablePage } from './build-search-index.mjs';
+import { splitNewsletterIssues, formatIssueMonth } from './newsletter-issues.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (path) => readFileSync(join(root, path), 'utf8');
@@ -108,6 +110,39 @@ function renderPeopleTokens(html) {
   });
 }
 
+// One card for {{NEWSLETTERS:recent}}/{{NEWSLETTERS:archive}} — see
+// renderNewsletterTokens below.
+function renderNewsletterCard({ slug, title, date, summary }) {
+  return `        <div class="card reveal">
+          <div class="meta">${formatIssueMonth(date)}</div>
+          <h3>${title}</h3>
+          <p>${summary}</p>
+          <a href="${slug}.html">Read this issue &rarr;</a>
+        </div>`;
+}
+
+const NEWSLETTER_EMPTY_MESSAGES = {
+  recent: 'No issues published yet — sign up below to be the first to know.',
+  archive: 'No past issues yet — check back after a few more have gone out.',
+};
+
+// {{NEWSLETTERS:recent}} -> issues from the last six months (newest first);
+// {{NEWSLETTERS:archive}} -> everything older. Split is computed once per
+// build (see splitNewsletterIssues), not client-side — good enough for
+// something that only moves a few times a year, and keeps every issue's
+// listing entry in one place (src/newsletter.config.mjs) rather than
+// duplicated by hand across both listing pages.
+function renderNewsletterTokens(html) {
+  const { recent, archive } = splitNewsletterIssues(NEWSLETTER_ISSUES);
+  return html.replace(/\{\{NEWSLETTERS:(recent|archive)\}\}/g, (_, which) => {
+    const issues = which === 'recent' ? recent : archive;
+    if (issues.length === 0) {
+      return `<p style="color:var(--ink-soft);">${NEWSLETTER_EMPTY_MESSAGES[which]}</p>`;
+    }
+    return issues.map(renderNewsletterCard).join('\n');
+  });
+}
+
 function renderNavItems(links, activeHref) {
   return links
     .map(({ href, label }) => {
@@ -134,12 +169,12 @@ const footer = replaceTokens(
 const searchEntries = [];
 
 for (const page of PAGES) {
-  // {{PEOPLE:...}} tokens expand to real headings first, so the anchor
-  // injection and search indexing below see actual person cards, not
-  // unexpanded tokens. Every heading then gets a real, working anchor
+  // {{PEOPLE:...}}/{{NEWSLETTERS:...}} tokens expand to real headings first,
+  // so the anchor injection and search indexing below see actual content,
+  // not unexpanded tokens. Every heading then gets a real, working anchor
   // before anything else touches this page's content — search results and
   // the page itself can never disagree about where a section actually is.
-  const content = ensureSectionIds(renderPeopleTokens(read(`src/pages/${page.slug}.html`).trimEnd()));
+  const content = ensureSectionIds(renderNewsletterTokens(renderPeopleTokens(read(`src/pages/${page.slug}.html`).trimEnd())));
 
   if (isSearchablePage(page)) {
     const resolvedForSearch = replaceTokens(content, tokens);

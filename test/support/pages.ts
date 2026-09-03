@@ -71,6 +71,15 @@ export const NEWSLETTER_PAGE: SitePage = {
   heading: /inspire newsletter/i,
 };
 
+// Same pattern as Parish News Archive: reachable from the newsletter page's
+// "Browse the full archive" link, not the primary nav or the footer.
+export const NEWSLETTER_ARCHIVE_PAGE: SitePage = {
+  path: '/newsletter-archive.html',
+  navLabel: 'InSpire Newsletter Archive',
+  titleContains: 'InSpire Newsletter Archive',
+  heading: /the inspire newsletter archive/i,
+};
+
 // Not in the primary nav or the footer — reachable only via the consent
 // text on the newsletter signup form. Same pattern as Treasurer Job
 // Description (reachable only via a link in page content).
@@ -119,4 +128,4 @@ export const CHURCH_PORTAL_PAGES: SitePage[] = [
 
 // Every generated page, including the ones without primary nav — used by
 // specs that should run against literally everything (footer, tokens).
-export const ALL_PAGES: SitePage[] = [HOME_PAGE, ...NAV_PAGES, SAFEGUARDING_PAGE, PARISH_NEWS_ARCHIVE_PAGE, NEWSLETTER_PAGE, PRIVACY_POLICY_PAGE, DONATE_PAGE, TREASURER_JOB_DESCRIPTION_PAGE, ...CHURCH_PORTAL_PAGES, UPDATES_PAGE];
+export const ALL_PAGES: SitePage[] = [HOME_PAGE, ...NAV_PAGES, SAFEGUARDING_PAGE, PARISH_NEWS_ARCHIVE_PAGE, NEWSLETTER_PAGE, NEWSLETTER_ARCHIVE_PAGE, PRIVACY_POLICY_PAGE, DONATE_PAGE, TREASURER_JOB_DESCRIPTION_PAGE, ...CHURCH_PORTAL_PAGES, UPDATES_PAGE];

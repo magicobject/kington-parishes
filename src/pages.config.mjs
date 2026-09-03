@@ -241,6 +241,16 @@ export const PAGES = [
     robots: 'noindex, nofollow',
   },
   {
+    slug: 'newsletter-archive',
+    title: 'InSpire Newsletter Archive — Kington Parishes',
+    description: 'Past issues of the InSpire Newsletter, more than six months old — free to read online.',
+    // Reachable from the newsletter page ("Browse the full archive"), not
+    // the primary nav or the footer — same pattern as Parish News Archive.
+    active: null,
+    header: true,
+    robots: 'noindex, nofollow',
+  },
+  {
     slug: 'privacy-policy',
     title: 'Privacy Policy — Kington Parishes',
     description: 'How Kington Parishes handles the personal details you give us when signing up for the InSpire Newsletter.',
