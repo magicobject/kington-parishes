@@ -569,6 +569,7 @@ footer.site .fine a { color: #C9C3B2; text-decoration: underline; text-underline
 .parish + .parish { border-top: 1px solid var(--line); }
 .parish.alt { background: var(--parchment); }
 .parish h2 { font-size: clamp(1.6rem, 3vw, 2.1rem); }
+.parish h3 { font-size: 1.25rem; font-weight: 600; margin: 28px 0 6px; }
 .parish .dedication { color: var(--brass-dark); font-weight: 700; font-size: 0.92rem; margin-bottom: 6px; }
 .parish .body-text { max-width: 66ch; color: var(--ink-soft); }
 .parish .facts {

@@ -10,11 +10,11 @@ import { join } from 'node:path';
 // reached both pages, not that someone kept two hand-written lists in sync.
 
 const CHURCHES = [
-  { anchor: 'kington', label: "Visit the St Mary's, Kington page →", photoLabel: "Visit the St Mary's, Kington page", portal: '/church-kington.html', heading: /st mary the virgin, kington/i },
-  { anchor: 'titley', label: "Visit the St Peter's, Titley page →", photoLabel: "Visit the St Peter's, Titley page", portal: '/church-titley.html', heading: /st peter's, titley/i },
-  { anchor: 'old-radnor', label: "Visit the St Stephen's, Old Radnor page →", photoLabel: "Visit the St Stephen's, Old Radnor page", portal: '/church-old-radnor.html', heading: /st stephen's, old radnor/i },
-  { anchor: 'kinnerton', label: "Visit the St Mary's, Kinnerton page →", photoLabel: "Visit the St Mary's, Kinnerton page", portal: '/church-kinnerton.html', heading: /st mary's, kinnerton/i },
-  { anchor: 'huntington', label: 'Visit the St Thomas à Becket, Huntington page →', photoLabel: 'Visit the St Thomas à Becket, Huntington page', portal: '/church-huntington.html', heading: /st thomas à becket, huntington/i },
+  { anchor: 'kington', label: "More about St Mary's, Kington →", photoLabel: "More about St Mary's, Kington", portal: '/church-kington.html', heading: /st mary the virgin, kington/i },
+  { anchor: 'titley', label: "More about St Peter's, Titley →", photoLabel: "More about St Peter's, Titley", portal: '/church-titley.html', heading: /st peter's, titley/i },
+  { anchor: 'old-radnor', label: "More about St Stephen's, Old Radnor →", photoLabel: "More about St Stephen's, Old Radnor", portal: '/church-old-radnor.html', heading: /st stephen's, old radnor/i },
+  { anchor: 'kinnerton', label: "More about St Mary's, Kinnerton →", photoLabel: "More about St Mary's, Kinnerton", portal: '/church-kinnerton.html', heading: /st mary's, kinnerton/i },
+  { anchor: 'huntington', label: 'More about St Thomas à Becket, Huntington →', photoLabel: 'More about St Thomas à Becket, Huntington', portal: '/church-huntington.html', heading: /st thomas à becket, huntington/i },
 ];
 
 for (const church of CHURCHES) {
