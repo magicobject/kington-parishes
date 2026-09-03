@@ -1,9 +1,16 @@
 {
   "name": "kingtonparishes",
   "compatibility_date": "2026-08-07",
+  "main": "src/worker/index.mjs",
   "assets": {
     "directory": "./public",
+    "binding": "ASSETS",
     "not_found_handling": "404-page",
     "html_handling": "auto-trailing-slash"
+  },
+  "vars": {
+    // Non-secret: MailerLite group to add newsletter signups to.
+    // Fill in once the "Inspire Newsletter" group exists in MailerLite (Phase 2).
+    "MAILERLITE_GROUP_ID": "REPLACE_WITH_REAL_GROUP_ID"
   }
 }
