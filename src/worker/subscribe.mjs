@@ -50,5 +50,9 @@ export async function subscribeToMailerLite(email, name, env, fetchImpl = fetch)
     return { ok: false, status: 422, message: 'Please enter a valid email address.' };
   }
 
+  // Never logs the request itself (so the API key is never at risk of
+  // ending up in Cloudflare's log stream) — only MailerLite's own response,
+  // for diagnosing things like an auth failure vs. a misconfigured group id.
+  console.error('MailerLite subscribe failed', response.status, await response.text());
   return { ok: false, status: 502, message: 'Something went wrong on our end — please try again shortly.' };
 }
