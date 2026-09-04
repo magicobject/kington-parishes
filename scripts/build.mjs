@@ -31,6 +31,10 @@ const pageTemplate = read('templates/page.html');
 const headerTemplate = read('templates/header.html').trimEnd();
 const footerTemplate = read('templates/footer.html').trimEnd();
 const safeguardStripTemplate = read('templates/safeguard-strip.html').trimEnd();
+// The newsletter signup form is identical wherever it appears (newsletter.html
+// and the homepage, so far) — one shared partial via a {{NEWSLETTER_SIGNUP_FORM}}
+// token, rather than hand-duplicating the form/its ids across pages.
+const newsletterSignupFormPartial = read('templates/newsletter-signup-form.html').trim();
 
 function readBuildNumber() {
   const file = join(root, 'build-number.json');
@@ -203,6 +207,7 @@ const footerNavItems = FOOTER_NAV.map(({ href, label }) => {
 
 const buildNumber = readBuildNumber();
 const tokens = tokensFromSite(SITE, buildNumber);
+tokens.NEWSLETTER_SIGNUP_FORM = newsletterSignupFormPartial;
 
 const footer = replaceTokens(
   footerTemplate.replace('{{FOOTER_NAV_ITEMS}}', footerNavItems),

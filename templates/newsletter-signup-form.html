@@ -1,0 +1,27 @@
+<form id="newsletter-signup-form" novalidate>
+        <div class="form-field">
+          <label for="newsletter-email">Email address</label>
+          <input type="email" id="newsletter-email" name="email" autocomplete="email" required>
+        </div>
+        <div class="form-field">
+          <label for="newsletter-name">First name <span style="font-weight:400; color:var(--ink-soft);">(optional)</span></label>
+          <input type="text" id="newsletter-name" name="name" autocomplete="given-name">
+        </div>
+
+        <div class="hp-field" aria-hidden="true">
+          <label for="newsletter-website">Leave this field blank</label>
+          <input type="text" id="newsletter-website" name="website" tabindex="-1" autocomplete="off">
+        </div>
+
+        <div class="form-consent">
+          <input type="checkbox" id="newsletter-consent" name="consent" required>
+          <label for="newsletter-consent">I'd like to receive the InSpire Newsletter by email. See our <a href="privacy-policy.html">Privacy Policy</a> for how we use your details — you can unsubscribe at any time.</label>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Sign up</button>
+
+        <p id="newsletter-signup-message" class="form-message" role="status" aria-live="polite" hidden></p>
+      </form>
+      <div id="newsletter-signup-success" class="form-message is-success" role="status" tabindex="-1" hidden>
+        Almost there — check your inbox to confirm your subscription.
+      </div>

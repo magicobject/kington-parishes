@@ -1,19 +1,41 @@
 // Wires up the InSpire Newsletter signup form: posts to /api/subscribe as
-// JSON, shows an inline success/error message, and disables the submit
-// button while a request is in flight. Does nothing on pages without the
-// form. Vanilla JS, no dependencies.
+// JSON, shows an inline error or a clean success state, and disables the
+// submit button while a request is in flight. Does nothing on pages
+// without the form. Vanilla JS, no dependencies.
 document.addEventListener('DOMContentLoaded', function () {
   var form = document.getElementById('newsletter-signup-form');
   if (!form) return;
 
   var message = document.getElementById('newsletter-signup-message');
+  var successBlock = document.getElementById('newsletter-signup-success');
   var submitBtn = form.querySelector('button[type="submit"]');
+  var consecutiveFailures = 0;
 
-  function showMessage(text, isError) {
-    message.textContent = text;
+  function showError(text) {
+    consecutiveFailures++;
+    message.textContent = '';
+    message.appendChild(document.createTextNode(text));
+    // After a repeat failure, add a fallback so a genuinely broken form
+    // doesn't just dead-end the visitor.
+    if (consecutiveFailures >= 2) {
+      var fallback = document.createElement('span');
+      fallback.innerHTML = ' Still not working? Email <a href="mailto:vicar@kingtonparishes.org.uk">vicar@kingtonparishes.org.uk</a> and we’ll add you by hand.';
+      message.appendChild(fallback);
+    }
     message.hidden = false;
-    message.classList.toggle('is-error', !!isError);
-    message.classList.toggle('is-success', !isError);
+    message.classList.add('is-error');
+    message.classList.remove('is-success');
+  }
+
+  // Replaces the form with a clean confirmation state, rather than just
+  // showing a message alongside a form that's already been filled in and
+  // submitted — moving focus to it so the result isn't easy to miss.
+  function showSuccess() {
+    consecutiveFailures = 0;
+    message.hidden = true;
+    form.hidden = true;
+    successBlock.hidden = false;
+    successBlock.focus();
   }
 
   form.addEventListener('submit', function (event) {
@@ -25,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var consent = form.elements.consent.checked;
 
     if (!consent) {
-      showMessage('Please tick the box to confirm you’d like to receive the newsletter.', true);
+      showError('Please tick the box to confirm you’d like to receive the newsletter.');
       return;
     }
 
@@ -37,11 +59,14 @@ document.addEventListener('DOMContentLoaded', function () {
     })
       .then(function (res) { return res.json().then(function (data) { return { status: res.status, data: data }; }); })
       .then(function (result) {
-        showMessage(result.data.message, !result.data.ok);
-        if (result.data.ok) form.reset();
+        if (result.data.ok) {
+          showSuccess();
+        } else {
+          showError(result.data.message);
+        }
       })
       .catch(function () {
-        showMessage('Something went wrong on our end — please try again shortly.', true);
+        showError('Something went wrong on our end — please try again shortly.');
       })
       .then(function () {
         submitBtn.disabled = false;

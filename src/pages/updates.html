@@ -15,6 +15,10 @@
     <div class="wrap">
       <ul class="changelog">
         <li>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.04.002</span><span class="changelog-date">4 September 2026</span></div>
+          <p>Newsletter signup UX: a clean, focused confirmation state replaces the form on success, and a repeat failure now offers a fallback contact email. The form is factored into one shared partial (<code>templates/newsletter-signup-form.html</code>) and now also appears on the <a href="index.html">homepage</a>. Renamed <a href="parish-news.html">Parish News</a> to "Parish Magazine" in the nav and footer to better differentiate it from the <a href="newsletter.html">InSpire Newsletter</a>, which now has its own top-nav link ("InSpire").</p>
+        </li>
+        <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.04.001</span><span class="changelog-date">4 September 2026</span></div>
           <p>SEO audit fixes: structured data on <a href="blog.html">Blog</a>, <a href="parish-news.html">Parish News</a> and the <a href="newsletter.html">InSpire Newsletter</a> pages (issue schema computed automatically from <code>src/newsletter.config.mjs</code>); a postal address on the <a href="index.html">homepage</a>'s Organization schema; a PNG favicon fallback and apple-touch-icon (<code>scripts/generate-favicons.mjs</code>); and an automatically generated <a href="sitemap.xml">sitemap.xml</a> on every build.</p>
         </li>

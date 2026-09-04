@@ -24,12 +24,13 @@ export const HOME_PAGE: SitePage = {
   heading: /vibrant church communities/i,
 };
 
-// The eleven pages in the primary header nav.
+// The twelve pages in the primary header nav.
 export const NAV_PAGES: SitePage[] = [
   { path: '/our-churches.html', navLabel: 'Our Churches', titleContains: 'Our Churches', heading: /five churches, one benefice/i },
   { path: '/our-people.html', navLabel: 'Our People', titleContains: 'Our People', heading: /the people who lead and serve us/i },
   { path: '/services.html', navLabel: 'Services & Events', titleContains: 'Services', heading: /worship, week by week/i },
-  { path: '/parish-news.html', navLabel: 'Parish News', titleContains: 'Parish News', heading: /family magazine/i },
+  { path: '/parish-news.html', navLabel: 'Parish Magazine', titleContains: 'Parish News', heading: /family magazine/i },
+  { path: '/newsletter.html', navLabel: 'InSpire', titleContains: 'InSpire Newsletter', heading: /inspire newsletter/i },
   { path: '/blog.html', navLabel: 'Blog', titleContains: 'Blog', heading: /news from across the parishes/i },
   { path: '/life-events.html', navLabel: 'Life Events', titleContains: 'Life Events', heading: /baptisms, weddings/i },
   { path: '/get-involved.html', navLabel: 'Get Involved', titleContains: 'Get Involved', heading: /support, hire, and take part/i },
@@ -49,26 +50,14 @@ export const SAFEGUARDING_PAGE: SitePage = {
 };
 
 // Same pattern as Safeguarding: reachable from the footer's "Explore" list
-// (labelled "Parish News", same text as the NAV_PAGES entry above but
-// pointing at the archive instead) and from the Parish News page — not the
-// primary nav.
+// (labelled "Parish Magazine", same text as the NAV_PAGES entry above but
+// pointing at the archive instead) and from the Parish Magazine page — not
+// the primary nav.
 export const PARISH_NEWS_ARCHIVE_PAGE: SitePage = {
   path: '/parish-news-archive.html',
-  navLabel: 'Parish News',
+  navLabel: 'Parish Magazine',
   titleContains: 'Parish News Archive',
   heading: /the parish news archive/i,
-};
-
-// Not in the primary nav either — reachable from the header's Donate Now
-// button (every page) and Get Involved's Give card, so it doesn't need its
-// own nav entry.
-// Same pattern as Safeguarding: reachable from the footer's "Explore" list,
-// not the primary nav.
-export const NEWSLETTER_PAGE: SitePage = {
-  path: '/newsletter.html',
-  navLabel: 'InSpire Newsletter',
-  titleContains: 'InSpire Newsletter',
-  heading: /inspire newsletter/i,
 };
 
 // One entry per newsletter issue page — reachable only via the newsletter
@@ -78,8 +67,10 @@ export const NEWSLETTER_ISSUE_PAGES: SitePage[] = [
   { path: '/newsletter-2026-09.html', navLabel: 'September 2026', titleContains: 'September 2026', heading: /september 2026/i },
 ];
 
-// Same pattern as Parish News Archive: reachable from the newsletter page's
-// "Browse the full archive" link, not the primary nav or the footer.
+// Reachable from the newsletter page's "Browse the full archive" link, and
+// from the footer's "Explore" list (labelled "InSpire Newsletter") — same
+// nav/footer split as Parish Magazine, just the other way round (nav points
+// at the hub, footer at the archive).
 export const NEWSLETTER_ARCHIVE_PAGE: SitePage = {
   path: '/newsletter-archive.html',
   navLabel: 'InSpire Newsletter Archive',
@@ -135,4 +126,4 @@ export const CHURCH_PORTAL_PAGES: SitePage[] = [
 
 // Every generated page, including the ones without primary nav — used by
 // specs that should run against literally everything (footer, tokens).
-export const ALL_PAGES: SitePage[] = [HOME_PAGE, ...NAV_PAGES, SAFEGUARDING_PAGE, PARISH_NEWS_ARCHIVE_PAGE, NEWSLETTER_PAGE, ...NEWSLETTER_ISSUE_PAGES, NEWSLETTER_ARCHIVE_PAGE, PRIVACY_POLICY_PAGE, DONATE_PAGE, TREASURER_JOB_DESCRIPTION_PAGE, ...CHURCH_PORTAL_PAGES, UPDATES_PAGE];
+export const ALL_PAGES: SitePage[] = [HOME_PAGE, ...NAV_PAGES, SAFEGUARDING_PAGE, PARISH_NEWS_ARCHIVE_PAGE, ...NEWSLETTER_ISSUE_PAGES, NEWSLETTER_ARCHIVE_PAGE, PRIVACY_POLICY_PAGE, DONATE_PAGE, TREASURER_JOB_DESCRIPTION_PAGE, ...CHURCH_PORTAL_PAGES, UPDATES_PAGE];

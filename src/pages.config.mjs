@@ -16,7 +16,8 @@ export const NAV = [
   { href: 'our-churches.html', label: 'Our Churches' },
   { href: 'our-people.html', label: 'Our People' },
   { href: 'services.html', label: 'Services &amp; Events' },
-  { href: 'parish-news.html', label: 'Parish News' },
+  { href: 'parish-news.html', label: 'Parish Magazine' },
+  { href: 'newsletter.html', label: 'InSpire' },
   { href: 'blog.html', label: 'Blog' },
   { href: 'life-events.html', label: 'Life Events' },
   { href: 'get-involved.html', label: 'Get Involved' },
@@ -32,8 +33,8 @@ export const NAV = [
 export const FOOTER_NAV = [
   { href: 'our-churches.html', label: 'Our Churches' },
   { href: 'services.html', label: 'Services &amp; Events' },
-  { href: 'parish-news-archive.html', label: 'Parish News' },
-  { href: 'newsletter.html', label: 'InSpire Newsletter' },
+  { href: 'parish-news-archive.html', label: 'Parish Magazine' },
+  { href: 'newsletter-archive.html', label: 'InSpire Newsletter' },
   { href: 'safeguarding.html', label: 'Safeguarding' },
   { href: 'https://www.youtube.com/@KingtonStMaryLive', label: 'Our YouTube Channel' },
   { href: 'https://www.facebook.com/kingtonparishes', label: 'Our Facebook Community' },
@@ -260,9 +261,7 @@ export const PAGES = [
     slug: 'newsletter',
     title: 'InSpire Newsletter — Kington Parishes',
     description: 'Sign up for the InSpire Newsletter — news, services and events from across the Kington Parishes, straight to your inbox.',
-    // Reachable from the footer's Explore list, not the primary nav — same
-    // pattern as Parish News Archive/Donate/Safeguarding.
-    active: null,
+    active: 'newsletter.html',
     header: true,
     robots: 'noindex, nofollow',
   },
