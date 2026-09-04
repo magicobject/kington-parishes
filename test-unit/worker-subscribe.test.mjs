@@ -7,6 +7,7 @@ import {
   sanitizeName,
   buildMailerLitePayload,
   subscribeToMailerLite,
+  PREVIOUSLY_UNSUBSCRIBED_MESSAGE,
 } from '../src/worker/subscribe.mjs';
 
 describe('validateEmail', () => {
@@ -84,11 +85,31 @@ describe('subscribeToMailerLite', () => {
     assert.equal(result.status, 200);
   });
 
-  test('maps a 422 to a friendly validation message', async () => {
+  test('maps a plain 422 to a friendly validation message', async () => {
     const fetchMock = async () => new Response(null, { status: 422 });
     const result = await subscribeToMailerLite('person@example.com', undefined, env, fetchMock);
     assert.equal(result.ok, false);
     assert.equal(result.status, 422);
+    assert.equal(result.message, 'Please enter a valid email address.');
+  });
+
+  // Real MailerLite response body for this case, captured while diagnosing
+  // a report of a genuinely valid address being told it was "invalid" — a
+  // 422 there doesn't necessarily mean a bad email format.
+  test('maps a "previously unsubscribed" 422 to its own distinct message, not "invalid email"', async () => {
+    const fetchMock = async () =>
+      new Response(
+        JSON.stringify({
+          message: 'The given data was invalid.',
+          errors: { email: ['This subscriber is unsubscribed and cannot be imported'] },
+          subscriber: '197606381721748792',
+        }),
+        { status: 422 },
+      );
+    const result = await subscribeToMailerLite('greg@gregwright.it', undefined, env, fetchMock);
+    assert.equal(result.ok, false);
+    assert.equal(result.status, 409);
+    assert.equal(result.message, PREVIOUSLY_UNSUBSCRIBED_MESSAGE);
   });
 
   test('maps any other failure to a generic retry message', async () => {

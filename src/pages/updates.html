@@ -15,6 +15,10 @@
     <div class="wrap">
       <ul class="changelog">
         <li>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.04.004</span><span class="changelog-date">4 September 2026</span></div>
+          <p>Newsletter signup fix: a previously-unsubscribed address now gets a clear, honest message ("previously unsubscribed, email us to add you back") instead of the misleading "please enter a valid email address" — MailerLite rejects re-importing unsubscribed contacts via the API on purpose, and that's a different situation from a bad email format. Reverts the temporary debug logging from the last two entries.</p>
+        </li>
+        <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.04.003</span><span class="changelog-date">4 September 2026</span></div>
           <p>Newsletter signup: temporarily surface MailerLite's raw 422 response, to diagnose a report of a genuinely valid email address ("Please enter a valid email address" is currently shown for any 422, not necessarily an email-format problem).</p>
         </li>

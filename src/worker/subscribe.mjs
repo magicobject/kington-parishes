@@ -7,6 +7,7 @@ const MAX_EMAIL_LENGTH = 254;
 const MAX_NAME_LENGTH = 100;
 
 export const SUCCESS_MESSAGE = 'Almost there — check your email to confirm your subscription.';
+export const PREVIOUSLY_UNSUBSCRIBED_MESSAGE = 'This address was previously unsubscribed, so we can’t re-add it automatically. Email vicar@kingtonparishes.org.uk and we’ll add you back by hand.';
 
 // Returns the trimmed, valid email, or null if the input isn't usable.
 export function validateEmail(email) {
@@ -49,11 +50,17 @@ export async function subscribeToMailerLite(email, name, env, fetchImpl = fetch)
   }
 
   if (response.status === 422) {
-    // TEMPORARY: a 422 doesn't necessarily mean the email format is bad —
-    // it's whatever MailerLite's own validation rejected. Surfacing the raw
-    // body to diagnose a real report of a valid address being rejected.
-    const body422 = await response.text();
-    return { ok: false, status: 422, message: `Please enter a valid email address. (debug: ${body422})` };
+    // A 422 doesn't always mean the email format is bad — MailerLite also
+    // uses it when the address was previously unsubscribed and refuses to
+    // silently re-add it via the API (a deliberate anti-spam protection on
+    // their side, not something to route around). Tell the visitor the real
+    // reason rather than the misleading "enter a valid email" for that case.
+    const body = await response.json().catch(() => null);
+    const emailErrors = body?.errors?.email;
+    if (Array.isArray(emailErrors) && emailErrors.some((message) => /unsubscribed/i.test(message))) {
+      return { ok: false, status: 409, message: PREVIOUSLY_UNSUBSCRIBED_MESSAGE };
+    }
+    return { ok: false, status: 422, message: 'Please enter a valid email address.' };
   }
 
   // Never logs the request itself (so the API key is never at risk of
