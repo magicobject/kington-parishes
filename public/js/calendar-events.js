@@ -20,11 +20,28 @@
     { date: '2026-08-16', time: '14:00', title: 'Pilgrimage and tea', location: "St Thomas à Becket, Huntington" },
     { date: '2026-08-25', time: '10:30', title: "Summer Family Fun at St Mary's", location: "St Mary's, Kington" },
     { date: '2026-08-30', time: '16:00', title: 'Choral Evensong sung by the Church House Singers', location: "St Mary's, Kington" },
+    // Sunday services, September-November 2026: Holy Communion every Sunday
+    // except the third Sunday of the month, which is Morning Praise. Only
+    // covers Sep-Nov for now — see CLAUDE.md.
+    { date: '2026-09-06', time: '10:00', title: 'Holy Communion', location: "St Mary's, Kington" },
+    { date: '2026-09-12', time: '19:00', title: 'Organ Recital: Ewan Murray', location: "St Mary's, Kington" },
+    { date: '2026-09-13', time: '10:00', title: 'Holy Communion', location: "St Mary's, Kington" },
+    { date: '2026-09-20', time: '10:00', title: 'Morning Praise', location: "St Mary's, Kington" },
     { date: '2026-09-20', time: '12:00', title: 'Wild Church Cook Out', location: 'Yield Wood' },
     { date: '2026-09-20', time: '13:45', title: "Kington Pilgrim Path Walk from St Mary's", location: "St Mary's, Kington" },
     { date: '2026-09-20', time: '14:00', title: 'Pilgrimage and tea', location: "St Mary's, Kinnerton" },
+    { date: '2026-09-27', time: '10:00', title: 'Holy Communion', location: "St Mary's, Kington" },
+    { date: '2026-10-04', time: '10:00', title: 'Holy Communion', location: "St Mary's, Kington" },
+    { date: '2026-10-11', time: '10:00', title: 'Holy Communion', location: "St Mary's, Kington" },
+    { date: '2026-10-18', time: '10:00', title: 'Morning Praise', location: "St Mary's, Kington" },
+    { date: '2026-10-25', time: '10:00', title: 'Holy Communion', location: "St Mary's, Kington" },
     { date: '2026-10-28', time: '10:20', title: 'Visiting Ringers', location: "St Mary's, Kington" },
+    { date: '2026-11-01', time: '10:00', title: 'Holy Communion', location: "St Mary's, Kington" },
+    { date: '2026-11-08', time: '10:00', title: 'Holy Communion', location: "St Mary's, Kington" },
+    { date: '2026-11-15', time: '10:00', title: 'Morning Praise', location: "St Mary's, Kington" },
     { date: '2026-11-15', time: '15:30', title: 'Recital by the Titley Philharmonic Orchestra (Bach Double Violin Concerto and Handel Organ Concerto)', location: "St Mary's, Kington" },
+    { date: '2026-11-22', time: '10:00', title: 'Holy Communion', location: "St Mary's, Kington" },
+    { date: '2026-11-29', time: '10:00', title: 'Holy Communion', location: "St Mary's, Kington" },
     { date: '2026-12-11', time: '18:30', title: 'Carols at the Oxford', location: '' },
   ];
 
