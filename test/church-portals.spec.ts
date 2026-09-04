@@ -48,10 +48,11 @@ const CHURCH_OFFICERS = {
     ['Greg Wright', 'Churchwarden · Interim Treasurer'],
     ['Margaret Cooke', 'Churchwarden'],
     ['Christine Robinson', 'Parish Safeguarding Officer · Church Secretary'],
-    ['Julia Reed', 'Health & Safety Officer'],
+    ['Julia Reid', 'Health & Safety Officer'],
     ['Philip Sell', 'Director of Music · Parish Administrator'],
     ['Revd Paul Roberts', 'Organist'],
     ['David Redmayne', 'Parish News Editor'],
+    ['Craig Freese', 'Parish News Compositor'],
     ['John Clayton', 'Bell Tower Captain'],
   ],
   titley: [

@@ -62,7 +62,7 @@ export const CHURCH_OFFICERS = {
       iconSvg: SHIELD_ICON,
     },
     {
-      name: 'Julia Reed',
+      name: 'Julia Reid',
       role: 'Health &amp; Safety Officer',
       bio: "Keeps St Mary's, Kington safe for worshippers, volunteers and visitors alike.",
       iconSvg: CHECK_ICON,
@@ -83,6 +83,12 @@ export const CHURCH_OFFICERS = {
       name: 'David Redmayne',
       role: 'Parish News Editor',
       bio: 'Editor of the Kington Parish News, the family magazine for all five churches.' + contactLink('pn.kingtonparishes@gmail.com'),
+      iconSvg: NEWSPAPER_ICON,
+    },
+    {
+      name: 'Craig Freese',
+      role: 'Parish News Compositor',
+      bio: 'Sets out and designs the Kington Parish News, the family magazine for all five churches.',
       iconSvg: NEWSPAPER_ICON,
     },
     {
