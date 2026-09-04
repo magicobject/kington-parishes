@@ -22,6 +22,8 @@
 
         <p id="newsletter-signup-message" class="form-message" role="status" aria-live="polite" hidden></p>
       </form>
-      <div id="newsletter-signup-success" class="form-message is-success" role="status" tabindex="-1" hidden>
-        Almost there — check your inbox to confirm your subscription.
-      </div>
+      <!-- Text is set by newsletter-signup.js from the server's own response
+           on success, not hardcoded here — the server (src/worker/subscribe.mjs)
+           is the one place that needs to change if the double opt-in email
+           gets switched back on. -->
+      <div id="newsletter-signup-success" class="form-message is-success" role="status" tabindex="-1" hidden></div>

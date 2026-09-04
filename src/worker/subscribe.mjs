@@ -6,7 +6,13 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_EMAIL_LENGTH = 254;
 const MAX_NAME_LENGTH = 100;
 
-export const SUCCESS_MESSAGE = 'Almost there — check your email to confirm your subscription.';
+// Double opt-in is currently switched OFF in MailerLite (see CLAUDE.md's
+// "Newsletter signup confirmation copy" note) — a happy response here means
+// the subscriber is already active, no confirmation email gets sent. Keep
+// this message honest about that; if double opt-in is re-enabled later,
+// this needs to change back to a "check your email" message, alongside
+// every other place CLAUDE.md lists.
+export const SUCCESS_MESSAGE = "You're subscribed! Welcome to the InSpire Newsletter.";
 export const PREVIOUSLY_UNSUBSCRIBED_MESSAGE = 'This address was previously unsubscribed, so we can’t re-add it automatically. Email vicar@kingtonparishes.org.uk and we’ll add you back by hand.';
 
 // Returns the trimmed, valid email, or null if the input isn't usable.
@@ -31,9 +37,11 @@ export function buildMailerLitePayload(email, groupId, name) {
   return payload;
 }
 
-// MailerLite adds the subscriber and (with double opt-in enabled on the
-// group, see Phase 2) sends its own confirmation email automatically —
-// nothing else to do here for that part.
+// With double opt-in enabled on the group, MailerLite would send its own
+// confirmation email automatically and this call alone is enough to
+// trigger it — but double opt-in is currently off (see the note on
+// SUCCESS_MESSAGE above), so a happy response here subscribes the address
+// immediately, with no email sent at all.
 export async function subscribeToMailerLite(email, name, env, fetchImpl = fetch) {
   const response = await fetchImpl('https://connect.mailerlite.com/api/subscribers', {
     method: 'POST',

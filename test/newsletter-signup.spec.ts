@@ -20,7 +20,7 @@ test('a successful signup replaces the form with a focused confirmation', async 
   await page.route('**/api/subscribe', (route) =>
     route.fulfill({
       contentType: 'application/json',
-      body: JSON.stringify({ ok: true, message: 'Almost there — check your inbox to confirm your subscription.' }),
+      body: JSON.stringify({ ok: true, message: "You're all set!" }),
     }),
   );
 
@@ -31,7 +31,9 @@ test('a successful signup replaces the form with a focused confirmation', async 
 
   const success = page.locator('#newsletter-signup-success');
   await expect(success).toBeVisible();
-  await expect(success).toHaveText(/check your inbox/i);
+  // Text comes straight from the server's response, not a hardcoded string
+  // in the page — proves that pass-through actually works.
+  await expect(success).toHaveText("You're all set!");
   await expect(page.locator('#newsletter-signup-form')).toBeHidden();
   await expect(success).toBeFocused();
 });
@@ -89,7 +91,7 @@ test('a success after failures resets the failure count (no lingering fallback t
     }
     return route.fulfill({
       contentType: 'application/json',
-      body: JSON.stringify({ ok: true, message: 'Almost there — check your inbox to confirm your subscription.' }),
+      body: JSON.stringify({ ok: true, message: "You're all set!" }),
     });
   });
 
@@ -109,7 +111,7 @@ test('the homepage has its own working copy of the same signup form', async ({ p
   await page.route('**/api/subscribe', (route) =>
     route.fulfill({
       contentType: 'application/json',
-      body: JSON.stringify({ ok: true, message: 'Almost there — check your inbox to confirm your subscription.' }),
+      body: JSON.stringify({ ok: true, message: "You're all set!" }),
     }),
   );
 

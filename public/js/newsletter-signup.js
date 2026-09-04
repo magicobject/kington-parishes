@@ -29,11 +29,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Replaces the form with a clean confirmation state, rather than just
   // showing a message alongside a form that's already been filled in and
-  // submitted — moving focus to it so the result isn't easy to miss.
-  function showSuccess() {
+  // submitted — moving focus to it so the result isn't easy to miss. Text
+  // comes from the server's own response (src/worker/subscribe.mjs), not
+  // hardcoded here, so there's one place to change if double opt-in ever
+  // gets switched back on.
+  function showSuccess(text) {
     consecutiveFailures = 0;
     message.hidden = true;
     form.hidden = true;
+    successBlock.textContent = text;
     successBlock.hidden = false;
     successBlock.focus();
   }
@@ -60,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
       .then(function (res) { return res.json().then(function (data) { return { status: res.status, data: data }; }); })
       .then(function (result) {
         if (result.data.ok) {
-          showSuccess();
+          showSuccess(result.data.message);
         } else {
           showError(result.data.message);
         }

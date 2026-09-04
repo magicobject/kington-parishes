@@ -25,13 +25,13 @@
 <meta name="twitter:description" content="Sign up for the InSpire Newsletter — news, services and events from across the Kington Parishes, straight to your inbox.">
 <meta name="twitter:image" content="https://kington-parishes.magicobject.workers.dev/img/our-churches/kington.webp">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"ItemList","url":"https://kington-parishes.magicobject.workers.dev/newsletter.html","itemListElement":[{"@type":"ListItem","position":1,"url":"https://kington-parishes.magicobject.workers.dev/newsletter-2026-09.html","name":"September 2026"}]}</script>
-<link rel="icon" href="/img/favicon.svg?v=2026.09.04.004" type="image/svg+xml">
-<link rel="icon" href="/img/favicon-32.png?v=2026.09.04.004" type="image/png" sizes="32x32">
-<link rel="apple-touch-icon" href="/img/apple-touch-icon.png?v=2026.09.04.004">
+<link rel="icon" href="/img/favicon.svg?v=2026.09.04.005" type="image/svg+xml">
+<link rel="icon" href="/img/favicon-32.png?v=2026.09.04.005" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="/img/apple-touch-icon.png?v=2026.09.04.005">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/style.css?v=2026.09.04.004">
+<link rel="stylesheet" href="/css/style.css?v=2026.09.04.005">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -112,7 +112,10 @@
         <div class="kicker">Sign up</div>
         <h2 id="get-the-inspire-newsletter">Get the InSpire Newsletter</h2>
       </div>
-      <p style="max-width:60ch; color:var(--ink-soft);">Leave your email below and we'll send you a confirmation link — you're only added once you click it. Unsubscribing later is just as easy, from a link in every issue.</p>
+      <!-- Double opt-in is currently off in MailerLite — see CLAUDE.md's
+           "Newsletter signup confirmation copy" note if this needs to
+           change back to describing a confirmation email. -->
+      <p style="max-width:60ch; color:var(--ink-soft);">Leave your email below and you're signed up right away — no confirmation email needed. Unsubscribing later is just as easy, from a link in every issue.</p>
 
       <form id="newsletter-signup-form" novalidate>
         <div class="form-field">
@@ -138,9 +141,11 @@
 
         <p id="newsletter-signup-message" class="form-message" role="status" aria-live="polite" hidden></p>
       </form>
-      <div id="newsletter-signup-success" class="form-message is-success" role="status" tabindex="-1" hidden>
-        Almost there — check your inbox to confirm your subscription.
-      </div>
+      <!-- Text is set by newsletter-signup.js from the server's own response
+           on success, not hardcoded here — the server (src/worker/subscribe.mjs)
+           is the one place that needs to change if the double opt-in email
+           gets switched back on. -->
+      <div id="newsletter-signup-success" class="form-message is-success" role="status" tabindex="-1" hidden></div>
     </div>
   </section>
 
@@ -181,13 +186,13 @@
     </div>
     <div class="fine">
       <span>&copy; <span id="year"></span> Kington Parishes. St Mary's Church Kington PCC is registered charity no. 1185453. Site by <a href="https://mediawright.uk">mediawright.uk</a>.</span>
-      <span class="build-number">Build 2026.09.04.004</span>
+      <span class="build-number">Build 2026.09.04.005</span>
     </div>
   </div>
 </footer>
 
-<script src="/js/main.js?v=2026.09.04.004" defer></script>
-<script src="/js/search-match.js?v=2026.09.04.004" defer></script>
-<script src="/js/search-ui.js?v=2026.09.04.004" defer></script>
+<script src="/js/main.js?v=2026.09.04.005" defer></script>
+<script src="/js/search-match.js?v=2026.09.04.005" defer></script>
+<script src="/js/search-ui.js?v=2026.09.04.005" defer></script>
 </body>
 </html>

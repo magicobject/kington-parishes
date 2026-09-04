@@ -30,7 +30,10 @@
         <div class="kicker">Sign up</div>
         <h2>Get the InSpire Newsletter</h2>
       </div>
-      <p style="max-width:60ch; color:var(--ink-soft);">Leave your email below and we'll send you a confirmation link — you're only added once you click it. Unsubscribing later is just as easy, from a link in every issue.</p>
+      <!-- Double opt-in is currently off in MailerLite — see CLAUDE.md's
+           "Newsletter signup confirmation copy" note if this needs to
+           change back to describing a confirmation email. -->
+      <p style="max-width:60ch; color:var(--ink-soft);">Leave your email below and you're signed up right away — no confirmation email needed. Unsubscribing later is just as easy, from a link in every issue.</p>
 
       {{NEWSLETTER_SIGNUP_FORM}}
     </div>
