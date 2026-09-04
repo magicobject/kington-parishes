@@ -27,7 +27,6 @@
     { date: '2026-09-12', time: '19:00', title: 'Organ Recital: Ewan Murray', location: "St Mary's, Kington" },
     { date: '2026-09-13', time: '10:00', title: 'Holy Communion', location: "St Mary's, Kington" },
     { date: '2026-09-20', time: '10:00', title: 'Morning Praise', location: "St Mary's, Kington" },
-    { date: '2026-09-20', time: '12:00', title: 'Wild Church Cook Out', location: 'Yield Wood' },
     { date: '2026-09-20', time: '13:45', title: "Kington Pilgrim Path Walk from St Mary's", location: "St Mary's, Kington" },
     { date: '2026-09-20', time: '14:00', title: 'Pilgrimage and tea', location: "St Mary's, Kinnerton" },
     { date: '2026-09-27', time: '10:00', title: 'Holy Communion', location: "St Mary's, Kington" },
