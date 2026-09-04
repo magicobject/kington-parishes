@@ -49,7 +49,11 @@ export async function subscribeToMailerLite(email, name, env, fetchImpl = fetch)
   }
 
   if (response.status === 422) {
-    return { ok: false, status: 422, message: 'Please enter a valid email address.' };
+    // TEMPORARY: a 422 doesn't necessarily mean the email format is bad —
+    // it's whatever MailerLite's own validation rejected. Surfacing the raw
+    // body to diagnose a real report of a valid address being rejected.
+    const body422 = await response.text();
+    return { ok: false, status: 422, message: `Please enter a valid email address. (debug: ${body422})` };
   }
 
   // Never logs the request itself (so the API key is never at risk of
