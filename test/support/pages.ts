@@ -24,7 +24,7 @@ export const HOME_PAGE: SitePage = {
   heading: /vibrant church communities/i,
 };
 
-// The twelve pages in the primary header nav.
+// The thirteen pages in the primary header nav.
 export const NAV_PAGES: SitePage[] = [
   { path: '/our-churches.html', navLabel: 'Our Churches', titleContains: 'Our Churches', heading: /five churches, one benefice/i },
   { path: '/our-people.html', navLabel: 'Our People', titleContains: 'Our People', heading: /the people who lead and serve us/i },
@@ -34,6 +34,7 @@ export const NAV_PAGES: SitePage[] = [
   { path: '/blog.html', navLabel: 'Blog', titleContains: 'Blog', heading: /news from across the parishes/i },
   { path: '/life-events.html', navLabel: 'Life Events', titleContains: 'Life Events', heading: /baptisms, weddings/i },
   { path: '/get-involved.html', navLabel: 'Get Involved', titleContains: 'Get Involved', heading: /support, hire, and take part/i },
+  { path: '/resources.html', navLabel: 'Resources', titleContains: 'Resources', heading: /explore or grow in faith/i },
   { path: '/parish-hall.html', navLabel: 'Parish Hall', titleContains: 'Parish Hall', heading: /a hall for the whole community/i },
   { path: '/calendar.html', navLabel: 'Calendar', titleContains: 'Calendar', heading: /what's on/i },
   { path: '/walkers.html', navLabel: 'Walkers', titleContains: 'Walkers Welcome', heading: /walkers welcome/i },
