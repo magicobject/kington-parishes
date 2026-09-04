@@ -143,6 +143,49 @@ function renderNewsletterTokens(html) {
   });
 }
 
+// Structured data for the newsletter pages is computed here from
+// NEWSLETTER_ISSUES (src/newsletter.config.mjs) rather than hand-authored
+// per page in pages.config.mjs — a new issue only needs adding in one
+// place, and its schema comes along for free instead of being one more
+// thing to remember to keep in sync by hand.
+function newsletterIssueStructuredData(issue) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: `InSpire Newsletter — ${issue.title}`,
+    description: issue.summary,
+    datePublished: issue.date,
+    url: `${SITE_URL}/${issue.slug}.html`,
+    publisher: { '@type': 'Organization', name: SITE.orgName },
+  };
+}
+
+function newsletterListStructuredData(issues, pageUrl) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    url: pageUrl,
+    itemListElement: issues.map((issue, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: `${SITE_URL}/${issue.slug}.html`,
+      name: issue.title,
+    })),
+  };
+}
+
+// Falls back to a computed value for the newsletter pages when the page
+// config itself doesn't set structuredData — see the two functions above.
+function structuredDataFor(page, pageUrl) {
+  if (page.structuredData) return page.structuredData;
+  const issue = NEWSLETTER_ISSUES.find((i) => i.slug === page.slug);
+  if (issue) return newsletterIssueStructuredData(issue);
+  const { recent, archive } = splitNewsletterIssues(NEWSLETTER_ISSUES);
+  if (page.slug === 'newsletter') return newsletterListStructuredData(recent, pageUrl);
+  if (page.slug === 'newsletter-archive') return newsletterListStructuredData(archive, pageUrl);
+  return null;
+}
+
 function renderNavItems(links, activeHref) {
   return links
     .map(({ href, label }) => {
@@ -167,6 +210,7 @@ const footer = replaceTokens(
 );
 
 const searchEntries = [];
+const sitemapUrls = [];
 
 for (const page of PAGES) {
   // {{PEOPLE:...}}/{{NEWSLETTERS:...}} tokens expand to real headings first,
@@ -183,6 +227,16 @@ for (const page of PAGES) {
 
   const pageUrl = `${SITE_URL}/${page.slug}.html`;
   const pageImage = `${SITE_URL}${page.image || DEFAULT_OG_IMAGE}`;
+
+  // Same "real content, not internal-only" test used for search — sitemap.xml
+  // lists every page a visitor could actually land on, excluding the build
+  // changelog and the 404 page. Listing a noindex page here is harmless (a
+  // sitemap is a discovery hint, not an indexing override — Google drops
+  // noindex pages from the index regardless of whether they're listed) so
+  // this generates a real, complete sitemap now, ready for the day this
+  // site's pages stop being noindex, rather than something to remember to
+  // build later.
+  if (isSearchablePage(page)) sitemapUrls.push(pageUrl);
 
   let extraHead = '';
   if (page.robots) extraHead += `<meta name="robots" content="${page.robots}">\n`;
@@ -202,7 +256,8 @@ for (const page of PAGES) {
   extraHead += `<meta name="twitter:title" content="${page.title}">\n`;
   extraHead += `<meta name="twitter:description" content="${page.description}">\n`;
   extraHead += `<meta name="twitter:image" content="${pageImage}">\n`;
-  if (page.structuredData) extraHead += `<script type="application/ld+json">${JSON.stringify(page.structuredData)}</script>\n`;
+  const structuredData = structuredDataFor(page, pageUrl);
+  if (structuredData) extraHead += `<script type="application/ld+json">${JSON.stringify(structuredData)}</script>\n`;
 
   const header = page.header
     ? replaceTokens(headerTemplate.replace('{{NAV_ITEMS}}', renderNavItems(NAV, page.active)), tokens)
@@ -225,6 +280,13 @@ for (const page of PAGES) {
   writeFileSync(join(root, 'public', `${page.slug}.html`), html);
   console.log(`built public/${page.slug}.html`);
 }
+
+const lastmod = new Date().toISOString().slice(0, 10);
+const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemapUrls
+  .map((url) => `  <url>\n    <loc>${url}</loc>\n    <lastmod>${lastmod}</lastmod>\n  </url>`)
+  .join('\n')}\n</urlset>\n`;
+writeFileSync(join(root, 'public', 'sitemap.xml'), sitemapXml);
+console.log(`built public/sitemap.xml (${sitemapUrls.length} urls)`);
 
 writeFileSync(join(root, 'public', 'search-index.json'), JSON.stringify(searchEntries));
 console.log(`built public/search-index.json (${searchEntries.length} entries)`);

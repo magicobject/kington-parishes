@@ -24,11 +24,13 @@
 <meta name="twitter:title" content="Site Updates — Kington Parishes">
 <meta name="twitter:description" content="Internal build changelog for this site — not linked from anywhere on the site.">
 <meta name="twitter:image" content="https://kington-parishes.magicobject.workers.dev/img/our-churches/kington.webp">
-<link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/img/favicon.svg?v=2026.09.04.001" type="image/svg+xml">
+<link rel="icon" href="/img/favicon-32.png?v=2026.09.04.001" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="/img/apple-touch-icon.png?v=2026.09.04.001">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/style.css?v=2026.09.03.022">
+<link rel="stylesheet" href="/css/style.css?v=2026.09.04.001">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -87,6 +89,10 @@
   <section>
     <div class="wrap">
       <ul class="changelog">
+        <li>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.04.001</span><span class="changelog-date">4 September 2026</span></div>
+          <p>SEO audit fixes: structured data on <a href="blog.html">Blog</a>, <a href="parish-news.html">Parish News</a> and the <a href="newsletter.html">InSpire Newsletter</a> pages (issue schema computed automatically from <code>src/newsletter.config.mjs</code>); a postal address on the <a href="index.html">homepage</a>'s Organization schema; a PNG favicon fallback and apple-touch-icon (<code>scripts/generate-favicons.mjs</code>); and an automatically generated <a href="sitemap.xml">sitemap.xml</a> on every build.</p>
+        </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.03.022</span><span class="changelog-date">3 September 2026</span></div>
           <p>First InSpire Newsletter issue: <a href="newsletter-2026-09.html">September 2026</a> — 25 years of ministry for Revd Sally Welch, Revd Phillippa Wright's ordination as priest, the Treasurer vacancy, and September's Wild Church. Matching email version drafted in <code>newsletter-templates/</code>, ready for MailerLite.</p>
@@ -455,13 +461,13 @@
     </div>
     <div class="fine">
       <span>&copy; <span id="year"></span> Kington Parishes. St Mary's Church Kington PCC is registered charity no. 1185453. Site by <a href="https://mediawright.uk">mediawright.uk</a>.</span>
-      <span class="build-number">Build 2026.09.03.022</span>
+      <span class="build-number">Build 2026.09.04.001</span>
     </div>
   </div>
 </footer>
 
-<script src="/js/main.js?v=2026.09.03.022" defer></script>
-<script src="/js/search-match.js?v=2026.09.03.022" defer></script>
-<script src="/js/search-ui.js?v=2026.09.03.022" defer></script>
+<script src="/js/main.js?v=2026.09.04.001" defer></script>
+<script src="/js/search-match.js?v=2026.09.04.001" defer></script>
+<script src="/js/search-ui.js?v=2026.09.04.001" defer></script>
 </body>
 </html>

@@ -55,6 +55,17 @@ export const PAGES = [
       logo: 'https://kington-parishes.magicobject.workers.dev/img/favicon.svg',
       email: 'vicar@kingtonparishes.org.uk',
       telephone: '+447974439630',
+      // Matches SITE in src/site.config.mjs — kept as a separate literal
+      // here since structuredData objects in this file are hand-authored,
+      // not token-substituted (see the file-level comment above).
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: 'The Vicarage, Church Road',
+        addressLocality: 'Kington',
+        addressRegion: 'Herefordshire',
+        postalCode: 'HR5 3AG',
+        addressCountry: 'GB',
+      },
       sameAs: [
         'https://www.youtube.com/@KingtonStMaryLive',
         'https://www.facebook.com/kingtonparishes',
@@ -218,6 +229,21 @@ export const PAGES = [
     header: true,
     robots: 'noindex, nofollow',
     image: '/img/parish-news/parish-news-2026-09.jpg',
+    // Describes the latest issue — update alongside the "Latest issue" card
+    // in src/pages/parish-news.html when a new issue is published.
+    structuredData: {
+      '@context': 'https://schema.org',
+      '@type': 'CreativeWork',
+      name: 'Parish News — September 2026',
+      url: 'https://kington-parishes.magicobject.workers.dev/parish-news/parish-news-2026-09.pdf',
+      encodingFormat: 'application/pdf',
+      thumbnailUrl: 'https://kington-parishes.magicobject.workers.dev/img/parish-news/parish-news-2026-09.jpg',
+      isPartOf: {
+        '@type': 'CreativeWorkSeries',
+        name: 'Parish News',
+        publisher: { '@type': 'Organization', name: 'Kington Parishes' },
+      },
+    },
   },
   {
     slug: 'parish-news-archive',
@@ -278,6 +304,26 @@ export const PAGES = [
     active: 'blog.html',
     header: true,
     robots: 'noindex, nofollow',
+    // One BlogPosting per post — hand-authored, matching the pattern of the
+    // Church entries above. Add a matching entry here when a new post is
+    // added to src/pages/blog.html (the anchor id in `url` comes from that
+    // heading's own text via slugify — see scripts/build-search-index.mjs).
+    structuredData: {
+      '@context': 'https://schema.org',
+      '@type': 'Blog',
+      name: 'Kington Parishes Blog',
+      url: 'https://kington-parishes.magicobject.workers.dev/blog.html',
+      publisher: { '@type': 'Organization', name: 'Kington Parishes' },
+      blogPost: [
+        {
+          '@type': 'BlogPosting',
+          headline: "We're recruiting a Treasurer for St Mary's, Kington",
+          url: 'https://kington-parishes.magicobject.workers.dev/blog.html#we-re-recruiting-a-treasurer-for-st-mary-s-kington',
+          datePublished: '2026-09-02',
+          author: { '@type': 'Person', name: 'Greg Wright' },
+        },
+      ],
+    },
   },
   {
     slug: 'treasurer-job-description',
