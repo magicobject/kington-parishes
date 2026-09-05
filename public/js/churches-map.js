@@ -7,11 +7,11 @@
   if (!mapEl || typeof L === 'undefined') return;
 
   var churches = [
-    { name: "St Mary the Virgin, Kington", lat: 52.206108727628994, lng: -3.0260032744928784, url: '/church-kington.html' },
-    { name: "St Peter's, Titley", lat: 52.23585239448353, lng: -2.9802284142333035, url: '/church-titley.html' },
-    { name: "St Stephen's, Old Radnor", lat: 52.22531215688683, lng: -3.097180075965132, url: '/church-old-radnor.html' },
-    { name: "St Mary's, Kinnerton", lat: 52.26131715327042, lng: -3.1083431994438713, url: '/church-kinnerton.html' },
-    { name: 'St Thomas à Becket, Huntington', lat: 52.176790889307306, lng: -3.0891223911277272, url: '/church-huntington.html' },
+    { name: "St Mary the Virgin, Kington", lat: 52.2045407, lng: -3.0384017, url: '/church-kington.html' },
+    { name: "St Peter's, Titley", lat: 52.2357368, lng: -2.9806390, url: '/church-titley.html' },
+    { name: "St Stephen's, Old Radnor", lat: 52.2249297, lng: -3.0996140, url: '/church-old-radnor.html' },
+    { name: "St Mary's, Kinnerton", lat: 52.2612662, lng: -3.1088144, url: '/church-kinnerton.html' },
+    { name: 'St Thomas à Becket, Huntington', lat: 52.1735393, lng: -3.0989438, url: '/church-huntington.html' },
   ];
 
   var map = L.map(mapEl, { scrollWheelZoom: false });
@@ -27,5 +27,5 @@
       .bindPopup('<a href="' + church.url + '">' + church.name + '</a>');
   });
 
-  map.fitBounds(L.featureGroup(markers).getBounds(), { padding: [28, 28] });
+  map.fitBounds(L.featureGroup(markers).getBounds(), { padding: [55, 55] });
 })();
