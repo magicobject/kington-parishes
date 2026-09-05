@@ -17,3 +17,4 @@ to Done below once it lands (with its build tag).
 - [x] Update homepage's five-church map to the corrected coordinates and zoom out slightly — build 2026.09.05.004
 - [x] Publish SUGGESTIONS.md's St Mary the Virgin, Kington research (History & architecture, Monuments, Bells, Organ, Lychgate sections; Grade I listing) to church-kington.html — build 2026.09.05.006
 - [x] Publish SUGGESTIONS.md's St Peter's, Titley research (History & architecture, Monuments sections; Grade II listing; Mészáros grave hedged per his 1991 reburial) to church-titley.html — build 2026.09.05.007
+- [x] Publish SUGGESTIONS.md's St Stephen's, Old Radnor research (History & architecture, Font, Rood screen, Organ, Monuments & other features sections; Grade I listing; organ-case dispute hedged via Bicknell/Susi Jeans) to church-old-radnor.html — build 2026.09.05.008

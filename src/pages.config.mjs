@@ -129,6 +129,10 @@ export const PAGES = [
           hasMap: 'https://what3words.com/tolerable.shifting.roosters',
           telephone: '+447974439630',
           email: 'vicar@kingtonparishes.org.uk',
+          sameAs: [
+            'https://en.wikipedia.org/wiki/St_Stephen%27s_Church,_Old_Radnor',
+            'https://coflein.gov.uk/en/site/306985',
+          ],
         },
         {
           '@type': 'Church',
