@@ -155,6 +155,7 @@ export const PAGES = [
           hasMap: 'https://what3words.com/handicaps.messy.ranted',
           telephone: '+447974439630',
           email: 'vicar@kingtonparishes.org.uk',
+          sameAs: ['https://historicengland.org.uk/listing/the-list/list-entry/1349556'],
         },
       ],
     },
