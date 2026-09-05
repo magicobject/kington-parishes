@@ -93,7 +93,7 @@
           <a class="thumb" href="/img/notices/organ-recital-2026-09-12.webp" target="_blank" rel="noopener">
             <img src="/img/notices/organ-recital-2026-09-12.webp" alt="Poster: St Mary's Church Kington Organ Recital, Saturday 12th September, 7pm, Ewan Murray, Director of Music at Holy Trinity Hereford, tickets on the door £12" loading="lazy">
           </a>
-          <div class="body"><h3>Organ Recital — Ewan Murray</h3><div class="date">Saturday 12 September, 7:00pm — St Mary's, Kington</div></div>
+          <div class="body"><h3>Organ Recital — <a href="https://ewanmurraymusic.co.uk/" target="_blank" rel="noopener">Ewan Murray</a></h3><div class="date">Saturday 12 September, 7:00pm — St Mary's, Kington</div></div>
         </div>
         <div class="noticeboard-card reveal" data-expires="2027-03-31">
           <a class="thumb" href="/img/notices/st-stephens-heritage-fund.webp" target="_blank" rel="noopener">
@@ -229,14 +229,26 @@
       <div class="section-head">
         <div class="kicker">Visit us</div>
         <h2>Find Us</h2>
-        <p>St Mary's, Kington is a short distance from the heart of the town, on {{STREET}}, {{POSTCODE}} — open during the day, with the Parish Hall right alongside it.</p>
+        <p>Our benefice spans five villages on the Herefordshire/Powys border: <a href="church-kington.html">St Mary the Virgin, Kington</a> (a short distance from the heart of the town, on {{STREET}}, {{POSTCODE}}, with the Parish Hall right alongside it), <a href="church-titley.html">St Peter's, Titley</a>, <a href="church-old-radnor.html">St Stephen's, Old Radnor</a>, <a href="church-kinnerton.html">St Mary's, Kinnerton</a>, and <a href="church-huntington.html">St Thomas à Becket, Huntington</a> — click a pin below, or visit any church's own page for directions.</p>
       </div>
       <div class="map-full">
-        <iframe class="map-full-embed" loading="lazy" title="Map showing St Mary's Church, Kington" src="https://www.google.com/maps?q=St+Mary%27s+Church+Kington+HR5+3AG&center=52.2350,-3.0580&zoom=16&output=embed"></iframe>
+        <div id="churches-map" class="map-full-embed" role="region" aria-label="Map showing the locations of our five churches"></div>
+        <noscript>
+          <ul>
+            <li><a href="church-kington.html">St Mary the Virgin, Kington</a></li>
+            <li><a href="church-titley.html">St Peter's, Titley</a></li>
+            <li><a href="church-old-radnor.html">St Stephen's, Old Radnor</a></li>
+            <li><a href="church-kinnerton.html">St Mary's, Kinnerton</a></li>
+            <li><a href="church-huntington.html">St Thomas à Becket, Huntington</a></li>
+          </ul>
+        </noscript>
       </div>
     </div>
   </section>
 
 </main>
 
+<link rel="stylesheet" href="/css/vendor/leaflet.css">
+<script src="/js/vendor/leaflet.js" defer></script>
+<script src="/js/churches-map.js" defer></script>
 <script src="/js/newsletter-signup.js" defer></script>
