@@ -16,3 +16,4 @@ to Done below once it lands (with its build tag).
 - [x] Correct St Thomas à Becket, Huntington pin to OSM's church building (52.1735393, -3.0989438) — was ~670m off — build 2026.09.05.004
 - [x] Update homepage's five-church map to the corrected coordinates and zoom out slightly — build 2026.09.05.004
 - [x] Publish SUGGESTIONS.md's St Mary the Virgin, Kington research (History & architecture, Monuments, Bells, Organ, Lychgate sections; Grade I listing) to church-kington.html — build 2026.09.05.006
+- [x] Publish SUGGESTIONS.md's St Peter's, Titley research (History & architecture, Monuments sections; Grade II listing; Mészáros grave hedged per his 1991 reburial) to church-titley.html — build 2026.09.05.007

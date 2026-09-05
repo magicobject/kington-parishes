@@ -114,6 +114,10 @@ export const PAGES = [
           hasMap: 'https://what3words.com/wooden.hence.thankful',
           telephone: '+447974439630',
           email: 'vicar@kingtonparishes.org.uk',
+          sameAs: [
+            'https://en.wikipedia.org/wiki/Titley_Priory',
+            'https://historicengland.org.uk/listing/the-list/list-entry/1081465',
+          ],
         },
         {
           '@type': 'Church',

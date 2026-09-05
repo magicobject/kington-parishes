@@ -15,15 +15,6 @@ Each item is tagged:
 
 ---
 
-## St Peter's, Titley
-
-- **[addition]** No listing grade mentioned. It's **Grade II**, list entry **1081465**, listed 17 December 1986 (confirmed via Wikidata; Historic England and British Listed Buildings both blocked automated fetching, so pull the full listing description manually from https://historicengland.org.uk/listing/the-list/list-entry/1081465 if you want the verbatim text).
-- **[addition]** The site has occupied this spot since **c.1120**, as a priory — a cell of the **Tironensian Order** (a Benedictine branch), one of only four such houses in England. There's a short separate Wikipedia stub on ["Titley Priory"](https://en.wikipedia.org/wiki/Titley_Priory).
-- **[addition]** The **west tower dates from c.1834**, designed and paid for by **Lady Elizabeth Coffin Greenly** of Titley Court; she and her mother are buried beneath it.
-- **[verify]** The present church's main rebuild date is given as **1865** by the National Churches Trust but **1868** by Herefordshire Past — worth resolving before quoting a specific year. No architect has been identified for this rebuild in any source found (only the earlier 1834 tower has a named patron).
-- **[addition]** Notable churchyard monument: **General Lázár Mészáros**, a Hungarian national hero (Supreme Commander of the Army and Minister of National Defence in Hungary's 1849 revolutionary government), died at Titley and was buried here in November 1858. A memorial plaque was unveiled in November 2019 by the Hungarian Embassy.
-- **[verify]** Multiple sources say Mészáros's remains were **exhumed in 1991 and reburied at Baja Cathedral, Hungary** — if adding the grave to the site, phrase it as a grave/memorial rather than implying his remains are still there.
-
 ## St Stephen's, Old Radnor
 
 - **[addition]** No listing grade mentioned. It's **Grade I** (Cadw, not Historic England — this one's in Wales), building ID **9131**, listed 1993.
