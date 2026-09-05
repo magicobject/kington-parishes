@@ -99,7 +99,10 @@ export const PAGES = [
           hasMap: 'https://what3words.com/gripes.remark.dimension',
           telephone: '+447974439630',
           email: 'vicar@kingtonparishes.org.uk',
-          sameAs: ['https://en.wikipedia.org/wiki/Church_of_St_Mary,_Kington'],
+          sameAs: [
+            'https://en.wikipedia.org/wiki/Church_of_St_Mary,_Kington',
+            'https://historicengland.org.uk/listing/the-list/list-entry/1208031',
+          ],
         },
         {
           '@type': 'Church',

@@ -15,21 +15,6 @@ Each item is tagged:
 
 ---
 
-## St Mary the Virgin, Kington
-
-- **[correction]** The photo caption/alt-text says the church is "set among trees in a wooded valley." Multiple sources (Historic England-derived text, local history blogs) instead describe it standing **on a hill overlooking the town, near the site of the former Kington Castle** — worth checking the actual photo against this before keeping the caption as-is.
-- **[correction]** The page calls it a "tall broach spire." Historic England's own listing description uses the more specific term **"double-broach spire (rebuilt 1794)"** — worth tightening if we want to match the statutory description.
-- **[addition]** No listing grade is mentioned anywhere on the page. It's **Grade I**, list entry **1208031**, first listed 8 October 1953 — [Historic England](https://historicengland.org.uk/listing/the-list/list-entry/1208031).
-- **[addition]** Construction history from the HE listing: c.1200 detached defensive tower → c.1300 nave/aisles → early C14 chancel rebuilt + south porch → c.1320 Decorated-style south chapel → 1794 spire rebuilt → c.1874 outer north aisle added.
-- **[addition]** Norman circular font with rope moulding and incised zig-zag ornament (per HE listing) — currently unmentioned.
-- **[addition]** Alabaster tomb-chest of **Sir Thomas Vaughan** (d. 1469, killed at the Battle of Edgecote fighting for the Yorkists) and his wife Ellen (Elena) Gethin, of nearby Hergest Court — effigies with 10×4 alabaster angels holding shields, restored 1845. A genuinely striking feature currently absent from the page.
-- **[addition]** Memorial tablet to William Matthews (d. 1688), per the HE listing.
-- **[addition]** The **lychgate** is separately **Grade II\* listed** (18th-century, carved stone, domed roof) — currently unmentioned anywhere.
-- **[addition]** Ring of six bells — five by Rudhall of Gloucester (1736–39), one by William Evans of Chepstow (1764), refurbished 1978. Corroborated independently by the Hereford Diocesan Guild of Bellringers.
-- **[verify]** Organ: said to be installed 1883 (J.W. Walker & Sons), rebuilt 1959 (Henry Willis & Sons) — only found on Wikipedia, not independently cross-checked.
-- **[verify]** Local-history claim that Lady Margaret Hawkins (wife of Sir John Hawkins, of the Vaughan family) endowed the church and required Lady Hawkins School pupils to attend Sunday services and report on the sermon — a specific, good story, but only found in one source (Herefordshire Past). Worth checking against the Lady Hawkins School's own history before using.
-- **[verify]** Naming: Historic England and Wikipedia both use plain **"Church of St Mary"** (no "the Virgin"); the Church of England's own "A Church Near You" directory uses "St Mary the Virgin" like we do. Not an error either way, just worth knowing the two heritage-authority sources drop "the Virgin."
-
 ## St Peter's, Titley
 
 - **[addition]** No listing grade mentioned. It's **Grade II**, list entry **1081465**, listed 17 December 1986 (confirmed via Wikidata; Historic England and British Listed Buildings both blocked automated fetching, so pull the full listing description manually from https://historicengland.org.uk/listing/the-list/list-entry/1081465 if you want the verbatim text).
