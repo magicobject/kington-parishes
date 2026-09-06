@@ -48,6 +48,10 @@ export const PAGES = [
     description: "Kington Parishes: St Mary's Kington, St Peter's Titley, St Stephen's Old Radnor, St Mary's Kinnerton and St Thomas à Becket Huntington. Services, news, and community events.",
     active: 'index.html',
     header: true,
+    // The homepage carries its own full safeguarding section (#safeguarding)
+    // now, which already links to safeguarding.html — the small strip above
+    // the footer would just repeat that on the same page.
+    safeguardStrip: false,
     robots: 'noindex, nofollow',
     structuredData: {
       '@context': 'https://schema.org',

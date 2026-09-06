@@ -31,6 +31,12 @@ const pageTemplate = read('templates/page.html');
 const headerTemplate = read('templates/header.html').trimEnd();
 const footerTemplate = read('templates/footer.html').trimEnd();
 const safeguardStripTemplate = read('templates/safeguard-strip.html').trimEnd();
+// The emergency box, "if you're worried" text and officer/council contact
+// cards are identical on the homepage's own safeguarding section and on
+// safeguarding.html itself — one shared partial via a
+// {{SAFEGUARDING_ESSENTIALS}} token (see renderSafeguardingEssentials below)
+// instead of hand-duplicating officer names/numbers across both pages.
+const safeguardingEssentialsTemplate = read('templates/safeguarding-essentials.html').trim();
 // The newsletter signup form is identical wherever it appears (newsletter.html
 // and the homepage, so far) — one shared partial via a {{NEWSLETTER_SIGNUP_FORM}}
 // token, rather than hand-duplicating the form/its ids across pages.
@@ -112,6 +118,13 @@ function renderPeopleTokens(html) {
     const list = key === 'clergy' ? CLERGY : CHURCH_OFFICERS[key] || [];
     return renderPeopleCards(list);
   });
+}
+
+// Must run before ensureSectionIds, same reasoning as renderPeopleTokens
+// above — so the partial's own h3s are real headings by the time anchor ids
+// get injected, not a token search can't see.
+function renderSafeguardingEssentials(html) {
+  return html.replace(/\{\{SAFEGUARDING_ESSENTIALS\}\}/g, () => safeguardingEssentialsTemplate);
 }
 
 // One card for {{NEWSLETTERS:recent}}/{{NEWSLETTERS:archive}} — see
@@ -223,7 +236,7 @@ for (const page of PAGES) {
   // not unexpanded tokens. Every heading then gets a real, working anchor
   // before anything else touches this page's content — search results and
   // the page itself can never disagree about where a section actually is.
-  const content = ensureSectionIds(renderNewsletterTokens(renderPeopleTokens(read(`src/pages/${page.slug}.html`).trimEnd())));
+  const content = ensureSectionIds(renderNewsletterTokens(renderPeopleTokens(renderSafeguardingEssentials(read(`src/pages/${page.slug}.html`).trimEnd()))));
 
   if (isSearchablePage(page)) {
     const resolvedForSearch = replaceTokens(content, tokens);
