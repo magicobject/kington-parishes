@@ -17,11 +17,12 @@ import { splitNewsletterIssues, formatIssueMonth } from './newsletter-issues.mjs
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (path) => readFileSync(join(root, path), 'utf8');
 
-// The proof-of-concept build's own deployed URL — used for canonical links
-// and, now, Open Graph/Twitter Card URLs and images (absolute URLs are
-// required for both). Not the parishes' real domain — see pages.config.mjs's
-// own note on why every page is noindex.
-const SITE_URL = 'https://kington-parishes.magicobject.workers.dev';
+// The parishes' real domain, live since 6 September 2026 — used for
+// canonical links, Open Graph/Twitter Card URLs and images (absolute URLs
+// are required for both), and every sitemap entry. Was the workers.dev
+// preview URL for this build's proof-of-concept phase; see
+// pages.config.mjs's own note on the noindex pages that remain.
+const SITE_URL = 'https://www.kingtonparishes.org.uk';
 // Falls back for any page that doesn't set its own `image` — the flagship
 // aerial shot of St Mary's, Kington, representative of the benefice as a
 // whole.

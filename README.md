@@ -1,8 +1,8 @@
 # Kington Parishes
 
-Static site for the five parishes of Kington, Titley, Old Radnor, Kinnerton and Huntington, deployed to Cloudflare Workers at [kington-parishes.magicobject.workers.dev](https://kington-parishes.magicobject.workers.dev) (auto-deploys on push to `main`). Same lightweight build pipeline as [wrightmaths.uk](https://github.com/magicobject/WrightMaths), [kingtonfoodbank.org.uk](https://github.com/magicobject/kingtonfoodbank) and [lovinggod.uk](https://github.com/magicobject/LovingGod) — see their READMEs for the full explanation; the short version is below.
+Static site for the five parishes of Kington, Titley, Old Radnor, Kinnerton and Huntington, deployed to Cloudflare Workers at [kingtonparishes.org.uk](https://www.kingtonparishes.org.uk) (auto-deploys on push to `main`). Same lightweight build pipeline as [wrightmaths.uk](https://github.com/magicobject/WrightMaths), [kingtonfoodbank.org.uk](https://github.com/magicobject/kingtonfoodbank) and [lovinggod.uk](https://github.com/magicobject/LovingGod) — see their READMEs for the full explanation; the short version is below.
 
-**This is a proof-of-concept build showcased in the MediaWright portfolio, not the parishes' real production website.** Every page carries `<meta name="robots" content="noindex, nofollow">` so it can never get indexed or mistaken for the genuine site in search results — see "Proof-of-concept: noindex everywhere" below before removing that from anywhere.
+**This is the parishes' real production website**, live since 6 September 2026, taking over from the previous Wix-hosted site at the same domain. It started life as a proof-of-concept build showcased in the MediaWright portfolio — see "Search visibility" below for what that meant while it lasted, and what's changed now that it's gone live.
 
 ## Quick start
 
@@ -68,11 +68,13 @@ Array order doesn't matter — the calendar groups events by date and sorts each
 
 [test/calendar.spec.ts](test/calendar.spec.ts) checks the calendar's behaviour (navigation, selection, multi-event days, no horizontal scroll) but not the content of `calendar-events.js` — a typo'd date or time won't fail a test, so double-check new entries by eye in the browser.
 
-## Proof-of-concept: noindex everywhere
+## Search visibility
 
-This site exists to demonstrate the build pipeline in the MediaWright portfolio — it is **not** the real Kington Parishes website, and must never be confused with or outrank the genuine one in search results. Every page in `src/pages.config.mjs` sets `robots: 'noindex, nofollow'` (there's no sitewide default in `scripts/build.mjs` — it's explicit per page, so a new page added without it would fail the `page-content.spec.ts` test that checks every page for this).
+Every real page is indexable now. `src/pages.config.mjs` only sets `robots: 'noindex, nofollow'` on two pages — `404` (never a genuine search result) and `updates` (the internal build changelog, deliberately never linked from anywhere on the site). Everything else has no `robots` field at all, which is what actually keeps the tag off the page (`scripts/build.mjs` only writes the meta tag `if (page.robots)`) — a new page added with no `robots` field is indexable by default, and `page-content.spec.ts` checks that only those two pages carry the tag.
 
-`public/robots.txt` still says `Allow: /` rather than `Disallow: /` — that's deliberate, not an oversight. If crawling were blocked at the robots.txt level, a search engine could still index the bare URL from a link elsewhere without ever seeing the `noindex` tag on the page itself, since it would never be allowed to fetch and read it. Allowing crawl but marking every page `noindex` is the combination search engines actually document as reliable for keeping a site out of results entirely. There's no `sitemap.xml` for the same reason — publishing one would actively invite indexing of exactly the URLs this site needs to stay out of.
+`public/robots.txt` says `Allow: /` and points at `sitemap.xml`, which `scripts/build.mjs` regenerates from `PAGES` on every build (via `isSearchablePage`, the same check search indexing and the sitemap both use to skip `404` and `updates`).
+
+Until go-live on 6 September 2026, this was reversed: the site existed only to demonstrate the build pipeline in the MediaWright portfolio, so every page carried `noindex, nofollow` and there was no sitemap at all, to keep this proof-of-concept build from ever being confused with or outranking the real (then Wix-hosted) kingtonparishes.org.uk in search results.
 
 ## What changed from the original hand-written site
 

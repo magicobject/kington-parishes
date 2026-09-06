@@ -15,6 +15,10 @@
     <div class="wrap">
       <ul class="changelog">
         <li>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.06.004</span><span class="changelog-date">6 September 2026</span></div>
+          <p><strong>Go live, step 1 of 2 (code):</strong> pointed <code>SITE_URL</code> at <code>https://www.kingtonparishes.org.uk</code> instead of the workers.dev preview address — every canonical link, Open Graph/Twitter tag, JSON-LD block and the sitemap now use the real domain. Removed <code>robots: 'noindex, nofollow'</code> from every real page in <code>src/pages.config.mjs</code> (kept only on <code>404</code> and this changelog), updated <code>public/robots.txt</code>'s sitemap line to match, and rewrote the two tests and the README section that used to assert the opposite. Cloudflare itself — attaching the custom domain, retiring the old DNS record pointing at Wix — is the next, separate step.</p>
+        </li>
+        <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.06.003</span><span class="changelog-date">6 September 2026</span></div>
           <p>Renamed the Safeguarding Policy from <code>.doc</code> to <code>.docx</code> — the file is genuinely Open XML format, and the mismatched extension could trip a "format doesn't match" warning in Word. Updated the download link on <a href="safeguarding.html">Safeguarding</a> to match.</p>
         </li>

@@ -18,17 +18,26 @@ test('every page links to a unique canonical URL matching its own filename', asy
     const canonical = page.locator('link[rel="canonical"]');
     await expect(canonical).toHaveAttribute(
       'href',
-      `https://kington-parishes.magicobject.workers.dev${sitePage.path}`,
+      `https://www.kingtonparishes.org.uk${sitePage.path}`,
     );
   }
 });
 
-// This whole site is a proof-of-concept build, not the parishes' real
-// production website, and must never get indexed or confused with it —
-// every page (not just 404) needs the noindex signal.
-test('every page is noindex — this is a proof-of-concept build, not the real site', async ({ page }) => {
-  for (const sitePage of [...ALL_PAGES.map((p) => p.path), '/404.html']) {
-    await page.goto(sitePage);
-    await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex, nofollow');
+// Live since 6 September 2026 — every real page should be indexable now.
+// Only the internal build changelog and 404 (never genuine search-result
+// destinations) still carry the noindex signal; this test used to assert
+// the opposite, back when the whole site was a noindexed proof-of-concept.
+test('only the internal changelog and 404 carry a noindex tag', async ({ page }) => {
+  for (const sitePage of ALL_PAGES) {
+    await page.goto(sitePage.path);
+    const robotsMeta = page.locator('meta[name="robots"]');
+    if (sitePage.path === '/updates.html') {
+      await expect(robotsMeta).toHaveAttribute('content', 'noindex, nofollow');
+    } else {
+      await expect(robotsMeta).toHaveCount(0);
+    }
   }
+
+  await page.goto('/404.html');
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex, nofollow');
 });

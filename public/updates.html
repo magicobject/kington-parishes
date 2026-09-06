@@ -13,24 +13,24 @@
 <title>Site Updates — Kington Parishes</title>
 <meta name="description" content="Internal build changelog for this site — not linked from anywhere on the site.">
 <meta name="robots" content="noindex, nofollow">
-<link rel="canonical" href="https://kington-parishes.magicobject.workers.dev/updates.html">
+<link rel="canonical" href="https://www.kingtonparishes.org.uk/updates.html">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Kington Parishes">
 <meta property="og:title" content="Site Updates — Kington Parishes">
 <meta property="og:description" content="Internal build changelog for this site — not linked from anywhere on the site.">
-<meta property="og:url" content="https://kington-parishes.magicobject.workers.dev/updates.html">
-<meta property="og:image" content="https://kington-parishes.magicobject.workers.dev/img/our-churches/kington.webp">
+<meta property="og:url" content="https://www.kingtonparishes.org.uk/updates.html">
+<meta property="og:image" content="https://www.kingtonparishes.org.uk/img/our-churches/kington.webp">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Site Updates — Kington Parishes">
 <meta name="twitter:description" content="Internal build changelog for this site — not linked from anywhere on the site.">
-<meta name="twitter:image" content="https://kington-parishes.magicobject.workers.dev/img/our-churches/kington.webp">
-<link rel="icon" href="/img/favicon.svg?v=2026.09.06.003" type="image/svg+xml">
-<link rel="icon" href="/img/favicon-32.png?v=2026.09.06.003" type="image/png" sizes="32x32">
-<link rel="apple-touch-icon" href="/img/apple-touch-icon.png?v=2026.09.06.003">
+<meta name="twitter:image" content="https://www.kingtonparishes.org.uk/img/our-churches/kington.webp">
+<link rel="icon" href="/img/favicon.svg?v=2026.09.06.004" type="image/svg+xml">
+<link rel="icon" href="/img/favicon-32.png?v=2026.09.06.004" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="/img/apple-touch-icon.png?v=2026.09.06.004">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/style.css?v=2026.09.06.003">
+<link rel="stylesheet" href="/css/style.css?v=2026.09.06.004">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -91,6 +91,10 @@
   <section>
     <div class="wrap">
       <ul class="changelog">
+        <li>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.06.004</span><span class="changelog-date">6 September 2026</span></div>
+          <p><strong>Go live, step 1 of 2 (code):</strong> pointed <code>SITE_URL</code> at <code>https://www.kingtonparishes.org.uk</code> instead of the workers.dev preview address — every canonical link, Open Graph/Twitter tag, JSON-LD block and the sitemap now use the real domain. Removed <code>robots: 'noindex, nofollow'</code> from every real page in <code>src/pages.config.mjs</code> (kept only on <code>404</code> and this changelog), updated <code>public/robots.txt</code>'s sitemap line to match, and rewrote the two tests and the README section that used to assert the opposite. Cloudflare itself — attaching the custom domain, retiring the old DNS record pointing at Wix — is the next, separate step.</p>
+        </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.06.003</span><span class="changelog-date">6 September 2026</span></div>
           <p>Renamed the Safeguarding Policy from <code>.doc</code> to <code>.docx</code> — the file is genuinely Open XML format, and the mismatched extension could trip a "format doesn't match" warning in Word. Updated the download link on <a href="safeguarding.html">Safeguarding</a> to match.</p>
@@ -547,13 +551,13 @@
     </div>
     <div class="fine">
       <span>&copy; <span id="year"></span> Kington Parishes. St Mary's Church Kington PCC is registered charity no. 1185453. Site by <a href="https://mediawright.uk">mediawright.uk</a>.</span>
-      <span class="build-number">Build 2026.09.06.003</span>
+      <span class="build-number">Build 2026.09.06.004</span>
     </div>
   </div>
 </footer>
 
-<script src="/js/main.js?v=2026.09.06.003" defer></script>
-<script src="/js/search-match.js?v=2026.09.06.003" defer></script>
-<script src="/js/search-ui.js?v=2026.09.06.003" defer></script>
+<script src="/js/main.js?v=2026.09.06.004" defer></script>
+<script src="/js/search-match.js?v=2026.09.06.004" defer></script>
+<script src="/js/search-ui.js?v=2026.09.06.004" defer></script>
 </body>
 </html>
