@@ -15,6 +15,10 @@
     <div class="wrap">
       <ul class="changelog">
         <li>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.06.005</span><span class="changelog-date">6 September 2026</span></div>
+          <p>Fixed a CSP violation on every page with a Leaflet map — the <a href="index.html">home page</a>'s five-pin map and each church's own single-pin map (e.g. <a href="church-kington.html">St Mary the Virgin, Kington</a>) — where Leaflet's internal 1&times;1 transparent-GIF placeholder was being blocked by <code>img-src</code> (three console errors per load; the map itself still rendered correctly regardless, tiles and marker icon both came from allowed origins). Added <code>data:</code> to <code>img-src</code> in <code>public/_headers</code>, verified clean with <code>wrangler dev</code> since that's the only way to actually exercise <code>_headers</code> locally.</p>
+        </li>
+        <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.06.004</span><span class="changelog-date">6 September 2026</span></div>
           <p><strong>Go live, step 1 of 2 (code):</strong> pointed <code>SITE_URL</code> at <code>https://www.kingtonparishes.org.uk</code> instead of the workers.dev preview address — every canonical link, Open Graph/Twitter tag, JSON-LD block and the sitemap now use the real domain. Removed <code>robots: 'noindex, nofollow'</code> from every real page in <code>src/pages.config.mjs</code> (kept only on <code>404</code> and this changelog), updated <code>public/robots.txt</code>'s sitemap line to match, and rewrote the two tests and the README section that used to assert the opposite. Cloudflare itself — attaching the custom domain, retiring the old DNS record pointing at Wix — is the next, separate step.</p>
         </li>
