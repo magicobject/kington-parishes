@@ -97,6 +97,12 @@ export const CHURCH_OFFICERS = {
       bio: 'Bell Tower Captain at St Mary the Virgin, Kington.',
       iconSvg: BELL_ICON,
     },
+    {
+      name: 'Stephen Lacey',
+      role: 'Lego Club Organiser',
+      bio: "Runs Lego Club at St Mary's, Kington.",
+      iconSvg: PERSON_ICON,
+    },
   ],
   titley: [
     {
