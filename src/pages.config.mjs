@@ -171,10 +171,23 @@ export const PAGES = [
   // duplicates that church's descriptive text/photo/links from Our Churches
   // by hand (see CLAUDE.md's "Data kept in sync by hand"); only the People
   // cards on church-kington are DRY, via src/people.config.mjs.
+  //
+  // church-kington-history is a further deep-dive page, reachable only via
+  // a "Read the full History & Architecture guide →" link inside
+  // church-kington's own History & architecture section — not in the
+  // primary nav, and not itself a portal page.
   {
     slug: 'church-kington',
     title: "St Mary the Virgin, Kington — Kington Parishes",
     description: "St Mary the Virgin, Kington: service times, how to give, and the people who lead and serve this church.",
+    active: null,
+    header: true,
+    image: '/img/our-churches/kington.webp',
+  },
+  {
+    slug: 'church-kington-history',
+    title: "History &amp; Architecture — St Mary the Virgin, Kington — Kington Parishes",
+    description: "The full history and architecture of St Mary the Virgin, Kington: the Norman tower, the Vaughan effigies, the bells, organ, stained glass, and lychgate.",
     active: null,
     header: true,
     image: '/img/our-churches/kington.webp',

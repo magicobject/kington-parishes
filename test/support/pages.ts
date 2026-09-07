@@ -125,6 +125,16 @@ export const CHURCH_PORTAL_PAGES: SitePage[] = [
   { path: '/church-huntington.html', navLabel: 'Huntington', titleContains: 'St Thomas à Becket, Huntington', heading: /st thomas à becket, huntington/i },
 ];
 
+// Not in the primary nav — reachable only via the "Read the full History &
+// Architecture guide →" link inside church-kington's own History &
+// architecture section. Same pattern as Donate/Treasurer Job Description.
+export const CHURCH_KINGTON_HISTORY_PAGE: SitePage = {
+  path: '/church-kington-history.html',
+  navLabel: 'History & Architecture',
+  titleContains: 'History & Architecture',
+  heading: /history & architecture/i,
+};
+
 // Every generated page, including the ones without primary nav — used by
 // specs that should run against literally everything (footer, tokens).
-export const ALL_PAGES: SitePage[] = [HOME_PAGE, ...NAV_PAGES, SAFEGUARDING_PAGE, PARISH_NEWS_ARCHIVE_PAGE, ...NEWSLETTER_ISSUE_PAGES, NEWSLETTER_ARCHIVE_PAGE, PRIVACY_POLICY_PAGE, DONATE_PAGE, TREASURER_JOB_DESCRIPTION_PAGE, ...CHURCH_PORTAL_PAGES, UPDATES_PAGE];
+export const ALL_PAGES: SitePage[] = [HOME_PAGE, ...NAV_PAGES, SAFEGUARDING_PAGE, PARISH_NEWS_ARCHIVE_PAGE, ...NEWSLETTER_ISSUE_PAGES, NEWSLETTER_ARCHIVE_PAGE, PRIVACY_POLICY_PAGE, DONATE_PAGE, TREASURER_JOB_DESCRIPTION_PAGE, ...CHURCH_PORTAL_PAGES, CHURCH_KINGTON_HISTORY_PAGE, UPDATES_PAGE];
