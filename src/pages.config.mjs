@@ -39,6 +39,7 @@ export const FOOTER_NAV = [
   { href: 'parish-news-archive.html', label: 'Parish Magazine' },
   { href: 'newsletter-archive.html', label: 'InSpire Newsletter' },
   { href: 'safeguarding.html', label: 'Safeguarding' },
+  { href: 'privacy-policy.html', label: 'Privacy Policy' },
   { href: 'https://www.youtube.com/@KingtonStMaryLive', label: 'Our YouTube Channel' },
   { href: 'https://www.facebook.com/kingtonparishes', label: 'Our Facebook Community' },
 ];
@@ -294,8 +295,9 @@ export const PAGES = [
     slug: 'privacy-policy',
     title: 'Privacy Policy — Kington Parishes',
     description: 'How Kington Parishes handles the personal details you give us when signing up for the InSpire Newsletter.',
-    // Reachable from the newsletter signup form's consent text, not the
-    // primary nav — same pattern as Parish News Archive/Donate/Safeguarding.
+    // Reachable from the newsletter signup form's consent text and the
+    // footer's Explore list, not the primary nav — same pattern as
+    // Safeguarding.
     active: null,
     header: true,
   },
