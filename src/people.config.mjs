@@ -100,7 +100,7 @@ export const CHURCH_OFFICERS = {
     {
       name: 'Stephen Lacey',
       role: 'Lego Club Organiser',
-      bio: "Runs Lego Club at St Mary's, Kington.",
+      bio: "Runs Lego Club at St Mary's, Kington." + contactLink('legoclub@kingtonparishes.org.uk'),
       iconSvg: PERSON_ICON,
     },
   ],
