@@ -15,6 +15,10 @@
     <div class="wrap">
       <ul class="changelog">
         <li>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.07.001</span><span class="changelog-date">7 September 2026</span></div>
+          <p>Added Lego Club (3:30-5:00pm, St Mary's, Kington) and Praise &amp; Prayer in the Evening (PPE, 6:00-7:00pm, first Sunday of the month, St Mary's, Kington) to the <a href="calendar.html">calendar</a> for September through December 2026.</p>
+        </li>
+        <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.06.005</span><span class="changelog-date">6 September 2026</span></div>
           <p>Fixed a CSP violation on every page with a Leaflet map — the <a href="index.html">home page</a>'s five-pin map and each church's own single-pin map (e.g. <a href="church-kington.html">St Mary the Virgin, Kington</a>) — where Leaflet's internal 1&times;1 transparent-GIF placeholder was being blocked by <code>img-src</code> (three console errors per load; the map itself still rendered correctly regardless, tiles and marker icon both came from allowed origins). Added <code>data:</code> to <code>img-src</code> in <code>public/_headers</code>, verified clean with <code>wrangler dev</code> since that's the only way to actually exercise <code>_headers</code> locally.</p>
         </li>
