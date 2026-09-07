@@ -1,0 +1,6 @@
+# Compatibility copy — the canonical file lives at /.well-known/security.txt
+# per RFC 9116. Keep both in sync if you ever change one.
+Contact: mailto:hello@mediawright.uk
+Expires: 2027-09-07T00:00:00.000Z
+Canonical: https://www.kingtonparishes.org.uk/.well-known/security.txt
+Preferred-Languages: en
