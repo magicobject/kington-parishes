@@ -468,6 +468,26 @@ button.btn[disabled] { opacity: 0.6; cursor: not-allowed; }
 .form-message.is-success { background: rgba(124,95,114,0.12); color: var(--heather-dark); border: 1px solid var(--heather); }
 .form-message.is-error { background: rgba(90,61,38,0.1); color: var(--amber-dark); border: 1px solid var(--amber-dark); }
 
+/* A block of ready-to-copy plain-text instructions (currently just the
+   Getting Set Up paste-into-Claude-Code prompt). A plain readonly textarea
+   rather than a styled <pre> so a click/tap selects the whole thing in one
+   go (see the focus handler in main.js) — easier for a non-technical reader
+   than manually drag-selecting several lines. */
+.copy-block { margin: 20px 0; max-width: 640px; }
+.copy-block label { display: block; font-weight: 600; margin-bottom: 6px; }
+.copy-block textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--parchment);
+  color: var(--ink);
+  font-family: 'Public Sans', sans-serif;
+  font-size: 0.96rem;
+  line-height: 1.5;
+  resize: vertical;
+}
+
 /* ---------- Safeguarding banner (footer link, not full text everywhere) ---------- */
 .safeguard-strip {
   background: var(--heather-dark);

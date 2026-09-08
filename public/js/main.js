@@ -60,6 +60,14 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  // Copy-paste instruction blocks (see .copy-block in style.css, currently
+  // just the Getting Set Up page's paste-into-Claude-Code prompt): select
+  // the whole textarea on focus, so a click/tap is enough to grab everything
+  // before Ctrl+C/Cmd+C, no manual drag-select needed.
+  document.querySelectorAll('.copy-block textarea').forEach(function (ta) {
+    ta.addEventListener('focus', function () { ta.select(); });
+  });
+
   var revealEls = document.querySelectorAll('.reveal');
   if ('IntersectionObserver' in window && revealEls.length) {
     var io = new IntersectionObserver(function (entries) {

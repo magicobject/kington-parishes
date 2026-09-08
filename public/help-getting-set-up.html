@@ -11,26 +11,26 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Setting Up Your Laptop — Help — Kington Parishes</title>
-<meta name="description" content="How to install Claude Desktop and the local tools it needs, create a GitHub account, and get your own working copy of this website.">
+<meta name="description" content="How to install Claude Desktop, create a GitHub account, and paste one block of instructions that gets Claude to set everything else up for you.">
 <meta name="robots" content="noindex, nofollow">
 <link rel="canonical" href="https://www.kingtonparishes.org.uk/help-getting-set-up.html">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Kington Parishes">
 <meta property="og:title" content="Setting Up Your Laptop — Help — Kington Parishes">
-<meta property="og:description" content="How to install Claude Desktop and the local tools it needs, create a GitHub account, and get your own working copy of this website.">
+<meta property="og:description" content="How to install Claude Desktop, create a GitHub account, and paste one block of instructions that gets Claude to set everything else up for you.">
 <meta property="og:url" content="https://www.kingtonparishes.org.uk/help-getting-set-up.html">
 <meta property="og:image" content="https://www.kingtonparishes.org.uk/img/our-churches/kington.webp">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Setting Up Your Laptop — Help — Kington Parishes">
-<meta name="twitter:description" content="How to install Claude Desktop and the local tools it needs, create a GitHub account, and get your own working copy of this website.">
+<meta name="twitter:description" content="How to install Claude Desktop, create a GitHub account, and paste one block of instructions that gets Claude to set everything else up for you.">
 <meta name="twitter:image" content="https://www.kingtonparishes.org.uk/img/our-churches/kington.webp">
-<link rel="icon" href="/img/favicon.svg?v=2026.09.08.008" type="image/svg+xml">
-<link rel="icon" href="/img/favicon-32.png?v=2026.09.08.008" type="image/png" sizes="32x32">
-<link rel="apple-touch-icon" href="/img/apple-touch-icon.png?v=2026.09.08.008">
+<link rel="icon" href="/img/favicon.svg?v=2026.09.08.009" type="image/svg+xml">
+<link rel="icon" href="/img/favicon-32.png?v=2026.09.08.009" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="/img/apple-touch-icon.png?v=2026.09.08.009">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/style.css?v=2026.09.08.008">
+<link rel="stylesheet" href="/css/style.css?v=2026.09.08.009">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -84,15 +84,15 @@
     <div class="wrap">
       <div class="kicker"><a href="help.html" style="color:#F8F5EE; text-decoration:underline;">Help</a> / Getting set up</div>
       <h1 id="setting-up-your-laptop">Setting up your laptop</h1>
-      <p class="lede">A one-off job, about twenty minutes. Once this is done, you won't need to repeat it — every future change starts from step one of <a href="help-making-a-change.html">making a change</a>.</p>
+      <p class="lede">A one-off job, about fifteen minutes — and most of that is just waiting for Claude to finish, not typing. Once this is done, you won't need to repeat it — every future change starts from step one of <a href="help-making-a-change.html">making a change</a>.</p>
     </div>
   </div>
 
   <section>
     <div class="wrap">
       <div class="section-head">
-        <div class="kicker">Five things to do, in order</div>
-        <h2 id="install-sign-up-connect-ask">Install, sign up, connect, ask</h2>
+        <div class="kicker">Four things to do, in order</div>
+        <h2 id="install-sign-up-ask-wait">Install, sign up, ask, wait</h2>
       </div>
       <div class="card-grid">
         <div class="card reveal">
@@ -101,26 +101,33 @@
           <p>Claude Desktop is the app you'll use whenever you want something on the website changed — specifically its <strong>Code</strong> tab (also called Claude Code), which is what lets Claude read and edit files on your laptop and talk to GitHub on your behalf. An ordinary chat elsewhere in the app can't do either of those. Download it from <a href="https://claude.ai/download" target="_blank" rel="noopener">claude.ai/download</a> and sign in (or create an account if you don't already have one).</p>
         </div>
         <div class="card reveal">
-          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#A8813C" stroke-width="1.6"><path d="M14.7 6.3a1 1 0 0 1 1.4 0l1.6 1.6a1 1 0 0 1 0 1.4L9.4 17.6l-3.7.7.7-3.7 8.3-8.3Z"/><path d="M4 21h16"/></svg></div>
-          <h3 id="2-install-two-free-tools-claude-needs">2. Install two free tools Claude needs</h3>
-          <p>Claude Code works through your laptop's own tools rather than bringing its own, so two small, free programs need installing first — both one-off, both a plain "next, next, finish" installer with no settings to change: <a href="https://git-scm.com/downloads" target="_blank" rel="noopener">Git</a> (the actual program behind everything described in <a href="help.html#git-and-github">Git &amp; GitHub, in plain English</a>) and <a href="https://nodejs.org/" target="_blank" rel="noopener">Node.js</a> (choose the "LTS" version) — the toolkit this site's build process and automatic tests run on.</p>
-        </div>
-        <div class="card reveal">
           <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#A8813C" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-7 8-7s8 3 8 7"/></svg></div>
-          <h3 id="3-create-a-free-github-account">3. Create a free GitHub account</h3>
+          <h3 id="2-create-a-free-github-account">2. Create a free GitHub account</h3>
           <p>GitHub is where the website's master copy lives — see <a href="help.html#git-and-github">Git &amp; GitHub, in plain English</a>. Sign up at <a href="https://github.com/signup" target="_blank" rel="noopener">github.com/signup</a> and keep your username and password somewhere safe, like a password manager.</p>
           <p><strong>Then turn on two-factor authentication (2FA)</strong> in your GitHub account settings, under Password and authentication. It's a quick one-off step — after your password, GitHub also asks for a one-time code from an app on your phone — and it matters: this account will have the ability to change a real, public website, so it's worth properly securing.</p>
         </div>
         <div class="card reveal">
           <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#A8813C" stroke-width="1.6"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
-          <h3 id="4-ask-for-access">4. Ask for access</h3>
-          <p>Send your new GitHub username to whoever currently looks after the website, so they can add you to the project. Get in touch at <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#119;&#101;&#98;&#64;&#107;&#105;&#110;&#103;&#116;&#111;&#110;&#112;&#97;&#114;&#105;&#115;&#104;&#101;&#115;&#46;&#111;&#114;&#103;&#46;&#117;&#107;">web@kingtonparishes.org.uk</a>.</p>
+          <h3 id="3-ask-for-access">3. Ask for access</h3>
+          <p>Send your new GitHub username to whoever currently looks after the website, so they can add you to the project. Get in touch at <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#119;&#101;&#98;&#64;&#107;&#105;&#110;&#103;&#116;&#111;&#110;&#112;&#97;&#114;&#105;&#115;&#104;&#101;&#115;&#46;&#111;&#114;&#103;&#46;&#117;&#107;">web@kingtonparishes.org.uk</a>. You'll get an email invitation from GitHub — accept it before going any further, or Claude won't be able to save your changes later on.</p>
         </div>
         <div class="card reveal">
           <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#A8813C" stroke-width="1.6"><path d="M4 4h16v13H7l-3 3V4Z"/><path d="M8 9h8M8 12.5h5"/></svg></div>
-          <h3 id="5-open-the-code-tab-and-ask-claude-to-fetch-the-site">5. Open the Code tab and ask Claude to fetch the site</h3>
-          <p>Once you have access, open Claude Desktop's Code tab and ask Claude to get a working copy of the Kington Parishes website ready — technically this is called "cloning the repository", but you can just say it in plain English and Claude will handle the actual command. It'll ask where on your laptop to put it (anywhere is fine — a folder called Documents is a sensible default) and, from then on, that's the one you'll point the Code tab at each time you come back to make another change. The first time Claude needs to connect to GitHub on your behalf, a browser window may pop up asking you to sign in — that's expected, and only happens once.</p>
-          <p>If Claude ever asks which address to fetch, it's <code>https://github.com/magicobject/kington-parishes.git</code> — see <a href="help-technical-details.html#the-code">the technical details page</a> for more on where the code lives.</p>
+          <h3 id="4-open-the-code-tab-paste-this-and-wait">4. Open the Code tab, paste this, and wait</h3>
+          <p>Open Claude Desktop's Code tab, copy the box below into it exactly as it is, and send it. Claude will check your laptop has what it needs, fetch a working copy of the website, and tell you when it's ready — there's nothing else to do while it works, other than answer if it asks you something.</p>
+          <div class="copy-block">
+            <label for="setup-prompt">Instructions to paste into Claude Code</label>
+            <textarea id="setup-prompt" readonly rows="9">I'm a volunteer helping update the Kington Parishes website. Please get my laptop ready to work on it, then wait for me before doing anything else:
+
+1. Check whether Git and Node.js (the LTS version) are already installed. If either is missing, install it for me if you can, or tell me exactly what to download and click.
+2. Clone https://github.com/magicobject/kington-parishes.git into a sensible folder on my laptop (Documents is fine) and tell me where you put it.
+3. Run the project's own setup (npm install), then confirm everything works by building the site and running its automatic tests.
+4. Tell me plainly once it's all ready. From then on I'll just describe the change I want, in plain English.
+
+My GitHub username is:
+(If I haven't been added to the project yet, that's fine — just let me know once you reach a step that actually needs it.)</textarea>
+          </div>
+          <p>The first time Claude needs to connect to GitHub on your behalf, a browser window may pop up asking you to sign in — that's expected, and only happens once. If you'd like to know more about what any of this means, see <a href="help.html#git-and-github">Git &amp; GitHub, in plain English</a> and <a href="help-technical-details.html#the-code">the technical details page</a>.</p>
         </div>
       </div>
     </div>
@@ -166,13 +173,13 @@
     </div>
     <div class="fine">
       <span>&copy; <span id="year"></span> Kington Parishes. St Mary's Church Kington PCC is registered charity no. 1185453. Site by <a href="https://mediawright.uk">mediawright.uk</a>.</span>
-      <span class="build-number">Build 2026.09.08.008</span>
+      <span class="build-number">Build 2026.09.08.009</span>
     </div>
   </div>
 </footer>
 
-<script src="/js/main.js?v=2026.09.08.008" defer></script>
-<script src="/js/search-match.js?v=2026.09.08.008" defer></script>
-<script src="/js/search-ui.js?v=2026.09.08.008" defer></script>
+<script src="/js/main.js?v=2026.09.08.009" defer></script>
+<script src="/js/search-match.js?v=2026.09.08.009" defer></script>
+<script src="/js/search-ui.js?v=2026.09.08.009" defer></script>
 </body>
 </html>
