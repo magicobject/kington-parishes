@@ -174,6 +174,7 @@ describe('isSearchablePage', () => {
     assert.equal(isSearchablePage({ slug: 'help-getting-set-up' }), false);
     assert.equal(isSearchablePage({ slug: 'help-making-a-change' }), false);
     assert.equal(isSearchablePage({ slug: 'help-technical-details' }), false);
+    assert.equal(isSearchablePage({ slug: 'help-when-it-goes-wrong' }), false);
   });
 
   test('includes an ordinary content page', () => {

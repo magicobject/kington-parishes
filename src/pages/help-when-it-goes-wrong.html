@@ -1,0 +1,68 @@
+<main id="main">
+
+  <div class="page-header">
+    <svg class="ridge-watermark" viewBox="0 0 1200 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <path d="M0 60 C 100 45, 160 20, 220 30 S 320 70, 380 40 S 480 5, 540 20 S 640 65, 710 45 S 820 10, 880 25 S 980 68, 1040 48 S 1140 15, 1200 35" fill="none" stroke="#B8A98C" stroke-width="2"/>
+    </svg>
+    <div class="wrap">
+      <div class="kicker"><a href="help.html" style="color:#F8F5EE; text-decoration:underline;">Help</a> / When it goes wrong</div>
+      <h1>When something goes wrong</h1>
+      <p class="lede">A change didn't look right, or you're not sure what just happened — here's what to do. Short version: it's very hard to break anything permanently, and putting it right is always just a conversation with Claude, not a technical problem for you to solve.</p>
+    </div>
+  </div>
+
+  <section id="your-options">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">Your options</div>
+        <h2>Three ways to put it right</h2>
+        <p>None of these need any technical know-how — just tell Claude what's wrong, in your own words, the same way you asked for the change in the first place.</p>
+      </div>
+      <div class="card-grid">
+        <div class="card reveal">
+          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#A8813C" stroke-width="1.6"><path d="M4 4h16v13H7l-3 3V4Z"/><path d="M8 9h8M8 12.5h5"/></svg></div>
+          <h3>1. Ask Claude</h3>
+          <p>This is always the first step. Say what looks wrong — "that's not what I meant", "the date's wrong", "it looks odd on my phone" — and Claude will look at what it just changed and work out what to do next.</p>
+        </div>
+        <div class="card reveal">
+          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#A8813C" stroke-width="1.6"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></svg></div>
+          <h3>2. Revert the change</h3>
+          <p>Because Git keeps a complete history (see <a href="help.html#git-and-github">Git &amp; GitHub, in plain English</a>), any change can be fully undone — just ask Claude to "revert" or "undo" it, and the page goes back to exactly how it looked before.</p>
+        </div>
+        <div class="card reveal">
+          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#A8813C" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></div>
+          <h3>3. Or just fail forward</h3>
+          <p>Often quicker than undoing: instead of reverting, simply describe the fix you actually want — "make the heading bigger, not smaller" — and Claude edits again from where things stand. Whichever of the two feels simpler for the situation is the right one to ask for.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt" id="reassurance">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">Worth knowing</div>
+        <h2>A few reassurances</h2>
+      </div>
+      <div class="card-grid">
+        <div class="card reveal">
+          <h3>Nothing is permanently broken</h3>
+          <p>Every version of every page is saved in Git's history, forever — there's always a way back to how things looked before, no matter what went wrong.</p>
+        </div>
+        <div class="card reveal">
+          <h3>Most mistakes are caught before they go live</h3>
+          <p>Claude runs the site's automatic tests and its accessibility and security checks before anything reaches the live site (see <a href="help-making-a-change.html#the-steps">Making a change</a>) — so most problems never make it as far as a visitor seeing them.</p>
+        </div>
+        <div class="card reveal">
+          <h3>Not seeing your change yet?</h3>
+          <p>It might just not have gone live yet — check <a href="updates.html">/updates</a> for your change at the top of the list before assuming something's wrong.</p>
+        </div>
+        <div class="card reveal">
+          <h3>Still stuck?</h3>
+          <p>Get in touch at <a href="{{OBFUSCATE_MAILTO:web@kingtonparishes.org.uk}}">web@kingtonparishes.org.uk</a> and whoever currently looks after the website will help sort it out.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>

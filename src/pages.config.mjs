@@ -473,6 +473,15 @@ export const PAGES = [
     robots: 'noindex, nofollow',
   },
   {
+    slug: 'help-when-it-goes-wrong',
+    title: 'When It Goes Wrong — Help — Kington Parishes',
+    description: 'What to do if a change looks wrong: ask Claude, revert it, or fail forward — plus why nothing is ever permanently broken.',
+    active: null,
+    header: true,
+    safeguardStrip: false,
+    robots: 'noindex, nofollow',
+  },
+  {
     slug: '404',
     title: 'Page not found — Kington Parishes',
     description: "This page couldn't be found. Find your way back to Kington Parishes' home page.",
