@@ -13,6 +13,7 @@
         <a href="#dns">DNS</a>
         <a href="#build-templates">Build &amp; templates</a>
         <a href="#testing">Testing</a>
+        <a href="#contributors">Multiple contributors</a>
         <a href="#newsletter">Newsletter</a>
         <a href="#api-security">MailerLite API security</a>
         <a href="#the-code">The code</a>
@@ -82,7 +83,19 @@
     </div>
   </section>
 
-  <section id="newsletter">
+  <section id="contributors">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">Multiple contributors</div>
+        <h2>Who changed what: <code>users.json</code></h2>
+        <p>More than one person now makes changes to this site through Claude Code. <code>users.json</code>, at the root of the repository, is the roster: each entry is a first name, last name and GitHub account name. It's what lets every change be attributed to the person who actually made it, rather than a single generic "the website team".</p>
+        <p>Before adding an entry to the <a href="updates.html">/updates</a> changelog, Claude looks up the GitHub account currently signed in (<code>gh api user</code>) against <code>users.json</code>, and credits that person by name — that's the <code>changelog-author</code> shown next to each build number. If the signed-in account isn't on the roster, Claude asks for it to be added rather than guessing.</p>
+        <p>This is a check Claude runs, not a security boundary — it doesn't stop anyone with direct repository access from doing anything, but it does keep an honest, automatic record of who did what, and gives a foundation to later limit what a given contributor is allowed to change.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt" id="newsletter">
     <div class="wrap">
       <div class="section-head">
         <div class="kicker">Newsletter</div>
@@ -106,7 +119,7 @@
     </div>
   </section>
 
-  <section class="alt" id="api-security">
+  <section id="api-security">
     <div class="wrap">
       <div class="section-head">
         <div class="kicker">MailerLite API security</div>
@@ -141,7 +154,7 @@
     </div>
   </section>
 
-  <section id="the-code">
+  <section class="alt" id="the-code">
     <div class="wrap">
       <div class="section-head">
         <div class="kicker">The code</div>

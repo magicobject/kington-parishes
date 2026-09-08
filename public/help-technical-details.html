@@ -24,13 +24,13 @@
 <meta name="twitter:title" content="Technical Details — Help — Kington Parishes">
 <meta name="twitter:description" content="Hosting on Cloudflare Workers, DNS, the templated build that keeps the site DRY, what gets tested before a change goes live, the MailerLite-powered newsletter, how the API is secured, and where the source code lives.">
 <meta name="twitter:image" content="https://www.kingtonparishes.org.uk/img/our-churches/kington.webp">
-<link rel="icon" href="/img/favicon.svg?v=2026.09.08.012" type="image/svg+xml">
-<link rel="icon" href="/img/favicon-32.png?v=2026.09.08.012" type="image/png" sizes="32x32">
-<link rel="apple-touch-icon" href="/img/apple-touch-icon.png?v=2026.09.08.012">
+<link rel="icon" href="/img/favicon.svg?v=2026.09.08.013" type="image/svg+xml">
+<link rel="icon" href="/img/favicon-32.png?v=2026.09.08.013" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="/img/apple-touch-icon.png?v=2026.09.08.013">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/style.css?v=2026.09.08.012">
+<link rel="stylesheet" href="/css/style.css?v=2026.09.08.013">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -90,6 +90,7 @@
         <a href="#dns">DNS</a>
         <a href="#build-templates">Build &amp; templates</a>
         <a href="#testing">Testing</a>
+        <a href="#contributors">Multiple contributors</a>
         <a href="#newsletter">Newsletter</a>
         <a href="#api-security">MailerLite API security</a>
         <a href="#the-code">The code</a>
@@ -159,7 +160,19 @@
     </div>
   </section>
 
-  <section id="newsletter">
+  <section id="contributors">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">Multiple contributors</div>
+        <h2>Who changed what: <code>users.json</code></h2>
+        <p>More than one person now makes changes to this site through Claude Code. <code>users.json</code>, at the root of the repository, is the roster: each entry is a first name, last name and GitHub account name. It's what lets every change be attributed to the person who actually made it, rather than a single generic "the website team".</p>
+        <p>Before adding an entry to the <a href="updates.html">/updates</a> changelog, Claude looks up the GitHub account currently signed in (<code>gh api user</code>) against <code>users.json</code>, and credits that person by name — that's the <code>changelog-author</code> shown next to each build number. If the signed-in account isn't on the roster, Claude asks for it to be added rather than guessing.</p>
+        <p>This is a check Claude runs, not a security boundary — it doesn't stop anyone with direct repository access from doing anything, but it does keep an honest, automatic record of who did what, and gives a foundation to later limit what a given contributor is allowed to change.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt" id="newsletter">
     <div class="wrap">
       <div class="section-head">
         <div class="kicker">Newsletter</div>
@@ -183,7 +196,7 @@
     </div>
   </section>
 
-  <section class="alt" id="api-security">
+  <section id="api-security">
     <div class="wrap">
       <div class="section-head">
         <div class="kicker">MailerLite API security</div>
@@ -218,7 +231,7 @@
     </div>
   </section>
 
-  <section id="the-code">
+  <section class="alt" id="the-code">
     <div class="wrap">
       <div class="section-head">
         <div class="kicker">The code</div>
@@ -259,13 +272,13 @@
     </div>
     <div class="fine">
       <span>&copy; <span id="year"></span> Kington Parishes. St Mary's Church Kington PCC is registered charity no. 1185453. Site by <a href="https://mediawright.uk">mediawright.uk</a>.</span>
-      <span class="build-number">Build 2026.09.08.012</span>
+      <span class="build-number">Build 2026.09.08.013</span>
     </div>
   </div>
 </footer>
 
-<script src="/js/main.js?v=2026.09.08.012" defer></script>
-<script src="/js/search-match.js?v=2026.09.08.012" defer></script>
-<script src="/js/search-ui.js?v=2026.09.08.012" defer></script>
+<script src="/js/main.js?v=2026.09.08.013" defer></script>
+<script src="/js/search-match.js?v=2026.09.08.013" defer></script>
+<script src="/js/search-ui.js?v=2026.09.08.013" defer></script>
 </body>
 </html>

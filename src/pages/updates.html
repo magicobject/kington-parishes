@@ -15,515 +15,519 @@
     <div class="wrap">
       <ul class="changelog">
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.08.012</span><span class="changelog-date">8 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.08.013</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
+          <p>Added multi-developer guardrails: a <code>users.json</code> roster (first name, last name, GitHub account) that Claude checks before crediting a changelog entry, a standing rule to <code>git pull origin main</code> before starting and before pushing any change, and every changelog entry on this page — past and future — now names its author. Explained the mechanism on <a href="help-technical-details.html#contributors">Help / Technical details</a>.</p>
+        </li>
+        <li>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.08.012</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
           <p>Security self-review of <a href="help.html">/help</a>: no secrets, keys or credentials found anywhere in the guide, and everything else there is already public via the GitHub repo or a plain DNS lookup. Fixed one real inconsistency — <a href="help-dns-setup.html">DNS setup</a> had the vicar's email written out in plain text as an example, breaking this site's own rule that every mailto address gets obfuscated against harvester scrapers.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.08.011</span><span class="changelog-date">8 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.08.011</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
           <p>Added <a href="help-dns-setup.html">Help / DNS setup</a>, linked from <a href="help-technical-details.html#dns">Technical details</a>' DNS section: the actual A/MX/TXT records for <code>kingtonparishes.org.uk</code> (checked via a live public DNS lookup), what each non-A record is for, and that email is handled separately from the website — by 123 Reg/GoDaddy, not Cloudflare. Also corrected the site's previous host, mentioned in <a href="help-technical-details.html">Technical details</a>, past changelog entries and the README — it was Squarespace, not Wix.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.08.010</span><span class="changelog-date">8 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.08.010</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
           <p>Added two new sections to <a href="help-technical-details.html">Help / Technical details</a>: <a href="help-technical-details.html#build-templates">Build &amp; templates</a> (the templated, DRY build pipeline, and why some files under <code>public/</code> should never be hand-edited) and <a href="help-technical-details.html#testing">Testing</a> (reactive/responsive, WCAG AA, functional regressions, and security, all checked before a push). Also renamed "API security" to "MailerLite API security" for clarity, and added a reminder to renew <code>security.txt</code>'s <code>Expires</code> date annually.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.08.009</span><span class="changelog-date">8 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.08.009</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
           <p>Simplified <a href="help-getting-set-up.html">Help / Getting set up</a> from five manual steps to four: installing Git and Node.js and cloning the repository are now a single copy-paste block of instructions for Claude Code to carry out itself, rather than separate steps the reader does by hand. Added a reusable <code>.copy-block</code> component (a click-to-select-all textarea, <code>public/css/style.css</code> and <code>public/js/main.js</code>) for it.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.08.008</span><span class="changelog-date">8 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.08.008</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
           <p><a href="help-getting-set-up.html">Help / Getting set up</a> now covers installing Git and Node.js (the local tools Claude Code needs) and asking Claude to clone the <a href="https://github.com/magicobject/kington-parishes.git">kington-parishes</a> repository, rather than jumping straight from a GitHub account to "open the Code tab and ask" with no working copy on the laptop yet.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.08.007</span><span class="changelog-date">8 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.08.007</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
           <p>Added <a href="help-when-it-goes-wrong.html">Help / When it goes wrong</a> — ask Claude, revert, or fail forward, plus reassurance that nothing is permanently broken — linked from the <a href="help.html">Help</a> hub and its "undo a change" FAQ entry. Also added a clear reassurance to the Help hub and <a href="help-getting-set-up.html">Getting set up</a> that once a laptop is set up, zero technical knowledge is needed for anything that follows.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.08.006</span><span class="changelog-date">8 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.08.006</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
           <p>Added 2FA advice to <a href="help-getting-set-up.html">Help / Getting set up</a>'s GitHub account step, and a new, more technical <a href="help-technical-details.html">Help / Technical details</a> page linked from the <a href="help.html">Help</a> hub — Cloudflare Workers hosting and DNS, the MailerLite-powered newsletter, how the <code>/api/subscribe</code> endpoint is secured, and where the source lives on GitHub.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.08.005</span><span class="changelog-date">8 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.08.005</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
           <p>Clarified on the <a href="help-getting-set-up.html">Help / Getting set up</a> and <a href="help-making-a-change.html">Help / Making a change</a> pages that it's specifically Claude Desktop's <strong>Code</strong> tab (Claude Code) that reads/edits files and talks to GitHub — an ordinary chat elsewhere in the app can't do either.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.08.004</span><span class="changelog-date">8 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.08.004</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
           <p>Added a hidden, non-technical <a href="help.html">Help</a> guide for the website team — how changes reach the live site via Claude/Git/GitHub in plain English, plus <a href="help-getting-set-up.html">getting a laptop set up</a> and <a href="help-making-a-change.html">making a change day to day</a>. Not linked from anywhere on the main site and marked noindex, same pattern as this changelog.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.08.003</span><span class="changelog-date">8 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.08.003</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
           <p>Updated the Stay &amp; Play poster on the <a href="index.html">homepage</a> noticeboard with a new design, and lowered its suggested donation from £2 to £1.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.08.002</span><span class="changelog-date">8 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.08.002</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
           <p>Fixed Revd Judith Pollard's PTO card not showing on <a href="church-kington.html">St Mary the Virgin, Kington</a>'s page — she's PTO clergy at Kington, same as Revd Paul Roberts, but was missing the church tag that surfaces a PTO card there.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.08.001</span><span class="changelog-date">8 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.08.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
           <p>Added our clergy with Permission to Officiate (PTO) — Revd Paul Roberts, Revd Judith Pollard and Revd Paul Buckingham — to <a href="our-people.html">Our People</a>, plus <a href="church-kington.html">St Mary the Virgin, Kington</a>'s and <a href="church-huntington.html">St Thomas à Becket, Huntington</a>'s own pages for the PTO clergy tied to each. Also added Rob MacCurrach as Reader to <a href="our-people.html">Our People</a> and <a href="church-kington.html">St Mary the Virgin, Kington</a>'s page.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.07.009</span><span class="changelog-date">7 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.07.009</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">7 September 2026</span></div>
           <p>Added the Kington Harvest Festival service (10am, Sunday 4 October, replacing that week's regular Holy Communion slot) and the 'Jug of Punch' October Concert (7pm, Friday 16 October) to the <a href="calendar.html">calendar</a>.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.07.008</span><span class="changelog-date">7 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.07.008</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">7 September 2026</span></div>
           <p>Answered the 1995 stained-glass window's own question on <a href="church-kington-history.html">St Mary's, Kington's History &amp; Architecture</a> page — it depicts the Holy Spirit as a dove, not just "a bird".</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.07.007</span><span class="changelog-date">7 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.07.007</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">7 September 2026</span></div>
           <p>Added a new <a href="church-kington-history.html">History &amp; Architecture</a> page for St Mary's, Kington, combining the church's own visitor-guide leaflets with the existing history content — linked from <a href="church-kington.html">St Mary's, Kington</a>'s own page, which now carries a shorter overview and a link through. Also corrected the organ's history (Nicholson, 1848; rebuilt by Walkers, 1884; moved 1909; rebuilt again 2024) against the leaflets' account, which conflicted with what was on the site before.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.07.006</span><span class="changelog-date">7 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.07.006</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">7 September 2026</span></div>
           <p>Added a <a href=".well-known/security.txt">security.txt</a> (RFC 9116), pointing researchers at <code>hello@mediawright.uk</code> — also mirrored at the top-level <code>/security.txt</code> for older tooling that doesn't check <code>/.well-known/</code>. Didn't have one before.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.07.005</span><span class="changelog-date">7 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.07.005</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">7 September 2026</span></div>
           <p>Added Stephen Lacey's contact email for the Lego Club to his card on <a href="our-people.html">Our People</a> and <a href="church-kington.html">St Mary the Virgin, Kington</a>'s own page.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.07.004</span><span class="changelog-date">7 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.07.004</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">7 September 2026</span></div>
           <p>Added the <a href="privacy-policy.html">Privacy Policy</a> to the footer's Explore list — previously only reachable from the newsletter signup form's consent text, so it had no link from most of the site. Also changed its Contact us section to <code>web@kingtonparishes.org.uk</code>, a dedicated address instead of the vicar's own.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.07.003</span><span class="changelog-date">7 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.07.003</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">7 September 2026</span></div>
           <p>Added a Cookies section to the <a href="privacy-policy.html">Privacy Policy</a> — the site sets no cookies of its own (verified against live response headers), so no consent banner is needed; noted Cloudflare's rare strictly-necessary security cookie and the third-party requests made to Google Fonts and OpenStreetMap.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.07.002</span><span class="changelog-date">7 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.07.002</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">7 September 2026</span></div>
           <p>Added Stephen Lacey as Lego Club Organiser to <a href="our-people.html">Our People</a> and <a href="church-kington.html">St Mary the Virgin, Kington</a>'s own page.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.07.001</span><span class="changelog-date">7 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.07.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">7 September 2026</span></div>
           <p>Added Lego Club (3:30-5:00pm, St Mary's, Kington) and Praise &amp; Prayer in the Evening (PPE, 6:00-7:00pm, first Sunday of the month, St Mary's, Kington) to the <a href="calendar.html">calendar</a> for September through December 2026.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.06.005</span><span class="changelog-date">6 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.06.005</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">6 September 2026</span></div>
           <p>Fixed a CSP violation on every page with a Leaflet map — the <a href="index.html">home page</a>'s five-pin map and each church's own single-pin map (e.g. <a href="church-kington.html">St Mary the Virgin, Kington</a>) — where Leaflet's internal 1&times;1 transparent-GIF placeholder was being blocked by <code>img-src</code> (three console errors per load; the map itself still rendered correctly regardless, tiles and marker icon both came from allowed origins). Added <code>data:</code> to <code>img-src</code> in <code>public/_headers</code>, verified clean with <code>wrangler dev</code> since that's the only way to actually exercise <code>_headers</code> locally.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.06.004</span><span class="changelog-date">6 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.06.004</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">6 September 2026</span></div>
           <p><strong>Go live, step 1 of 2 (code):</strong> pointed <code>SITE_URL</code> at <code>https://www.kingtonparishes.org.uk</code> instead of the workers.dev preview address — every canonical link, Open Graph/Twitter tag, JSON-LD block and the sitemap now use the real domain. Removed <code>robots: 'noindex, nofollow'</code> from every real page in <code>src/pages.config.mjs</code> (kept only on <code>404</code> and this changelog), updated <code>public/robots.txt</code>'s sitemap line to match, and rewrote the two tests and the README section that used to assert the opposite. Cloudflare itself — attaching the custom domain, retiring the old DNS record pointing at Squarespace — is the next, separate step.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.06.003</span><span class="changelog-date">6 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.06.003</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">6 September 2026</span></div>
           <p>Renamed the Safeguarding Policy from <code>.doc</code> to <code>.docx</code> — the file is genuinely Open XML format, and the mismatched extension could trip a "format doesn't match" warning in Word. Updated the download link on <a href="safeguarding.html">Safeguarding</a> to match.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.06.002</span><span class="changelog-date">6 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.06.002</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">6 September 2026</span></div>
           <p>Added a new <code>public/docs/</code> folder (hand-maintained, same as <code>public/pilgrim-paths/</code> and <code>public/parish-news/</code>) holding the PCC-agreed Safeguarding Policy, and linked it from <a href="safeguarding.html">Safeguarding</a> — the one piece of the old site's footer that was deliberately left out until the file itself was supplied.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.06.001</span><span class="changelog-date">6 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.06.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">6 September 2026</span></div>
           <p>Added a full safeguarding section to the <a href="index.html">home page</a> (the 999 emergency notice, the "if you're worried" guidance, and the Parish/Diocesan Safeguarding Officer and Herefordshire Council contact cards) — carried over from the bottom of the old site's home page. DRYed up via a new shared <code>safeguarding-essentials.html</code> partial so <a href="safeguarding.html">Safeguarding</a> and the home page render the exact same contact details rather than duplicating them by hand; the home page's small safeguard-strip banner is now skipped in favour of this fuller section. The safeguarding policy document itself (the old site linked a Word doc and a PNG) is intentionally not carried over yet — still waiting on that file.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.05.010</span><span class="changelog-date">5 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.05.010</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">5 September 2026</span></div>
           <p>Expanded <a href="church-kinnerton.html">St Mary's, Kinnerton</a>'s page with its Diocese of Hereford / chapel-of-ease context, the churchyard's 1943 extension and yew tree, and its aumbry and piscina — and deliberately did not add a listing grade, since research found no evidence this church is actually Cadw-listed. Fifth and last of the <code>SUGGESTIONS.md</code> reviews to be published — all five churches now done.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.05.009</span><span class="changelog-date">5 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.05.009</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">5 September 2026</span></div>
           <p>Expanded <a href="church-huntington.html">St Thomas à Becket, Huntington</a>'s page with History &amp; Architecture, Bells, Fittings, Stained Glass and Organ sections, plus its Grade II* listing. Corrected the "first recorded in the Domesday Book" claim — Domesday records Huntington the settlement, not the church, which dates from around 1300 — and reframed the Richard le Bret founding story as local tradition rather than fact. Fourth of the <code>SUGGESTIONS.md</code> reviews to be published.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.05.008</span><span class="changelog-date">5 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.05.008</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">5 September 2026</span></div>
           <p>Expanded <a href="church-old-radnor.html">St Stephen's, Old Radnor</a>'s page with History &amp; Architecture, Font, Rood Screen, Organ and Monuments &amp; Other Features sections, plus its Grade I (Cadw) listing. The famous "oldest organ case in the UK" claim now cites organ historian Stephen Bicknell's authentication of a case once doubted by Lady Susi Jeans, rather than stating it as flatly uncontested. Third of the <code>SUGGESTIONS.md</code> reviews to be published.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.05.007</span><span class="changelog-date">5 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.05.007</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">5 September 2026</span></div>
           <p>Expanded <a href="church-titley.html">St Peter's, Titley</a>'s page with a History &amp; Architecture section (its c.1120 Tironensian priory origin, the 1834 west tower funded by Lady Elizabeth Greenly, and its Grade II listing) and a Monuments section noting the churchyard grave of Hungarian national hero General Lázár Mészáros — carefully hedged, since his remains were reportedly reburied in Hungary in 1991. Second of the <code>SUGGESTIONS.md</code> reviews to be published.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.05.006</span><span class="changelog-date">5 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.05.006</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">5 September 2026</span></div>
           <p>Expanded <a href="church-kington.html">St Mary the Virgin, Kington</a>'s page with History &amp; Architecture, Monuments, Bells, Organ and Lychgate sections, and its Grade I listing — the first of the research findings from <code>SUGGESTIONS.md</code> to be reviewed and published.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.05.005</span><span class="changelog-date">5 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.05.005</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">5 September 2026</span></div>
           <p>Added a <code>SUGGESTIONS.md</code> at the repo root: research findings on all five churches (Wikipedia, Historic England/Cadw listings, Wikidata) compared against what <a href="church-kington.html">Kington</a>, <a href="church-titley.html">Titley</a>, <a href="church-old-radnor.html">Old Radnor</a>, <a href="church-kinnerton.html">Kinnerton</a> and <a href="church-huntington.html">Huntington</a>'s own pages currently say — corrections, additions and things worth verifying, awaiting review before anything moves into <code>BACKLOG.md</code>. Process change with no page of its own beyond the ones linked.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.05.004</span><span class="changelog-date">5 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.05.004</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">5 September 2026</span></div>
           <p>Corrected all five churches' map coordinates on the <a href="index.html">homepage</a> and each church's own portal page (<a href="church-kington.html">Kington</a>, <a href="church-titley.html">Titley</a>, <a href="church-old-radnor.html">Old Radnor</a>, <a href="church-kinnerton.html">Kinnerton</a>, <a href="church-huntington.html">Huntington</a>) — the hand-converted lat/lng from build 2026.09.05.001 had drifted from the real church buildings (Kington was ~850m out, Huntington ~670m), now matched against OpenStreetMap's own building outlines. Also widened the homepage map's zoom slightly.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.05.003</span><span class="changelog-date">5 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.05.003</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">5 September 2026</span></div>
           <p>Added a <code>BACKLOG.md</code> at the repo root: a Todo/Done tracker so requests that arrive mid-task get parked there instead of bloating whatever's currently being worked on. Process change with no page of its own — covers build 2026.09.05.002, which added the file itself.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.05.001</span><span class="changelog-date">5 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.05.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">5 September 2026</span></div>
           <p>Replaced the <a href="index.html">homepage</a>'s single-pin Google Maps embed (which couldn't show more than one tagged marker) with a self-hosted Leaflet/OpenStreetMap "Find Us" map showing all five churches, auto-zoomed to fit them all, each pin linking to that church's page. Also added a single-marker map to each church's own portal page: <a href="church-kington.html">Kington</a>, <a href="church-titley.html">Titley</a>, <a href="church-old-radnor.html">Old Radnor</a>, <a href="church-kinnerton.html">Kinnerton</a> and <a href="church-huntington.html">Huntington</a>. Linked Ewan Murray's name to his own website in the organ recital notice.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.04.010</span><span class="changelog-date">4 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.04.010</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">4 September 2026</span></div>
           <p>Removed the 20 September Wild Church Cook Out from the <a href="calendar.html">Calendar</a> — cancelled.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.04.009</span><span class="changelog-date">4 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.04.009</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">4 September 2026</span></div>
           <p>Added Sunday service times to the <a href="calendar.html">Calendar</a> for September-November 2026: 10am Holy Communion at St Mary's, Kington on every Sunday except the third of the month, which is 10am Morning Praise. Also added the 12 September 7pm organ recital by Ewan Murray at St Mary's, Kington. The calendar beyond November 2026 is still to be sorted out.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.04.008</span><span class="changelog-date">4 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.04.008</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">4 September 2026</span></div>
           <p>Fixed a broken link on the <a href="resources.html">Resources</a> page: Everyday Faith now points at the Church of England's current page for it (<code>faith-life/exploring-faith/everyday-faith</code>) instead of the old, dead <code>everydayfaith</code> URL.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.04.007</span><span class="changelog-date">4 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.04.007</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">4 September 2026</span></div>
           <p>People fixes on <a href="our-people.html">Our People</a> and <a href="church-kington.html">St Mary's, Kington</a>'s portal page: corrected the Health &amp; Safety Officer's name to Julia Reid (was misspelled Reed), and added a card for Craig Freese, Parish News Compositor, who typesets and lays out the magazine alongside editor David Redmayne.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.04.006</span><span class="changelog-date">4 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.04.006</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">4 September 2026</span></div>
           <p>Added a new <a href="resources.html">Resources</a> page — Alpha, Christianity Explored, the Church of England's Everyday Faith and Learning to Pray resources, plus books (Loving God, Revd Sally Welch) — linked in the primary nav after <a href="get-involved.html">Get Involved</a>.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.04.005</span><span class="changelog-date">4 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.04.005</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">4 September 2026</span></div>
           <p>Newsletter signup: fix misleading "check your email to confirm" copy — double opt-in is currently off in MailerLite, so a successful signup is immediate and no confirmation email is sent. Fixed on the success screen, the <a href="newsletter.html">newsletter page</a>, and the <a href="privacy-policy.html">Privacy Policy</a>; the success message is now read from the server's own response instead of being duplicated as static text. See CLAUDE.md for where this needs to change back if double opt-in is re-enabled.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.04.004</span><span class="changelog-date">4 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.04.004</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">4 September 2026</span></div>
           <p>Newsletter signup fix: a previously-unsubscribed address now gets a clear, honest message ("previously unsubscribed, email us to add you back") instead of the misleading "please enter a valid email address" — MailerLite rejects re-importing unsubscribed contacts via the API on purpose, and that's a different situation from a bad email format. Reverts the temporary debug logging from the last two entries.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.04.003</span><span class="changelog-date">4 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.04.003</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">4 September 2026</span></div>
           <p>Newsletter signup: temporarily surface MailerLite's raw 422 response, to diagnose a report of a genuinely valid email address ("Please enter a valid email address" is currently shown for any 422, not necessarily an email-format problem).</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.04.002</span><span class="changelog-date">4 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.04.002</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">4 September 2026</span></div>
           <p>Newsletter signup UX: a clean, focused confirmation state replaces the form on success, and a repeat failure now offers a fallback contact email. The form is factored into one shared partial (<code>templates/newsletter-signup-form.html</code>) and now also appears on the <a href="index.html">homepage</a>. Renamed <a href="parish-news.html">Parish News</a> to "Parish Magazine" in the nav and footer to better differentiate it from the <a href="newsletter.html">InSpire Newsletter</a>, which now has its own top-nav link ("InSpire").</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.04.001</span><span class="changelog-date">4 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.04.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">4 September 2026</span></div>
           <p>SEO audit fixes: structured data on <a href="blog.html">Blog</a>, <a href="parish-news.html">Parish News</a> and the <a href="newsletter.html">InSpire Newsletter</a> pages (issue schema computed automatically from <code>src/newsletter.config.mjs</code>); a postal address on the <a href="index.html">homepage</a>'s Organization schema; a PNG favicon fallback and apple-touch-icon (<code>scripts/generate-favicons.mjs</code>); and an automatically generated <a href="sitemap.xml">sitemap.xml</a> on every build.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.03.022</span><span class="changelog-date">3 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.03.022</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">3 September 2026</span></div>
           <p>First InSpire Newsletter issue: <a href="newsletter-2026-09.html">September 2026</a> — 25 years of ministry for Revd Sally Welch, Revd Phillippa Wright's ordination as priest, the Treasurer vacancy, and September's Wild Church. Matching email version drafted in <code>newsletter-templates/</code>, ready for MailerLite.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.03.021</span><span class="changelog-date">3 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.03.021</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">3 September 2026</span></div>
           <p>Newsletter, phase 6: <a href="newsletter.html">InSpire Newsletter</a> now lists recent issues, and past issues move automatically to the new <a href="newsletter-archive.html">newsletter archive</a> once they're over six months old — driven by <code>src/newsletter.config.mjs</code>, no manual archiving step needed.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.03.020</span><span class="changelog-date">3 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.03.020</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">3 September 2026</span></div>
           <p>Newsletter, phase 5: add the hand-maintained InSpire Newsletter email template (<code>newsletter-templates/inspire-newsletter.html</code>) — table-based, inline-styled, matching the site's colours and fonts, ready to paste into MailerLite's custom HTML editor per issue. Not part of the built site, so no page to link here.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.03.019</span><span class="changelog-date">3 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.03.019</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">3 September 2026</span></div>
           <p>Newsletter signup: revert the temporary verbose 502 message. Root cause of the recurring dropped API key was a leftover build-scoped variable conflicting with the runtime secret, a known Cloudflare Workers Builds issue — this entry doesn't link a page, since it's a process change with no page of its own.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.03.018</span><span class="changelog-date">3 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.03.018</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">3 September 2026</span></div>
           <p>Newsletter signup: temporarily surface MailerLite's raw error again, to diagnose a new 502 reported from a real signup attempt on the live form.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.03.017</span><span class="changelog-date">3 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.03.017</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">3 September 2026</span></div>
           <p>Newsletter signup, phase 3: add the public <a href="newsletter.html">InSpire Newsletter</a> signup form (with a honeypot spam field) and a <a href="privacy-policy.html">Privacy Policy</a> page, linked from the footer's Explore list.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.03.016</span><span class="changelog-date">3 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.03.016</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">3 September 2026</span></div>
           <p>Newsletter signup: revert the temporary debug logging/error-message changes now that the live end-to-end signup flow is confirmed working. Only the private, server-side error log remains.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.03.015</span><span class="changelog-date">3 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.03.015</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">3 September 2026</span></div>
           <p>Newsletter signup, phase 2: point <code>MAILERLITE_GROUP_ID</code> at the real "InSpire Newsletter" group in MailerLite, replacing the placeholder.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.03.014</span><span class="changelog-date">3 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.03.014</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">3 September 2026</span></div>
           <p>Newsletter signup: temporarily log the stored API key's length and first/last character (never the key itself) to diagnose a persistent 401 from MailerLite. To be reverted alongside the other debug-only changes.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.03.013</span><span class="changelog-date">3 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.03.013</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">3 September 2026</span></div>
           <p>Newsletter signup: temporarily surface MailerLite's raw status/response in <code>/api/subscribe</code>'s error message, to verify the live API key without a dashboard log round trip. To be reverted before the public form ships.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.03.012</span><span class="changelog-date">3 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.03.012</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">3 September 2026</span></div>
           <p>Newsletter signup: log MailerLite's own error response server-side (never the request itself) when <code>/api/subscribe</code> fails, so a bad API key vs. a misconfigured group id can be told apart from Cloudflare's log stream.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.03.011</span><span class="changelog-date">3 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.03.011</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">3 September 2026</span></div>
           <p>Newsletter signup, phase 1: the site is now a Cloudflare Worker rather than pure static assets, with a new <code>/api/subscribe</code> endpoint that adds signups to MailerLite server-side. Backend plumbing only — no public-facing form yet.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.03.010</span><span class="changelog-date">3 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.03.010</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">3 September 2026</span></div>
           <p>CLAUDE.md: changelog entries on this page must now link the page(s) a change touched, not just name them in prose (this entry doesn't, since it's a process change with no page of its own).</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.03.009</span><span class="changelog-date">3 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.03.009</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">3 September 2026</span></div>
           <p>Link to St Thomas à Becket, Huntington's own website, on both Our Churches and its portal page.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.03.008</span><span class="changelog-date">3 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.03.008</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">3 September 2026</span></div>
           <p>Parish News: clarify "Every issue is free to read online".</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.03.007</span><span class="changelog-date">3 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.03.007</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">3 September 2026</span></div>
           <p>Donate page: spell out the two shorthand links in full — "Donate to St Stephen's, Old Radnor and St Mary's, Kinnerton" and "Donate to St Thomas à Becket, Huntington".</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.03.006</span><span class="changelog-date">3 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.03.006</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">3 September 2026</span></div>
           <p>St Mary's, Kinnerton's portal page: add History &amp; Architecture and The Bell (Dove's Guide details). Reword the Our Churches portal links from "Visit the ... page" to "More about ...".</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.03.005</span><span class="changelog-date">3 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.03.005</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">3 September 2026</span></div>
           <p>Our Churches: each church's photo is now also a link through to its portal page, alongside the existing "Visit the ... page" text link.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.03.004</span><span class="changelog-date">3 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.03.004</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">3 September 2026</span></div>
           <p>Add wardens, secretaries, organists, bell tower captains and Parish News editors for all five churches to Our People and each church's portal page, from the same single source of people data.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.03.003</span><span class="changelog-date">3 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.03.003</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">3 September 2026</span></div>
           <p>Parish News: "Write for us" now points articles, information and adverts to the editor, David Redmayne, rather than the general parish office address.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.03.002</span><span class="changelog-date">3 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.03.002</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">3 September 2026</span></div>
           <p>Add a portal page per church, linked from Our Churches. St Mary's, Kington's portal lists the same clergy and officers as Our People, sourced from one place (src/people.config.mjs) so a new officer only needs adding once.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.03.001</span><span class="changelog-date">3 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.03.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">3 September 2026</span></div>
           <p>Add a Treasurer job description page and link it from the Treasurer-vacancy blog post, which now also mentions working with the bookkeeper.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.02.008</span><span class="changelog-date">2 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.02.008</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">2 September 2026</span></div>
           <p>Add a Blog page, linked in the header nav, listing posts newest-first — first post: St Mary's, Kington is recruiting a Treasurer, contact Greg Wright.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.02.007</span><span class="changelog-date">2 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.02.007</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">2 September 2026</span></div>
           <p>Add a live search box to the header: a build-time index (regenerated on every build, one entry per section across every page except this changelog) matched keyword-by-keyword client-side, with full keyboard navigation and unit + Playwright coverage.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.02.006</span><span class="changelog-date">2 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.02.006</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">2 September 2026</span></div>
           <p>Add geo coordinates and a what3words map link to each church's JSON-LD, using the lat/long behind their what3words addresses.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.02.005</span><span class="changelog-date">2 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.02.005</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">2 September 2026</span></div>
           <p>Update the what3words links for Kington, Titley, Kinnerton and Huntington with more accurate locations.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.02.004</span><span class="changelog-date">2 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.02.004</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">2 September 2026</span></div>
           <p>Our Churches: add a Wikipedia link for St Mary's, Kington and a what3words link for all five churches (plus a note that Huntington can be tricky to find). Fix the dead "Open the calendar" link on Services &amp; Events. Add Open Graph/Twitter Card tags and Organization/Church JSON-LD structured data sitewide. Replace calendar-events.js's ~70 hand-typed recurring rows with a small recurrence-rule expansion, and sync the calendar's no-JS fallback list. Add Playwright coverage for the noticeboard/archive expiry mechanism.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.02.003</span><span class="changelog-date">2 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.02.003</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">2 September 2026</span></div>
           <p>Make the Our Churches sketch interactive: each drawn church is now a link to its own section, with a hover/focus tag and a corrected left-to-right alt description (Titley, Old Radnor, Kington, Huntington, Kinnerton).</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.02.002</span><span class="changelog-date">2 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.02.002</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">2 September 2026</span></div>
           <p>Warm up the header, hero, page-header and footer with a golden-sunrise gradient and a brass/heather/amber accent line, recolour the ridge watermark, and lighten the footer's fine print to keep it above 4.5:1 contrast on the new background.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.02.001</span><span class="changelog-date">2 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.02.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">2 September 2026</span></div>
           <p>Add a contact link for Phillippa Wright to the Stay &amp; Play programme card, with an obfuscated mailto and a pre-filled subject.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.01.013</span><span class="changelog-date">1 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.01.013</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">1 September 2026</span></div>
           <p>Add the missing February 2026 issue to the Parish News Archive.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.01.012</span><span class="changelog-date">1 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.01.012</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">1 September 2026</span></div>
           <p>CLAUDE.md: prefix test-count reports with the repo name; drop an unused import in the test server.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.01.011</span><span class="changelog-date">1 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.01.011</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">1 September 2026</span></div>
           <p>Security sweep: obfuscate the booking secretary's email like the safeguarding officers', and fix a path-traversal bug in the test server.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.01.010</span><span class="changelog-date">1 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.01.010</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">1 September 2026</span></div>
           <p>CLAUDE.md: report test count and duration whenever the full suite runs.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.01.009</span><span class="changelog-date">1 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.01.009</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">1 September 2026</span></div>
           <p>Block external network calls in tests (Google Fonts, the Find Us map) to remove intermittent multi-second stalls.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.01.008</span><span class="changelog-date">1 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.01.008</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">1 September 2026</span></div>
           <p>Auto-refresh the Updates page every minute.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.01.007</span><span class="changelog-date">1 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.01.007</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">1 September 2026</span></div>
           <p>Remove Stay and Play calendar entries falling in Herefordshire school holidays (27 Oct, 22 &amp; 29 Dec).</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.01.006</span><span class="changelog-date">1 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.01.006</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">1 September 2026</span></div>
           <p>Add a Live Stream button next to Donate Now in the header.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.01.005</span><span class="changelog-date">1 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.01.005</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">1 September 2026</span></div>
           <p>Move Walkers further right in the top menu, just before Contact.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.01.004</span><span class="changelog-date">1 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.01.004</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">1 September 2026</span></div>
           <p>Reorder the top menu so Services &amp; Events comes before Walkers.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.01.003</span><span class="changelog-date">1 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.01.003</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">1 September 2026</span></div>
           <p>Replace the vicar's disconnected 01544 landline with her mobile number.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.01.002</span><span class="changelog-date">1 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.01.002</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">1 September 2026</span></div>
           <p>Correct Margaret Cooke's name and add Christine Robinson's Church Secretary role on Our People.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.09.01.001</span><span class="changelog-date">1 September 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.01.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">1 September 2026</span></div>
           <p>Replace Donate Now's direct link to Kington with a church-picker page covering all five churches.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.08.31.014</span><span class="changelog-date">31 August 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.08.31.014</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">31 August 2026</span></div>
           <p>Add a Parish Hall page, linked from the top menu, with photos and booking details.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.08.31.013</span><span class="changelog-date">31 August 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.08.31.013</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">31 August 2026</span></div>
           <p>Add a photo of each of the five churches to Our Churches.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.08.31.012</span><span class="changelog-date">31 August 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.08.31.012</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">31 August 2026</span></div>
           <p>Note in Pilgrim Paths that the Titley path isn't currently recommended for use.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.08.31.011</span><span class="changelog-date">31 August 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.08.31.011</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">31 August 2026</span></div>
           <p>Add Philip Sell, Director of Music at St Mary's, Kington, to Our People.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.08.31.010</span><span class="changelog-date">31 August 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.08.31.010</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">31 August 2026</span></div>
           <p>Add Wild Church Cook Out and the Kington Pilgrim Path Walk to 20 September; add recurring Zero Waste, Stay and Play and Marches Voices Choir entries through the end of the year.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.08.31.009</span><span class="changelog-date">31 August 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.08.31.009</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">31 August 2026</span></div>
           <p>Add a link to the Facebook community in the footer's Explore list.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.08.31.008</span><span class="changelog-date">31 August 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.08.31.008</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">31 August 2026</span></div>
           <p>Fix the Find Us map embed being CSP-blocked in production (add frame-src for Google Maps); reword "heart of the town".</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.08.31.007</span><span class="changelog-date">31 August 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.08.31.007</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">31 August 2026</span></div>
           <p>Add build-number git tagging and an /updates changelog page.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.08.31.006</span><span class="changelog-date">31 August 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.08.31.006</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">31 August 2026</span></div>
           <p>Link Titley, Old Radnor and Huntington to the National Churches Trust.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.08.31.005</span><span class="changelog-date">31 August 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.08.31.005</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">31 August 2026</span></div>
           <p>Link the footer's church list to their sections on Our Churches.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.08.31.004</span><span class="changelog-date">31 August 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.08.31.004</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">31 August 2026</span></div>
           <p>Link each church on Our Churches to its own Parish Giving Scheme page.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.08.31.003</span><span class="changelog-date">31 August 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.08.31.003</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">31 August 2026</span></div>
           <p>Point Donate Now at Kington St Mary's, and expand Our People.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.08.31.002</span><span class="changelog-date">31 August 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.08.31.002</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">31 August 2026</span></div>
           <p>Add an Our People page introducing the clergy team.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.08.31.001</span><span class="changelog-date">31 August 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.08.31.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">31 August 2026</span></div>
           <p>Add a Walkers page, and a Find Us map on the homepage.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.08.30.022</span><span class="changelog-date">30 August 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.08.30.022</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">30 August 2026</span></div>
           <p>Add CLAUDE.md: standing rules for tested, secure, accessible changes.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.08.30.021</span><span class="changelog-date">30 August 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.08.30.021</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">30 August 2026</span></div>
           <p>Add the old site's five-churches sketch to Our Churches.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.08.30.020</span><span class="changelog-date">30 August 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.08.30.020</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">30 August 2026</span></div>
           <p>Fix wrong YouTube link on Services &amp; Events.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.08.30.019</span><span class="changelog-date">30 August 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.08.30.019</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">30 August 2026</span></div>
           <p>Add the rest of 2026 to the Parish News Archive.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.08.30.018</span><span class="changelog-date">30 August 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.08.30.018</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">30 August 2026</span></div>
           <p>Collapse the primary nav behind an ellipsis toggle on mobile.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.08.30.017</span><span class="changelog-date">30 August 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.08.30.017</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">30 August 2026</span></div>
           <p>Accessibility review: fix real issues, add axe-core regression testing.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.08.30.016</span><span class="changelog-date">30 August 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.08.30.016</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">30 August 2026</span></div>
           <p>Test multi-event days on the calendar; document no recurrence support.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.08.30.015</span><span class="changelog-date">30 August 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.08.30.015</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">30 August 2026</span></div>
           <p>Escape event data in the calendar, add security response headers.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.08.30.014</span><span class="changelog-date">30 August 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.08.30.014</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">30 August 2026</span></div>
           <p>Block pushes with high/critical npm audit findings.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.08.30.013</span><span class="changelog-date">30 August 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.08.30.013</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">30 August 2026</span></div>
           <p>Document how to add a calendar event in the README.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.08.30.012</span><span class="changelog-date">30 August 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.08.30.012</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">30 August 2026</span></div>
           <p>Change the main contact email to vicar@kingtonparishes.org.uk.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.08.30.011</span><span class="changelog-date">30 August 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.08.30.011</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">30 August 2026</span></div>
           <p>Add a month-by-month events calendar.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.08.30.009</span><span class="changelog-date">30 August 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.08.30.009</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">30 August 2026</span></div>
           <p>Swap Zero Waste notice to the poster artwork, fix its times everywhere.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.08.30.008</span><span class="changelog-date">30 August 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.08.30.008</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">30 August 2026</span></div>
           <p>Redesign the favicon as a distinct chapel silhouette.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.08.30.007</span><span class="changelog-date">30 August 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.08.30.007</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">30 August 2026</span></div>
           <p>Populate the noticeboard with real notices and wire up the archive.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.08.30.006</span><span class="changelog-date">30 August 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.08.30.006</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">30 August 2026</span></div>
           <p>Add a Parish News Archive, with June-September 2026 back issues.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.08.30.005</span><span class="changelog-date">30 August 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.08.30.005</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">30 August 2026</span></div>
           <p>Remove dead/redundant pilgrim-path mentions from Our Churches.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.08.30.004</span><span class="changelog-date">30 August 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.08.30.004</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">30 August 2026</span></div>
           <p>Fix invisible brand-logo hover, add YouTube link to footer.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.08.30.003</span><span class="changelog-date">30 August 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.08.30.003</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">30 August 2026</span></div>
           <p>Link "online" in the homepage welcome text to the YouTube channel.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.08.30.002</span><span class="changelog-date">30 August 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.08.30.002</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">30 August 2026</span></div>
           <p>Add a Pilgrim Paths section to the homepage.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.08.30.001</span><span class="changelog-date">30 August 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.08.30.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">30 August 2026</span></div>
           <p>Add Kington Zero Waste Food Project noticeboard image and A3 poster.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.08.29.005</span><span class="changelog-date">29 August 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.08.29.005</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">29 August 2026</span></div>
           <p>Make the whole site noindex — this is a proof-of-concept, not the real parish site.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.08.29.004</span><span class="changelog-date">29 August 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.08.29.004</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">29 August 2026</span></div>
           <p>Link each national helpline name to its own website.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.08.29.003</span><span class="changelog-date">29 August 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.08.29.003</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">29 August 2026</span></div>
           <p>Turn officer names into mailto links, obfuscate the addresses, and correct the Diocesan officer's details.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.08.29.002</span><span class="changelog-date">29 August 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.08.29.002</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">29 August 2026</span></div>
           <p>Fix email addresses overflowing their card on the Safeguarding page.</p>
         </li>
         <li>
-          <div class="changelog-meta"><span class="changelog-build">2026.08.29.001</span><span class="changelog-date">29 August 2026</span></div>
+          <div class="changelog-meta"><span class="changelog-build">2026.08.29.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">29 August 2026</span></div>
           <p>Adopt the wrightmaths.uk build pipeline: templates, tests, versioning, mediawright.uk credit, and a few real bug fixes.</p>
         </li>
       </ul>

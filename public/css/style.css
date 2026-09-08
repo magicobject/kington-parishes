@@ -678,6 +678,7 @@ footer.site .fine a { color: #C9C3B2; text-decoration: underline; text-underline
 .changelog li:last-child { border-bottom: none; }
 .changelog-meta { display: flex; gap: 14px; align-items: baseline; flex-wrap: wrap; margin-bottom: 4px; }
 .changelog-build { font-weight: 700; color: var(--brass-dark); font-variant-numeric: tabular-nums; }
+.changelog-author { font-size: 0.85rem; color: var(--ink-soft); }
 .changelog-date { font-size: 0.85rem; color: var(--ink-soft); }
 .changelog p { margin: 0; color: var(--ink-soft); }
 /* Both current uses of .jump-row sit inside the dark .page-header banner
