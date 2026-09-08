@@ -24,13 +24,13 @@
 <meta name="twitter:title" content="Making a Change — Help — Kington Parishes">
 <meta name="twitter:description" content="What happens, step by step, when you ask Claude to update this website — plus answers to the questions people usually ask first.">
 <meta name="twitter:image" content="https://www.kingtonparishes.org.uk/img/our-churches/kington.webp">
-<link rel="icon" href="/img/favicon.svg?v=2026.09.08.013" type="image/svg+xml">
-<link rel="icon" href="/img/favicon-32.png?v=2026.09.08.013" type="image/png" sizes="32x32">
-<link rel="apple-touch-icon" href="/img/apple-touch-icon.png?v=2026.09.08.013">
+<link rel="icon" href="/img/favicon.svg?v=2026.09.08.014" type="image/svg+xml">
+<link rel="icon" href="/img/favicon-32.png?v=2026.09.08.014" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="/img/apple-touch-icon.png?v=2026.09.08.014">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/style.css?v=2026.09.08.013">
+<link rel="stylesheet" href="/css/style.css?v=2026.09.08.014">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -87,6 +87,9 @@
       <p class="lede">Once you're <a href="help-getting-set-up.html">set up</a>, here's what actually happens each time you'd like something on the website updated.</p>
       <nav class="jump-row" aria-label="Jump to a section">
         <a href="#the-steps">The steps</a>
+        <a href="#archiving">What archives itself</a>
+        <a href="#publish-newsletter">Publish the newsletter</a>
+        <a href="#add-parish-news">Add a Parish News issue</a>
         <a href="#questions">Questions people ask</a>
       </nav>
     </div>
@@ -127,7 +130,79 @@
     </div>
   </section>
 
-  <section class="alt" id="questions">
+  <section class="alt" id="archiving">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">Automatic housekeeping</div>
+        <h2>What archives itself, and what doesn't</h2>
+        <p>A couple of areas of the site tidy themselves up on a schedule — worth knowing so you don't go looking for a manual step that doesn't exist, and so you know when a manual check really is needed.</p>
+      </div>
+      <div class="card-grid">
+        <div class="card reveal">
+          <h3>Noticeboard → Services &amp; Events archive</h3>
+          <p>Any noticeboard card on the homepage with an expiry date moves itself to the Archive section of <a href="services.html#archive">Services &amp; Events</a> the moment that date passes. No need to remove or move it by hand.</p>
+        </div>
+        <div class="card reveal">
+          <h3>InSpire Newsletter → Newsletter archive</h3>
+          <p>Each issue listed on the <a href="newsletter.html">InSpire Newsletter</a> page moves itself to the <a href="newsletter-archive.html">newsletter archive</a> once it's more than six months old. Nothing to do here either.</p>
+        </div>
+        <div class="card reveal">
+          <h3>Parish News does <em>not</em> archive itself</h3>
+          <p>Unlike the two above, publishing a new <a href="parish-news.html">Parish News</a> issue means updating three separate places by hand — the homepage teaser, the Parish News page's latest issue, and the archive. See <a href="#add-parish-news">Add a Parish News issue</a> below, and always check it once it's live.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="publish-newsletter">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">Common task</div>
+        <h2>Publish the InSpire Newsletter</h2>
+        <p>Three steps — the first two happen through Claude, the last one happens directly in MailerLite.</p>
+      </div>
+      <div class="card-grid">
+        <div class="card reveal">
+          <h3>1. Ask Claude to create it</h3>
+          <p>Tell Claude you're ready for the next issue and give it the items to include. Claude adds it to the website as a new InSpire Newsletter issue.</p>
+        </div>
+        <div class="card reveal">
+          <h3>2. Review, then ask for the one-page version</h3>
+          <p>Once the website has been updated, ask Claude for any corrections you'd like. When you're happy with it, ask Claude to create a one-page version of the newsletter — a self-contained file, styled to match, ready for MailerLite.</p>
+        </div>
+        <div class="card reveal">
+          <h3>3. Send it from MailerLite</h3>
+          <p>Upload that file into the correct group in MailerLite and send it out to subscribed users. This last step happens in MailerLite's own dashboard — not something Claude can do on your behalf.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt" id="add-parish-news">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">Common task</div>
+        <h2>Add a Parish News issue</h2>
+        <p>Because this one touches three places by hand (see <a href="#archiving">What archives itself</a> above), it's worth a quick check once it's live.</p>
+      </div>
+      <div class="card-grid">
+        <div class="card reveal">
+          <h3>1. Upload the PDF to Claude</h3>
+          <p>Drop the new issue's PDF into Claude Desktop's Code tab and ask Claude to update the site with it.</p>
+        </div>
+        <div class="card reveal">
+          <h3>2. Claude updates the site</h3>
+          <p>The usual six-step process — Claude updates the homepage teaser, the <a href="parish-news.html">Parish News</a> page's latest issue and the <a href="parish-news-archive.html">archive</a>, then tests and pushes it live.</p>
+        </div>
+        <div class="card reveal">
+          <h3>3. Check it once it's live</h3>
+          <p>Visit the <a href="index.html">homepage</a> and the <a href="parish-news-archive.html">Parish News archive</a> and confirm the new issue's cover image and download link both look right in all three places.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="questions">
     <div class="wrap">
       <div class="section-head">
         <div class="kicker">Questions people ask</div>
@@ -189,13 +264,13 @@
     </div>
     <div class="fine">
       <span>&copy; <span id="year"></span> Kington Parishes. St Mary's Church Kington PCC is registered charity no. 1185453. Site by <a href="https://mediawright.uk">mediawright.uk</a>.</span>
-      <span class="build-number">Build 2026.09.08.013</span>
+      <span class="build-number">Build 2026.09.08.014</span>
     </div>
   </div>
 </footer>
 
-<script src="/js/main.js?v=2026.09.08.013" defer></script>
-<script src="/js/search-match.js?v=2026.09.08.013" defer></script>
-<script src="/js/search-ui.js?v=2026.09.08.013" defer></script>
+<script src="/js/main.js?v=2026.09.08.014" defer></script>
+<script src="/js/search-match.js?v=2026.09.08.014" defer></script>
+<script src="/js/search-ui.js?v=2026.09.08.014" defer></script>
 </body>
 </html>
