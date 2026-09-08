@@ -11,6 +11,7 @@ import { NAV, FOOTER_NAV, PAGES } from '../src/pages.config.mjs';
 import { SITE } from '../src/site.config.mjs';
 import { CLERGY, PTO_CLERGY, CHURCH_OFFICERS } from '../src/people.config.mjs';
 import { NEWSLETTER_ISSUES } from '../src/newsletter.config.mjs';
+import { ONE_OFF_EVENTS, expandEvents, placeFor, formatTime12h, formatEventDate } from '../src/events.config.mjs';
 import { ensureSectionIds, extractSearchEntries, isSearchablePage, isIndexable, isHelpPage } from './build-search-index.mjs';
 import { splitNewsletterIssues, formatIssueMonth } from './newsletter-issues.mjs';
 
@@ -27,6 +28,16 @@ const SITE_URL = 'https://www.kingtonparishes.org.uk';
 // aerial shot of St Mary's, Kington, representative of the benefice as a
 // whole.
 const DEFAULT_OG_IMAGE = '/img/our-churches/kington.webp';
+// Today's date, computed once and reused for both the sitemap's <lastmod>
+// and filtering the calendar's Event structured data down to what's still
+// upcoming — Google penalizes Event rich results that list events that have
+// already happened, and this list only gets regenerated on a rebuild, so
+// "upcoming" means "as of this build" until the next one.
+const todayStr = new Date().toISOString().slice(0, 10);
+
+function escapeHtml(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
 
 const pageTemplate = read('templates/page.html');
 const headerTemplate = read('templates/header.html').trimEnd();
@@ -166,6 +177,43 @@ function renderNewsletterTokens(html) {
   });
 }
 
+// {{EVENTS_NOSCRIPT}} on calendar.html -> the same plain-text fallback list
+// that used to be hand-typed there and hand-mirrored against ONE_OFF_EVENTS
+// in public/js/calendar-events.js. Only one-off events, not the recurring
+// series' individual occurrences — same scope the hand-written list always
+// had. Must run before ensureSectionIds, same reasoning as
+// renderPeopleTokens above (harmless here since this content lives inside
+// <noscript>, but keeps the token pipeline's ordering rule uniform).
+function renderEventsToken(html) {
+  return html.replace(/\{\{EVENTS_NOSCRIPT\}\}/g, () =>
+    ONE_OFF_EVENTS.map((e) => {
+      const suffix = e.location ? ` — ${escapeHtml(e.location)}` : '';
+      return `          <li>${formatEventDate(e.date)}, ${formatTime12h(e.time)} — ${escapeHtml(e.title)}${suffix}</li>`;
+    }).join('\n'));
+}
+
+// Event structured data for calendar.html — one schema.org Event per
+// concrete occurrence (Google's structured data guidelines want individual
+// dated Events, not one Event plus a recurrence rule). Filtered to events
+// that haven't happened yet as of this build, so a stale rebuild doesn't
+// keep listing events from months back.
+function eventStructuredData(pageUrl) {
+  const events = expandEvents()
+    .filter((e) => e.date >= todayStr)
+    .map((e) => ({
+      '@context': 'https://schema.org',
+      '@type': 'Event',
+      name: e.title,
+      startDate: `${e.date}T${e.time}:00`,
+      eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+      eventStatus: 'https://schema.org/EventScheduled',
+      location: placeFor(e.location),
+      organizer: { '@type': 'Organization', name: SITE.orgName, url: SITE_URL },
+      url: pageUrl,
+    }));
+  return events.length ? events : null;
+}
+
 // Structured data for the newsletter pages is computed here from
 // NEWSLETTER_ISSUES (src/newsletter.config.mjs) rather than hand-authored
 // per page in pages.config.mjs — a new issue only needs adding in one
@@ -206,6 +254,7 @@ function structuredDataFor(page, pageUrl) {
   const { recent, archive } = splitNewsletterIssues(NEWSLETTER_ISSUES);
   if (page.slug === 'newsletter') return newsletterListStructuredData(recent, pageUrl);
   if (page.slug === 'newsletter-archive') return newsletterListStructuredData(archive, pageUrl);
+  if (page.slug === 'calendar') return eventStructuredData(pageUrl);
   return null;
 }
 
@@ -242,7 +291,7 @@ for (const page of PAGES) {
   // not unexpanded tokens. Every heading then gets a real, working anchor
   // before anything else touches this page's content — search results and
   // the page itself can never disagree about where a section actually is.
-  const content = ensureSectionIds(renderNewsletterTokens(renderPeopleTokens(renderSafeguardingEssentials(read(`src/pages/${page.slug}.html`).trimEnd()))));
+  const content = ensureSectionIds(renderEventsToken(renderNewsletterTokens(renderPeopleTokens(renderSafeguardingEssentials(read(`src/pages/${page.slug}.html`).trimEnd())))));
 
   if (isIndexable(page)) {
     const resolvedForSearch = replaceTokens(content, tokens);
@@ -310,12 +359,24 @@ for (const page of PAGES) {
   console.log(`built public/${page.slug}.html`);
 }
 
-const lastmod = new Date().toISOString().slice(0, 10);
 const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemapUrls
-  .map((url) => `  <url>\n    <loc>${url}</loc>\n    <lastmod>${lastmod}</lastmod>\n  </url>`)
+  .map((url) => `  <url>\n    <loc>${url}</loc>\n    <lastmod>${todayStr}</lastmod>\n  </url>`)
   .join('\n')}\n</urlset>\n`;
 writeFileSync(join(root, 'public', 'sitemap.xml'), sitemapXml);
 console.log(`built public/sitemap.xml (${sitemapUrls.length} urls)`);
 
 writeFileSync(join(root, 'public', 'search-index.json'), JSON.stringify(searchEntries));
 console.log(`built public/search-index.json (${searchEntries.length} entries)`);
+
+// public/js/calendar-events.js — generated from src/events.config.mjs, same
+// "edit the source, not this file" rule as public/*.html. Pre-expanded here
+// at build time rather than shipping the recurrence-expansion logic to the
+// browser: calendar.js (hand-maintained, not generated) just reads the flat
+// window.CALENDAR_EVENTS array.
+const calendarEventsJs = `// AUTO-GENERATED — DO NOT EDIT THIS FILE.
+// Generated from src/events.config.mjs by scripts/build.mjs on every build.
+// Edit the arrays there instead, then run \`npm run build\`.
+window.CALENDAR_EVENTS = ${JSON.stringify(expandEvents())};
+`;
+writeFileSync(join(root, 'public', 'js', 'calendar-events.js'), calendarEventsJs);
+console.log('built public/js/calendar-events.js');
