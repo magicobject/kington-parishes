@@ -55,8 +55,9 @@ export const PTO_CLERGY = [
   {
     name: 'Revd Judith Pollard',
     role: 'Permission to Officiate (PTO)',
-    bio: 'Assists with leading services across the parishes.',
+    bio: "Assists with leading services at St Mary's, Kington.",
     iconSvg: PERSON_ICON,
+    church: 'kington',
   },
   {
     name: 'Revd Paul Buckingham',
