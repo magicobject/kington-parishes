@@ -5,7 +5,8 @@
       "name": "kington-parishes",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "serve"],
-      "port": 4176
+      "port": 4176,
+      "autoPort": true
     }
   ]
 }
