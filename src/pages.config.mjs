@@ -434,7 +434,7 @@ export const PAGES = [
   // URLs rather than a real `/help/...` subdirectory.
   {
     slug: 'help',
-    title: 'Help — How This Website Gets Updated — Kington Parishes',
+    title: 'Help — How To Update This Website — Kington Parishes',
     description: 'A plain-English guide for the website team: how changes reach the live site, and how to set up a laptop to make one.',
     active: null,
     header: true,

@@ -119,7 +119,7 @@ export const UPDATES_PAGE: SitePage = {
 // non-technical how-it-works guide for the website team. Same "unlisted,
 // not user-facing" pattern as Updates above.
 export const HELP_PAGES: SitePage[] = [
-  { path: '/help.html', navLabel: 'Help', titleContains: 'Help', heading: /how this website gets updated/i },
+  { path: '/help.html', navLabel: 'Help', titleContains: 'Help', heading: /how to update this website/i },
   { path: '/help-getting-set-up.html', navLabel: 'Getting set up', titleContains: 'Setting Up Your Laptop', heading: /setting up your laptop/i },
   { path: '/help-making-a-change.html', navLabel: 'Making a change', titleContains: 'Making a Change', heading: /making a change/i },
   { path: '/help-technical-details.html', navLabel: 'Technical details', titleContains: 'Technical Details', heading: /under the hood/i },
