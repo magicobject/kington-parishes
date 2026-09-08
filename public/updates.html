@@ -24,13 +24,13 @@
 <meta name="twitter:title" content="Site Updates — Kington Parishes">
 <meta name="twitter:description" content="Internal build changelog for this site — not linked from anywhere on the site.">
 <meta name="twitter:image" content="https://www.kingtonparishes.org.uk/img/our-churches/kington.webp">
-<link rel="icon" href="/img/favicon.svg?v=2026.09.08.016" type="image/svg+xml">
-<link rel="icon" href="/img/favicon-32.png?v=2026.09.08.016" type="image/png" sizes="32x32">
-<link rel="apple-touch-icon" href="/img/apple-touch-icon.png?v=2026.09.08.016">
+<link rel="icon" href="/img/favicon.svg?v=2026.09.08.017" type="image/svg+xml">
+<link rel="icon" href="/img/favicon-32.png?v=2026.09.08.017" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="/img/apple-touch-icon.png?v=2026.09.08.017">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/style.css?v=2026.09.08.016">
+<link rel="stylesheet" href="/css/style.css?v=2026.09.08.017">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -91,6 +91,10 @@
   <section>
     <div class="wrap">
       <ul class="changelog">
+        <li>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.08.017</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
+          <p>Expanded the "Claude saves it to GitHub" step on <a href="help-making-a-change.html#the-steps">Help / Making a change</a> to mention the version number shown in the site's footer and on <a href="updates.html">/updates</a>, and that it corresponds to a Git tag behind the scenes — a way back to an exact past point in the site's history, in the extremely unlikely event it's ever needed.</p>
+        </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.08.016</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
           <p>Fixed the previous build's help-guide search scoping (<a href="help.html">/help</a>) not actually working live: it checked for a <code>.html</code> suffix on the URL, which is how the local dev/test server serves pages but not how the live site does — Cloudflare strips <code>.html</code> from every page's URL in production, so the check silently never matched and every search fell back to ordinary site-only results, even on a help page. The matching logic now tolerates both forms, and is unit-tested against each.</p>
@@ -656,13 +660,13 @@
     </div>
     <div class="fine">
       <span>&copy; <span id="year"></span> Kington Parishes. St Mary's Church Kington PCC is registered charity no. 1185453. Site by <a href="https://mediawright.uk">mediawright.uk</a>.</span>
-      <span class="build-number">Build 2026.09.08.016</span>
+      <span class="build-number">Build 2026.09.08.017</span>
     </div>
   </div>
 </footer>
 
-<script src="/js/main.js?v=2026.09.08.016" defer></script>
-<script src="/js/search-match.js?v=2026.09.08.016" defer></script>
-<script src="/js/search-ui.js?v=2026.09.08.016" defer></script>
+<script src="/js/main.js?v=2026.09.08.017" defer></script>
+<script src="/js/search-match.js?v=2026.09.08.017" defer></script>
+<script src="/js/search-ui.js?v=2026.09.08.017" defer></script>
 </body>
 </html>

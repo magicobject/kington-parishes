@@ -15,6 +15,10 @@
     <div class="wrap">
       <ul class="changelog">
         <li>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.08.017</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
+          <p>Expanded the "Claude saves it to GitHub" step on <a href="help-making-a-change.html#the-steps">Help / Making a change</a> to mention the version number shown in the site's footer and on <a href="updates.html">/updates</a>, and that it corresponds to a Git tag behind the scenes — a way back to an exact past point in the site's history, in the extremely unlikely event it's ever needed.</p>
+        </li>
+        <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.08.016</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
           <p>Fixed the previous build's help-guide search scoping (<a href="help.html">/help</a>) not actually working live: it checked for a <code>.html</code> suffix on the URL, which is how the local dev/test server serves pages but not how the live site does — Cloudflare strips <code>.html</code> from every page's URL in production, so the check silently never matched and every search fell back to ordinary site-only results, even on a help page. The matching logic now tolerates both forms, and is unit-tested against each.</p>
         </li>
