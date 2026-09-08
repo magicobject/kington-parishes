@@ -9,7 +9,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { NAV, FOOTER_NAV, PAGES } from '../src/pages.config.mjs';
 import { SITE } from '../src/site.config.mjs';
-import { CLERGY, CHURCH_OFFICERS } from '../src/people.config.mjs';
+import { CLERGY, PTO_CLERGY, CHURCH_OFFICERS } from '../src/people.config.mjs';
 import { NEWSLETTER_ISSUES } from '../src/newsletter.config.mjs';
 import { ensureSectionIds, extractSearchEntries, isSearchablePage } from './build-search-index.mjs';
 import { splitNewsletterIssues, formatIssueMonth } from './newsletter-issues.mjs';
@@ -108,16 +108,21 @@ function renderPeopleCards(list) {
   return list.map(renderPersonCard).join('\n');
 }
 
-// {{PEOPLE:clergy}} -> everyone in CLERGY; {{PEOPLE:<slug>}} -> that church's
-// entry in CHURCH_OFFICERS (empty/absent slugs just render nothing — a
-// church with no officers listed yet simply gets no cards, not an error).
+// {{PEOPLE:clergy}} -> everyone in CLERGY; {{PEOPLE:pto-clergy}} -> everyone
+// in PTO_CLERGY (the combined Our People section); {{PEOPLE:pto-<slug>}} ->
+// just the PTO_CLERGY entries tagged with that church, for that church's own
+// portal page; {{PEOPLE:<slug>}} -> that church's entry in CHURCH_OFFICERS
+// (empty/absent slugs just render nothing — a church with no officers listed
+// yet simply gets no cards, not an error).
 // Must run before ensureSectionIds/extractSearchEntries so each rendered
 // person's <h3> is a real heading by the time anchors get injected and the
 // search index gets built — not a token search can't see.
 function renderPeopleTokens(html) {
   return html.replace(/\{\{PEOPLE:([a-z-]+)\}\}/g, (_, key) => {
-    const list = key === 'clergy' ? CLERGY : CHURCH_OFFICERS[key] || [];
-    return renderPeopleCards(list);
+    if (key === 'clergy') return renderPeopleCards(CLERGY);
+    if (key === 'pto-clergy') return renderPeopleCards(PTO_CLERGY);
+    if (key.startsWith('pto-')) return renderPeopleCards(PTO_CLERGY.filter((p) => p.church === key.slice(4)));
+    return renderPeopleCards(CHURCH_OFFICERS[key] || []);
   });
 }
 

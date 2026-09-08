@@ -37,6 +37,36 @@ export const CLERGY = [
   },
 ];
 
+// Retired/non-stipendiary clergy licensed to help lead services but without a
+// parish role of their own — a separate card from any other role they hold
+// (e.g. Paul Roberts is also Kington's organist, see CHURCH_OFFICERS below;
+// that's a deliberate second card, not a duplicate to merge). The optional
+// `church` slug additionally surfaces someone on that church's own portal
+// page via {{PEOPLE:pto-<slug>}} — see renderPeopleTokens in build.mjs;
+// leave it off for PTO clergy not tied to one specific church.
+export const PTO_CLERGY = [
+  {
+    name: 'Revd Paul Roberts',
+    role: 'Permission to Officiate (PTO)',
+    bio: "Assists with leading services at St Mary's, Kington." + contactLink('rev.paul.c.roberts@gmail.com'),
+    iconSvg: PERSON_ICON,
+    church: 'kington',
+  },
+  {
+    name: 'Revd Judith Pollard',
+    role: 'Permission to Officiate (PTO)',
+    bio: 'Assists with leading services across the parishes.',
+    iconSvg: PERSON_ICON,
+  },
+  {
+    name: 'Revd Paul Buckingham',
+    role: 'Permission to Officiate (PTO)',
+    bio: 'Assists with leading services at St Thomas à Becket, Huntington.',
+    iconSvg: PERSON_ICON,
+    church: 'huntington',
+  },
+];
+
 // Wardens and officers, keyed by church slug (matching the anchors on
 // our-churches.html and each church's portal page). A person serving two
 // roles at the same church (e.g. warden and organist) gets one card with
@@ -101,6 +131,12 @@ export const CHURCH_OFFICERS = {
       name: 'Stephen Lacey',
       role: 'Lego Club Organiser',
       bio: "Runs Lego Club at St Mary's, Kington." + contactLink('legoclub@kingtonparishes.org.uk'),
+      iconSvg: PERSON_ICON,
+    },
+    {
+      name: 'Rob MacCurrach',
+      role: 'Reader',
+      bio: "Licensed Reader at St Mary's, Kington.",
       iconSvg: PERSON_ICON,
     },
   ],
