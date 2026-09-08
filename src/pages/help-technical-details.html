@@ -1,0 +1,111 @@
+<main id="main">
+
+  <div class="page-header">
+    <svg class="ridge-watermark" viewBox="0 0 1200 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <path d="M0 60 C 100 45, 160 20, 220 30 S 320 70, 380 40 S 480 5, 540 20 S 640 65, 710 45 S 820 10, 880 25 S 980 68, 1040 48 S 1140 15, 1200 35" fill="none" stroke="#B8A98C" stroke-width="2"/>
+    </svg>
+    <div class="wrap">
+      <div class="kicker"><a href="help.html" style="color:#F8F5EE; text-decoration:underline;">Help</a> / Technical details</div>
+      <h1>Under the hood</h1>
+      <p class="lede">The rest of this guide deliberately stays non-technical. This page doesn't — it's for anyone who wants to understand exactly what this site runs on: hosting, DNS, the newsletter, and how the small amount of server-side code is secured.</p>
+      <nav class="jump-row" aria-label="Jump to a section">
+        <a href="#hosting">Hosting</a>
+        <a href="#dns">DNS</a>
+        <a href="#newsletter">Newsletter</a>
+        <a href="#api-security">API security</a>
+        <a href="#the-code">The code</a>
+      </nav>
+    </div>
+  </div>
+
+  <section id="hosting">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">Hosting</div>
+        <h2>A Cloudflare Worker, not just static hosting</h2>
+        <p>The live site is a <a href="https://developers.cloudflare.com/workers/" target="_blank" rel="noopener">Cloudflare Worker</a>. Its configuration (<code>wrangler.jsonc</code>) points Cloudflare's asset handler at <code>public/</code>, the folder the build script generates — so almost every request is served as a plain static file, exactly like conventional web hosting. The one addition is a small JSON API endpoint, <code>/api/subscribe</code>, that the newsletter signup form talks to — see <a href="#newsletter">Newsletter</a> below.</p>
+        <p>Deployment is automatic: Cloudflare's GitHub integration watches the <code>main</code> branch, and every push triggers a fresh build and deploy — no separate deploy step to run by hand, and typically live in well under a minute. This is the mechanism behind step 5 in <a href="help-making-a-change.html#the-steps">Making a change</a> ("the live site rebuilds itself").</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt" id="dns">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">DNS</div>
+        <h2>Also managed in Cloudflare</h2>
+        <p>The <code>kingtonparishes.org.uk</code> domain's DNS lives in the same Cloudflare account as the Worker, with the domain attached to the Worker as a custom domain. That's a deliberate, common pairing — Cloudflare can issue and renew the site's TLS certificate and route traffic straight to the Worker without a separate DNS provider in the loop. It replaced the previous host (Wix) at go-live on 6 September 2026; see <a href="updates.html">/updates</a> for that migration's own build-log entries.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="newsletter">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">Newsletter</div>
+        <h2>InSpire Newsletter signups, via MailerLite</h2>
+        <p>The <a href="newsletter.html">InSpire Newsletter</a> signup form doesn't talk to <a href="https://www.mailerlite.com/" target="_blank" rel="noopener">MailerLite</a> directly from the browser. Instead:</p>
+      </div>
+      <div class="card-grid">
+        <div class="card reveal">
+          <h3>1. The form posts to the Worker</h3>
+          <p>A visitor's email (and optional name) is sent to this site's own <code>/api/subscribe</code> endpoint — never straight to a third party.</p>
+        </div>
+        <div class="card reveal">
+          <h3>2. The Worker calls MailerLite</h3>
+          <p>Server-side code (<code>src/worker/subscribe.mjs</code>) validates the address, then calls MailerLite's API to add it to the "InSpire Newsletter" group.</p>
+        </div>
+        <div class="card reveal">
+          <h3>3. Immediate subscription</h3>
+          <p>Double opt-in is currently switched off in MailerLite (the sending domain isn't yet verified for it), so a successful signup is immediate — no confirmation email is sent. See CLAUDE.md for where this reverts if that changes.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt" id="api-security">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">API security</div>
+        <h2>How the API endpoint is secured</h2>
+      </div>
+      <div class="card-grid">
+        <div class="card reveal">
+          <h3>The MailerLite key is a Cloudflare secret</h3>
+          <p>It's never committed to GitHub and never appears in this repository — only the non-secret group id lives in <code>wrangler.jsonc</code>. On a failure, only MailerLite's own error status is logged server-side; the key and the raw request are never written to a log.</p>
+        </div>
+        <div class="card reveal">
+          <h3>Server-side validation</h3>
+          <p>Email format and length, and name length, are checked before anything reaches MailerLite — the API is never handed unvalidated input.</p>
+        </div>
+        <div class="card reveal">
+          <h3>A honeypot field</h3>
+          <p>A hidden form field real visitors never see, but generic bots filling in every field will. A filled honeypot is answered with a normal success response rather than an error, so bots don't learn to detect and route around it.</p>
+        </div>
+        <div class="card reveal">
+          <h3>Security response headers</h3>
+          <p>Every response carries a Content-Security-Policy, <code>X-Frame-Options: DENY</code>, <code>X-Content-Type-Options: nosniff</code>, a restrictive Permissions-Policy, and HSTS (<code>public/_headers</code>) — defence in depth against injected scripts, clickjacking and downgraded connections, on every page, not just the API.</p>
+        </div>
+        <div class="card reveal">
+          <h3>Dependency scanning on every push</h3>
+          <p>A git hook runs <code>npm audit --audit-level=high</code> before any push can complete, blocking it outright if a dependency carries a known high or critical severity vulnerability.</p>
+        </div>
+        <div class="card reveal">
+          <h3>A published disclosure contact</h3>
+          <p>An RFC 9116 <a href=".well-known/security.txt" target="_blank" rel="noopener">security.txt</a> points anyone who finds a real vulnerability at a monitored contact address, rather than leaving them no way to report one responsibly.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="the-code">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">The code</div>
+        <h2>Where it all lives</h2>
+        <p>Every piece of this — page content, templates, the build script, the styling, and the Worker code behind the newsletter API — lives in one public GitHub repository: <a href="https://github.com/magicobject/kington-parishes.git" target="_blank" rel="noopener">github.com/magicobject/kington-parishes</a>. Every commit that reaches <code>main</code> is tagged with its own build number (e.g. <code>build-2026.09.08.005</code>), so any past version of the site can be checked out by name — see <a href="updates.html">/updates</a> for the human-readable version of that same history.</p>
+      </div>
+    </div>
+  </section>
+
+</main>

@@ -142,7 +142,7 @@ export function extractSearchEntries(html, page) {
 // the 404 page (no real content), and the hidden `help`/`help-*` guide for
 // the website team — internal process documentation, not something a site
 // visitor should be able to search their way into.
-const UNSEARCHABLE_SLUGS = new Set(['updates', '404', 'help', 'help-getting-set-up', 'help-making-a-change']);
+const UNSEARCHABLE_SLUGS = new Set(['updates', '404', 'help', 'help-getting-set-up', 'help-making-a-change', 'help-technical-details']);
 export function isSearchablePage(page) {
   return !UNSEARCHABLE_SLUGS.has(page.slug);
 }

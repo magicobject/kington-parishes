@@ -459,6 +459,19 @@ export const PAGES = [
     safeguardStrip: false,
     robots: 'noindex, nofollow',
   },
+  // More technical than the other three help- pages, deliberately — for
+  // anyone who wants the real infrastructure detail (Cloudflare Workers
+  // hosting/DNS, MailerLite, API security, the GitHub repo itself) rather
+  // than the plain-English framing the rest of the guide sticks to.
+  {
+    slug: 'help-technical-details',
+    title: 'Technical Details — Help — Kington Parishes',
+    description: 'Hosting on Cloudflare Workers, DNS, the MailerLite-powered newsletter, how the API is secured, and where the source code lives.',
+    active: null,
+    header: true,
+    safeguardStrip: false,
+    robots: 'noindex, nofollow',
+  },
   {
     slug: '404',
     title: 'Page not found — Kington Parishes',
