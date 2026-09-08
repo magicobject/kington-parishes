@@ -7,6 +7,8 @@ import {
   ensureSectionIds,
   extractSearchEntries,
   isSearchablePage,
+  isIndexable,
+  isHelpPage,
 } from '../scripts/build-search-index.mjs';
 
 describe('slugify', () => {
@@ -180,5 +182,37 @@ describe('isSearchablePage', () => {
 
   test('includes an ordinary content page', () => {
     assert.equal(isSearchablePage({ slug: 'our-churches' }), true);
+  });
+});
+
+describe('isIndexable', () => {
+  test('excludes the internal changelog and the 404 page', () => {
+    assert.equal(isIndexable({ slug: 'updates' }), false);
+    assert.equal(isIndexable({ slug: '404' }), false);
+  });
+
+  test('includes the help guide (indexed, but in its own search scope)', () => {
+    assert.equal(isIndexable({ slug: 'help' }), true);
+    assert.equal(isIndexable({ slug: 'help-technical-details' }), true);
+  });
+
+  test('includes an ordinary content page', () => {
+    assert.equal(isIndexable({ slug: 'our-churches' }), true);
+  });
+});
+
+describe('isHelpPage', () => {
+  test('identifies every page of the hidden help guide', () => {
+    assert.equal(isHelpPage({ slug: 'help' }), true);
+    assert.equal(isHelpPage({ slug: 'help-getting-set-up' }), true);
+    assert.equal(isHelpPage({ slug: 'help-making-a-change' }), true);
+    assert.equal(isHelpPage({ slug: 'help-technical-details' }), true);
+    assert.equal(isHelpPage({ slug: 'help-dns-setup' }), true);
+    assert.equal(isHelpPage({ slug: 'help-when-it-goes-wrong' }), true);
+  });
+
+  test('does not match an ordinary page or the changelog', () => {
+    assert.equal(isHelpPage({ slug: 'our-churches' }), false);
+    assert.equal(isHelpPage({ slug: 'updates' }), false);
   });
 });

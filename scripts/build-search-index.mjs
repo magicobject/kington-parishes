@@ -138,11 +138,27 @@ export function extractSearchEntries(html, page) {
   return entries;
 }
 
-// Pages that should never appear in search: the internal build changelog,
-// the 404 page (no real content), and the hidden `help`/`help-*` guide for
-// the website team — internal process documentation, not something a site
-// visitor should be able to search their way into.
-const UNSEARCHABLE_SLUGS = new Set(['updates', '404', 'help', 'help-getting-set-up', 'help-making-a-change', 'help-technical-details', 'help-dns-setup', 'help-when-it-goes-wrong']);
+// Pages with no real content, ever — excluded from the search index
+// entirely, not just from the public-facing scope of it.
+const NEVER_INDEXED_SLUGS = new Set(['updates', '404']);
+export function isIndexable(page) {
+  return !NEVER_INDEXED_SLUGS.has(page.slug);
+}
+
+// The hidden `help`/`help-*` guide for the website team. Its content IS in
+// the search index (see build.mjs, which tags each of its entries with
+// `scope: 'help'`), but scoped separately by the header search box itself
+// (public/js/search-ui.js): only surfaced while already on a help page, and
+// hidden everywhere else — a site visitor shouldn't be able to search their
+// way into internal process documentation from an ordinary page.
+const HELP_SLUGS = new Set(['help', 'help-getting-set-up', 'help-making-a-change', 'help-technical-details', 'help-dns-setup', 'help-when-it-goes-wrong']);
+export function isHelpPage(page) {
+  return HELP_SLUGS.has(page.slug);
+}
+
+// True for pages appropriate for site-wide, public search scope, and for
+// the sitemap: excludes both the never-indexed pages above and the help
+// guide (searchable, but only in its own separate scope — see isHelpPage).
 export function isSearchablePage(page) {
-  return !UNSEARCHABLE_SLUGS.has(page.slug);
+  return isIndexable(page) && !isHelpPage(page);
 }

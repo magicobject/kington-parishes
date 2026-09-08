@@ -66,6 +66,59 @@ test('the internal changelog is never indexed', async ({ page }) => {
   await expect(results).toContainText('No results');
 });
 
+test.describe('the hidden help guide has its own search scope', () => {
+  test('an ordinary page never surfaces help-guide content', async ({ page }) => {
+    // "Under the hood" is help-technical-details.html's own h1, and appears
+    // nowhere in the site's real, public-facing content.
+    await page.goto('/index.html');
+    await page.getByRole('combobox', { name: 'Search the site' }).fill('under the hood');
+    const results = page.locator('#site-search-results');
+    await expect(results).toBeVisible();
+    await expect(results).toContainText('No results');
+  });
+
+  test('a help page never surfaces ordinary site content', async ({ page }) => {
+    await page.goto('/help.html');
+    await page.getByRole('combobox', { name: 'Search the help guide' }).fill('Titley');
+    const results = page.locator('#site-search-results');
+    await expect(results).toBeVisible();
+    await expect(results).toContainText('No results');
+  });
+
+  test('a help page searches across the whole guide, not just its own page', async ({ page }) => {
+    // Searched from help.html (the hub), but the match lives on a different
+    // help page (help-technical-details.html) — proves the scope covers the
+    // whole guide, not just whatever page the box happens to be on.
+    await page.goto('/help.html');
+    await page.getByRole('combobox', { name: 'Search the help guide' }).fill('under the hood');
+    const results = page.locator('#site-search-results');
+    await expect(results).toBeVisible();
+    await expect(results.getByRole('option').first()).toHaveAttribute('href', 'help-technical-details.html#under-the-hood');
+  });
+
+  test('the search box relabels itself while on a help page', async ({ page }) => {
+    await page.goto('/help-making-a-change.html');
+    await expect(page.getByRole('combobox', { name: 'Search the help guide' })).toBeVisible();
+    await expect(page.getByPlaceholder('Search the help guide')).toBeVisible();
+  });
+
+  test('axe: search results open, on a help page', async ({ page }) => {
+    await page.goto('/help.html');
+    await page.evaluate(() => {
+      document.querySelectorAll('.reveal').forEach((el) => {
+        el.classList.add('in');
+        (el as HTMLElement).style.transition = 'none';
+        (el as HTMLElement).style.opacity = '1';
+        (el as HTMLElement).style.transform = 'none';
+      });
+    });
+    await page.getByRole('combobox', { name: 'Search the help guide' }).fill('newsletter');
+    await expect(page.locator('#site-search-results')).toBeVisible();
+    const results = await new AxeBuilder({ page }).analyze();
+    expect(results.violations).toEqual([]);
+  });
+});
+
 test.describe('keyboard interaction', () => {
   test('ArrowDown moves focus from the input into the first result', async ({ page }) => {
     await page.goto('/index.html');

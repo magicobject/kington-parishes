@@ -11,7 +11,7 @@ import { NAV, FOOTER_NAV, PAGES } from '../src/pages.config.mjs';
 import { SITE } from '../src/site.config.mjs';
 import { CLERGY, PTO_CLERGY, CHURCH_OFFICERS } from '../src/people.config.mjs';
 import { NEWSLETTER_ISSUES } from '../src/newsletter.config.mjs';
-import { ensureSectionIds, extractSearchEntries, isSearchablePage } from './build-search-index.mjs';
+import { ensureSectionIds, extractSearchEntries, isSearchablePage, isIndexable, isHelpPage } from './build-search-index.mjs';
 import { splitNewsletterIssues, formatIssueMonth } from './newsletter-issues.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -244,9 +244,14 @@ for (const page of PAGES) {
   // the page itself can never disagree about where a section actually is.
   const content = ensureSectionIds(renderNewsletterTokens(renderPeopleTokens(renderSafeguardingEssentials(read(`src/pages/${page.slug}.html`).trimEnd()))));
 
-  if (isSearchablePage(page)) {
+  if (isIndexable(page)) {
     const resolvedForSearch = replaceTokens(content, tokens);
-    searchEntries.push(...extractSearchEntries(resolvedForSearch, page));
+    const entries = extractSearchEntries(resolvedForSearch, page);
+    // Help-guide entries are indexed but kept in their own search scope —
+    // public/js/search-ui.js only surfaces them while already on a help
+    // page. See isHelpPage/isSearchablePage in build-search-index.mjs.
+    if (isHelpPage(page)) entries.forEach((entry) => { entry.scope = 'help'; });
+    searchEntries.push(...entries);
   }
 
   const pageUrl = `${SITE_URL}/${page.slug}.html`;

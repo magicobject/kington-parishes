@@ -9,6 +9,24 @@ document.addEventListener('DOMContentLoaded', function () {
   var form = document.getElementById('site-search-form');
   if (!input || !resultsList || !form || !window.SearchMatch) return;
 
+  // The hidden help guide (help.html, help-*.html) has its own entries in
+  // the index, tagged scope:"help" by scripts/build.mjs — kept out of
+  // ordinary site search so a visitor can't search their way into internal
+  // process documentation, but fully searchable while already on a help
+  // page, scoped to just that guide (see CLAUDE.md's "Site search" section).
+  var onHelpPage = /^\/help(-[a-z0-9-]+)?\.html$/.test(window.location.pathname);
+  if (onHelpPage) {
+    var label = form.querySelector('label[for="site-search-input"]');
+    if (label) label.textContent = 'Search the help guide';
+    input.placeholder = 'Search the help guide';
+  }
+
+  function scopeToCurrentSearch(index) {
+    return index.filter(function (entry) {
+      return onHelpPage ? entry.scope === 'help' : entry.scope !== 'help';
+    });
+  }
+
   var indexPromise = null;
   function loadIndex() {
     if (!indexPromise) {
@@ -69,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // what's currently in the box, never a stale snapshot.
         var current = input.value;
         if (!current.trim()) { closeResults(); return; }
-        var matches = window.SearchMatch.searchEntries(current, index, 8);
+        var matches = window.SearchMatch.searchEntries(current, scopeToCurrentSearch(index), 8);
         renderResults(current, matches);
       });
     }, 150);
