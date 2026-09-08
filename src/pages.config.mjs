@@ -444,7 +444,7 @@ export const PAGES = [
   {
     slug: 'help-getting-set-up',
     title: 'Setting Up Your Laptop — Help — Kington Parishes',
-    description: 'How to install Claude Desktop, create a GitHub account, and get access to make changes to this website.',
+    description: 'How to install Claude Desktop and the local tools it needs, create a GitHub account, and get your own working copy of this website.',
     active: null,
     header: true,
     safeguardStrip: false,

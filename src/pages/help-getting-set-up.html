@@ -7,14 +7,14 @@
     <div class="wrap">
       <div class="kicker"><a href="help.html" style="color:#F8F5EE; text-decoration:underline;">Help</a> / Getting set up</div>
       <h1>Setting up your laptop</h1>
-      <p class="lede">A one-off job, about fifteen minutes. Once this is done, you won't need to repeat it — every future change starts from step one of <a href="help-making-a-change.html">making a change</a>.</p>
+      <p class="lede">A one-off job, about twenty minutes. Once this is done, you won't need to repeat it — every future change starts from step one of <a href="help-making-a-change.html">making a change</a>.</p>
     </div>
   </div>
 
   <section>
     <div class="wrap">
       <div class="section-head">
-        <div class="kicker">Four things to do, in order</div>
+        <div class="kicker">Five things to do, in order</div>
         <h2>Install, sign up, connect, ask</h2>
       </div>
       <div class="card-grid">
@@ -24,20 +24,26 @@
           <p>Claude Desktop is the app you'll use whenever you want something on the website changed — specifically its <strong>Code</strong> tab (also called Claude Code), which is what lets Claude read and edit files on your laptop and talk to GitHub on your behalf. An ordinary chat elsewhere in the app can't do either of those. Download it from <a href="https://claude.ai/download" target="_blank" rel="noopener">claude.ai/download</a> and sign in (or create an account if you don't already have one).</p>
         </div>
         <div class="card reveal">
+          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#A8813C" stroke-width="1.6"><path d="M14.7 6.3a1 1 0 0 1 1.4 0l1.6 1.6a1 1 0 0 1 0 1.4L9.4 17.6l-3.7.7.7-3.7 8.3-8.3Z"/><path d="M4 21h16"/></svg></div>
+          <h3>2. Install two free tools Claude needs</h3>
+          <p>Claude Code works through your laptop's own tools rather than bringing its own, so two small, free programs need installing first — both one-off, both a plain "next, next, finish" installer with no settings to change: <a href="https://git-scm.com/downloads" target="_blank" rel="noopener">Git</a> (the actual program behind everything described in <a href="help.html#git-and-github">Git &amp; GitHub, in plain English</a>) and <a href="https://nodejs.org/" target="_blank" rel="noopener">Node.js</a> (choose the "LTS" version) — the toolkit this site's build process and automatic tests run on.</p>
+        </div>
+        <div class="card reveal">
           <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#A8813C" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-7 8-7s8 3 8 7"/></svg></div>
-          <h3>2. Create a free GitHub account</h3>
+          <h3>3. Create a free GitHub account</h3>
           <p>GitHub is where the website's master copy lives — see <a href="help.html#git-and-github">Git &amp; GitHub, in plain English</a>. Sign up at <a href="https://github.com/signup" target="_blank" rel="noopener">github.com/signup</a> and keep your username and password somewhere safe, like a password manager.</p>
           <p><strong>Then turn on two-factor authentication (2FA)</strong> in your GitHub account settings, under Password and authentication. It's a quick one-off step — after your password, GitHub also asks for a one-time code from an app on your phone — and it matters: this account will have the ability to change a real, public website, so it's worth properly securing.</p>
         </div>
         <div class="card reveal">
           <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#A8813C" stroke-width="1.6"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
-          <h3>3. Ask for access</h3>
+          <h3>4. Ask for access</h3>
           <p>Send your new GitHub username to whoever currently looks after the website, so they can add you to the project. Get in touch at <a href="{{OBFUSCATE_MAILTO:web@kingtonparishes.org.uk}}">web@kingtonparishes.org.uk</a>.</p>
         </div>
         <div class="card reveal">
           <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#A8813C" stroke-width="1.6"><path d="M4 4h16v13H7l-3 3V4Z"/><path d="M8 9h8M8 12.5h5"/></svg></div>
-          <h3>4. Open the Code tab and ask</h3>
-          <p>Once you have access, open Claude Desktop's Code tab and say you'd like to make a change to the Kington Parishes website. The first time it needs to connect to GitHub on your behalf, a browser window may pop up asking you to sign in — that's expected, and only happens once.</p>
+          <h3>5. Open the Code tab and ask Claude to fetch the site</h3>
+          <p>Once you have access, open Claude Desktop's Code tab and ask Claude to get a working copy of the Kington Parishes website ready — technically this is called "cloning the repository", but you can just say it in plain English and Claude will handle the actual command. It'll ask where on your laptop to put it (anywhere is fine — a folder called Documents is a sensible default) and, from then on, that's the one you'll point the Code tab at each time you come back to make another change. The first time Claude needs to connect to GitHub on your behalf, a browser window may pop up asking you to sign in — that's expected, and only happens once.</p>
+          <p>If Claude ever asks which address to fetch, it's <code>https://github.com/magicobject/kington-parishes.git</code> — see <a href="help-technical-details.html#the-code">the technical details page</a> for more on where the code lives.</p>
         </div>
       </div>
     </div>
