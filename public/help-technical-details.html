@@ -24,13 +24,13 @@
 <meta name="twitter:title" content="Technical Details — Help — Kington Parishes">
 <meta name="twitter:description" content="Hosting on Cloudflare Workers, DNS, the templated build that keeps the site DRY, what gets tested before a change goes live, the MailerLite-powered newsletter, how the API is secured, and where the source code lives.">
 <meta name="twitter:image" content="https://www.kingtonparishes.org.uk/img/our-churches/kington.webp">
-<link rel="icon" href="/img/favicon.svg?v=2026.09.08.019" type="image/svg+xml">
-<link rel="icon" href="/img/favicon-32.png?v=2026.09.08.019" type="image/png" sizes="32x32">
-<link rel="apple-touch-icon" href="/img/apple-touch-icon.png?v=2026.09.08.019">
+<link rel="icon" href="/img/favicon.svg?v=2026.09.08.020" type="image/svg+xml">
+<link rel="icon" href="/img/favicon-32.png?v=2026.09.08.020" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="/img/apple-touch-icon.png?v=2026.09.08.020">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/style.css?v=2026.09.08.019">
+<link rel="stylesheet" href="/css/style.css?v=2026.09.08.020">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -94,6 +94,7 @@
         <a href="#newsletter">Newsletter</a>
         <a href="#api-security">MailerLite API security</a>
         <a href="#the-code">The code</a>
+        <a href="#ci-cd">Build, test and deploy: where each happens</a>
       </nav>
     </div>
   </div>
@@ -241,6 +242,18 @@
     </div>
   </section>
 
+  <section class="alt" id="ci-cd">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">Build, test and deploy: where each happens</div>
+        <h2>No CI on GitHub — the build and the test suite both run locally</h2>
+        <p>It's easy to assume a project like this has a GitHub Actions workflow that builds and tests every push. It doesn't — there's no <code>.github/workflows</code> directory in the repository at all, just <a href="https://github.com/magicobject/kington-parishes/blob/main/.github/dependabot.yml" target="_blank" rel="noopener">Dependabot's config</a> for dependency update PRs. GitHub's only job here is to host the repository and be the place Cloudflare watches for new commits on <code>main</code>.</p>
+        <p>The actual building and testing happens on whichever machine is making the change — see <a href="#build-templates">Build &amp; templates</a> and <a href="#testing">Testing</a> above. <code>npm run build</code> regenerates <code>public/</code> on every commit (via the pre-commit git hook), and <code>npm test</code> plus <code>npm run audit</code> run before every push, both locally, both before anything reaches GitHub at all. By the time a commit lands on <code>main</code>, it's already been built and already passed the full test suite — nothing on GitHub's side builds or tests it again.</p>
+        <p>What a push to <code>main</code> <em>does</em> trigger is Cloudflare's own deployment, via its GitHub integration (see <a href="#hosting">Hosting</a> above) — but that's a deploy, not a build or test step: it uploads the already-built <code>public/</code> folder and the Worker code exactly as they were committed, live in well under a minute. If a change were ever pushed without running the local build and test suite first, Cloudflare would deploy it anyway, untested — which is exactly why that suite running locally, before every push, is a standing rule for this project rather than a courtesy.</p>
+      </div>
+    </div>
+  </section>
+
 </main>
 
 
@@ -272,13 +285,13 @@
     </div>
     <div class="fine">
       <span>&copy; <span id="year"></span> Kington Parishes. St Mary's Church Kington PCC is registered charity no. 1185453. Site by <a href="https://mediawright.uk">mediawright.uk</a>.</span>
-      <span class="build-number">Build 2026.09.08.019</span>
+      <span class="build-number">Build 2026.09.08.020</span>
     </div>
   </div>
 </footer>
 
-<script src="/js/main.js?v=2026.09.08.019" defer></script>
-<script src="/js/search-match.js?v=2026.09.08.019" defer></script>
-<script src="/js/search-ui.js?v=2026.09.08.019" defer></script>
+<script src="/js/main.js?v=2026.09.08.020" defer></script>
+<script src="/js/search-match.js?v=2026.09.08.020" defer></script>
+<script src="/js/search-ui.js?v=2026.09.08.020" defer></script>
 </body>
 </html>

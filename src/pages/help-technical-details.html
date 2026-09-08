@@ -17,6 +17,7 @@
         <a href="#newsletter">Newsletter</a>
         <a href="#api-security">MailerLite API security</a>
         <a href="#the-code">The code</a>
+        <a href="#ci-cd">Build, test and deploy: where each happens</a>
       </nav>
     </div>
   </div>
@@ -160,6 +161,18 @@
         <div class="kicker">The code</div>
         <h2>Where it all lives</h2>
         <p>Every piece of this — page content, templates, the build script, the styling, and the Worker code behind the newsletter API — lives in one public GitHub repository: <a href="https://github.com/magicobject/kington-parishes.git" target="_blank" rel="noopener">github.com/magicobject/kington-parishes</a>. Every commit that reaches <code>main</code> is tagged with its own build number (e.g. <code>build-2026.09.08.005</code>), so any past version of the site can be checked out by name — see <a href="updates.html">/updates</a> for the human-readable version of that same history.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt" id="ci-cd">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">Build, test and deploy: where each happens</div>
+        <h2>No CI on GitHub — the build and the test suite both run locally</h2>
+        <p>It's easy to assume a project like this has a GitHub Actions workflow that builds and tests every push. It doesn't — there's no <code>.github/workflows</code> directory in the repository at all, just <a href="https://github.com/magicobject/kington-parishes/blob/main/.github/dependabot.yml" target="_blank" rel="noopener">Dependabot's config</a> for dependency update PRs. GitHub's only job here is to host the repository and be the place Cloudflare watches for new commits on <code>main</code>.</p>
+        <p>The actual building and testing happens on whichever machine is making the change — see <a href="#build-templates">Build &amp; templates</a> and <a href="#testing">Testing</a> above. <code>npm run build</code> regenerates <code>public/</code> on every commit (via the pre-commit git hook), and <code>npm test</code> plus <code>npm run audit</code> run before every push, both locally, both before anything reaches GitHub at all. By the time a commit lands on <code>main</code>, it's already been built and already passed the full test suite — nothing on GitHub's side builds or tests it again.</p>
+        <p>What a push to <code>main</code> <em>does</em> trigger is Cloudflare's own deployment, via its GitHub integration (see <a href="#hosting">Hosting</a> above) — but that's a deploy, not a build or test step: it uploads the already-built <code>public/</code> folder and the Worker code exactly as they were committed, live in well under a minute. If a change were ever pushed without running the local build and test suite first, Cloudflare would deploy it anyway, untested — which is exactly why that suite running locally, before every push, is a standing rule for this project rather than a courtesy.</p>
       </div>
     </div>
   </section>

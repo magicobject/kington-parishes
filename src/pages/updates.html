@@ -15,6 +15,10 @@
     <div class="wrap">
       <ul class="changelog">
         <li>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.08.020</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
+          <p>Added a closing section to <a href="help-technical-details.html#ci-cd">Help / Technical details</a> clarifying there's no GitHub Actions CI in this repository — the build and the full test suite both run locally, before every push, and a push to <code>main</code> only triggers Cloudflare's own deployment of the already-built, already-tested code, not a build or test step of its own.</p>
+        </li>
+        <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.08.019</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
           <p>Technical audit follow-up: added explicit <code>width</code>/<code>height</code> to the five noticeboard poster images on <a href="index.html">the homepage</a> and <a href="services.html">Services &amp; Events</a>, matching every other image on the site — previously these were the only ones without it, risking layout shift as each poster loaded in.</p>
         </li>
