@@ -466,7 +466,7 @@ export const PAGES = [
   {
     slug: 'help-technical-details',
     title: 'Technical Details — Help — Kington Parishes',
-    description: 'Hosting on Cloudflare Workers, DNS, the MailerLite-powered newsletter, how the API is secured, and where the source code lives.',
+    description: 'Hosting on Cloudflare Workers, DNS, the templated build that keeps the site DRY, what gets tested before a change goes live, the MailerLite-powered newsletter, how the API is secured, and where the source code lives.',
     active: null,
     header: true,
     safeguardStrip: false,

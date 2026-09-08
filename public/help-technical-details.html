@@ -11,26 +11,26 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Technical Details — Help — Kington Parishes</title>
-<meta name="description" content="Hosting on Cloudflare Workers, DNS, the MailerLite-powered newsletter, how the API is secured, and where the source code lives.">
+<meta name="description" content="Hosting on Cloudflare Workers, DNS, the templated build that keeps the site DRY, what gets tested before a change goes live, the MailerLite-powered newsletter, how the API is secured, and where the source code lives.">
 <meta name="robots" content="noindex, nofollow">
 <link rel="canonical" href="https://www.kingtonparishes.org.uk/help-technical-details.html">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Kington Parishes">
 <meta property="og:title" content="Technical Details — Help — Kington Parishes">
-<meta property="og:description" content="Hosting on Cloudflare Workers, DNS, the MailerLite-powered newsletter, how the API is secured, and where the source code lives.">
+<meta property="og:description" content="Hosting on Cloudflare Workers, DNS, the templated build that keeps the site DRY, what gets tested before a change goes live, the MailerLite-powered newsletter, how the API is secured, and where the source code lives.">
 <meta property="og:url" content="https://www.kingtonparishes.org.uk/help-technical-details.html">
 <meta property="og:image" content="https://www.kingtonparishes.org.uk/img/our-churches/kington.webp">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Technical Details — Help — Kington Parishes">
-<meta name="twitter:description" content="Hosting on Cloudflare Workers, DNS, the MailerLite-powered newsletter, how the API is secured, and where the source code lives.">
+<meta name="twitter:description" content="Hosting on Cloudflare Workers, DNS, the templated build that keeps the site DRY, what gets tested before a change goes live, the MailerLite-powered newsletter, how the API is secured, and where the source code lives.">
 <meta name="twitter:image" content="https://www.kingtonparishes.org.uk/img/our-churches/kington.webp">
-<link rel="icon" href="/img/favicon.svg?v=2026.09.08.009" type="image/svg+xml">
-<link rel="icon" href="/img/favicon-32.png?v=2026.09.08.009" type="image/png" sizes="32x32">
-<link rel="apple-touch-icon" href="/img/apple-touch-icon.png?v=2026.09.08.009">
+<link rel="icon" href="/img/favicon.svg?v=2026.09.08.010" type="image/svg+xml">
+<link rel="icon" href="/img/favicon-32.png?v=2026.09.08.010" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="/img/apple-touch-icon.png?v=2026.09.08.010">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/style.css?v=2026.09.08.009">
+<link rel="stylesheet" href="/css/style.css?v=2026.09.08.010">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -84,12 +84,14 @@
     <div class="wrap">
       <div class="kicker"><a href="help.html" style="color:#F8F5EE; text-decoration:underline;">Help</a> / Technical details</div>
       <h1 id="under-the-hood">Under the hood</h1>
-      <p class="lede">The rest of this guide deliberately stays non-technical. This page doesn't — it's for anyone who wants to understand exactly what this site runs on: hosting, DNS, the newsletter, and how the small amount of server-side code is secured.</p>
+      <p class="lede">The rest of this guide deliberately stays non-technical. This page doesn't — it's for anyone who wants to understand exactly what this site runs on: hosting and DNS, how it's built from templates, what gets tested before a change goes live, the newsletter, and how the small amount of server-side code is secured.</p>
       <nav class="jump-row" aria-label="Jump to a section">
         <a href="#hosting">Hosting</a>
         <a href="#dns">DNS</a>
+        <a href="#build-templates">Build &amp; templates</a>
+        <a href="#testing">Testing</a>
         <a href="#newsletter">Newsletter</a>
-        <a href="#api-security">API security</a>
+        <a href="#api-security">MailerLite API security</a>
         <a href="#the-code">The code</a>
       </nav>
     </div>
@@ -113,6 +115,47 @@
         <h2>Also managed in Cloudflare</h2>
         <p>The <code>kingtonparishes.org.uk</code> domain's DNS lives in the same Cloudflare account as the Worker, with the domain attached to the Worker as a custom domain. That's a deliberate, common pairing — Cloudflare can issue and renew the site's TLS certificate and route traffic straight to the Worker without a separate DNS provider in the loop. It replaced the previous host (Wix) at go-live on 6 September 2026; see <a href="updates.html">/updates</a> for that migration's own build-log entries.</p>
       </div>
+    </div>
+  </section>
+
+  <section id="build-templates">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">Build &amp; templates</div>
+        <h2>Built from templates, not hand-copied HTML</h2>
+        <p>No page's HTML is written out in full anywhere. Each one is assembled at build time (<code>scripts/build.mjs</code>) from four pieces: <code>templates/*.html</code> (the shared header, footer, safeguard banner and page shell), <code>src/pages/*.html</code> (just that page's own content — no <code>&lt;head&gt;</code>, no nav, no footer), <code>src/pages.config.mjs</code> (the nav, each page's title and meta description), and <code>src/site.config.mjs</code> (facts repeated across the site — phone number, email, the donate link — each substituted wherever a matching placeholder appears in a page's content).</p>
+        <p>This is what keeps the site <strong>DRY</strong> ("Don't Repeat Yourself"): a fact like the parish office's phone number, or a person's role and contact details, is typed in exactly one place, and every page that shows it — however many there are — picks it up automatically the next time the site is built. Change the phone number in <code>site.config.mjs</code> once, and it updates on every page that shows it; add a churchwarden to <code>src/people.config.mjs</code> once, and their card appears on both <a href="our-people.html">Our People</a> and their own church's page. Without this, the same fact would need finding and editing by hand on every page that happened to mention it — easy to do consistently once, easy to let quietly drift out of sync after the tenth edit.</p>
+        <p><strong>Not every file in <code>public/</code> is generated, though</strong> — a handful (the stylesheet, the JavaScript, the images, <code>robots.txt</code>, <code>_headers</code>) are the real, hand-maintained originals, sitting directly in the folder Cloudflare serves, because there's no per-page fact to template: a stylesheet doesn't repeat page to page, it defines how every page looks. Everything else under <code>public/</code> — every <code>*.html</code> file — is a generated build artefact: editing one directly would have no lasting effect, since it gets silently regenerated (and any hand-edit overwritten) the next time anyone builds the site, which happens automatically on every commit via a git hook. Claude already knows this file-by-file — it edits the real source under <code>src/</code>, <code>templates/</code>, or the genuinely hand-maintained files in <code>public/</code>, and never a generated page directly.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt" id="testing">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">Testing</div>
+        <h2>What gets checked before anything reaches the live site</h2>
+        <p>Every change runs through the same automated suite before Claude pushes it — this project's standing rule is that nothing goes live untested. Four things it checks:</p>
+      </div>
+      <div class="card-grid">
+        <div class="card reveal">
+          <h3>Reactive — works well on any device</h3>
+          <p><a href="https://playwright.dev" target="_blank" rel="noopener">Playwright</a> tests real layouts at both desktop and handheld (mobile) viewport widths — the primary nav's collapsed menu toggle below 860px, the calendar's day grid never forcing the page to scroll sideways, and more — not just an assumption that the CSS behaves as intended.</p>
+        </div>
+        <div class="card reveal">
+          <h3>WCAG AA accessible</h3>
+          <p>Every single page is scanned with <a href="https://github.com/dequelabs/axe-core" target="_blank" rel="noopener">axe-core</a>, with zero violations tolerated: colour contrast, heading order, form labels, ARIA usage and more, checked automatically rather than eyeballed.</p>
+        </div>
+        <div class="card reveal">
+          <h3>Functionally correct, no regressions</h3>
+          <p>Several hundred Playwright tests exercise real behaviour across the whole site — navigation, forms, the calendar, search, the footer's build number, each page's own title and canonical link — so a change made for one page can't silently break another without the suite catching it.</p>
+        </div>
+        <div class="card reveal">
+          <h3>Secure</h3>
+          <p><code>npm audit</code> blocks any push carrying a known high or critical severity dependency vulnerability (see <a href="#api-security">MailerLite API security</a> below), and the same test suite acts as a regression net for the security headers whenever <code>public/_headers</code> changes.</p>
+        </div>
+      </div>
+      <p>All of it runs locally in well under a minute, and its result — pass or fail — is what actually decides whether a change gets pushed, not a judgement call. See step 3 of <a href="help-making-a-change.html#the-steps">Making a change</a>.</p>
     </div>
   </section>
 
@@ -143,8 +186,8 @@
   <section class="alt" id="api-security">
     <div class="wrap">
       <div class="section-head">
-        <div class="kicker">API security</div>
-        <h2>How the API endpoint is secured</h2>
+        <div class="kicker">MailerLite API security</div>
+        <h2>How the MailerLite API endpoint is secured</h2>
       </div>
       <div class="card-grid">
         <div class="card reveal">
@@ -169,7 +212,7 @@
         </div>
         <div class="card reveal">
           <h3>A published disclosure contact</h3>
-          <p>An RFC 9116 <a href=".well-known/security.txt" target="_blank" rel="noopener">security.txt</a> points anyone who finds a real vulnerability at a monitored contact address, rather than leaving them no way to report one responsibly.</p>
+          <p>An RFC 9116 <a href=".well-known/security.txt" target="_blank" rel="noopener">security.txt</a> points anyone who finds a real vulnerability at a monitored contact address, rather than leaving them no way to report one responsibly. <strong>Remember to update security.txt annually</strong> — its <code>Expires</code> date has to stay within a year or it's treated as lapsed; just ask Claude to renew it.</p>
         </div>
       </div>
     </div>
@@ -216,13 +259,13 @@
     </div>
     <div class="fine">
       <span>&copy; <span id="year"></span> Kington Parishes. St Mary's Church Kington PCC is registered charity no. 1185453. Site by <a href="https://mediawright.uk">mediawright.uk</a>.</span>
-      <span class="build-number">Build 2026.09.08.009</span>
+      <span class="build-number">Build 2026.09.08.010</span>
     </div>
   </div>
 </footer>
 
-<script src="/js/main.js?v=2026.09.08.009" defer></script>
-<script src="/js/search-match.js?v=2026.09.08.009" defer></script>
-<script src="/js/search-ui.js?v=2026.09.08.009" defer></script>
+<script src="/js/main.js?v=2026.09.08.010" defer></script>
+<script src="/js/search-match.js?v=2026.09.08.010" defer></script>
+<script src="/js/search-ui.js?v=2026.09.08.010" defer></script>
 </body>
 </html>
