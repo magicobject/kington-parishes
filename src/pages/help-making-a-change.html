@@ -1,0 +1,84 @@
+<main id="main">
+
+  <div class="page-header">
+    <svg class="ridge-watermark" viewBox="0 0 1200 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <path d="M0 60 C 100 45, 160 20, 220 30 S 320 70, 380 40 S 480 5, 540 20 S 640 65, 710 45 S 820 10, 880 25 S 980 68, 1040 48 S 1140 15, 1200 35" fill="none" stroke="#B8A98C" stroke-width="2"/>
+    </svg>
+    <div class="wrap">
+      <div class="kicker"><a href="help.html" style="color:#F8F5EE; text-decoration:underline;">Help</a> / Day to day</div>
+      <h1>Making a change</h1>
+      <p class="lede">Once you're <a href="help-getting-set-up.html">set up</a>, here's what actually happens each time you'd like something on the website updated.</p>
+      <nav class="jump-row" aria-label="Jump to a section">
+        <a href="#the-steps">The steps</a>
+        <a href="#questions">Questions people ask</a>
+      </nav>
+    </div>
+  </div>
+
+  <section id="the-steps">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">The steps</div>
+        <h2>From a request to a live page</h2>
+      </div>
+      <div class="card-grid">
+        <div class="card reveal">
+          <h3>1. Say what you'd like changed</h3>
+          <p>In plain English, in Claude Desktop — "add this event to the calendar" or "the phone number on the Contact page is wrong". No file names or technical terms needed.</p>
+        </div>
+        <div class="card reveal">
+          <h3>2. Claude finds and edits the file</h3>
+          <p>You can ask to see the change before it goes any further, and ask for tweaks — nothing is final until you're happy with it.</p>
+        </div>
+        <div class="card reveal">
+          <h3>3. Claude checks its own work</h3>
+          <p>The site's automatic tests run, and Claude confirms the change is secure and stays readable for screen readers and other assistive technology — this site's standing rule is that nothing goes live untested.</p>
+        </div>
+        <div class="card reveal">
+          <h3>4. Claude saves it to GitHub</h3>
+          <p>This step is called a "push" — the moment your change leaves your laptop and joins the master copy. See <a href="help.html#git-and-github">Git &amp; GitHub, in plain English</a> if these words are new to you.</p>
+        </div>
+        <div class="card reveal">
+          <h3>5. The live site rebuilds itself</h3>
+          <p>A process behind the scenes notices the new version on GitHub and publishes it automatically — usually in well under a minute. There's nothing for you to do at this step.</p>
+        </div>
+        <div class="card reveal">
+          <h3>6. Check it went live</h3>
+          <p>Visit <a href="updates.html">/updates</a> and look for your change at the top of the list, with today's date. If it's not there after a minute or two, just ask Claude to check.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt" id="questions">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">Questions people ask</div>
+        <h2>A few things worth knowing</h2>
+      </div>
+      <div class="card-grid">
+        <div class="card reveal">
+          <h3>Can I break the website?</h3>
+          <p>It's very hard to. Claude runs the site's tests and its security and accessibility checks before anything goes live, and every change is recorded in Git's full history — so even a mistake can always be undone.</p>
+        </div>
+        <div class="card reveal">
+          <h3>Do I need to remember any commands?</h3>
+          <p>No. Everything happens through ordinary conversation with Claude — you never need to type a technical command yourself.</p>
+        </div>
+        <div class="card reveal">
+          <h3>What if I want to undo a change?</h3>
+          <p>Just ask Claude. Because Git keeps every past version, an earlier version of any page can always be brought back.</p>
+        </div>
+        <div class="card reveal">
+          <h3>Where do I check my change went live?</h3>
+          <p><a href="updates.html">/updates</a> lists every change to the site, newest first, each with the date and a short description of what changed.</p>
+        </div>
+        <div class="card reveal">
+          <h3>Who can see this help page?</h3>
+          <p>This page isn't linked from anywhere on the main site and won't turn up in search, but it isn't password-protected either — treat its address as something to share only with people who'll be helping update the site.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>

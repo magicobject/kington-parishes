@@ -169,6 +169,12 @@ describe('isSearchablePage', () => {
     assert.equal(isSearchablePage({ slug: '404' }), false);
   });
 
+  test('excludes the hidden help guide', () => {
+    assert.equal(isSearchablePage({ slug: 'help' }), false);
+    assert.equal(isSearchablePage({ slug: 'help-getting-set-up' }), false);
+    assert.equal(isSearchablePage({ slug: 'help-making-a-change' }), false);
+  });
+
   test('includes an ordinary content page', () => {
     assert.equal(isSearchablePage({ slug: 'our-churches' }), true);
   });

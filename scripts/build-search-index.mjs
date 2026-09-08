@@ -138,8 +138,11 @@ export function extractSearchEntries(html, page) {
   return entries;
 }
 
-// Pages that should never appear in search: the internal build changelog
-// (deliberately unlisted and noindex) and the 404 page (no real content).
+// Pages that should never appear in search: the internal build changelog,
+// the 404 page (no real content), and the hidden `help`/`help-*` guide for
+// the website team — internal process documentation, not something a site
+// visitor should be able to search their way into.
+const UNSEARCHABLE_SLUGS = new Set(['updates', '404', 'help', 'help-getting-set-up', 'help-making-a-change']);
 export function isSearchablePage(page) {
-  return page.slug !== 'updates' && page.slug !== '404';
+  return !UNSEARCHABLE_SLUGS.has(page.slug);
 }

@@ -423,6 +423,42 @@ export const PAGES = [
     safeguardStrip: false,
     robots: 'noindex, nofollow',
   },
+  // Hidden how-it-works guide for non-technical members of the website
+  // team, explaining (in plain English) how changes reach the live site via
+  // Claude/Git/GitHub, and how to set a laptop up to make one. Same pattern
+  // as `updates` above: not in NAV/FOOTER_NAV, not pastoral content (no
+  // safeguard-strip banner), and noindex/nofollow since it's internal
+  // process documentation, not something a site visitor should search their
+  // way into. Three pages, all prefixed `help-` and cross-linked from the
+  // `help` hub, since this site's build only supports flat `/slug.html`
+  // URLs rather than a real `/help/...` subdirectory.
+  {
+    slug: 'help',
+    title: 'Help — How This Website Gets Updated — Kington Parishes',
+    description: 'A plain-English guide for the website team: how changes reach the live site, and how to set up a laptop to make one.',
+    active: null,
+    header: true,
+    safeguardStrip: false,
+    robots: 'noindex, nofollow',
+  },
+  {
+    slug: 'help-getting-set-up',
+    title: 'Setting Up Your Laptop — Help — Kington Parishes',
+    description: 'How to install Claude Desktop, create a GitHub account, and get access to make changes to this website.',
+    active: null,
+    header: true,
+    safeguardStrip: false,
+    robots: 'noindex, nofollow',
+  },
+  {
+    slug: 'help-making-a-change',
+    title: 'Making a Change — Help — Kington Parishes',
+    description: 'What happens, step by step, when you ask Claude to update this website — plus answers to the questions people usually ask first.',
+    active: null,
+    header: true,
+    safeguardStrip: false,
+    robots: 'noindex, nofollow',
+  },
   {
     slug: '404',
     title: 'Page not found — Kington Parishes',

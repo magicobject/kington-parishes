@@ -1,0 +1,103 @@
+<main id="main">
+
+  <div class="page-header">
+    <svg class="ridge-watermark" viewBox="0 0 1200 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <path d="M0 60 C 100 45, 160 20, 220 30 S 320 70, 380 40 S 480 5, 540 20 S 640 65, 710 45 S 820 10, 880 25 S 980 68, 1040 48 S 1140 15, 1200 35" fill="none" stroke="#B8A98C" stroke-width="2"/>
+    </svg>
+    <div class="wrap">
+      <div class="kicker">Help for the website team</div>
+      <h1>How this website gets updated</h1>
+      <p class="lede">You don't need to know how to code. This page explains, in plain English, how changes get made to this site — and how you can make one yourself, with help from an AI assistant called Claude.</p>
+      <nav class="jump-row" aria-label="Jump to a section">
+        <a href="#short-version">The short version</a>
+        <a href="#git-and-github">Git &amp; GitHub, in plain English</a>
+        <a href="#next-steps">Next steps</a>
+      </nav>
+    </div>
+  </div>
+
+  <section id="short-version">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">The short version</div>
+        <h2>What happens when you ask for a change</h2>
+        <p>Every change to this website — big or small — follows the same six steps. You only ever do the first one; Claude takes care of the rest.</p>
+      </div>
+      <div class="card-grid">
+        <div class="card reveal">
+          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#A8813C" stroke-width="1.6"><path d="M4 4h16v13H7l-3 3V4Z"/><path d="M8 9h8M8 12.5h5"/></svg></div>
+          <h3>1. You describe the change</h3>
+          <p>In your own words — "add this event to the calendar" or "the phone number on the Contact page is wrong". No technical detail needed.</p>
+        </div>
+        <div class="card reveal">
+          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#A8813C" stroke-width="1.6"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></div>
+          <h3>2. Claude edits the files</h3>
+          <p>On your own laptop, Claude finds the right page and makes the change — you can see exactly what it changed before it goes any further.</p>
+        </div>
+        <div class="card reveal">
+          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#A8813C" stroke-width="1.6"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3Z"/><path d="M9 12l2 2 4-4"/></svg></div>
+          <h3>3. Claude checks its own work</h3>
+          <p>The site's automatic tests run, and Claude checks the page still passes its security and accessibility rules — nothing goes live untested.</p>
+        </div>
+        <div class="card reveal">
+          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#A8813C" stroke-width="1.6"><path d="M12 4v10"/><path d="M8 9l4-5 4 5"/><path d="M5 15v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3"/></svg></div>
+          <h3>4. Claude saves it to GitHub</h3>
+          <p>This step is called a "push" — it's the moment your change leaves your laptop and joins the master copy the live site is built from.</p>
+        </div>
+        <div class="card reveal">
+          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#A8813C" stroke-width="1.6"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></svg></div>
+          <h3>5. The live site rebuilds itself</h3>
+          <p>A process behind the scenes notices the new version on GitHub and publishes it automatically — usually in well under a minute, with nothing more for you to do.</p>
+        </div>
+        <div class="card reveal">
+          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#A8813C" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div>
+          <h3>6. You watch it appear</h3>
+          <p>Keep an eye on <a href="updates.html">/updates</a> — every change is logged there, newest first, so you can confirm yours has gone live.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt" id="git-and-github">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">Two names worth knowing</div>
+        <h2>What are "Git" and "GitHub"?</h2>
+        <p>You'll see these words come up, so it's worth knowing what they mean — even though Claude handles both for you and you'll never need to use either directly.</p>
+      </div>
+      <div class="card-grid">
+        <div class="card reveal">
+          <h3>Git</h3>
+          <p>The record-keeping system behind the website's files. It saves every version of every change ever made, like an extremely thorough undo history — nothing is ever truly lost.</p>
+        </div>
+        <div class="card reveal">
+          <h3>GitHub</h3>
+          <p>The website where those files live online. It's the master copy the live site is built from, and where Claude sends ("pushes") your changes once they're checked and ready.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="next-steps">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">Next steps</div>
+        <h2>Ready to get started?</h2>
+        <p>Setup is a one-off, and takes about fifteen minutes. After that, every change follows the six steps above.</p>
+      </div>
+      <div class="card-grid">
+        <div class="card reveal">
+          <h3>Get your laptop set up →</h3>
+          <p>Install Claude Desktop, create a free GitHub account, and get access to this website's files.</p>
+          <a href="help-getting-set-up.html">Read the setup guide &rarr;</a>
+        </div>
+        <div class="card reveal">
+          <h3>Make a change →</h3>
+          <p>A closer look at each of the six steps above, plus answers to the questions people usually ask first.</p>
+          <a href="help-making-a-change.html">Read the day-to-day guide &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>

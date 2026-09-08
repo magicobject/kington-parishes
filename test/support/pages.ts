@@ -115,6 +115,15 @@ export const UPDATES_PAGE: SitePage = {
   heading: /site updates/i,
 };
 
+// Not in the primary nav, the footer, or anywhere else — a hidden,
+// non-technical how-it-works guide for the website team. Same "unlisted,
+// not user-facing" pattern as Updates above.
+export const HELP_PAGES: SitePage[] = [
+  { path: '/help.html', navLabel: 'Help', titleContains: 'Help', heading: /how this website gets updated/i },
+  { path: '/help-getting-set-up.html', navLabel: 'Getting set up', titleContains: 'Setting Up Your Laptop', heading: /setting up your laptop/i },
+  { path: '/help-making-a-change.html', navLabel: 'Making a change', titleContains: 'Making a Change', heading: /making a change/i },
+];
+
 // One portal page per church, reachable only via the "Visit the ... page →"
 // link on each church's section of Our Churches — not the primary nav.
 export const CHURCH_PORTAL_PAGES: SitePage[] = [
@@ -137,4 +146,4 @@ export const CHURCH_KINGTON_HISTORY_PAGE: SitePage = {
 
 // Every generated page, including the ones without primary nav — used by
 // specs that should run against literally everything (footer, tokens).
-export const ALL_PAGES: SitePage[] = [HOME_PAGE, ...NAV_PAGES, SAFEGUARDING_PAGE, PARISH_NEWS_ARCHIVE_PAGE, ...NEWSLETTER_ISSUE_PAGES, NEWSLETTER_ARCHIVE_PAGE, PRIVACY_POLICY_PAGE, DONATE_PAGE, TREASURER_JOB_DESCRIPTION_PAGE, ...CHURCH_PORTAL_PAGES, CHURCH_KINGTON_HISTORY_PAGE, UPDATES_PAGE];
+export const ALL_PAGES: SitePage[] = [HOME_PAGE, ...NAV_PAGES, SAFEGUARDING_PAGE, PARISH_NEWS_ARCHIVE_PAGE, ...NEWSLETTER_ISSUE_PAGES, NEWSLETTER_ARCHIVE_PAGE, PRIVACY_POLICY_PAGE, DONATE_PAGE, TREASURER_JOB_DESCRIPTION_PAGE, ...CHURCH_PORTAL_PAGES, CHURCH_KINGTON_HISTORY_PAGE, UPDATES_PAGE, ...HELP_PAGES];
