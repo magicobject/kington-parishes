@@ -72,5 +72,17 @@
     return capped.map(function (s) { return s.entry; });
   }
 
-  return { normalize: normalize, tokenize: tokenize, searchEntries: searchEntries };
+  // Matches a URL pathname against the hidden help guide's own pages.
+  // Deliberately tolerant of both "/help.html" (how the local dev/test
+  // server, and any plain static host, serves it) and "/help" (how the
+  // live site serves it — Cloudflare Workers assets strips the .html
+  // extension from every page's canonical URL; see wrangler.jsonc's
+  // html_handling: "auto-trailing-slash"). Getting this wrong silently
+  // breaks the help guide's search scope in production while still
+  // looking correct in every local/test environment — it did, once.
+  function isHelpPath(pathname) {
+    return /^\/help(?:-[a-z0-9-]+)?(?:\.html)?$/i.test(String(pathname));
+  }
+
+  return { normalize: normalize, tokenize: tokenize, searchEntries: searchEntries, isHelpPath: isHelpPath };
 });

@@ -15,6 +15,10 @@
     <div class="wrap">
       <ul class="changelog">
         <li>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.08.016</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
+          <p>Fixed the previous build's help-guide search scoping (<a href="help.html">/help</a>) not actually working live: it checked for a <code>.html</code> suffix on the URL, which is how the local dev/test server serves pages but not how the live site does — Cloudflare strips <code>.html</code> from every page's URL in production, so the check silently never matched and every search fell back to ordinary site-only results, even on a help page. The matching logic now tolerates both forms, and is unit-tested against each.</p>
+        </li>
+        <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.08.015</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
           <p>Site search now works inside the hidden <a href="help.html">help guide</a>, scoped to itself: while on a <code>/help*</code> page, the header search box searches only across the guide's own pages (and relabels itself "Search the help guide" to make that clear) — everywhere else, it behaves exactly as before, and the guide stays invisible to ordinary site search either way.</p>
         </li>

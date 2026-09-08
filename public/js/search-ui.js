@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // ordinary site search so a visitor can't search their way into internal
   // process documentation, but fully searchable while already on a help
   // page, scoped to just that guide (see CLAUDE.md's "Site search" section).
-  var onHelpPage = /^\/help(-[a-z0-9-]+)?\.html$/.test(window.location.pathname);
+  var onHelpPage = window.SearchMatch.isHelpPath(window.location.pathname);
   if (onHelpPage) {
     var label = form.querySelector('label[for="site-search-input"]');
     if (label) label.textContent = 'Search the help guide';

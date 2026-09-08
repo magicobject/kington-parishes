@@ -4,7 +4,7 @@ import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import SearchMatch from '../public/js/search-match.js';
 
-const { normalize, tokenize, searchEntries } = SearchMatch;
+const { normalize, tokenize, searchEntries, isHelpPath } = SearchMatch;
 
 describe('normalize', () => {
   test('lowercases and strips punctuation', () => {
@@ -92,5 +92,34 @@ describe('searchEntries', () => {
 
   test('returns nothing when no entry matches all query words', () => {
     assert.deepEqual(searchEntries('kington zebra', entries), []);
+  });
+});
+
+describe('isHelpPath', () => {
+  test('matches the help hub and its sub-pages with a .html extension (local dev/test server)', () => {
+    assert.equal(isHelpPath('/help.html'), true);
+    assert.equal(isHelpPath('/help-technical-details.html'), true);
+    assert.equal(isHelpPath('/help-getting-set-up.html'), true);
+  });
+
+  test('matches the same pages with the extension stripped (the live site)', () => {
+    // Regression: the live site serves clean URLs — Cloudflare Workers
+    // assets strips .html from every page (wrangler.jsonc's html_handling:
+    // "auto-trailing-slash") — so window.location.pathname there is "/help",
+    // never "/help.html". A pattern that only matched the .html form passed
+    // every local/test check yet silently never matched in production.
+    assert.equal(isHelpPath('/help'), true);
+    assert.equal(isHelpPath('/help-technical-details'), true);
+  });
+
+  test('does not match an ordinary page, with or without the extension', () => {
+    assert.equal(isHelpPath('/our-churches.html'), false);
+    assert.equal(isHelpPath('/our-churches'), false);
+    assert.equal(isHelpPath('/'), false);
+  });
+
+  test('does not match the internal changelog', () => {
+    assert.equal(isHelpPath('/updates.html'), false);
+    assert.equal(isHelpPath('/updates'), false);
   });
 });
