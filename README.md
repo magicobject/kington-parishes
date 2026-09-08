@@ -2,7 +2,7 @@
 
 Static site for the five parishes of Kington, Titley, Old Radnor, Kinnerton and Huntington, deployed to Cloudflare Workers at [kingtonparishes.org.uk](https://www.kingtonparishes.org.uk) (auto-deploys on push to `main`). Same lightweight build pipeline as [wrightmaths.uk](https://github.com/magicobject/WrightMaths), [kingtonfoodbank.org.uk](https://github.com/magicobject/kingtonfoodbank) and [lovinggod.uk](https://github.com/magicobject/LovingGod) — see their READMEs for the full explanation; the short version is below.
 
-**This is the parishes' real production website**, live since 6 September 2026, taking over from the previous Wix-hosted site at the same domain. It started life as a proof-of-concept build showcased in the MediaWright portfolio — see "Search visibility" below for what that meant while it lasted, and what's changed now that it's gone live.
+**This is the parishes' real production website**, live since 6 September 2026, taking over from the previous Squarespace-hosted site at the same domain. It started life as a proof-of-concept build showcased in the MediaWright portfolio — see "Search visibility" below for what that meant while it lasted, and what's changed now that it's gone live.
 
 ## Quick start
 
@@ -74,7 +74,7 @@ Every real page is indexable now. `src/pages.config.mjs` only sets `robots: 'noi
 
 `public/robots.txt` says `Allow: /` and points at `sitemap.xml`, which `scripts/build.mjs` regenerates from `PAGES` on every build (via `isSearchablePage`, the same check search indexing and the sitemap both use to skip `404` and `updates`).
 
-Until go-live on 6 September 2026, this was reversed: the site existed only to demonstrate the build pipeline in the MediaWright portfolio, so every page carried `noindex, nofollow` and there was no sitemap at all, to keep this proof-of-concept build from ever being confused with or outranking the real (then Wix-hosted) kingtonparishes.org.uk in search results.
+Until go-live on 6 September 2026, this was reversed: the site existed only to demonstrate the build pipeline in the MediaWright portfolio, so every page carried `noindex, nofollow` and there was no sitemap at all, to keep this proof-of-concept build from ever being confused with or outranking the real (then Squarespace-hosted) kingtonparishes.org.uk in search results.
 
 ## What changed from the original hand-written site
 

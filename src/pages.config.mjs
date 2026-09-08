@@ -472,6 +472,22 @@ export const PAGES = [
     safeguardStrip: false,
     robots: 'noindex, nofollow',
   },
+  // A deeper-still dive off Technical details' DNS section — the domain's
+  // actual DNS records (A/MX/TXT), what each non-A one is for, and that
+  // email is on a separate provider (123 Reg/GoDaddy) from the website
+  // (Cloudflare). Content is drawn from a real, live public DNS lookup
+  // (see git log for this page's own addition) rather than invented, since
+  // DNS records are public and verifiable but do drift over time — the page
+  // says so and gives the date it was checked.
+  {
+    slug: 'help-dns-setup',
+    title: 'DNS Setup — Help — Kington Parishes',
+    description: "A closer look at kingtonparishes.org.uk's DNS records: the A records pointing at Cloudflare, the MX records handing email to 123 Reg/GoDaddy, and what the SPF/DMARC/verification TXT records are for.",
+    active: null,
+    header: true,
+    safeguardStrip: false,
+    robots: 'noindex, nofollow',
+  },
   {
     slug: 'help-when-it-goes-wrong',
     title: 'When It Goes Wrong — Help — Kington Parishes',

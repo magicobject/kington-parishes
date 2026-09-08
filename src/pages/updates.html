@@ -15,6 +15,10 @@
     <div class="wrap">
       <ul class="changelog">
         <li>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.08.011</span><span class="changelog-date">8 September 2026</span></div>
+          <p>Added <a href="help-dns-setup.html">Help / DNS setup</a>, linked from <a href="help-technical-details.html#dns">Technical details</a>' DNS section: the actual A/MX/TXT records for <code>kingtonparishes.org.uk</code> (checked via a live public DNS lookup), what each non-A record is for, and that email is handled separately from the website — by 123 Reg/GoDaddy, not Cloudflare. Also corrected the site's previous host, mentioned in <a href="help-technical-details.html">Technical details</a>, past changelog entries and the README — it was Squarespace, not Wix.</p>
+        </li>
+        <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.08.010</span><span class="changelog-date">8 September 2026</span></div>
           <p>Added two new sections to <a href="help-technical-details.html">Help / Technical details</a>: <a href="help-technical-details.html#build-templates">Build &amp; templates</a> (the templated, DRY build pipeline, and why some files under <code>public/</code> should never be hand-edited) and <a href="help-technical-details.html#testing">Testing</a> (reactive/responsive, WCAG AA, functional regressions, and security, all checked before a push). Also renamed "API security" to "MailerLite API security" for clarity, and added a reminder to renew <code>security.txt</code>'s <code>Expires</code> date annually.</p>
         </li>
@@ -96,7 +100,7 @@
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.06.004</span><span class="changelog-date">6 September 2026</span></div>
-          <p><strong>Go live, step 1 of 2 (code):</strong> pointed <code>SITE_URL</code> at <code>https://www.kingtonparishes.org.uk</code> instead of the workers.dev preview address — every canonical link, Open Graph/Twitter tag, JSON-LD block and the sitemap now use the real domain. Removed <code>robots: 'noindex, nofollow'</code> from every real page in <code>src/pages.config.mjs</code> (kept only on <code>404</code> and this changelog), updated <code>public/robots.txt</code>'s sitemap line to match, and rewrote the two tests and the README section that used to assert the opposite. Cloudflare itself — attaching the custom domain, retiring the old DNS record pointing at Wix — is the next, separate step.</p>
+          <p><strong>Go live, step 1 of 2 (code):</strong> pointed <code>SITE_URL</code> at <code>https://www.kingtonparishes.org.uk</code> instead of the workers.dev preview address — every canonical link, Open Graph/Twitter tag, JSON-LD block and the sitemap now use the real domain. Removed <code>robots: 'noindex, nofollow'</code> from every real page in <code>src/pages.config.mjs</code> (kept only on <code>404</code> and this changelog), updated <code>public/robots.txt</code>'s sitemap line to match, and rewrote the two tests and the README section that used to assert the opposite. Cloudflare itself — attaching the custom domain, retiring the old DNS record pointing at Squarespace — is the next, separate step.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.06.003</span><span class="changelog-date">6 September 2026</span></div>

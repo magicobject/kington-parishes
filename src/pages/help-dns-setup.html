@@ -1,0 +1,83 @@
+<main id="main">
+
+  <div class="page-header">
+    <svg class="ridge-watermark" viewBox="0 0 1200 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <path d="M0 60 C 100 45, 160 20, 220 30 S 320 70, 380 40 S 480 5, 540 20 S 640 65, 710 45 S 820 10, 880 25 S 980 68, 1040 48 S 1140 15, 1200 35" fill="none" stroke="#B8A98C" stroke-width="2"/>
+    </svg>
+    <div class="wrap">
+      <div class="kicker"><a href="help-technical-details.html" style="color:#F8F5EE; text-decoration:underline;">Help / Technical details</a> / DNS setup</div>
+      <h1>DNS setup, in detail</h1>
+      <p class="lede">A closer look at <code>kingtonparishes.org.uk</code>'s actual DNS records — what each one is for, and why the website and the parish's email addresses are handled by two completely different companies. DNS records are public information, so everything below is just a plain lookup anyone can run, not anything confidential.</p>
+      <nav class="jump-row" aria-label="Jump to a section">
+        <a href="#the-web-address">The web address</a>
+        <a href="#email">Email — 123 Reg / GoDaddy</a>
+        <a href="#other-records">The other records</a>
+      </nav>
+    </div>
+  </div>
+
+  <section id="the-web-address">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">The web address</div>
+        <h2>A records point at Cloudflare, not a server</h2>
+        <p>Both <code>kingtonparishes.org.uk</code> and <code>www.kingtonparishes.org.uk</code> resolve to two Cloudflare addresses (currently <code>104.21.13.200</code> and <code>172.67.157.83</code>) — not the Worker's own address, because there isn't one to point at directly. These are shared Cloudflare "proxy" addresses: every visitor's request lands at Cloudflare first (this is also what provides the TLS certificate and the security headers described in <a href="help-technical-details.html#api-security">Technical details</a>), which then hands it internally to the Worker. The domain's nameservers — <code>mustafa.ns.cloudflare.com</code> and <code>suzanne.ns.cloudflare.com</code> — are what makes Cloudflare the authority for every record described on this page, not just the website's own.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt" id="email">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">Email — 123 Reg / GoDaddy</div>
+        <h2>The website and the email are on separate providers</h2>
+        <p>Even though Cloudflare controls the domain's DNS, none of the parish's email actually flows through Cloudflare. Two <strong>MX records</strong> (the record type that says where a domain's email should be delivered) point everything at GoDaddy's mail infrastructure instead:</p>
+      </div>
+      <div class="card-grid">
+        <div class="card reveal">
+          <h3>smtp.secureserver.net (priority 0)</h3>
+          <p>The primary mail handler — lower priority numbers are tried first, so this is where incoming mail for the domain is delivered under normal conditions.</p>
+        </div>
+        <div class="card reveal">
+          <h3>mailstore1.secureserver.net (priority 10)</h3>
+          <p>A secondary/backup mail store, tried only if the first is unavailable.</p>
+        </div>
+      </div>
+      <p><code>secureserver.net</code> is GoDaddy's own shared infrastructure — and <strong>123 Reg is a GoDaddy-owned UK brand</strong>, so this is exactly what the parish's registrar handling both domain redirection and mailbox hosting looks like from the DNS side: the mailboxes themselves (e.g. <code>vicar@kingtonparishes.org.uk</code>) live on 123 Reg/GoDaddy's servers, entirely separate from the Cloudflare Worker that serves this website.</p>
+    </div>
+  </section>
+
+  <section id="other-records">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">The other records</div>
+        <h2>What the non-A record lines are for</h2>
+        <p>A domain's DNS carries more than just "where's the website" and "where's the email" — several <strong>TXT records</strong> (plain-text entries that don't route any traffic themselves, just publish information) do other jobs:</p>
+      </div>
+      <div class="card-grid">
+        <div class="card reveal">
+          <h3>SPF (Sender Policy Framework)</h3>
+          <p>Lists which mail servers are allowed to send email claiming to be from <code>kingtonparishes.org.uk</code> — currently GoDaddy's servers (for real parish email) and MailerLite's sending infrastructure (for the InSpire Newsletter, see <a href="help-technical-details.html#newsletter">Newsletter</a>). Other mail providers check this record to help tell genuine mail from spoofed mail.</p>
+        </div>
+        <div class="card reveal">
+          <h3>DMARC</h3>
+          <p>Sits alongside SPF and says what should happen to mail that fails those checks. It's currently set to <code>p=none</code> — monitor only, nothing gets rejected because of it yet — with a summary report emailed to a Cloudflare-provided reporting address rather than anyone at the parish having to watch it directly.</p>
+        </div>
+        <div class="card reveal">
+          <h3>Google site verification</h3>
+          <p>Proves to Google Search Console that whoever added this record controls the domain — unrelated to email, and safe to ignore day to day.</p>
+        </div>
+        <div class="card reveal">
+          <h3>MailerLite domain verification</h3>
+          <p>The same idea, for MailerLite: proves domain ownership as part of setting up the newsletter's sending domain.</p>
+        </div>
+        <div class="card reveal">
+          <h3>One unexplained record</h3>
+          <p>A short plain-text value with no obvious purpose from the DNS alone — most likely a leftover verification code from a past service. Worth checking with whoever manages the Cloudflare account before ever removing it, in case it's still quietly relied on by something.</p>
+        </div>
+      </div>
+      <p>DNS records can change, so treat the specifics above as a snapshot taken 8 September 2026, not a permanent fact — a public DNS lookup (the same kind used to write this page) takes Claude moments to re-run if this page might be out of date.</p>
+    </div>
+  </section>
+
+</main>
