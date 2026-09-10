@@ -38,17 +38,15 @@ export const CLERGY = [
 ];
 
 // Retired/non-stipendiary clergy licensed to help lead services but without a
-// parish role of their own — a separate card from any other role they hold
-// (e.g. Paul Roberts is also Kington's organist, see CHURCH_OFFICERS below;
-// that's a deliberate second card, not a duplicate to merge). The optional
-// `church` slug additionally surfaces someone on that church's own portal
-// page via {{PEOPLE:pto-<slug>}} — see renderPeopleTokens in build.mjs;
-// leave it off for PTO clergy not tied to one specific church.
+// parish role of their own — a separate card from any other role they hold.
+// The optional `church` slug additionally surfaces someone on that church's
+// own portal page via {{PEOPLE:pto-<slug>}} — see renderPeopleTokens in
+// build.mjs; leave it off for PTO clergy not tied to one specific church.
 export const PTO_CLERGY = [
   {
     name: 'Revd Paul Roberts',
     role: 'Permission to Officiate (PTO)',
-    bio: "Assists with leading services at St Mary's, Kington." + contactLink('rev.paul.c.roberts@gmail.com'),
+    bio: "Assists with leading services at St Mary's, Kington.",
     iconSvg: PERSON_ICON,
     church: 'kington',
   },
@@ -102,12 +100,6 @@ export const CHURCH_OFFICERS = {
       name: 'Philip Sell',
       role: 'Director of Music · Parish Administrator',
       bio: "Director of Music at St Mary's, Kington, and Parish Administrator for Kington Parishes." + contactLink('office@kingtonparishes.org.uk'),
-      iconSvg: MUSIC_ICON,
-    },
-    {
-      name: 'Revd Paul Roberts',
-      role: 'Organist',
-      bio: "Organist at St Mary's, Kington." + contactLink('rev.paul.c.roberts@gmail.com'),
       iconSvg: MUSIC_ICON,
     },
     {

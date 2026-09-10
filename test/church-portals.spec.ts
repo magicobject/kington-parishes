@@ -50,7 +50,6 @@ const CHURCH_OFFICERS = {
     ['Christine Robinson', 'Parish Safeguarding Officer · Church Secretary'],
     ['Julia Reid', 'Health & Safety Officer'],
     ['Philip Sell', 'Director of Music · Parish Administrator'],
-    ['Revd Paul Roberts', 'Organist'],
     ['David Redmayne', 'Parish News Editor'],
     ['Craig Freese', 'Parish News Compositor'],
     ['John Clayton', 'Bell Tower Captain'],
@@ -93,12 +92,10 @@ for (const [slug, officers] of Object.entries(CHURCH_OFFICERS)) {
       await page.goto(path);
       for (const [name, role] of [...CLERGY, ...officers]) {
         // .first(): our-people.html lists every church on one page, so
-        // someone serving more than one church (Ruth Jones, Nicola Cavell),
-        // or more than one role in different sections of the same church
-        // (Revd Paul Roberts: Organist here, Permission to Officiate in the
-        // PTO section), has more than one matching-name card there — filter
-        // down to the one whose role tag matches before asserting, so those
-        // extra cards don't cause a false mismatch.
+        // someone serving more than one church (Ruth Jones, Nicola Cavell)
+        // has more than one matching-name card there — filter down to the
+        // one whose role tag matches before asserting, so those extra cards
+        // don't cause a false mismatch.
         const card = page
           .locator('.card', { has: page.getByRole('heading', { name, exact: true }) })
           .filter({ has: page.locator('.tags', { hasText: new RegExp(`^${role.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`) }) })
