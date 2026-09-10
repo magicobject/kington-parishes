@@ -41,6 +41,7 @@ export const ONE_OFF_EVENTS = [
   { date: '2026-10-04', time: '18:00', title: 'Praise & Prayer in the Evening (PPE)', location: "St Mary's, Kington" },
   { date: '2026-10-11', time: '10:00', title: 'Holy Communion', location: "St Mary's, Kington" },
   { date: '2026-10-16', time: '19:00', title: "'Jug of Punch' October Concert", location: "St Mary's, Kington" },
+  { date: '2026-10-17', time: '10:00', title: 'Coffee Morning', location: 'The Dove & Yarn Barn, Kington' },
   { date: '2026-10-18', time: '10:00', title: 'Morning Praise', location: "St Mary's, Kington" },
   { date: '2026-10-21', time: '15:30', title: 'Lego Club', location: "St Mary's, Kington" },
   { date: '2026-10-25', time: '10:00', title: 'Holy Communion', location: "St Mary's, Kington" },
