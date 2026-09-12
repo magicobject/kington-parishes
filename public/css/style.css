@@ -524,6 +524,22 @@ footer.site .foot-churches a { text-decoration: underline; text-underline-offset
   border-bottom: 1px solid rgba(255,255,255,0.12);
 }
 @media (max-width: 700px) { .foot-grid { grid-template-columns: 1fr; } }
+.foot-badges {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding-top: 24px;
+}
+.foot-badges a {
+  display: inline-flex;
+  align-items: center;
+  background: #fff;
+  padding: 8px 14px;
+  border-radius: 6px;
+  line-height: 0;
+}
+.foot-badges img { display: block; height: 32px; width: auto; }
 .fine {
   padding-top: 18px;
   font-size: 0.82rem;
