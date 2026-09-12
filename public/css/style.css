@@ -532,6 +532,14 @@ footer.site .foot-churches a { text-decoration: underline; text-underline-offset
   margin-top: 16px;
 }
 .foot-logos img { display: block; height: 28px; width: auto; }
+.foot-logos .logo-chip {
+  display: inline-flex;
+  align-items: center;
+  background: #F8F5EE;
+  padding: 6px 10px;
+  border-radius: 6px;
+  line-height: 0;
+}
 .fine {
   padding-top: 18px;
   font-size: 0.82rem;
