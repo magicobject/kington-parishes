@@ -15,6 +15,10 @@
     <div class="wrap">
       <ul class="changelog">
         <li>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.14.014</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">14 September 2026</span></div>
+          <p>Fixed a build quirk on <a href="calendar.html">the calendar page</a>: the HTML comment explaining the EVENTS_NOSCRIPT token named it in curly braces, so the build's own token substitution matched that mention too and spliced the full generated event list into the comment's sentence. Harmless — it's never rendered — but bloated the file and looked broken in view-source. Reworded the comment so it names the token without triggering the substitution.</p>
+        </li>
+        <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.14.013</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">14 September 2026</span></div>
           <p>Added a Wedding at St Mary's, Kington to the <a href="calendar.html">calendar</a>, 2:00pm on Saturday 24 July 2027.</p>
         </li>
