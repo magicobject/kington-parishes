@@ -15,6 +15,10 @@
     <div class="wrap">
       <ul class="changelog">
         <li>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.14.011</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">14 September 2026</span></div>
+          <p>Restyled each church's entry on <a href="our-churches.html">Our Churches</a>: the photo is smaller and sits beside its blurb on desktop screens (860px and up) instead of above it, so there's more room for the text and less scrolling to get through all five. On mobile, the photo stays above the blurb as before.</p>
+        </li>
+        <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.14.010</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">14 September 2026</span></div>
           <p>Fixed each church portal page's "Find Us" map rendering in front of the sticky header on scroll, instead of behind it like the rest of the page. Leaflet's own panes and controls use z-index values up to 1000 that would otherwise escape past the header's — the homepage's map happened to avoid this by sitting inside a <code>.reveal</code> scroll-animation section whose transform incidentally contained it, but the church pages' maps had no such container. Isolated the map embed's own stacking context directly (<code>isolation: isolate</code>) so it's fixed everywhere on purpose, not by accident.</p>
         </li>
