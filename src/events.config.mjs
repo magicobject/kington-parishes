@@ -59,6 +59,7 @@ export const ONE_OFF_EVENTS = [
   { date: '2026-12-06', time: '18:00', title: 'Praise & Prayer in the Evening (PPE)', location: "St Mary's, Kington" },
   { date: '2026-12-09', time: '15:30', title: 'Lego Club', location: "St Mary's, Kington" },
   { date: '2026-12-11', time: '18:30', title: 'Carols at the Oxford', location: '' },
+  { date: '2027-07-24', time: '14:00', title: 'Wedding', location: "St Mary's, Kington" },
 ];
 
 // Recurring weekly activities. Each series expands into one entry per
