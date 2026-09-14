@@ -707,12 +707,20 @@ footer.site .fine a { color: #C9C3B2; text-decoration: underline; text-underline
 .parish-photo figcaption { margin-top: 10px; font-size: 0.85rem; color: var(--ink-soft); }
 
 /* From 860px up (same desktop threshold as the header's own nav
-   collapse), put the photo beside its blurb instead of above it —
-   smaller photo, more room for the text. */
+   collapse), float the photo so the blurb text wraps around it
+   instead of sitting in its own full-width block below. flow-root on
+   the wrap contains the float so it can't bleed into whatever section
+   follows the article (Find Us, Clergy team, etc. on the church portal
+   pages). Only the first heading after the photo is left free to wrap
+   alongside it (church-kington.html's "Join us for worship" sits right
+   after the photo with no intro paragraph of its own) — every heading
+   after that clears, so a heading is never squeezed into a narrow
+   column beside the image. */
 @media (min-width: 860px) {
-  .parish-body { display: flex; align-items: flex-start; gap: 40px; }
-  .parish-photo { flex: 0 0 300px; max-width: 300px; margin: 0; }
-  .parish-info { flex: 1 1 auto; min-width: 0; }
+  .parish .wrap { display: flow-root; }
+  .parish-photo { float: left; width: 300px; margin: 0 32px 20px 0; }
+  .parish .wrap > h2 ~ h2 { clear: both; }
+  .parish .facts, .parish .links-row { clear: left; }
 }
 
 /* ---------- Parish Hall gallery ---------- */
