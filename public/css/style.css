@@ -416,13 +416,46 @@ section + section { border-top: 1px solid var(--line); }
 .difficulty-badge--strenuous { background: #E8AFA0; color: var(--alert-text); }
 .pilgrim-card p { color: var(--ink-soft); margin: 10px 0 14px; font-size: 0.95rem; }
 .pilgrim-card .tags { font-size: 0.78rem; color: var(--brass-dark); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
-.pilgrim-card .btn-download {
+.btn-download {
   display: inline-flex; align-items: center; gap: 6px;
   font-weight: 700; font-size: 0.9rem; color: var(--slate-dark);
   text-decoration: none; border-bottom: 2px solid var(--brass); padding-bottom: 2px;
 }
-.pilgrim-card .btn-download svg { width: 14px; height: 14px; }
-.pilgrim-card .btn-download:hover { color: var(--brass-dark); border-color: var(--brass-dark); }
+.btn-download svg { width: 14px; height: 14px; }
+.btn-download:hover { color: var(--brass-dark); border-color: var(--brass-dark); }
+
+/* ---------- Newsletter / Parish Magazine panel ---------- */
+.newsletter-panel { display: flex; align-items: flex-start; gap: 56px; flex-wrap: wrap; }
+/* The callout card overlaps the photo's bottom-right corner, into the 56px
+   gap toward the copy column — never toward the photo's own left edge,
+   which at narrower viewports would push it off-screen. */
+.newsletter-photo { position: relative; flex-shrink: 0; width: 220px; margin-bottom: 40px; }
+.newsletter-photo img {
+  display: block; width: 100%; height: auto; aspect-ratio: 220 / 311; object-fit: cover;
+  border-radius: var(--radius); box-shadow: 0 14px 28px -14px rgba(38,37,33,0.4);
+}
+.newsletter-callout {
+  position: absolute;
+  right: -36px;
+  bottom: -40px;
+  width: 200px;
+  background: var(--parchment);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  box-shadow: 0 10px 22px -12px rgba(38,37,33,0.3);
+}
+.newsletter-callout .kicker { margin-bottom: 4px; }
+.newsletter-callout p { font-size: 0.85rem; color: var(--ink-soft); margin: 0 0 10px; }
+.newsletter-copy { flex: 1 1 340px; min-width: 280px; }
+.newsletter-copy .kicker { margin-bottom: 10px; }
+.newsletter-copy h2 { font-size: clamp(1.6rem, 3vw, 2.1rem); }
+.newsletter-copy > p { color: var(--ink-soft); margin-top: 12px; max-width: 56ch; }
+@media (max-width: 700px) {
+  .newsletter-panel { flex-direction: column; }
+  .newsletter-photo { width: 200px; margin: 0 auto 64px; }
+  .newsletter-callout { position: static; width: 100%; margin: -32px 0 0; }
+}
 
 .map-full { margin-top: 20px; }
 .map-full-embed {
