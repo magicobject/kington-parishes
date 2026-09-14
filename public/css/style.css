@@ -18,11 +18,19 @@
   --line: rgba(38,37,33,0.16);
   --radius: 4px;
   --max: 1080px;
+  /* Alert red family — deliberately outside the brand palette above, for
+     content where a muted brand color would undersell real urgency
+     (safeguarding, the Strenuous pilgrim-path badge). #7A241A on #FCE8E6
+     is 8.5:1, #7A241A on #E8AFA0 (the badge) is 5.3:1 — both clear AA. */
+  --alert-bg: #FCE8E6;
+  --alert-text: #7A241A;
+  --alert-border: #C0392B;
+  --header-height: 84px;
 }
 
 * { box-sizing: border-box; }
 
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; scroll-padding-top: var(--header-height); }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
@@ -70,7 +78,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
 header.site {
   background: var(--slate-dark);
   border-bottom: 1px solid rgba(255,255,255,0.08);
-  position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 6px 18px -10px rgba(0,0,0,0.4);
 }
 header.site::before {
   content: "";
@@ -136,13 +147,16 @@ nav.links a:hover, nav.links a[aria-current="page"] {
 .nav-toggle svg { flex-shrink: 0; }
 
 /* Below this width the primary nav gets cramped onto three wrapped lines —
-   collapse it behind the ellipsis toggle instead. Search stays visible
-   (its own full-width row) rather than hiding behind that toggle too —
-   it's useful enough not to bury. */
+   collapse it behind the ellipsis toggle instead. Search and the header CTAs
+   (Live Stream / Donate) collapse behind the same toggle here too — on a
+   phone-height screen, showing all three unconditionally pushed the actual
+   hero headline below the fold before a visitor saw any content. Higher
+   specificity than the unconditional `.header-ctas { display: flex }` rule
+   below is needed for the hide to stick regardless of source order. */
 @media (max-width: 860px) {
   .nav-toggle { display: flex; }
-  .header-search { order: 2; flex-basis: 100%; }
-  .header-ctas { order: 3; }
+  header.site .header-search { order: 2; flex-basis: 100%; display: none; }
+  header.site .header-ctas { order: 3; display: none; }
   nav.links {
     display: none;
     order: 4;
@@ -154,6 +168,8 @@ nav.links a:hover, nav.links a[aria-current="page"] {
     border-top: 1px solid rgba(255,255,255,0.14);
   }
   nav.links.nav-open { display: flex; }
+  header.site nav.links.nav-open ~ .header-search { display: block; }
+  header.site nav.links.nav-open ~ .header-ctas { display: flex; flex-direction: column; align-items: stretch; }
   nav.links a {
     padding: 11px 4px;
     border-bottom: 1px solid rgba(255,255,255,0.08);
@@ -572,11 +588,28 @@ footer.site .fine a { color: #C9C3B2; text-decoration: underline; text-underline
   overflow: hidden;
 }
 .hero .eyebrow { color: #C9BEA0; }
-.hero h1 { color: #F8F5EE; font-size: clamp(2.1rem, 5vw, 3.1rem); max-width: 17ch; font-weight: 600; }
+.hero h1 { color: #F8F5EE; font-size: clamp(2.1rem, 5vw, 3.1rem); max-width: 20ch; font-weight: 600; }
+/* Dawn-gold italic on the hero's darkest realistic background (slate-dark
+   #2E3C48) is 6.7:1; against the gradient's heather-dark midpoint it's still
+   4.99:1 — both clear the 3:1 large-text minimum with room to spare. */
+.hero h1 .hero-accent { font-style: italic; font-weight: 500; color: var(--dawn-gold); }
 .hero p.lede { color: #C4BFAF; max-width: 50ch; margin-top: 16px; font-size: 1.1rem; }
 .hero p.lede a { color: #F8F5EE; text-decoration: underline; text-underline-offset: 3px; }
 .hero p.lede a:hover { color: #D8B978; }
 .hero .cta-row { margin-top: 26px; display: flex; gap: 14px; flex-wrap: wrap; }
+.hero-stat {
+  margin-top: 30px;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 20px;
+  background: rgba(38,37,33,0.32);
+  border: 1px solid rgba(248,245,238,0.22);
+  border-radius: var(--radius);
+  backdrop-filter: blur(2px);
+}
+.hero-stat-num { font-family: 'Spectral', serif; font-size: 2.1rem; font-weight: 600; color: var(--dawn-gold); line-height: 1; }
+.hero-stat-label { max-width: 22ch; font-size: 0.88rem; color: #EDE8DC; line-height: 1.3; }
 .ridge-nav { margin-top: 44px; }
 .ridge-nav svg { display: block; width: 100%; height: auto; }
 .ridge-nav a { cursor: pointer; }
