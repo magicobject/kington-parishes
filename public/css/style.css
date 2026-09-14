@@ -70,7 +70,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
 header.site {
   background: var(--slate-dark);
   border-bottom: 1px solid rgba(255,255,255,0.08);
-  position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  box-shadow: 0 6px 18px -8px rgba(0,0,0,0.35);
 }
 header.site::before {
   content: "";
@@ -81,20 +84,32 @@ header.site::before {
 }
 .nav-row {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  padding: 16px 28px;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 28px;
   max-width: var(--max);
   margin: 0 auto;
+}
+.nav-primary {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 22px;
   flex-wrap: wrap;
+}
+.nav-secondary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
 }
 .brand {
   font-family: 'Spectral', serif;
   font-weight: 600;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   color: #F8F5EE;
   text-decoration: none;
+  flex-shrink: 0;
 }
 .brand:hover {
   color: #fff;
@@ -103,16 +118,16 @@ header.site::before {
 }
 nav.links {
   display: flex;
-  gap: 22px;
+  gap: 18px;
   flex-wrap: wrap;
   font-weight: 600;
-  font-size: 0.92rem;
+  font-size: 0.86rem;
 }
 nav.links a {
   color: #D6D0BF;
   text-decoration: none;
   border-bottom: 2px solid transparent;
-  padding-bottom: 3px;
+  padding-bottom: 2px;
 }
 nav.links a:hover, nav.links a[aria-current="page"] {
   color: #fff;
@@ -130,7 +145,7 @@ nav.links a:hover, nav.links a[aria-current="page"] {
   font-size: 0.88rem;
   padding: 8px 12px;
   cursor: pointer;
-  order: 1;
+  margin-left: auto;
 }
 .nav-toggle:hover { background: rgba(255,255,255,0.08); }
 .nav-toggle svg { flex-shrink: 0; }
@@ -141,17 +156,27 @@ nav.links a:hover, nav.links a[aria-current="page"] {
    it's useful enough not to bury. */
 @media (max-width: 860px) {
   .nav-toggle { display: flex; }
-  .header-search { order: 2; flex-basis: 100%; }
-  .header-ctas { order: 3; }
+  .nav-secondary { flex-wrap: wrap; }
+  .header-search { flex-basis: 100%; }
+  /* The header is sticky, so an open menu that grew the header's own
+     height would eat the whole viewport and leave nothing to tap to
+     dismiss it — overlay it over the page instead of pushing the header
+     taller. */
   nav.links {
     display: none;
-    order: 4;
-    flex-basis: 100%;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
     flex-direction: column;
     gap: 2px;
-    margin-top: 14px;
-    padding-top: 14px;
+    margin-top: 10px;
+    padding: 14px 0 4px;
     border-top: 1px solid rgba(255,255,255,0.14);
+    background: var(--slate-dark);
+    max-height: calc(100vh - 70px);
+    overflow-y: auto;
+    box-shadow: 0 16px 30px -12px rgba(0,0,0,0.45);
   }
   nav.links.nav-open { display: flex; }
   nav.links a {
@@ -165,7 +190,7 @@ nav.links a:hover, nav.links a[aria-current="page"] {
   .site-search-results { width: 100%; }
 }
 
-.header-ctas { display: flex; align-items: center; gap: 10px; }
+.header-ctas { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
 
 /* ---------- Header search ---------- */
 .header-search { position: relative; }
@@ -178,7 +203,7 @@ nav.links a:hover, nav.links a[aria-current="page"] {
 }
 #site-search-input {
   width: 190px;
-  padding: 8px 12px 8px 34px;
+  padding: 7px 12px 7px 34px;
   border-radius: 100px;
   border: 1px solid rgba(255,255,255,0.25);
   background: rgba(255,255,255,0.08);
@@ -232,7 +257,7 @@ nav.links a:hover, nav.links a[aria-current="page"] {
   background: var(--brass);
   color: #1F1A0B;
   font-weight: 700;
-  padding: 9px 18px;
+  padding: 7px 18px;
   border-radius: var(--radius);
   text-decoration: none;
   font-size: 0.88rem;
@@ -249,7 +274,7 @@ nav.links a:hover, nav.links a[aria-current="page"] {
   color: #F8F5EE;
   font-weight: 600;
   font-size: 0.88rem;
-  padding: 8px 16px;
+  padding: 7px 16px;
   text-decoration: none;
 }
 .btn-livestream:hover { background: rgba(255,255,255,0.08); }
