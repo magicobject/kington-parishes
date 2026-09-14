@@ -15,6 +15,10 @@
     <div class="wrap">
       <ul class="changelog">
         <li>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.14.005</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">14 September 2026</span></div>
+          <p>Split each church's ".facts" list on <a href="our-churches.html">Our Churches</a> and its own portal page (<a href="church-kington.html">Kington</a>, <a href="church-titley.html">Titley</a>, <a href="church-old-radnor.html">Old Radnor</a>, <a href="church-kinnerton.html">Kinnerton</a>, <a href="church-huntington.html">Huntington</a>) into two scannable pieces: a clock-icon schedule row for anything with a recurring day/time, and rounded fact-chip badges for everything else (listed grade, amenities, bell details). No service times or facts changed — only reformatted, and where a line mixed the time with the service name in prose order, reordered to time-first for a consistent row (e.g. Kington's "Praise &amp; Prayer in the Evening, 1st Sunday, 6:00pm" → "1st Sunday, 6:00pm — Praise &amp; Prayer in the Evening"). Verified every row/chip's text against the original via a scripted DOM diff before committing, and full Playwright suite (272 tests, axe included) still green.</p>
+        </li>
+        <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.14.004</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">14 September 2026</span></div>
           <p>Merged <a href="index.html">the homepage</a>'s separate "Parish Magazine" teaser row and "Stay InSpired" newsletter section into one panel, with the magazine cover styled as a photo and a small overlapping "Parish Magazine" callout card next to the signup form — instead of two flat, disconnected rows. Verified no horizontal overflow or clipping at 375px and 1024px before committing. dev branch.</p>
         </li>

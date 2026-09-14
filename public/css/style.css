@@ -729,6 +729,27 @@ footer.site .fine a { color: #C9C3B2; text-decoration: underline; text-underline
   font-size: 0.92rem;
 }
 .parish .facts div { color: var(--slate); font-weight: 600; }
+/* Schedule rows (icon + time + service name) replace prose-only facts lines
+   for anything with a recurring day/time; fact-chips replace them for
+   everything else (listed grade, amenities, bell details, …) — splitting
+   "when" from "what's notable" so each is scannable on its own. */
+.parish .schedule-list { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
+.parish .schedule-row { display: flex; align-items: baseline; gap: 10px; font-size: 0.95rem; }
+.parish .schedule-row svg { width: 16px; height: 16px; flex-shrink: 0; align-self: center; color: var(--brass-dark); }
+.parish .schedule-time { color: var(--slate); font-weight: 700; white-space: nowrap; }
+.parish .schedule-name { color: var(--ink-soft); }
+.parish .fact-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+/* brass-dark on limestone is 4.97:1 — clears AA for this small bold label. */
+.parish .fact-chip {
+  display: inline-block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--brass-dark);
+  background: var(--limestone);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 12px;
+}
 .parish .give-link { display: inline-block; margin-top: 20px; font-weight: 700; }
 .parish .give-note { margin-top: 20px; color: var(--ink-soft); font-size: 0.92rem; }
 .parish .links-row { display: flex; gap: 8px 24px; flex-wrap: wrap; margin-top: 20px; }
