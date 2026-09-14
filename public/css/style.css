@@ -396,8 +396,24 @@ section + section { border-top: 1px solid var(--line); }
 .pilgrim-card .thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; transition: transform 0.3s ease; }
 .pilgrim-card:hover .thumb img { transform: scale(1.04); }
 .pilgrim-card .body { padding: 18px 20px 20px; }
+.pilgrim-card .pilgrim-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
 .pilgrim-card h2, .pilgrim-card h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 2px; }
 .pilgrim-card .dedication { font-size: 0.85rem; color: var(--ink-soft); }
+/* Moderate: --dawn-gold/--amber-dark is 5.84:1. Strenuous reuses the
+   alert-red family (see :root) at 5.29:1 — both clear AA for this
+   small bold label. */
+.difficulty-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 3px 9px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.difficulty-badge--moderate { background: var(--dawn-gold); color: var(--amber-dark); }
+.difficulty-badge--strenuous { background: #E8AFA0; color: var(--alert-text); }
 .pilgrim-card p { color: var(--ink-soft); margin: 10px 0 14px; font-size: 0.95rem; }
 .pilgrim-card .tags { font-size: 0.78rem; color: var(--brass-dark); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
 .pilgrim-card .btn-download {
@@ -758,8 +774,12 @@ footer.site .fine a { color: #C9C3B2; text-decoration: underline; text-underline
   font-size: 0.98rem; flex-wrap: wrap;
 }
 .helpline-list a { font-weight: 700; }
+/* Deliberately breaks from the brand palette (--alert-* in :root) — a
+   "call 999" notice needs to read as urgent, not tasteful. See :root for
+   the contrast ratio this pairing clears. */
 .emergency-box {
-  background: var(--heather-dark); color: #F3EEEF;
+  background: var(--alert-bg); color: var(--alert-text);
+  border-left: 5px solid var(--alert-border);
   padding: 24px 26px; border-radius: var(--radius); margin-bottom: 32px;
 }
 .emergency-box strong { font-size: 1.2rem; }
