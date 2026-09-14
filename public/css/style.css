@@ -427,6 +427,10 @@ section + section { border-top: 1px solid var(--line); }
   border: 0;
   border-radius: var(--radius);
   display: block;
+  /* Leaflet's own panes/controls use z-index up to 1000, which would
+     otherwise float above the sticky header (z-index: 40) once scrolled
+     under it — isolate so the map's internal stacking never escapes. */
+  isolation: isolate;
 }
 
 .people-photo { max-width: 360px; margin: 0 auto 36px; text-align: center; }

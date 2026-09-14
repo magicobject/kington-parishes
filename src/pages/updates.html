@@ -15,6 +15,10 @@
     <div class="wrap">
       <ul class="changelog">
         <li>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.14.010</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">14 September 2026</span></div>
+          <p>Fixed each church portal page's "Find Us" map rendering in front of the sticky header on scroll, instead of behind it like the rest of the page. Leaflet's own panes and controls use z-index values up to 1000 that would otherwise escape past the header's — the homepage's map happened to avoid this by sitting inside a <code>.reveal</code> scroll-animation section whose transform incidentally contained it, but the church pages' maps had no such container. Isolated the map embed's own stacking context directly (<code>isolation: isolate</code>) so it's fixed everywhere on purpose, not by accident.</p>
+        </li>
+        <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.14.009</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">14 September 2026</span></div>
           <p>The header's nav row was still capped at the same 1080px measure as body copy, so the menu kept wrapping onto its own extra lines on ordinary desktop screens even after the previous build's compacting. Widened the header row and trimmed the nav's font size and spacing so the brand and all 13 menu items fit on one line from about 1280px up, giving a true two-line header (menu row, then Site Search/Live Stream/Donate Now) on desktop.</p>
         </li>
