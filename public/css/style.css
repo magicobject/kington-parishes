@@ -87,14 +87,17 @@ header.site::before {
   flex-direction: column;
   gap: 8px;
   padding: 10px 28px;
-  max-width: var(--max);
+  /* Wider than --max (the page's body-copy measure) on purpose — the nav
+     needs the extra room to fit brand + all 13 links on one line rather
+     than wrapping internally, which is what kept the header tall. */
+  max-width: 1320px;
   margin: 0 auto;
 }
 .nav-primary {
   position: relative;
   display: flex;
   align-items: center;
-  gap: 22px;
+  gap: 18px;
   flex-wrap: wrap;
 }
 .nav-secondary {
@@ -118,10 +121,10 @@ header.site::before {
 }
 nav.links {
   display: flex;
-  gap: 18px;
+  gap: 14px;
   flex-wrap: wrap;
   font-weight: 600;
-  font-size: 0.86rem;
+  font-size: 0.82rem;
 }
 nav.links a {
   color: #D6D0BF;
