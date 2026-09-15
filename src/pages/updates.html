@@ -15,6 +15,10 @@
     <div class="wrap">
       <ul class="changelog">
         <li>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.15.005</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">15 September 2026</span></div>
+          <p>Fixed a live CSP gap from the same-day anchor-scroll fix (build .003): the two inline <code>&lt;script&gt;</code> blocks it added to <a href="index.html">every page</a> were silently blocked by <code>script-src 'self'</code> in production (Cloudflare Workers, <code>_headers</code> applied) even though <code>npm test</code> passed — the plain static test server doesn't apply <code>_headers</code>, so the block never showed up locally. Allow-listed both scripts in <code>public/_headers</code> by SHA-256 hash instead of <code>'unsafe-inline'</code>, verified clean against a real <code>wrangler dev</code> console. Anchor links (search results, church sections, person cards) now actually clear the sticky header in production, not just in tests.</p>
+        </li>
+        <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.15.004</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">15 September 2026</span></div>
           <p>Added a <a href="vacancies.html">Vacancies</a> page, linked in the top menu after Get Involved: a Treasurer for St Mary's, Kington (linking through to the existing Blog post and job description, contacting Greg Wright), and Friday volunteers for Kington Foodbank at the Parish Hall — run by Churches Together in Kington, DBS check required, linking out to kingtonfoodbank.org.uk and contacting Phillippa Wright. Both are long-running vacancies with no expiry.</p>
         </li>
