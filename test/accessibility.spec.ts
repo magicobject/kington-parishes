@@ -36,6 +36,29 @@ for (const path of ALL_PATHS) {
   });
 }
 
+// CLAUDE.md's Accessibility rule ("no skipped levels — h1 → h2 → h3, not
+// h1 → h3") isn't covered by the axe scan above: axe-core's heading-order
+// check is tagged best-practice, not WCAG A/AA, so it's excluded from
+// AxeBuilder's default analyze() ruleset. This checks it directly instead —
+// a heading's level may never jump more than one deeper than the highest
+// level seen so far on the page (dropping back down, e.g. h3 after h2, is
+// always fine; skipping forward, e.g. h1 straight to h3, is not).
+for (const path of ALL_PATHS) {
+  test(`heading outline: ${path} has no skipped heading levels`, async ({ page }) => {
+    await page.goto(path);
+    const levels = await page.$$eval('h1, h2, h3, h4, h5, h6', (els) => els.map((el) => Number(el.tagName[1])));
+
+    let maxSeen = 0;
+    for (const level of levels) {
+      expect(
+        level,
+        `heading order on ${path} was [${levels.join(', ')}] — level ${level} appears after only reaching h${maxSeen}`,
+      ).toBeLessThanOrEqual(maxSeen + 1);
+      maxSeen = Math.max(maxSeen, level);
+    }
+  });
+}
+
 // The primary nav collapses behind an ellipsis "Menu" toggle below 860px —
 // scan both its closed and open states, since axe only sees what's actually
 // in the accessibility tree at scan time.

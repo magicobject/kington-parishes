@@ -18,6 +18,14 @@
   --line: rgba(38,37,33,0.16);
   --radius: 4px;
   --max: 1080px;
+  /* Overridden inline, right after the header, with its real measured
+     height (see templates/page.html) — the sticky header's height isn't a
+     fixed value or even a simple two-breakpoint step: the primary nav's 13
+     links wrap individually as the viewport narrows, so the header is
+     anywhere from ~97px to ~181px tall depending on exactly how much room
+     they need. This fallback only matters before that inline script runs
+     (or with JS disabled), so it errs generous rather than under-shooting. */
+  --header-offset: 190px;
 }
 
 * { box-sizing: border-box; }
@@ -27,6 +35,16 @@ html { scroll-behavior: smooth; }
   html { scroll-behavior: auto; }
   * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
 }
+
+/* The header is sticky (position: sticky; top: 0) and overlays whatever's
+   scrolled underneath it — without this, jumping to any #anchor (a search
+   result, a church's #kington on Our Churches, a person's card id, the 404
+   page's recovery link, anywhere) lands that element flush at the very top
+   of the viewport, right behind the header. :target is exactly "the element
+   the current URL fragment points at", so this reaches every such anchor —
+   headings ensureSectionIds gives an id to, .parish sections, anything —
+   without having to enumerate selectors by hand. */
+:target { scroll-margin-top: var(--header-offset); }
 
 body {
   margin: 0;
@@ -666,7 +684,6 @@ footer.site .fine a { color: #C9C3B2; text-decoration: underline; text-underline
 }
 .parish {
   padding: 56px 0;
-  scroll-margin-top: 24px;
 }
 .parish + .parish { border-top: 1px solid var(--line); }
 .parish.alt { background: var(--parchment); }

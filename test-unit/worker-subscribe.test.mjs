@@ -48,6 +48,12 @@ describe('sanitizeName', () => {
     assert.equal(sanitizeName(undefined), undefined);
   });
 
+  test('returns undefined for a non-string value (e.g. a number sent as JSON)', () => {
+    assert.equal(sanitizeName(123), undefined);
+    assert.equal(sanitizeName(null), undefined);
+    assert.equal(sanitizeName(['Sally']), undefined);
+  });
+
   test('caps overly long input', () => {
     assert.equal(sanitizeName('a'.repeat(200)).length, 100);
   });
@@ -117,5 +123,13 @@ describe('subscribeToMailerLite', () => {
     const result = await subscribeToMailerLite('person@example.com', undefined, env, fetchMock);
     assert.equal(result.ok, false);
     assert.equal(result.status, 502);
+  });
+
+  test('a 422 with a non-JSON body (e.g. a network/proxy error page) still falls back to the generic invalid-email message, rather than throwing', async () => {
+    const fetchMock = async () => new Response('<html>not json</html>', { status: 422 });
+    const result = await subscribeToMailerLite('person@example.com', undefined, env, fetchMock);
+    assert.equal(result.ok, false);
+    assert.equal(result.status, 422);
+    assert.equal(result.message, 'Please enter a valid email address.');
   });
 });

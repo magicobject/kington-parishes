@@ -23,13 +23,13 @@
 <meta name="twitter:title" content="St Mary's, Kinnerton — Kington Parishes">
 <meta name="twitter:description" content="St Mary's, Kinnerton: service times, how to give, and how to find this church.">
 <meta name="twitter:image" content="https://www.kingtonparishes.org.uk/img/our-churches/kinnerton.webp">
-<link rel="icon" href="/img/favicon.svg?v=2026.09.14.014" type="image/svg+xml">
-<link rel="icon" href="/img/favicon-32.png?v=2026.09.14.014" type="image/png" sizes="32x32">
-<link rel="apple-touch-icon" href="/img/apple-touch-icon.png?v=2026.09.14.014">
+<link rel="icon" href="/img/favicon.svg?v=2026.09.15.003" type="image/svg+xml">
+<link rel="icon" href="/img/favicon-32.png?v=2026.09.15.003" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="/img/apple-touch-icon.png?v=2026.09.15.003">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/style.css?v=2026.09.14.014">
+<link rel="stylesheet" href="/css/style.css?v=2026.09.15.003">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -77,6 +77,29 @@
     </div>
   </div>
 </header>
+<script>
+  // Sets --header-offset (see style.css's :target rule) to the sticky
+  // header's real height, before the browser scrolls to any #anchor in the
+  // URL — inline and synchronous, right after the header markup, so it runs
+  // as soon as the header itself has been parsed and styled, well before
+  // fragment-scrolling happens (a deferred script would risk running too
+  // late). The header has no fixed height — the primary nav's 13 links wrap
+  // individually as the viewport narrows — so this has to be measured, not
+  // guessed; see style.css's --header-offset fallback for the pre-JS value.
+  (function () {
+    var header = document.querySelector('header.site');
+    if (!header) return;
+    var setOffset = function () {
+      // getBoundingClientRect(), not offsetHeight — the header's real height
+      // is fractional (e.g. 97.234375px), and offsetHeight's integer
+      // rounding left target elements a fraction of a pixel short of fully
+      // clear.
+      document.documentElement.style.setProperty('--header-offset', header.getBoundingClientRect().height + 'px');
+    };
+    setOffset();
+    window.addEventListener('resize', setOffset);
+  })();
+</script>
 
 <main id="main">
 
@@ -204,6 +227,38 @@
 <link rel="stylesheet" href="/css/vendor/leaflet.css">
 <script src="/js/vendor/leaflet.js" defer></script>
 <script src="/js/church-map.js" defer></script>
+<script>
+  // If the URL points at a #fragment inside a .reveal element (the
+  // reveal-on-scroll animation — see .reveal/.reveal.in in style.css), that
+  // element is still sitting at its pre-reveal transform: translateY(14px)
+  // right now: main.js's IntersectionObserver only adds .in once the
+  // element is actually scrolled into view, which hasn't happened yet — the
+  // browser hasn't performed this navigation's own scroll-to-fragment step
+  // yet either. Left alone, that step measures the fragment's position
+  // using this shifted box, so it lands ~14px too high a moment later once
+  // the element reveals. Settle it to its rest state synchronously, right
+  // now, before that measurement happens — same technique
+  // test/accessibility.spec.ts uses to force-settle .reveal before an axe
+  // scan (toggling the class alone isn't enough; it starts a fresh
+  // transition rather than jumping to the end state, so the transition
+  // itself is killed too, then restored next frame so hover transitions on
+  // the same element — e.g. .card:hover — aren't left permanently inert).
+  (function () {
+    if (!location.hash) return;
+    var target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    var revealEl = target && target.closest('.reveal');
+    if (!revealEl) return;
+    revealEl.classList.add('in');
+    revealEl.style.transition = 'none';
+    revealEl.style.opacity = '1';
+    revealEl.style.transform = 'none';
+    requestAnimationFrame(function () {
+      revealEl.style.transition = '';
+      revealEl.style.opacity = '';
+      revealEl.style.transform = '';
+    });
+  })();
+</script>
 
 <div class="safeguard-strip" role="region" aria-label="Safeguarding notice">
   <div class="wrap">
@@ -243,13 +298,13 @@
     </div>
     <div class="fine">
       <span>&copy; <span id="year"></span> Kington Parishes. St Mary's Church Kington PCC is registered charity no. 1185453. Site by <a href="https://mediawright.uk">mediawright.uk</a>.</span>
-      <span class="build-number">Build 2026.09.14.014</span>
+      <span class="build-number">Build 2026.09.15.003</span>
     </div>
   </div>
 </footer>
 
-<script src="/js/main.js?v=2026.09.14.014" defer></script>
-<script src="/js/search-match.js?v=2026.09.14.014" defer></script>
-<script src="/js/search-ui.js?v=2026.09.14.014" defer></script>
+<script src="/js/main.js?v=2026.09.15.003" defer></script>
+<script src="/js/search-match.js?v=2026.09.15.003" defer></script>
+<script src="/js/search-ui.js?v=2026.09.15.003" defer></script>
 </body>
 </html>

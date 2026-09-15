@@ -96,6 +96,24 @@ test('a day with more than two events shows a "+N more" chip, but the full list 
   await expect(page.locator('#cal-agenda')).toContainText('Evening BBQ');
 });
 
+test('a day with no events shows the agenda\'s empty state, not a blank panel', async ({ page }) => {
+  await page.goto('/calendar.html');
+  // 1 July 2026 is a Wednesday with nothing seeded on it (the recurring
+  // series don't start until end of August/September, and no one-off event
+  // falls on this date) — a genuine zero-events day.
+  await gotoMonth(page, 'July 2026');
+  await page.locator('.cal-day[data-date="2026-07-01"]').click();
+  await expect(page.locator('#cal-agenda')).toContainText('Nothing on our calendar for this day.');
+  await expect(page.locator('#cal-agenda .cal-agenda-list')).toHaveCount(0);
+});
+
+test('Next from December crosses into January of the following year', async ({ page }) => {
+  await page.goto('/calendar.html');
+  await gotoMonth(page, 'December 2026');
+  await page.locator('#cal-next').click();
+  await expect(page.locator('#cal-month-label')).toHaveText('January 2027');
+});
+
 test('the calendar never causes the page to scroll horizontally, on mobile or desktop', async ({ page }) => {
   await page.goto('/calendar.html');
   await expect

@@ -15,6 +15,10 @@
     <div class="wrap">
       <ul class="changelog">
         <li>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.15.003</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">15 September 2026</span></div>
+          <p>Fixed every #anchor link on the site — search results, church sections, <a href="our-people.html">person cards</a>, and more — landing behind the sticky header instead of below it. The header has no fixed height (the nav's 13 links wrap individually as the viewport narrows, so it's anywhere from ~97px to ~180px tall), so a static scroll offset could never track it correctly. An inline script right after the header now measures its real height and feeds it to a <code>:target { scroll-margin-top: ... }</code> rule that covers every kind of anchor at once; it also settles the reveal-on-scroll animation early for whichever card or section is the actual target, since its pre-reveal <code>transform</code> was throwing the landing position off by another 14px. Also added test coverage for several previously-untested business rules: the calendar's structured data and venue-address mapping, the church coordinate data duplicated across four places, the sitemap, search ranking tie-breaks, and a few newsletter-worker edge cases.</p>
+        </li>
+        <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.14.014</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">14 September 2026</span></div>
           <p>Fixed a build quirk on <a href="calendar.html">the calendar page</a>: the HTML comment explaining the EVENTS_NOSCRIPT token named it in curly braces, so the build's own token substitution matched that mention too and spliced the full generated event list into the comment's sentence. Harmless — it's never rendered — but bloated the file and looked broken in view-source. Reworded the comment so it names the token without triggering the substitution.</p>
         </li>
