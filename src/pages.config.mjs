@@ -23,6 +23,7 @@ export const NAV = [
   { href: 'blog.html', label: 'Blog' },
   { href: 'life-events.html', label: 'Life Events' },
   { href: 'get-involved.html', label: 'Get Involved' },
+  { href: 'vacancies.html', label: 'Vacancies' },
   { href: 'resources.html', label: 'Resources' },
   { href: 'parish-hall.html', label: 'Parish Hall' },
   { href: 'calendar.html', label: 'Calendar' },
@@ -362,6 +363,13 @@ export const PAGES = [
     title: 'Get Involved — Kington Parishes',
     description: 'Hire the Parish Hall, join the church fete, support our fundraising, and find out what drives our mission.',
     active: 'get-involved.html',
+    header: true,
+  },
+  {
+    slug: 'vacancies',
+    title: 'Vacancies — Kington Parishes',
+    description: 'Current volunteer vacancies across Kington Parishes: a Treasurer at St Mary\'s, Kington, and Friday volunteers for Kington Foodbank.',
+    active: 'vacancies.html',
     header: true,
   },
   {

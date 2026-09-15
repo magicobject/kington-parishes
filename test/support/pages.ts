@@ -34,6 +34,7 @@ export const NAV_PAGES: SitePage[] = [
   { path: '/blog.html', navLabel: 'Blog', titleContains: 'Blog', heading: /news from across the parishes/i },
   { path: '/life-events.html', navLabel: 'Life Events', titleContains: 'Life Events', heading: /baptisms, weddings/i },
   { path: '/get-involved.html', navLabel: 'Get Involved', titleContains: 'Get Involved', heading: /support, hire, and take part/i },
+  { path: '/vacancies.html', navLabel: 'Vacancies', titleContains: 'Vacancies', heading: /current vacancies/i },
   { path: '/resources.html', navLabel: 'Resources', titleContains: 'Resources', heading: /explore or grow in faith/i },
   { path: '/parish-hall.html', navLabel: 'Parish Hall', titleContains: 'Parish Hall', heading: /a hall for the whole community/i },
   { path: '/calendar.html', navLabel: 'Calendar', titleContains: 'Calendar', heading: /what's on/i },

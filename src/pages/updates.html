@@ -15,6 +15,10 @@
     <div class="wrap">
       <ul class="changelog">
         <li>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.15.004</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">15 September 2026</span></div>
+          <p>Added a <a href="vacancies.html">Vacancies</a> page, linked in the top menu after Get Involved: a Treasurer for St Mary's, Kington (linking through to the existing Blog post and job description, contacting Greg Wright), and Friday volunteers for Kington Foodbank at the Parish Hall — run by Churches Together in Kington, DBS check required, linking out to kingtonfoodbank.org.uk and contacting Phillippa Wright. Both are long-running vacancies with no expiry.</p>
+        </li>
+        <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.15.003</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">15 September 2026</span></div>
           <p>Fixed every #anchor link on the site — search results, church sections, <a href="our-people.html">person cards</a>, and more — landing behind the sticky header instead of below it. The header has no fixed height (the nav's 13 links wrap individually as the viewport narrows, so it's anywhere from ~97px to ~180px tall), so a static scroll offset could never track it correctly. An inline script right after the header now measures its real height and feeds it to a <code>:target { scroll-margin-top: ... }</code> rule that covers every kind of anchor at once; it also settles the reveal-on-scroll animation early for whichever card or section is the actual target, since its pre-reveal <code>transform</code> was throwing the landing position off by another 14px. Also added test coverage for several previously-untested business rules: the calendar's structured data and venue-address mapping, the church coordinate data duplicated across four places, the sitemap, search ranking tie-breaks, and a few newsletter-worker edge cases.</p>
         </li>
