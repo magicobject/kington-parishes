@@ -22,29 +22,6 @@
 </head>
 <body>
 {{HEADER}}
-<script>
-  // Sets --header-offset (see style.css's :target rule) to the sticky
-  // header's real height, before the browser scrolls to any #anchor in the
-  // URL — inline and synchronous, right after the header markup, so it runs
-  // as soon as the header itself has been parsed and styled, well before
-  // fragment-scrolling happens (a deferred script would risk running too
-  // late). The header has no fixed height — the primary nav's 13 links wrap
-  // individually as the viewport narrows — so this has to be measured, not
-  // guessed; see style.css's --header-offset fallback for the pre-JS value.
-  (function () {
-    var header = document.querySelector('header.site');
-    if (!header) return;
-    var setOffset = function () {
-      // getBoundingClientRect(), not offsetHeight — the header's real height
-      // is fractional (e.g. 97.234375px), and offsetHeight's integer
-      // rounding left target elements a fraction of a pixel short of fully
-      // clear.
-      document.documentElement.style.setProperty('--header-offset', header.getBoundingClientRect().height + 'px');
-    };
-    setOffset();
-    window.addEventListener('resize', setOffset);
-  })();
-</script>
 
 {{CONTENT}}
 <script>

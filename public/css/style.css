@@ -18,14 +18,6 @@
   --line: rgba(38,37,33,0.16);
   --radius: 4px;
   --max: 1080px;
-  /* Overridden inline, right after the header, with its real measured
-     height (see templates/page.html) — the sticky header's height isn't a
-     fixed value or even a simple two-breakpoint step: the primary nav's 13
-     links wrap individually as the viewport narrows, so the header is
-     anywhere from ~97px to ~181px tall depending on exactly how much room
-     they need. This fallback only matters before that inline script runs
-     (or with JS disabled), so it errs generous rather than under-shooting. */
-  --header-offset: 190px;
 }
 
 * { box-sizing: border-box; }
@@ -35,16 +27,6 @@ html { scroll-behavior: smooth; }
   html { scroll-behavior: auto; }
   * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
 }
-
-/* The header is sticky (position: sticky; top: 0) and overlays whatever's
-   scrolled underneath it — without this, jumping to any #anchor (a search
-   result, a church's #kington on Our Churches, a person's card id, the 404
-   page's recovery link, anywhere) lands that element flush at the very top
-   of the viewport, right behind the header. :target is exactly "the element
-   the current URL fragment points at", so this reaches every such anchor —
-   headings ensureSectionIds gives an id to, .parish sections, anything —
-   without having to enumerate selectors by hand. */
-:target { scroll-margin-top: var(--header-offset); }
 
 body {
   margin: 0;
@@ -88,8 +70,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
 header.site {
   background: var(--slate-dark);
   border-bottom: 1px solid rgba(255,255,255,0.08);
-  position: sticky;
-  top: 0;
+  position: relative;
   z-index: 40;
   box-shadow: 0 6px 18px -8px rgba(0,0,0,0.35);
 }
@@ -172,17 +153,14 @@ nav.links a:hover, nav.links a[aria-current="page"] {
 .nav-toggle svg { flex-shrink: 0; }
 
 /* Below this width the primary nav gets cramped onto three wrapped lines —
-   collapse it behind the ellipsis toggle instead. Search stays visible
-   (its own full-width row) rather than hiding behind that toggle too —
-   it's useful enough not to bury. */
+   collapse it behind the ellipsis toggle instead. Search and the
+   Live Stream/Donate buttons stay visible, next to each other, rather than
+   hiding behind that toggle too — they're useful enough not to bury. */
 @media (max-width: 860px) {
   .nav-toggle { display: flex; }
-  .nav-secondary { flex-wrap: wrap; }
-  .header-search { flex-basis: 100%; }
-  /* The header is sticky, so an open menu that grew the header's own
-     height would eat the whole viewport and leave nothing to tap to
-     dismiss it — overlay it over the page instead of pushing the header
-     taller. */
+  /* An overlay dropdown rather than pushing the header taller in normal
+     flow — keeps the toggle itself always reachable at a fixed position
+     instead of the page jumping as the menu opens/closes. */
   nav.links {
     display: none;
     position: absolute;
@@ -207,8 +185,6 @@ nav.links a:hover, nav.links a[aria-current="page"] {
   }
   nav.links a:hover, nav.links a[aria-current="page"] { border-color: rgba(255,255,255,0.08); }
   nav.links a[aria-current="page"] { color: #D8B978; }
-  #site-search-input { width: 100%; }
-  .site-search-results { width: 100%; }
 }
 
 .header-ctas { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
@@ -241,6 +217,19 @@ nav.links a:hover, nav.links a[aria-current="page"] {
 /* Firefox and older WebKit both need their own selector for this — a
    combined selector they don't understand invalidates the whole rule. */
 #site-search-input::-webkit-search-cancel-button { filter: invert(1); opacity: 0.7; }
+
+/* Search and the Live Stream/Donate buttons share this row rather than
+   search taking a full-width row of its own above them — the search box
+   shrinks (it's the one element here that's still useful narrow) so the
+   buttons stay next to it instead of wrapping underneath. Falls back to
+   wrapping as a last resort only if a screen is too narrow to fit all
+   three, rather than forcing it. */
+@media (max-width: 860px) {
+  .nav-secondary { flex-wrap: wrap; gap: 8px 10px; }
+  .header-search { flex: 1 1 70px; min-width: 70px; }
+  #site-search-input { width: 100%; }
+  .header-ctas { flex-shrink: 0; gap: 6px; }
+}
 
 .site-search-results {
   position: absolute;
@@ -300,6 +289,13 @@ nav.links a:hover, nav.links a[aria-current="page"] {
 }
 .btn-livestream:hover { background: rgba(255,255,255,0.08); }
 .btn-livestream svg { flex-shrink: 0; }
+
+/* Trimmed down alongside the search box (see the nav-secondary rules above)
+   so Live Stream and Donate fit next to it on the same row instead of
+   wrapping underneath. */
+@media (max-width: 860px) {
+  .btn-livestream, .btn-donate { padding: 6px 10px; font-size: 0.8rem; }
+}
 
 /* ---------- Page header banner (non-home pages) ---------- */
 .page-header {
