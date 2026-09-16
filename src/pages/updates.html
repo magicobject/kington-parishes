@@ -15,6 +15,10 @@
     <div class="wrap">
       <ul class="changelog">
         <li>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.16.002</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">16 September 2026</span></div>
+          <p>CI only — no site change. The Claude Code GitHub Actions workflow (<code>.github/workflows/claude.yml</code>) now installs dependencies (<code>npm ci</code>) before running, and is allow-listed to run <code>npm ci</code>, <code>npm run build</code>, <code>npm test</code>, <code>npm run audit</code> and <code>node scripts/*.mjs</code> so it can actually build and test changes it makes.</p>
+        </li>
+        <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.16.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">16 September 2026</span></div>
           <p>No functional change — trialling GitHub connected mode for this repo. This entry exists to confirm a commit made that way tags and logs a build number the same as any other change.</p>
         </li>
