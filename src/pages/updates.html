@@ -15,6 +15,10 @@
     <div class="wrap">
       <ul class="changelog">
         <li>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.16.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">16 September 2026</span></div>
+          <p>No functional change — trialling GitHub connected mode for this repo. This entry exists to confirm a commit made that way tags and logs a build number the same as any other change.</p>
+        </li>
+        <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.15.006</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">15 September 2026</span></div>
           <p>Header is no longer sticky (<code>position: sticky</code> removed from <code>header.site</code>) — it now scrolls away with the page on every page, per user request. That also retired the same-day anchor-scroll compensation (builds .003/.005): with nothing left to overlay a scrolled-to <code>#anchor</code>, the <code>--header-offset</code>/<code>:target</code> CSS, its measuring script in <a href="index.html">templates/page.html</a>, its CSP hash, and <code>test/anchor-scroll.spec.ts</code> were all removed as dead weight rather than left in place doing nothing. Also reworked the mobile/handheld header: Live Stream and Donate now sit next to the search box on the same row (both shrink a little to fit) instead of wrapping onto a row of their own beneath it.</p>
         </li>
