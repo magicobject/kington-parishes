@@ -36,6 +36,8 @@ export const ONE_OFF_EVENTS = [
   { date: '2026-09-20', time: '10:00', title: 'Morning Praise', location: "St Mary's, Kington" },
   { date: '2026-09-20', time: '13:45', title: "Kington Pilgrim Path Walk from St Mary's", location: "St Mary's, Kington" },
   { date: '2026-09-20', time: '14:00', title: 'Pilgrimage and tea', location: "St Mary's, Kinnerton" },
+  { date: '2026-09-25', time: '09:15', title: "Lady Hawkins Founder's Day Service", location: "St Mary's, Kington" },
+  { date: '2026-09-25', time: '12:00', title: 'Funeral Service', location: "St Mary's, Kington" },
   { date: '2026-09-27', time: '10:00', title: 'Holy Communion', location: "St Mary's, Kington" },
   { date: '2026-10-04', time: '10:00', title: 'Harvest Festival', location: "St Mary's, Kington" },
   { date: '2026-10-04', time: '18:00', title: 'Praise & Prayer in the Evening (PPE)', location: "St Mary's, Kington" },
