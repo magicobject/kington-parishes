@@ -39,7 +39,8 @@ export const ONE_OFF_EVENTS = [
   { date: '2026-09-25', time: '09:15', title: "Lady Hawkins Founder's Day Service", location: "St Mary's, Kington" },
   { date: '2026-09-25', time: '12:00', title: 'Funeral Service', location: "St Mary's, Kington" },
   { date: '2026-09-27', time: '10:00', title: 'Holy Communion', location: "St Mary's, Kington" },
-  { date: '2026-10-04', time: '10:00', title: 'Harvest Festival', location: "St Mary's, Kington" },
+  { date: '2026-09-29', time: '10:30', title: 'Primary School Harvest Festival', location: "St Mary's, Kington" },
+  { date: '2026-10-04', time: '11:00', title: 'Harvest Festival, with lunch afterwards', location: "St Mary's, Kington" },
   { date: '2026-10-04', time: '18:00', title: 'Praise & Prayer in the Evening (PPE)', location: "St Mary's, Kington" },
   { date: '2026-10-11', time: '10:00', title: 'Holy Communion', location: "St Mary's, Kington" },
   { date: '2026-10-16', time: '11:00', title: 'Hard Hat Tours', location: "St Stephen's, Old Radnor" },
@@ -78,7 +79,7 @@ export const RECURRING_SERIES = [
   { title: 'Kington Zero Waste', location: "St Mary's Parish Hall", weekday: 5, time: '10:00', from: '2026-09-04', until: '2026-12-31', except: ['2026-12-25'] },
   // Term-time only (per the homepage noticeboard) — skip Herefordshire
   // school holidays. Update `except` once next term's dates are known.
-  { title: 'Stay and Play', location: "St Mary's Parish Hall", weekday: 2, time: '09:15', from: '2026-09-01', until: '2026-12-31', except: ['2026-10-27', '2026-12-22', '2026-12-29'] },
+  { title: 'Stay and Play', location: "St Mary's Parish Hall", weekday: 2, time: '09:15', from: '2026-09-01', until: '2026-12-31', except: ['2026-09-22', '2026-09-29', '2026-10-27', '2026-12-22', '2026-12-29'] },
   // Not term-time restricted — runs straight through, including the school
   // holidays Stay and Play skips.
   { title: 'Marches Voices Choir', location: 'Kington Parish Hall', weekday: 2, time: '14:00', from: '2026-09-01', until: '2026-12-31' },
