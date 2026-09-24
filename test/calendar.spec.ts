@@ -96,6 +96,31 @@ test('a day with more than two events shows a "+N more" chip, but the full list 
   await expect(page.locator('#cal-agenda')).toContainText('Evening BBQ');
 });
 
+test('a whole-day event shows "All day" instead of a time, ahead of that day\'s timed events', async ({ page }) => {
+  await page.route('**/js/calendar-events.js', (route) =>
+    route.fulfill({
+      contentType: 'application/javascript',
+      body: `window.CALENDAR_EVENTS = [
+        { date: '2026-12-25', time: '10:00', title: 'Christmas Morning Service', location: "St Mary's, Kington" },
+        { date: '2026-12-25', allDay: true, title: 'Christmas Day', location: '' },
+      ];`,
+    }),
+  );
+  await page.goto('/calendar.html');
+  await gotoMonth(page, 'December 2026');
+
+  const cell = page.locator('.cal-day[data-date="2026-12-25"]');
+  await expect(cell.locator('.cal-chip').nth(0)).toHaveText('All day Christmas Day');
+
+  await cell.click();
+  const agendaItems = page.locator('#cal-agenda .cal-agenda-list li');
+  await expect(agendaItems).toHaveCount(2);
+  await expect(agendaItems.nth(0).locator('.cal-agenda-time')).toHaveText('All day');
+  await expect(agendaItems.nth(0)).toContainText('Christmas Day');
+  await expect(agendaItems.nth(0)).not.toContainText('undefined');
+  await expect(agendaItems.nth(1)).toContainText('Christmas Morning Service');
+});
+
 test('a day with no events shows the agenda\'s empty state, not a blank panel', async ({ page }) => {
   await page.goto('/calendar.html');
   // 1 July 2026 is a Wednesday with nothing seeded on it (the recurring

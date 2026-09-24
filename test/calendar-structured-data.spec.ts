@@ -44,7 +44,10 @@ test("calendar.html's Event structured data matches src/events.config.mjs exactl
   for (let i = 0; i < expected.length; i++) {
     expect(actual[i]['@type']).toBe('Event');
     expect(actual[i].name).toBe(expected[i].title);
-    expect(actual[i].startDate).toBe(`${expected[i].date}T${expected[i].time}:00`);
+    // Whole-day events get a date-only startDate; timed ones a full datetime.
+    expect(actual[i].startDate).toBe(
+      expected[i].allDay ? expected[i].date : `${expected[i].date}T${expected[i].time}:00`,
+    );
     expect(actual[i].location).toEqual(placeFor(expected[i].location));
   }
 });
