@@ -34,6 +34,12 @@ export const CLERGY = [
     role: 'Curate',
     bio: 'Training and serving alongside Sally across the parishes.',
     iconSvg: PERSON_ICON,
+    photo: {
+      src: '/img/our-people/phillippa-wright.jpg',
+      alt: 'Illustrated portrait of Revd Phillippa Wright, smiling in clerical collar and stole, holding a shepherd\'s crook and a Bible, with a country church and grazing sheep behind her',
+      width: 480,
+      height: 600,
+    },
   },
 ];
 

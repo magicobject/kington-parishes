@@ -106,9 +106,14 @@ function obfuscateMailtoLinks(html) {
 // People and each church's portal page share the exact same person data —
 // add someone to src/people.config.mjs once, and every page that lists them
 // picks it up.
-function renderPersonCard({ iconSvg, role, name, bio }) {
+// A person with a `photo` gets that portrait at the top of their card in place
+// of the generic icon badge; everyone else keeps their icon.
+function renderPersonCard({ iconSvg, photo, role, name, bio }) {
+  const badge = photo
+    ? `<img class="person-photo" src="${photo.src}" alt="${photo.alt}" loading="lazy" width="${photo.width}" height="${photo.height}">`
+    : `<div class="icon-badge">${iconSvg}</div>`;
   return `        <div class="card reveal">
-          <div class="icon-badge">${iconSvg}</div>
+          ${badge}
           <div class="tags">${role}</div>
           <h3>${name}</h3>
           <p>${bio}</p>
