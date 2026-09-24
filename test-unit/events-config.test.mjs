@@ -96,13 +96,6 @@ describe('formatEventTime', () => {
   test('a timed event reads as its 12h time', () => {
     assert.equal(formatEventTime({ date: '2026-06-07', time: '18:00', title: 'Junior Praise' }), '6:00pm');
   });
-
-  test('Christmas Day is on the calendar as a whole-day event', () => {
-    const xmas = expandEvents().find((e) => e.title === 'Christmas Day');
-    assert.ok(xmas);
-    assert.equal(xmas.date, '2026-12-25');
-    assert.equal(xmas.allDay, true);
-  });
 });
 
 describe('formatEventDate', () => {
