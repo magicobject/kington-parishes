@@ -1,0 +1,196 @@
+# Canonical copy lives in siteadmin's templates/edit-pipeline-workflow.yml —
+# see CLAUDE.md's "GitHub Action template". Each managed repo gets its own
+# copy of this file at .github/workflows/volunteer-edit.yml; there is no
+# sync mechanism yet, so a change here must be manually re-copied into every
+# managed repo.
+#
+# NOT YET LIVE-TESTED against a real repo — that's Phase 6 (pilot rollout).
+# Built and reasoned through carefully, and its scope-check/exclusion logic
+# is unit-tested (scripts/check-diff-scope.ts, backed by
+# src/scope-check.ts's test suite), but the git/PR/merge mechanics below
+# have not run against a real GitHub Actions environment yet. Treat the
+# first real dispatch as the actual test of this file, not a formality.
+#
+# Required repo secrets on the MANAGED repo (not siteadmin):
+#   SITEADMIN_ACTION_SECRET  — same value as siteadmin's ACTION_SHARED_SECRET
+#   ANTHROPIC_API_KEY        — for headless Claude Code
+#
+# The X-Siteadmin-Action-Marker header below is NOT a secret — see
+# ARCHITECTURE.md's "Perimeter: Cloudflare WAF". It exists only so a
+# Cloudflare custom rule on siteadmin's zone can let these two calls skip
+# Bot Fight Mode's JS challenge (which otherwise 403s a plain curl call
+# before it ever reaches the Worker); the real authentication is still
+# ACTION_SHARED_SECRET, checked inside the Worker in constant time.
+# GITHUB_TOKEN is provided automatically by Actions; permissions below grant
+# it what this workflow needs (no separate PAT required inside the Action
+# itself — the PAT/GitHub App siteadmin holds is only for triggering
+# repository_dispatch from outside, a separate credential entirely).
+
+name: Volunteer website edit
+
+on:
+  repository_dispatch:
+    types: [website-edit-request]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  SITEADMIN_URL: https://siteadmin.mediawright.uk
+  SITE: ${{ github.event.client_payload.site }}
+  REQUESTED_BY: ${{ github.event.client_payload.requested_by }}
+  SPEC: ${{ github.event.client_payload.spec }}
+  CONVERSATION_ID: ${{ github.event.client_payload.conversation_id }}
+
+jobs:
+  edit:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1 (ARCHITECTURE.md's "Git workflow", step 1): independently
+      # re-validate against the live roster — never trust the dispatch
+      # payload alone, and never carry a stale local copy of the roster.
+      - name: Validate against the live roster
+        id: validate
+        env:
+          ACTION_SHARED_SECRET: ${{ secrets.SITEADMIN_ACTION_SECRET }}
+        run: |
+          set -euo pipefail
+          payload=$(jq -nc --arg rb "$REQUESTED_BY" --arg site "$SITE" '{requested_by:$rb, repo_slug:$site}')
+          response=$(curl -sS -w '\n%{http_code}' -X POST "$SITEADMIN_URL/internal/validate" \
+            -H "Authorization: Bearer ${ACTION_SHARED_SECRET}" \
+            -H "Content-Type: application/json" \
+            -H "X-Siteadmin-Action-Marker: edit-pipeline-v1" \
+            -d "$payload")
+          http_code=$(echo "$response" | tail -n1)
+          body=$(echo "$response" | sed '$d')
+          if [ "$http_code" != "200" ]; then
+            echo "::error::Validation endpoint returned HTTP $http_code: $body"
+            exit 1
+          fi
+          if [ "$(echo "$body" | jq -r '.allow')" != "true" ]; then
+            echo "::error::Validation denied for $REQUESTED_BY on $SITE — refusing to proceed."
+            exit 1
+          fi
+          echo "capability=$(echo "$body" | jq -r '.capability')" >> "$GITHUB_OUTPUT"
+          echo "$body" | jq -c '.globs' > /tmp/globs.json
+          echo "$body" | jq -r '"\(.github_owner)/\(.github_repo)"' > /tmp/expected_repo.txt
+
+      # Fail loudly on mismatch rather than proceeding — see
+      # ARCHITECTURE.md's "Security testing", "Action self-check".
+      - name: Sanity-check this workflow is running in the expected repo
+        run: |
+          expected=$(cat /tmp/expected_repo.txt)
+          if [ "$expected" != "${{ github.repository }}" ]; then
+            echo "::error::Roster says site '$SITE' maps to '$expected', but this workflow is running in '${{ github.repository }}'. Something upstream is wrong — refusing to proceed."
+            exit 1
+          fi
+
+      - uses: actions/checkout@v4
+
+      # TODO (Phase 6 onboarding): pull any staged R2 objects referenced in
+      # github.event.client_payload.attachments and hand their local paths
+      # to Claude Code below. Needs read-only R2 credentials scoped to this
+      # workflow. Not blocking the core text-edit path, which has no
+      # attachments most of the time.
+
+      - name: Create branch
+        run: git checkout -b "volunteer-edit/${CONVERSATION_ID}"
+
+      - name: Run Claude Code headlessly against the spec
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          # Exact non-interactive flags should be confirmed against current
+          # Claude Code CLI docs during Phase 6 setup — this is a reasonable
+          # starting point, not a value copied from a working run.
+          npx @anthropic-ai/claude-code -p "$SPEC" --dangerously-skip-permissions
+
+      - name: Commit
+        run: |
+          git config user.email "siteadmin@mediawright.uk"
+          git config user.name "Site Admin (on behalf of ${REQUESTED_BY})"
+          git add -A
+          git commit -m "Volunteer edit: ${SPEC}" --allow-empty-message || true
+          git push origin "volunteer-edit/${CONVERSATION_ID}"
+
+      - name: Open PR
+        id: pr
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          pr_url=$(gh pr create \
+            --title "Volunteer edit from ${REQUESTED_BY}" \
+            --body "$(printf 'Requested by %s\n\nSpec:\n%s' "$REQUESTED_BY" "$SPEC")" \
+            --base main --head "volunteer-edit/${CONVERSATION_ID}")
+          echo "pr_url=$pr_url" >> "$GITHUB_OUTPUT"
+
+      # ARCHITECTURE.md's "Git workflow", step 3: this repo's own test gate,
+      # exactly as its own CLAUDE.md requires before any push — this
+      # pipeline doesn't get to bypass a site's own quality bar.
+      - name: Run this repo's own test gate
+        id: tests
+        continue-on-error: true
+        run: |
+          npm ci
+          npm test
+          npm run audit
+
+      # Step 4: diff against the real globs AND the hardcoded infra
+      # exclusion list — see scripts/check-diff-scope.ts.
+      - name: Diff-check against scope + infra exclusion
+        id: scope
+        continue-on-error: true
+        run: |
+          git fetch origin main
+          git diff --name-only origin/main...HEAD | node .github/scripts/check-diff-scope.mjs "$(cat /tmp/globs.json)"
+          # check-diff-scope.mjs is vendored into this repo at
+          # .github/scripts/ — copied from siteadmin's
+          # templates/check-diff-scope-standalone.mjs at onboarding time,
+          # alongside this workflow file itself (see CLAUDE.md's "Adding a
+          # new managed repo means..."). Dependency-free on purpose, so this
+          # repo doesn't need a new devDependency just for this step.
+
+      # Step 5/6: auto-merge only if BOTH conditions hold; otherwise hold
+      # for review with a clear reason — the only case a human gets pulled
+      # into, and the exception, not the norm.
+      - name: Merge if green, in-scope, and clear of the exclusion list
+        id: merge
+        if: steps.tests.outcome == 'success' && steps.scope.outcome == 'success'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # A direct merge, not `gh pr merge --auto` — we've already gated on
+          # the checks ourselves in the steps above; --auto would defer to
+          # branch-protection required status checks that may not exist here.
+          gh pr merge --squash "${{ steps.pr.outputs.pr_url }}"
+          sha=$(gh pr view "${{ steps.pr.outputs.pr_url }}" --json mergeCommit -q '.mergeCommit.oid // empty')
+          echo "commit_url=https://github.com/${{ github.repository }}/commit/$sha" >> "$GITHUB_OUTPUT"
+
+      - name: Leave a note if held for review
+        if: steps.tests.outcome != 'success' || steps.scope.outcome != 'success'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh pr comment "${{ steps.pr.outputs.pr_url }}" --body "Held for review — tests: ${{ steps.tests.outcome }}, scope check: ${{ steps.scope.outcome }}. See this run's logs for the specific reason."
+
+      # Phase 5: report the outcome back so the volunteer sees a chat
+      # message instead of silence — see ARCHITECTURE.md's "Notification".
+      - name: Report completion back to siteadmin
+        if: always()
+        env:
+          ACTION_SHARED_SECRET: ${{ secrets.SITEADMIN_ACTION_SECRET }}
+        run: |
+          if [ "${{ steps.tests.outcome }}" = "success" ] && [ "${{ steps.scope.outcome }}" = "success" ]; then
+            payload=$(jq -nc --arg cid "$CONVERSATION_ID" --arg url "${{ steps.merge.outputs.commit_url }}" \
+              '{conversation_id:$cid, status:"merged", commit_url:$url}')
+          else
+            reason="tests: ${{ steps.tests.outcome }}, scope check: ${{ steps.scope.outcome }}"
+            payload=$(jq -nc --arg cid "$CONVERSATION_ID" --arg reason "$reason" \
+              '{conversation_id:$cid, status:"held_for_review", reason:$reason}')
+          fi
+          curl -sS -X POST "$SITEADMIN_URL/internal/callback" \
+            -H "Authorization: Bearer ${ACTION_SHARED_SECRET}" \
+            -H "Content-Type: application/json" \
+            -H "X-Siteadmin-Action-Marker: edit-pipeline-v1" \
+            -d "$payload"
