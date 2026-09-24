@@ -9,7 +9,10 @@
 // outputs follow automatically.
 
 // Special services, concerts and one-off events. Recurring weekly community
-// activities go in RECURRING_SERIES below instead.
+// activities go in RECURRING_SERIES below instead. A whole-day entry (no
+// specific time) takes `allDay: true` in place of `time` — it lists as "All
+// day", sorts ahead of that day's timed events, and gets a date-only
+// startDate in the structured data.
 export const ONE_OFF_EVENTS = [
   { date: '2026-06-07', time: '18:00', title: 'Junior Praise', location: 'Old Radnor' },
   { date: '2026-06-12', time: '19:00', title: 'Organ Concert: Roger Judd (Diocesan Organ Advisor)', location: "St Mary's, Kington" },
@@ -62,6 +65,7 @@ export const ONE_OFF_EVENTS = [
   { date: '2026-12-06', time: '18:00', title: 'Praise & Prayer in the Evening (PPE)', location: "St Mary's, Kington" },
   { date: '2026-12-09', time: '15:30', title: 'Lego Club', location: "St Mary's, Kington" },
   { date: '2026-12-11', time: '18:30', title: 'Carols at the Oxford', location: '' },
+  { date: '2026-12-25', allDay: true, title: 'Christmas Day', location: '' },
   { date: '2027-07-24', time: '14:00', title: 'Wedding', location: "St Mary's, Kington" },
 ];
 
@@ -143,8 +147,10 @@ function expandSeries(series) {
 // structured data both filter down from.
 export function expandEvents() {
   const recurring = RECURRING_SERIES.flatMap(expandSeries);
+  // All-day events have no `time`, so they sort as '' — ahead of that day's
+  // timed events.
   return [...ONE_OFF_EVENTS, ...recurring].sort((a, b) =>
-    a.date === b.date ? a.time.localeCompare(b.time) : a.date.localeCompare(b.date));
+    a.date === b.date ? (a.time || '').localeCompare(b.time || '') : a.date.localeCompare(b.date));
 }
 
 // "18:00" -> "6:00pm", "09:15" -> "9:15am" — matches the display format
@@ -154,6 +160,12 @@ export function formatTime12h(time24) {
   const period = h < 12 ? 'am' : 'pm';
   const h12 = h % 12 === 0 ? 12 : h % 12;
   return `${h12}:${pad(m)}${period}`;
+}
+
+// An event's time as listed: "All day" for a whole-day entry, otherwise the
+// 12h time.
+export function formatEventTime(e) {
+  return e.allDay ? 'All day' : formatTime12h(e.time);
 }
 
 const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];

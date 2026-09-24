@@ -14,7 +14,7 @@
     (eventsByDate[ev.date] = eventsByDate[ev.date] || []).push(ev);
   });
   Object.keys(eventsByDate).forEach(function (d) {
-    eventsByDate[d].sort(function (a, b) { return a.time.localeCompare(b.time); });
+    eventsByDate[d].sort(function (a, b) { return (a.time || '').localeCompare(b.time || ''); });
   });
 
   // calendar-events.js is hand-edited, not user input — but escape titles/
@@ -32,6 +32,11 @@
 
   function pad(n) { return n < 10 ? '0' + n : '' + n; }
   function dateStr(y, m, d) { return y + '-' + pad(m + 1) + '-' + pad(d); }
+  // Whole-day events (allDay: true) have no time — show "All day" instead.
+  function formatEventTime(ev) {
+    return ev.allDay ? 'All day' : formatTime(ev.time);
+  }
+
   function formatTime(t) {
     var parts = t.split(':');
     var h = parseInt(parts[0], 10);
@@ -79,7 +84,7 @@
       html += '<p class="cal-agenda-empty">Nothing on our calendar for this day.</p>';
     } else {
       html += '<ul class="cal-agenda-list">' + evs.map(function (ev) {
-        return '<li><span class="cal-agenda-time">' + formatTime(ev.time) + '</span>' +
+        return '<li><span class="cal-agenda-time">' + formatEventTime(ev) + '</span>' +
           '<span class="cal-agenda-title">' + escapeHtml(ev.title) + '</span>' +
           (ev.location ? '<span class="cal-agenda-location">' + escapeHtml(ev.location) + '</span>' : '') +
           '</li>';
@@ -111,7 +116,7 @@
       if (evs.length) classes.push('cal-day--has-events');
 
       var chipsHtml = evs.slice(0, 2).map(function (ev) {
-        return '<span class="cal-chip">' + formatTime(ev.time) + ' ' + escapeHtml(ev.title) + '</span>';
+        return '<span class="cal-chip">' + formatEventTime(ev) + ' ' + escapeHtml(ev.title) + '</span>';
       }).join('');
       if (evs.length > 2) {
         chipsHtml += '<span class="cal-chip cal-chip--more">+' + (evs.length - 2) + ' more</span>';

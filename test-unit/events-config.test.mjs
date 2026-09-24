@@ -4,7 +4,7 @@
 // the recurring-series expansion and the 12h time/date formatters.
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
-import { placeFor, expandEvents, formatTime12h, formatEventDate } from '../src/events.config.mjs';
+import { placeFor, expandEvents, formatTime12h, formatEventTime, formatEventDate } from '../src/events.config.mjs';
 
 describe('placeFor', () => {
   test('a location matching a known church gets a full postal address', () => {
@@ -68,8 +68,9 @@ describe('expandEvents', () => {
   test('one-off events and expanded recurring events are merged into a single chronologically sorted list', () => {
     const events = expandEvents();
     for (let i = 1; i < events.length; i++) {
-      const prevKey = events[i - 1].date + events[i - 1].time;
-      const key = events[i].date + events[i].time;
+      // All-day events have no time and sort first on their date.
+      const prevKey = events[i - 1].date + (events[i - 1].time || '');
+      const key = events[i].date + (events[i].time || '');
       assert.ok(prevKey <= key, `expected ${prevKey} <= ${key}`);
     }
   });
@@ -84,6 +85,23 @@ describe('formatTime12h', () => {
   test('midnight and noon are 12, not 0', () => {
     assert.equal(formatTime12h('00:00'), '12:00am');
     assert.equal(formatTime12h('12:00'), '12:00pm');
+  });
+});
+
+describe('formatEventTime', () => {
+  test('a whole-day event reads "All day"', () => {
+    assert.equal(formatEventTime({ date: '2026-12-25', allDay: true, title: 'Christmas Day' }), 'All day');
+  });
+
+  test('a timed event reads as its 12h time', () => {
+    assert.equal(formatEventTime({ date: '2026-06-07', time: '18:00', title: 'Junior Praise' }), '6:00pm');
+  });
+
+  test('Christmas Day is on the calendar as a whole-day event', () => {
+    const xmas = expandEvents().find((e) => e.title === 'Christmas Day');
+    assert.ok(xmas);
+    assert.equal(xmas.date, '2026-12-25');
+    assert.equal(xmas.allDay, true);
   });
 });
 

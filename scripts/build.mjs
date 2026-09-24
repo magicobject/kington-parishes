@@ -11,7 +11,7 @@ import { NAV, FOOTER_NAV, PAGES } from '../src/pages.config.mjs';
 import { SITE } from '../src/site.config.mjs';
 import { CLERGY, PTO_CLERGY, CHURCH_OFFICERS } from '../src/people.config.mjs';
 import { NEWSLETTER_ISSUES } from '../src/newsletter.config.mjs';
-import { ONE_OFF_EVENTS, expandEvents, placeFor, formatTime12h, formatEventDate } from '../src/events.config.mjs';
+import { ONE_OFF_EVENTS, expandEvents, placeFor, formatEventTime, formatEventDate } from '../src/events.config.mjs';
 import { ensureSectionIds, extractSearchEntries, isSearchablePage, isIndexable, isHelpPage } from './build-search-index.mjs';
 import { splitNewsletterIssues, formatIssueMonth } from './newsletter-issues.mjs';
 
@@ -193,7 +193,7 @@ function renderEventsToken(html) {
   return html.replace(/\{\{EVENTS_NOSCRIPT\}\}/g, () =>
     ONE_OFF_EVENTS.map((e) => {
       const suffix = e.location ? ` — ${escapeHtml(e.location)}` : '';
-      return `          <li>${formatEventDate(e.date)}, ${formatTime12h(e.time)} — ${escapeHtml(e.title)}${suffix}</li>`;
+      return `          <li>${formatEventDate(e.date)}, ${formatEventTime(e)} — ${escapeHtml(e.title)}${suffix}</li>`;
     }).join('\n'));
 }
 
@@ -209,7 +209,9 @@ function eventStructuredData(pageUrl) {
       '@context': 'https://schema.org',
       '@type': 'Event',
       name: e.title,
-      startDate: `${e.date}T${e.time}:00`,
+      // Whole-day events get a date-only startDate (valid ISO 8601, which
+      // schema.org accepts) rather than a made-up time.
+      startDate: e.allDay ? e.date : `${e.date}T${e.time}:00`,
       eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
       eventStatus: 'https://schema.org/EventScheduled',
       location: placeFor(e.location),
