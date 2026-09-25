@@ -191,8 +191,8 @@ jobs:
               '{conversation_id:$cid, status:"merged", commit_url:$url}')
           else
             reason="tests: ${{ steps.tests.outcome }}, scope check: ${{ steps.scope.outcome }}"
-            payload=$(jq -nc --arg cid "$CONVERSATION_ID" --arg reason "$reason" \
-              '{conversation_id:$cid, status:"held_for_review", reason:$reason}')
+            payload=$(jq -nc --arg cid "$CONVERSATION_ID" --arg reason "$reason" --arg pr "${{ steps.pr.outputs.pr_url }}" \
+              '{conversation_id:$cid, status:"held_for_review", reason:$reason, pr_url:$pr}')
           fi
           curl -sS -X POST "$SITEADMIN_URL/internal/callback" \
             -H "Authorization: Bearer ${ACTION_SHARED_SECRET}" \
