@@ -128,11 +128,24 @@ jobs:
       # ARCHITECTURE.md's "Git workflow", step 3: this repo's own test gate,
       # exactly as its own CLAUDE.md requires before any push — this
       # pipeline doesn't get to bypass a site's own quality bar.
+      #
+      # `npx playwright install --with-deps chromium` is required here —
+      # every managed repo's own test suite normally only ever runs on a
+      # developer's machine (already has browsers from a prior local
+      # `playwright install`), never in a clean CI environment before this
+      # pipeline. Without this, `npm test` fails instantly on every single
+      # test with "Executable doesn't exist", which looks identical to a
+      # real test failure and silently holds every request for review
+      # regardless of whether the actual edit was fine — found via a real
+      # dry run against kingtonfoodbank. Only chromium is installed since
+      # every managed repo's playwright.config.ts only configures that one
+      # project.
       - name: Run this repo's own test gate
         id: tests
         continue-on-error: true
         run: |
           npm ci
+          npx playwright install --with-deps chromium
           npm test
           npm run audit
 
