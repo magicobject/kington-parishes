@@ -50,6 +50,7 @@ export const ONE_OFF_EVENTS = [
   { date: '2026-10-16', time: '19:00', title: "'Jug of Punch' October Concert", location: "St Mary's, Kington" },
   { date: '2026-10-17', time: '10:00', title: 'Coffee Morning', location: 'The Dove & Yarn Barn, Kington' },
   { date: '2026-10-18', time: '10:00', title: 'Morning Praise', location: "St Mary's, Kington" },
+  { date: '2026-10-18', time: '12:30', title: 'Wild Church', location: 'Kington' },
   { date: '2026-10-21', time: '15:30', title: 'Lego Club', location: "St Mary's, Kington" },
   { date: '2026-10-24', time: '19:00', title: 'Film Show of Past Local Events', location: "St Stephen's, Old Radnor" },
   { date: '2026-10-25', time: '10:00', title: 'Holy Communion', location: "St Mary's, Kington" },
