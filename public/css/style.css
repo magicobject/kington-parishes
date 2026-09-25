@@ -873,7 +873,13 @@ footer.site .fine a { color: #C9C3B2; text-decoration: underline; text-underline
 }
 .cal-day--selected .cal-chip { background: rgba(248,245,238,0.15); color: #F8F5EE; }
 .cal-chip--more { background: transparent; color: var(--ink-soft); font-weight: 700; padding-left: 2px; }
-.cal-day--selected .cal-chip--more { color: #D8B978; }
+/* #D8B978 measured 3.87:1 against this chip's dark background in CI's
+   Chromium (small bold text — font-rendering/anti-aliasing differences
+   between environments shift the sampled edge pixels enough to fail WCAG
+   AA there even though the same pair reads ~6:1 in a plain desktop browser
+   against the CSS-declared background). Lightened with real margin above
+   4.5:1 against both readings, not just the more forgiving one. */
+.cal-day--selected .cal-chip--more { color: #F6DCA0; }
 
 .cal-agenda {
   margin-top: 22px; background: var(--limestone); border: 1px solid var(--line);

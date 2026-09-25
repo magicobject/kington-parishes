@@ -56,13 +56,32 @@ function allPathsInScope(paths, globs) {
 // positive (a legitimate <iframe> embed, a genuinely-needed inline
 // handler) costs one manual review, not a silently dropped or broken
 // change.
+// A <script type="application/ld+json"> block is inert structured data —
+// browsers never execute it as JavaScript, regardless of content — but a
+// site that regenerates one as part of its normal build (schema.org event
+// markup, say) rewrites that whole line on every content edit, which would
+// otherwise flag EVERY such edit as suspicious, forever. The exemption is
+// deliberately an exact, anchored type match (not "starts with" or
+// "includes"), and only applies when the opening tag actually closes on
+// this added line — anything else (no type, an executable type, a type
+// that merely resembles ld+json, or a tag split across lines so it can't be
+// verified from one diff line) is still flagged. Keep in sync with
+// src/scope-check.ts's JSON_LD_SCRIPT_OPEN_TAG/hasSuspiciousScriptTag.
+const JSON_LD_SCRIPT_OPEN_TAG = /^<script\b[^>]*\btype\s*=\s*(["'])application\/ld\+json\1[^>]*>$/i;
+
+function hasSuspiciousScriptTag(line) {
+	const openTags = line.match(/<script\b[^>]*>?/gi);
+	if (!openTags) return false;
+	return openTags.some((tag) => !JSON_LD_SCRIPT_OPEN_TAG.test(tag));
+}
+
 const SCRIPT_INJECTION_PATTERNS = [
-	{ label: '<script> tag', pattern: /<script[\s>]/i },
-	{ label: 'javascript: URI', pattern: /javascript:/i },
+	{ label: '<script> tag', test: hasSuspiciousScriptTag },
+	{ label: 'javascript: URI', test: (line) => /javascript:/i.test(line) },
 	// Requires a real "on<name>=" attribute with a quoted value — not just
 	// any word ending in "on" immediately before an unrelated "=".
-	{ label: 'inline event handler attribute', pattern: /\bon[a-z]+\s*=\s*["']/i },
-	{ label: '<iframe> tag', pattern: /<iframe[\s>]/i },
+	{ label: 'inline event handler attribute', test: (line) => /\bon[a-z]+\s*=\s*["']/i.test(line) },
+	{ label: '<iframe> tag', test: (line) => /<iframe[\s>]/i.test(line) },
 ];
 
 function scanAddedLinesForScriptInjection(diffText) {
@@ -70,8 +89,8 @@ function scanAddedLinesForScriptInjection(diffText) {
 	for (const line of diffText.split('\n')) {
 		if (!line.startsWith('+') || line.startsWith('+++')) continue;
 		const added = line.slice(1);
-		for (const { label, pattern } of SCRIPT_INJECTION_PATTERNS) {
-			if (pattern.test(added)) matches.add(label);
+		for (const { label, test: matchesPattern } of SCRIPT_INJECTION_PATTERNS) {
+			if (matchesPattern(added)) matches.add(label);
 		}
 	}
 	return { suspicious: matches.size > 0, matches: [...matches] };
