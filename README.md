@@ -171,3 +171,4 @@ Fixes that came out of the last full pass — kept here since axe won't re-expla
 Push to `main` — Cloudflare picks up the change and deploys `public/` automatically. There's no separate deploy step to run locally.
 
 **Note:** `wrangler.jsonc` now points `assets.directory` at `./public` instead of the repo root, since assets moved there as part of this restructure. If the Worker was previously configured to serve from the repo root, double-check the dashboard after this change lands to make sure it's picked up the new directory.
+<!-- siteadmin pipeline dry run -->
