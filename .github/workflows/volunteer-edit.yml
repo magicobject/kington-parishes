@@ -136,14 +136,19 @@ jobs:
           npm test
           npm run audit
 
-      # Step 4: diff against the real globs AND the hardcoded infra
-      # exclusion list — see scripts/check-diff-scope.ts.
-      - name: Diff-check against scope + infra exclusion
+      # Step 4: diff against the real globs, the hardcoded infra exclusion
+      # list, AND a scan of added lines for script-injection-shaped markup
+      # (<script>, javascript:, inline event handlers, <iframe>) — see
+      # scripts/check-diff-scope.ts. The FULL diff is piped in, not just
+      # --name-only, so the script can derive changed paths from the diff's
+      # own headers and scan added content in one pass — the two checks can
+      # never drift out of sync with each other.
+      - name: Diff-check against scope + infra exclusion + script injection
         id: scope
         continue-on-error: true
         run: |
           git fetch origin main
-          git diff --name-only origin/main...HEAD | node .github/scripts/check-diff-scope.mjs "$(cat /tmp/globs.json)"
+          git diff origin/main...HEAD | node .github/scripts/check-diff-scope.mjs "$(cat /tmp/globs.json)"
           # check-diff-scope.mjs is vendored into this repo at
           # .github/scripts/ — copied from siteadmin's
           # templates/check-diff-scope-standalone.mjs at onboarding time,
