@@ -10,6 +10,27 @@
 // `if (page.robots)`) — this used to be the reverse (noindex everywhere,
 // while this was a proof-of-concept build) until go-live on 6 September 2026.
 
+import { SITE } from './site.config.mjs';
+import { CHURCHES } from './churches.config.mjs';
+
+// One schema.org Church per entry in src/churches.config.mjs, for the
+// our-churches page's structured data. `geo` and `hasMap` come from each
+// church's what3words location, read off the map by a human.
+function churchStructuredData({ slug, name, locality, lat, lng, what3words, sameAs }) {
+  return {
+    '@type': 'Church',
+    name,
+    url: `https://www.kingtonparishes.org.uk/our-churches.html#${slug}`,
+    image: `https://www.kingtonparishes.org.uk/img/our-churches/${slug}.webp`,
+    address: { '@type': 'PostalAddress', addressLocality: locality, addressCountry: 'GB' },
+    geo: { '@type': 'GeoCoordinates', latitude: lat, longitude: lng },
+    hasMap: `https://what3words.com/${what3words}`,
+    telephone: SITE.phoneTel,
+    email: SITE.email,
+    ...(sameAs ? { sameAs } : {}),
+  };
+}
+
 // The header's primary nav — every page except 404 shows this.
 // "Home" isn't a link here: the brand link in the header already goes to
 // index.html, so a second link to the same place would be redundant — that
@@ -90,80 +111,11 @@ export const PAGES = [
     // One Church entry per parish. Deliberately no `address.addressRegion`
     // (Kington/Titley/Huntington read as Herefordshire, England;
     // Old Radnor/Kinnerton as Powys, Wales, but that's not confirmed against
-    // an official source here). `geo` and `hasMap` come from each church's
-    // what3words location (see the links on the page itself).
+    // an official source here). Generated from src/churches.config.mjs —
+    // see churchStructuredData below.
     structuredData: {
       '@context': 'https://schema.org',
-      '@graph': [
-        {
-          '@type': 'Church',
-          name: "St Mary the Virgin, Kington",
-          url: 'https://www.kingtonparishes.org.uk/our-churches.html#kington',
-          image: 'https://www.kingtonparishes.org.uk/img/our-churches/kington.webp',
-          address: { '@type': 'PostalAddress', addressLocality: 'Kington', addressCountry: 'GB' },
-          geo: { '@type': 'GeoCoordinates', latitude: 52.2045407, longitude: -3.0384017 },
-          hasMap: 'https://what3words.com/gripes.remark.dimension',
-          telephone: '+447974439630',
-          email: 'vicar@kingtonparishes.org.uk',
-          sameAs: [
-            'https://en.wikipedia.org/wiki/Church_of_St_Mary,_Kington',
-            'https://historicengland.org.uk/listing/the-list/list-entry/1208031',
-          ],
-        },
-        {
-          '@type': 'Church',
-          name: "St Peter's, Titley",
-          url: 'https://www.kingtonparishes.org.uk/our-churches.html#titley',
-          image: 'https://www.kingtonparishes.org.uk/img/our-churches/titley.webp',
-          address: { '@type': 'PostalAddress', addressLocality: 'Titley', addressCountry: 'GB' },
-          geo: { '@type': 'GeoCoordinates', latitude: 52.2357368, longitude: -2.9806390 },
-          hasMap: 'https://what3words.com/wooden.hence.thankful',
-          telephone: '+447974439630',
-          email: 'vicar@kingtonparishes.org.uk',
-          sameAs: [
-            'https://en.wikipedia.org/wiki/Titley_Priory',
-            'https://historicengland.org.uk/listing/the-list/list-entry/1081465',
-          ],
-        },
-        {
-          '@type': 'Church',
-          name: "St Stephen's, Old Radnor",
-          url: 'https://www.kingtonparishes.org.uk/our-churches.html#old-radnor',
-          image: 'https://www.kingtonparishes.org.uk/img/our-churches/old-radnor.webp',
-          address: { '@type': 'PostalAddress', addressLocality: 'Old Radnor', addressCountry: 'GB' },
-          geo: { '@type': 'GeoCoordinates', latitude: 52.2249297, longitude: -3.0996140 },
-          hasMap: 'https://what3words.com/tolerable.shifting.roosters',
-          telephone: '+447974439630',
-          email: 'vicar@kingtonparishes.org.uk',
-          sameAs: [
-            'https://en.wikipedia.org/wiki/St_Stephen%27s_Church,_Old_Radnor',
-            'https://coflein.gov.uk/en/site/306985',
-          ],
-        },
-        {
-          '@type': 'Church',
-          name: "St Mary's, Kinnerton",
-          url: 'https://www.kingtonparishes.org.uk/our-churches.html#kinnerton',
-          image: 'https://www.kingtonparishes.org.uk/img/our-churches/kinnerton.webp',
-          address: { '@type': 'PostalAddress', addressLocality: 'Kinnerton', addressCountry: 'GB' },
-          geo: { '@type': 'GeoCoordinates', latitude: 52.2612662, longitude: -3.1088144 },
-          hasMap: 'https://what3words.com/active.seducing.revolting',
-          telephone: '+447974439630',
-          email: 'vicar@kingtonparishes.org.uk',
-        },
-        {
-          '@type': 'Church',
-          name: 'St Thomas à Becket, Huntington',
-          url: 'https://www.kingtonparishes.org.uk/our-churches.html#huntington',
-          image: 'https://www.kingtonparishes.org.uk/img/our-churches/huntington.webp',
-          address: { '@type': 'PostalAddress', addressLocality: 'Huntington', addressCountry: 'GB' },
-          geo: { '@type': 'GeoCoordinates', latitude: 52.1735393, longitude: -3.0989438 },
-          hasMap: 'https://what3words.com/handicaps.messy.ranted',
-          telephone: '+447974439630',
-          email: 'vicar@kingtonparishes.org.uk',
-          sameAs: ['https://historicengland.org.uk/listing/the-list/list-entry/1349556'],
-        },
-      ],
+      '@graph': CHURCHES.map(churchStructuredData),
     },
   },
   // One portal page per church, linked from each church's "Visit the ..."

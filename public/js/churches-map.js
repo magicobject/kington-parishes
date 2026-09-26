@@ -1,18 +1,12 @@
-// Homepage "Find Us" map: one marker per church. Coordinates mirror the
-// `geo` values in src/pages.config.mjs's our-churches structuredData —
-// see CLAUDE.md "Data kept in sync by hand" if you're updating a church's
-// location.
+// Homepage "Find Us" map: one marker per church. The pins come from the
+// #churches-map div's data-churches attribute, generated at build time from
+// src/churches.config.mjs — edit a church's location there, not here.
 (function () {
   var mapEl = document.getElementById('churches-map');
   if (!mapEl || typeof L === 'undefined') return;
 
-  var churches = [
-    { name: "St Mary the Virgin, Kington", lat: 52.2045407, lng: -3.0384017, url: '/church-kington.html' },
-    { name: "St Peter's, Titley", lat: 52.2357368, lng: -2.9806390, url: '/church-titley.html' },
-    { name: "St Stephen's, Old Radnor", lat: 52.2249297, lng: -3.0996140, url: '/church-old-radnor.html' },
-    { name: "St Mary's, Kinnerton", lat: 52.2612662, lng: -3.1088144, url: '/church-kinnerton.html' },
-    { name: 'St Thomas à Becket, Huntington', lat: 52.1735393, lng: -3.0989438, url: '/church-huntington.html' },
-  ];
+  var churches = JSON.parse(mapEl.dataset.churches || '[]');
+  if (!churches.length) return;
 
   var map = L.map(mapEl, { scrollWheelZoom: false });
 

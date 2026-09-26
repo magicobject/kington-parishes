@@ -10,6 +10,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { NAV, FOOTER_NAV, PAGES } from '../src/pages.config.mjs';
 import { SITE } from '../src/site.config.mjs';
+import { CHURCHES } from '../src/churches.config.mjs';
 import { CLERGY, PTO_CLERGY, CHURCH_OFFICERS } from '../src/people.config.mjs';
 import { NEWSLETTER_ISSUES } from '../src/newsletter.config.mjs';
 import { ONE_OFF_EVENTS, expandEvents, placeFor, formatEventTime, formatEventDate } from '../src/events.config.mjs';
@@ -212,6 +213,25 @@ function renderNewsletterTokens(html) {
   });
 }
 
+// {{CHURCHES_MAP}} -> the homepage's five-pin map; {{CHURCH_MAP:<slug>}} ->
+// one church's single-pin map on its portal page. Both carry their pins as
+// data-* attributes (read by public/js/churches-map.js / church-map.js —
+// an inline <script> would be blocked by the site's CSP), generated from
+// src/churches.config.mjs so a church's coordinates only live in one place.
+function renderChurchMapTokens(html) {
+  return html
+    .replace(/\{\{CHURCHES_MAP\}\}/g, () => {
+      const pins = CHURCHES.map(({ slug, name, lat, lng }) => ({ name, lat, lng, url: `/church-${slug}.html` }));
+      return `<div id="churches-map" class="map-full-embed" role="region" aria-label="Map showing the locations of our five churches" data-churches="${escapeHtml(JSON.stringify(pins))}"></div>`;
+    })
+    .replace(/\{\{CHURCH_MAP:([a-z-]+)\}\}/g, (_, slug) => {
+      const church = CHURCHES.find((c) => c.slug === slug);
+      if (!church) throw new Error(`build: {{CHURCH_MAP:${slug}}} — no church with that slug in src/churches.config.mjs`);
+      const name = escapeHtml(church.name);
+      return `<div id="church-map" class="map-full-embed" role="region" aria-label="Map showing ${name}" data-lat="${church.lat}" data-lng="${church.lng}" data-name="${name}"></div>`;
+    });
+}
+
 // {{EVENTS_NOSCRIPT}} on calendar.html -> the same plain-text fallback list
 // that used to be hand-typed there and hand-mirrored against ONE_OFF_EVENTS
 // in public/js/calendar-events.js. Only one-off events, not the recurring
@@ -344,7 +364,7 @@ for (const page of PAGES) {
   // not unexpanded tokens. Every heading then gets a real, working anchor
   // before anything else touches this page's content — search results and
   // the page itself can never disagree about where a section actually is.
-  const content = ensureSectionIds(renderEventsToken(renderNewsletterTokens(renderPeopleTokens(renderSafeguardingEssentials(read(`src/pages/${page.slug}.html`).trimEnd())))));
+  const content = ensureSectionIds(renderChurchMapTokens(renderEventsToken(renderNewsletterTokens(renderPeopleTokens(renderSafeguardingEssentials(read(`src/pages/${page.slug}.html`).trimEnd()))))));
 
   if (isIndexable(page)) {
     const resolvedForSearch = replaceTokens(content, tokens);

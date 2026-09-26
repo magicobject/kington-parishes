@@ -2,15 +2,15 @@ import { test, expect } from './support/fixtures';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-// CLAUDE.md's "Data kept in sync by hand" flags each church's lat/lng as
-// duplicated in four separate places, none generated from the others:
-//   1. src/pages.config.mjs's our-churches JSON-LD `geo` (the notional
-//      source of truth, per that same note)
-//   2. public/js/churches-map.js — the homepage's five-pin Leaflet map
+// Each church's lat/lng lives once, in src/churches.config.mjs, and
+// scripts/build.mjs generates it into three places:
+//   1. the our-churches JSON-LD `geo`
+//   2. the homepage's five-pin map (#churches-map's data-churches attribute,
+//      read by public/js/churches-map.js)
 //   3. each church-<slug>.html portal page's #church-map data-lat/data-lng
-// Nothing currently catches one of these silently drifting from the others
-// when a pin moves — these specs read all three from the actual built/public
-// files and cross-check them, per church.
+// These specs read all three back out of the built pages and cross-check
+// them, per church — a regression net in case one of them ever stops being
+// generated from that shared source.
 
 const CHURCHES = [
   { name: "St Mary the Virgin, Kington", locality: 'Kington', portal: 'church-kington.html' },
@@ -24,21 +24,15 @@ function readFile(relPath: string): string {
   return readFileSync(join(__dirname, '..', relPath), 'utf8');
 }
 
-// Pulls { name -> {lat, lng} } out of public/js/churches-map.js's `churches`
-// array literal — parsed as data (a small regex over known-shape JS), not
-// executed, since this file is a plain classic script with no module exports.
-function parseChurchesMapJs(): Record<string, { lat: number; lng: number }> {
-  const js = readFile('public/js/churches-map.js');
+// Pulls { name -> {lat, lng} } out of the homepage map's data-churches
+// attribute, as generated into the built public/index.html.
+function parseHomepageMapPins(): Record<string, { lat: number; lng: number }> {
+  const html = readFile('public/index.html');
+  const match = html.match(/<div id="churches-map"[^>]*data-churches="([^"]*)"/);
+  if (!match) throw new Error('no data-churches attribute on #churches-map in public/index.html');
+  const json = match[1].replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
   const out: Record<string, { lat: number; lng: number }> = {};
-  // churches-map.js quotes a name with an apostrophe ("St Mary's, Kinnerton")
-  // in double quotes and a name with no apostrophe ('St Thomas à Becket, ...')
-  // in single quotes — match either, rather than excluding both quote
-  // characters from the name (which would stop at the internal apostrophe).
-  const entryRe = /name:\s*(?:"([^"]+)"|'([^']+)'),\s*lat:\s*(-?[\d.]+),\s*lng:\s*(-?[\d.]+)/g;
-  let m: RegExpExecArray | null;
-  while ((m = entryRe.exec(js))) {
-    out[m[1] ?? m[2]] = { lat: Number(m[3]), lng: Number(m[4]) };
-  }
+  for (const pin of JSON.parse(json)) out[pin.name] = { lat: pin.lat, lng: pin.lng };
   return out;
 }
 
@@ -60,13 +54,13 @@ function parseOurChurchesGeo(): Record<string, { lat: number; lng: number }> {
 }
 
 test.describe('each church\'s coordinates agree across every place they\'re duplicated', () => {
-  const mapJs = parseChurchesMapJs();
+  const mapJs = parseHomepageMapPins();
   const jsonLdGeo = parseOurChurchesGeo();
 
   for (const church of CHURCHES) {
-    test(`${church.name}: churches-map.js, the our-churches JSON-LD, and the ${church.portal} portal map all agree`, async ({ page }) => {
+    test(`${church.name}: the homepage map, the our-churches JSON-LD, and the ${church.portal} portal map all agree`, async ({ page }) => {
       const fromMapJs = mapJs[church.name];
-      expect(fromMapJs, `${church.name} missing from public/js/churches-map.js`).toBeTruthy();
+      expect(fromMapJs, `${church.name} missing from the homepage map's data-churches`).toBeTruthy();
 
       const fromJsonLd = jsonLdGeo[church.locality];
       expect(fromJsonLd, `${church.locality} missing from our-churches.html JSON-LD`).toBeTruthy();
@@ -80,6 +74,21 @@ test.describe('each church\'s coordinates agree across every place they\'re dupl
       expect(portalLng).toBeCloseTo(fromMapJs.lng, 5);
       expect(portalLat).toBeCloseTo(fromJsonLd.lat, 5);
       expect(portalLng).toBeCloseTo(fromJsonLd.lng, 5);
+    });
+  }
+});
+
+test.describe('the maps actually render their generated pins', () => {
+  test('the homepage map shows one marker per church', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('#churches-map .leaflet-marker-icon')).toHaveCount(CHURCHES.length);
+  });
+
+  for (const church of CHURCHES) {
+    test(`${church.portal} shows a single marker for ${church.name}`, async ({ page }) => {
+      await page.goto(`/${church.portal}`);
+      await expect(page.locator('#church-map .leaflet-marker-icon')).toHaveCount(1);
+      await expect(page.locator('#church-map .leaflet-popup-content')).toHaveText(church.name);
     });
   }
 });
