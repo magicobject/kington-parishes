@@ -97,14 +97,56 @@ jobs:
       - name: Create branch
         run: git checkout -b "volunteer-edit/${CONVERSATION_ID}"
 
+      # Restores ~/.npm between runs, keyed on package-lock.json. That holds
+      # npx's download of Claude Code below as well as the test gate's
+      # packages. No node-version on purpose: keeps the runner's own Node,
+      # exactly as before this step existed.
+      - uses: actions/setup-node@v4
+        with:
+          cache: npm
+
+      # Speed matters here: this step was the slowest and least predictable
+      # part of the pipeline (27s to 14 minutes). Three things keep it short:
+      #
+      # - FILES_JSON: the files siteadmin's chat model already read while
+      #   agreeing the change (see chat.ts's filesReadInConversation), so
+      #   Claude Code starts there instead of re-surveying the repository.
+      #   Only a hint — the scope check below is what enforces anything.
+      # - The deny rules: every site's CLAUDE.md says to run the full test
+      #   suite before pushing, but this workflow runs that test gate itself
+      #   straight afterwards, and no browser is installed yet at this point
+      #   anyway. Deny rules still apply under --dangerously-skip-permissions
+      #   (Claude Code's docs: "Deny rules block in every mode, including
+      #   bypassPermissions"), so this is a hard block, not a request.
+      # - --max-turns: a ceiling for a runaway session. Hitting it fails this
+      #   step, so a half-finished edit is never committed or merged.
+      #
+      # Both payload values arrive via env, never interpolated into the
+      # script, so nothing in them can be run as shell.
       - name: Run Claude Code headlessly against the spec
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          FILES_JSON: ${{ toJSON(github.event.client_payload.files) }}
+          EDIT_RULES: >-
+            You are applying one already-agreed website change inside an automated CI job. Nobody is watching,
+            so don't ask questions. Make the smallest change that fully satisfies the request, then stop. If
+            files are listed with the request, start there rather than surveying the repository. Keep following
+            this repository's CLAUDE.md conventions for a change (for example a build number, a changelog entry,
+            or regenerating generated files with npm run build), but do NOT run the test suite, npm audit,
+            npm install or npm ci, or Playwright: this workflow commits your change and then runs the full test
+            gate, scope check and security scan itself, and those commands are blocked here. Leave your changes
+            uncommitted; the workflow commits them.
         run: |
-          # Exact non-interactive flags should be confirmed against current
-          # Claude Code CLI docs during Phase 6 setup — this is a reasonable
-          # starting point, not a value copied from a working run.
-          npx @anthropic-ai/claude-code -p "$SPEC" --dangerously-skip-permissions
+          prompt="$SPEC"
+          files=$(echo "$FILES_JSON" | jq -r 'if type == "array" then .[] | select(type == "string") else empty end' | head -n 20)
+          if [ -n "$files" ]; then
+            prompt=$(printf '%s\n\nFiles the site assistant already read while agreeing this change (start here):\n%s' "$SPEC" "$(echo "$files" | sed 's/^/- /')")
+          fi
+          npx -y @anthropic-ai/claude-code -p "$prompt" \
+            --dangerously-skip-permissions \
+            --max-turns 50 \
+            --append-system-prompt "$EDIT_RULES" \
+            --disallowedTools "Bash(npm test*)" "Bash(npm run test*)" "Bash(npx playwright*)" "Bash(npm run audit*)" "Bash(npm audit*)" "Bash(npm ci*)" "Bash(npm install*)"
 
       - name: Commit
         run: |
@@ -140,6 +182,16 @@ jobs:
       # dry run against kingtonfoodbank. Only chromium is installed since
       # every managed repo's playwright.config.ts only configures that one
       # project.
+      # Playwright's browser download is cached between runs, keyed on the
+      # lockfile (which pins the Playwright version). The install in the
+      # test gate below still runs every time: on a cache hit it just skips
+      # the download and installs the OS libraries. Nothing about the tests
+      # themselves changes.
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
       - name: Run this repo's own test gate
         id: tests
         continue-on-error: true
