@@ -8,7 +8,7 @@ test('an unknown URL serves the branded 404 page with a 404 status', async ({ pa
   await expect(page.locator('h1')).toHaveText(/moved on, or never stood here/i);
 
   // The 404 page intentionally has no main nav — it isn't a nav destination —
-  // but it keeps the regular footer (build number, mediawright credit, contact details).
+  // but it keeps the regular footer (mediawright credit, contact details).
   await expect(page.locator('header.site')).toHaveCount(0);
   await expect(page.locator('footer.site')).toHaveCount(1);
 });

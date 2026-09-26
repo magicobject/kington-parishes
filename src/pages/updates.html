@@ -8,12 +8,17 @@
       <div class="kicker">Build history</div>
       <h1>Site updates</h1>
       <p class="lede">An internal changelog: every build number and what changed. This page isn't linked from anywhere else on the site, and refreshes itself every minute.</p>
+      <p class="build-number">Current build: {{BUILD_NUMBER}}</p>
     </div>
   </div>
 
   <section>
     <div class="wrap">
       <ul class="changelog">
+        <li>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.26.002</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">26 September 2026</span></div>
+          <p>Behind-the-scenes housekeeping so each change only touches the pages it affects. The build number has moved from every page's footer to the top of this page, and stylesheets, scripts and icons are now versioned by their own content rather than by build number — so returning visitors re-download a file only when it has actually changed, and the <a href="calendar.html">calendar</a> and maps now pick up changes straight away too. The five church pages and the <a href="index.html">homepage</a> share one copy of the map library's include.</p>
+        </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.26.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">26 September 2026</span></div>
           <p>Behind-the-scenes housekeeping, no visible change: a new <code>.gitattributes</code> makes every copy of the site's files use the same line endings, so a checkout on a Windows machine is byte-for-byte identical to what's deployed rather than subtly different.</p>

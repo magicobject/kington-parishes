@@ -30,6 +30,8 @@ This repo now has more than one person making changes through Claude Code. `user
 - `public/css/style.css` is the one thing in `public/` that's hand-maintained, not generated.
 - `public/js/calendar-events.js` is also generated (from `src/events.config.mjs`) — see "Calendar & events" below.
 - The pre-commit hook bumps the build number and regenerates `public/` automatically on every commit — never do either by hand.
+- **Never hand-write a `?v=` on a `<link>`/`<script>`.** `versionAssetUrls` in `scripts/build.mjs` appends `?v=<content hash>` to every same-origin `href`/`src` on those tags, and fails the build if the file doesn't exist. The build number deliberately appears only on `/updates.html` (not in footers, not in cache-busters, and there's no sitemap `<lastmod>`), so a commit only changes the generated pages it actually affects — keep it that way rather than stamping anything per-build into every page.
+- **Pages with a Leaflet map use the `{{LEAFLET}}` token** (`templates/leaflet.html`) for Leaflet's own CSS/JS, followed by their own map script.
 
 ## Calendar & events
 `src/events.config.mjs` (`ONE_OFF_EVENTS`, `RECURRING_SERIES`) is the single source of truth for the parish calendar — edit the arrays there, then `npm run build`. Three things come from it:
@@ -60,7 +62,7 @@ Each church has its own portal page (`church-kington.html`, `church-titley.html`
 ## Build numbers: tag every commit, and log it on /updates.html
 The pre-commit hook bumps `build-number.json` on every commit (same date → counter +1; new date → counter resets to 1). Two more things go with that, both driven by the *same* build number:
 1. **Before committing**, work out what the new build number will be (read `build-number.json`, apply the same same-date/new-date rule above) and add a new entry at the *top* of the changelog in `src/pages/updates.html` — that build number, the author, today's date, and a one-line summary of the change. Each entry's `changelog-meta` div is `<span class="changelog-build">`, then `<span class="changelog-author">` (see "Multi-developer workflow" above for how to resolve this), then `<span class="changelog-date">`. **Link the page(s) the change touched** — wrap the page name in an `<a href="...">` pointing at it (relative, same as any other internal link — `updates.html` sits alongside the pages it links to), e.g. `Link <a href="church-huntington.html">St Thomas à Becket, Huntington</a>'s own website`, not just the bare page name in prose. Newest entry first. Include this file in the commit like any other source change.
-2. **After committing**, tag it with that same build number and push the tag: `git tag build-<date>.<NNN>` (e.g. `build-2026.08.31.007`, matching the footer's "Build 2026.08.31.007" text exactly), then `git push origin build-<date>.<NNN>`.
+2. **After committing**, tag it with that same build number and push the tag: `git tag build-<date>.<NNN>` (e.g. `build-2026.08.31.007`, matching `/updates.html`'s "Current build: 2026.08.31.007" line exactly), then `git push origin build-<date>.<NNN>`.
 
 `/updates.html` is a real, reachable page — it's just not linked from anywhere on the site (not in NAV, not FOOTER_NAV, not any sitemap), and is marked `robots: noindex, nofollow` in `src/pages.config.mjs` for exactly that reason (matching this site's sitewide noindex policy). It's a build log for whoever knows the URL, not user-facing content.
 

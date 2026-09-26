@@ -73,7 +73,7 @@ test('a day with two events shows both, in time order', async ({ page }) => {
 test('a day with more than two events shows a "+N more" chip, but the full list in the agenda', async ({ page }) => {
   // Serve a stand-in for calendar-events.js with a third event added to 19
   // July, so the grid cell has to fall back to the "+1 more" overflow chip.
-  await page.route('**/js/calendar-events.js', (route) =>
+  await page.route('**/js/calendar-events.js?v=*', (route) =>
     route.fulfill({
       contentType: 'application/javascript',
       body: `window.CALENDAR_EVENTS = [
@@ -97,7 +97,7 @@ test('a day with more than two events shows a "+N more" chip, but the full list 
 });
 
 test('a whole-day event shows "All day" instead of a time, ahead of that day\'s timed events', async ({ page }) => {
-  await page.route('**/js/calendar-events.js', (route) =>
+  await page.route('**/js/calendar-events.js?v=*', (route) =>
     route.fulfill({
       contentType: 'application/javascript',
       body: `window.CALENDAR_EVENTS = [
