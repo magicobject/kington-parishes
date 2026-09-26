@@ -1,0 +1,15 @@
+# Check text out with LF on every platform. Git for Windows defaults to
+# core.autocrlf=true, which gives a CRLF (or mixed) working tree that differs
+# byte-for-byte from what's committed and deployed — anything that hashes or
+# compares exact file content (CSP hashes for inline scripts, generated-output
+# checks) then disagrees between a Windows machine and CI/production.
+* text=auto eol=lf
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.gif binary
+*.webp binary
+*.avif binary
+*.ico binary
+*.pdf binary
+*.docx binary

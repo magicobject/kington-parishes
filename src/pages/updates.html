@@ -15,6 +15,10 @@
     <div class="wrap">
       <ul class="changelog">
         <li>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.26.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">26 September 2026</span></div>
+          <p>Behind-the-scenes housekeeping, no visible change: a new <code>.gitattributes</code> makes every copy of the site's files use the same line endings, so a checkout on a Windows machine is byte-for-byte identical to what's deployed rather than subtly different.</p>
+        </li>
+        <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.25.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">25 September 2026</span></div>
           <p>Fixed two things that were quietly blocking every volunteer calendar edit from going live without a manual review, regardless of what was actually asked for: the "+N more" gold label on a busy day's tile didn't have quite enough contrast against its background for some browsers' text rendering, and the site-editor pipeline's safety check was mistaking the calendar's own search-engine event listing (invisible, never runs in a visitor's browser) for a real embedded script. Calendar updates should now go live automatically again, same as before.</p>
         </li>
