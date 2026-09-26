@@ -88,11 +88,45 @@ jobs:
 
       - uses: actions/checkout@v4
 
-      # TODO (Phase 6 onboarding): pull any staged R2 objects referenced in
-      # github.event.client_payload.attachments and hand their local paths
-      # to Claude Code below. Needs read-only R2 credentials scoped to this
-      # workflow. Not blocking the core text-edit path, which has no
-      # attachments most of the time.
+      # Files the volunteer attached in the chat (photos, PDFs). siteadmin
+      # staged them in R2 after checking them (real file-type sniff, no SVG,
+      # EXIF stripped) and this fetches them through siteadmin's own
+      # /internal/attachment endpoint, with the same secret as the validate
+      # call above. No R2 credential lives in this repo, and siteadmin only
+      # hands over a file that belongs to this conversation on this site.
+      # Each is saved under its server-generated name (a UUID plus an allowed
+      # extension, checked again here), never a path from the payload. If a
+      # listed attachment can't be fetched, the run fails rather than letting
+      # an edit that depends on it merge without it.
+      - name: Fetch the volunteer's attachments
+        env:
+          ACTION_SHARED_SECRET: ${{ secrets.SITEADMIN_ACTION_SECRET }}
+          ATTACHMENTS_JSON: ${{ toJSON(github.event.client_payload.attachments) }}
+        run: |
+          set -euo pipefail
+          dir="$RUNNER_TEMP/attachments"
+          mkdir -p "$dir"
+          keys=$(echo "$ATTACHMENTS_JSON" | jq -r 'if type == "array" then .[] | select(type == "string") else empty end' | head -n 10)
+          [ -z "$keys" ] && { echo "No attachments."; exit 0; }
+          while IFS= read -r key; do
+            name=$(basename "$key")
+            if ! [[ "$name" =~ ^[0-9a-f-]{36}\.(jpg|png|webp|pdf)$ ]]; then
+              echo "::error::Attachment key has an unexpected name — refusing it."
+              exit 1
+            fi
+            payload=$(jq -nc --arg cid "$CONVERSATION_ID" --arg site "$SITE" --arg key "$key" '{conversation_id:$cid, site:$site, key:$key}')
+            status=$(curl -sS -o "$dir/$name" -w '%{http_code}' -X POST "$SITEADMIN_URL/internal/attachment" \
+              -H "Authorization: Bearer ${ACTION_SHARED_SECRET}" \
+              -H "Content-Type: application/json" \
+              -H "X-Siteadmin-Action-Marker: edit-pipeline-v1" \
+              -d "$payload")
+            if [ "$status" != "200" ]; then
+              rm -f "$dir/$name" # the error body, not the file
+              echo "::error::Couldn't fetch attachment $name from siteadmin (HTTP $status)."
+              exit 1
+            fi
+          done <<< "$keys"
+          ls -l "$dir"
 
       - name: Create branch
         run: git checkout -b "volunteer-edit/${CONVERSATION_ID}"
@@ -137,14 +171,27 @@ jobs:
             gate, scope check and security scan itself, and those commands are blocked here. Leave your changes
             uncommitted; the workflow commits them.
         run: |
+          # siteadmin never dispatches an empty spec now (chat.ts's
+          # needsAnotherRound), but if one arrives anyway there's nothing to
+          # do: skip, and the "changes" step below reports "no changes".
+          if [ -z "${SPEC//[[:space:]]/}" ]; then
+            echo "::error::The request arrived with an empty spec — nothing to do."
+            exit 0
+          fi
           prompt="$SPEC"
           files=$(echo "$FILES_JSON" | jq -r 'if type == "array" then .[] | select(type == "string") else empty end' | head -n 20)
           if [ -n "$files" ]; then
-            prompt=$(printf '%s\n\nFiles the site assistant already read while agreeing this change (start here):\n%s' "$SPEC" "$(echo "$files" | sed 's/^/- /')")
+            prompt=$(printf '%s\n\nFiles the site assistant already read while agreeing this change (start here):\n%s' "$prompt" "$(echo "$files" | sed 's/^/- /')")
+          fi
+          attachments_dir="$RUNNER_TEMP/attachments"
+          attachments=$(find "$attachments_dir" -maxdepth 1 -type f | sort)
+          if [ -n "$attachments" ]; then
+            prompt=$(printf '%s\n\nThe volunteer attached these files (already checked by siteadmin):\n%s\nIf the change adds one to the site, copy it into the repository where this site keeps that kind of file (for example its images folder), under a short, descriptive, lowercase file name, and reference it from the page. Give every image meaningful alt text.' "$prompt" "$(echo "$attachments" | sed 's/^/- /')")
           fi
           npx -y @anthropic-ai/claude-code -p "$prompt" \
             --dangerously-skip-permissions \
             --max-turns 50 \
+            --add-dir "$attachments_dir" \
             --append-system-prompt "$EDIT_RULES" \
             --disallowedTools "Bash(npm test*)" "Bash(npm run test*)" "Bash(npx playwright*)" "Bash(npm run audit*)" "Bash(npm audit*)" "Bash(npm ci*)" "Bash(npm install*)"
 
@@ -156,8 +203,26 @@ jobs:
           git commit -m "Volunteer edit: ${SPEC}" --allow-empty-message || true
           git push origin "volunteer-edit/${CONVERSATION_ID}"
 
+      # If the edit changed nothing there's nothing to open a PR for, test,
+      # or merge — found via a real request that reached here with an empty
+      # spec: "Open PR" failed with "No commits between main and ...", and the
+      # run then told the volunteer a PR was waiting for approval. Every step
+      # below that needs a PR is skipped instead, and the report says
+      # "no changes", which the widget shows as "didn't go through".
+      - name: Check the edit changed something
+        id: changes
+        run: |
+          git fetch -q origin main
+          if [ "$(git rev-list --count origin/main..HEAD)" -gt 0 ]; then
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::The edit produced no changes, so no PR was opened."
+          fi
+
       - name: Open PR
         id: pr
+        if: steps.changes.outputs.has_changes == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -188,12 +253,14 @@ jobs:
       # the download and installs the OS libraries. Nothing about the tests
       # themselves changes.
       - uses: actions/cache@v4
+        if: steps.changes.outputs.has_changes == 'true'
         with:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
 
       - name: Run this repo's own test gate
         id: tests
+        if: steps.changes.outputs.has_changes == 'true'
         continue-on-error: true
         run: |
           npm ci
@@ -210,6 +277,7 @@ jobs:
       # never drift out of sync with each other.
       - name: Diff-check against scope + infra exclusion + script injection
         id: scope
+        if: steps.changes.outputs.has_changes == 'true'
         continue-on-error: true
         run: |
           git fetch origin main
@@ -226,7 +294,7 @@ jobs:
       # into, and the exception, not the norm.
       - name: Merge if green, in-scope, and clear of the exclusion list
         id: merge
-        if: steps.tests.outcome == 'success' && steps.scope.outcome == 'success'
+        if: steps.changes.outputs.has_changes == 'true' && steps.tests.outcome == 'success' && steps.scope.outcome == 'success'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -238,7 +306,7 @@ jobs:
           echo "commit_url=https://github.com/${{ github.repository }}/commit/$sha" >> "$GITHUB_OUTPUT"
 
       - name: Leave a note if held for review
-        if: steps.tests.outcome != 'success' || steps.scope.outcome != 'success'
+        if: steps.changes.outputs.has_changes == 'true' && (steps.tests.outcome != 'success' || steps.scope.outcome != 'success')
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -251,7 +319,11 @@ jobs:
         env:
           ACTION_SHARED_SECRET: ${{ secrets.SITEADMIN_ACTION_SECRET }}
         run: |
-          if [ "${{ steps.tests.outcome }}" = "success" ] && [ "${{ steps.scope.outcome }}" = "success" ]; then
+          if [ "${{ steps.changes.outputs.has_changes }}" = "false" ]; then
+            # Nothing was changed, so no PR exists and nothing is waiting for
+            # anyone — the widget shows this as "didn't go through".
+            payload=$(jq -nc --arg cid "$CONVERSATION_ID" '{conversation_id:$cid, status:"held_for_review", reason:"no changes"}')
+          elif [ "${{ steps.tests.outcome }}" = "success" ] && [ "${{ steps.scope.outcome }}" = "success" ]; then
             payload=$(jq -nc --arg cid "$CONVERSATION_ID" --arg url "${{ steps.merge.outputs.commit_url }}" \
               '{conversation_id:$cid, status:"merged", commit_url:$url}')
           else
