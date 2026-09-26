@@ -8,6 +8,8 @@
 // edit the arrays below and run `npm run build` instead; both generated
 // outputs follow automatically.
 
+import { CHURCHES } from './churches.config.mjs';
+
 // Special services, concerts and one-off events. Recurring weekly community
 // activities go in RECURRING_SERIES below instead. A whole-day entry (no
 // specific time) takes `allDay: true` in place of `time` — it lists as "All
@@ -89,19 +91,13 @@ export const RECURRING_SERIES = [
   { title: 'Marches Voices Choir', location: 'Kington Parish Hall', weekday: 2, time: '14:00', from: '2026-09-01', until: '2026-12-31' },
 ];
 
-// Known venues' addresses, for Event structured data's `location` — same
-// localities as the Church entries in the our-churches JSON-LD
-// (src/pages.config.mjs). Matched against an event's free-text `location`
-// by substring, so "St Mary's, Kington" and plain "Kington" both resolve.
-// Anything that doesn't match (Hereford Cathedral, The Oxford, blank) still
-// gets a valid Place — just without a postal address.
-const CHURCH_LOCALITIES = [
-  { match: 'kington', locality: 'Kington' },
-  { match: 'titley', locality: 'Titley' },
-  { match: 'old radnor', locality: 'Old Radnor' },
-  { match: 'kinnerton', locality: 'Kinnerton' },
-  { match: 'huntington', locality: 'Huntington' },
-];
+// Known venues' addresses, for Event structured data's `location` — each
+// church's locality from src/churches.config.mjs. Matched against an
+// event's free-text `location` by substring, so "St Mary's, Kington" and
+// plain "Kington" both resolve. Anything that doesn't match (Hereford
+// Cathedral, The Oxford, blank) still gets a valid Place — just without a
+// postal address.
+const CHURCH_LOCALITIES = CHURCHES.map(({ locality }) => ({ match: locality.toLowerCase(), locality }));
 
 export function placeFor(location) {
   // No location given (e.g. "Carols at the Oxford", which names the venue in
