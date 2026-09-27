@@ -252,7 +252,7 @@ jobs:
       # test gate below still runs every time: on a cache hit it just skips
       # the download and installs the OS libraries. Nothing about the tests
       # themselves changes.
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         if: steps.changes.outputs.has_changes == 'true'
         with:
           path: ~/.cache/ms-playwright
