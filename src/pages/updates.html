@@ -16,6 +16,10 @@
     <div class="wrap">
       <ul class="changelog">
         <li>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.27.006</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">27 September 2026</span></div>
+          <p>Fixed changes made through the site assistant only updating the site's source files and not the pages visitors actually see, so they reported success but never went live (the cause of Phillippa Wright's portrait resize not appearing earlier today). The volunteer-edit workflow now installs the site's build tools before making the edit, so the pages are regenerated and the build number bumped as part of every change. A workflow change only; no page changed.</p>
+        </li>
+        <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.27.005</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">27 September 2026</span></div>
           <p>Show Revd Phillippa Wright's portrait at half its previous size (240 × 300) on <a href="our-people.html">Our People</a> and every church portal page (<a href="church-kington.html">Kington</a>, <a href="church-titley.html">Titley</a>, <a href="church-old-radnor.html">Old Radnor</a>, <a href="church-kinnerton.html">Kinnerton</a>, <a href="church-huntington.html">Huntington</a>) — the change was saved earlier today but the pages themselves hadn't been rebuilt, so it only goes live with this build. Also, behind the scenes with no visible change: routine Dependabot updates to the <code>tsx</code> build tool and to the GitHub workflows' checkout, Node setup and cache actions.</p>
         </li>
