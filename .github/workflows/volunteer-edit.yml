@@ -139,6 +139,17 @@ jobs:
         with:
           cache: npm
 
+      # Install dependencies BEFORE Claude Code runs. It's blocked from
+      # running npm ci/install itself (see below), so without this step
+      # there's no node_modules: its `npm run build` fails, and the Commit
+      # step's pre-commit hook never runs either (npm ci's `prepare` is what
+      # sets core.hooksPath=.githooks). Found via a real edit that merged
+      # source-only — src/ changed, public/ never regenerated, nothing
+      # visible went live, and the test gate still passed against the stale
+      # pages. No secrets are in scope for this step.
+      - name: Install dependencies
+        run: npm ci
+
       # Speed matters here: this step was the slowest and least predictable
       # part of the pipeline (27s to 14 minutes). Three things keep it short:
       #
@@ -166,7 +177,8 @@ jobs:
             so don't ask questions. Make the smallest change that fully satisfies the request, then stop. If
             files are listed with the request, start there rather than surveying the repository. Keep following
             this repository's CLAUDE.md conventions for a change (for example a build number, a changelog entry,
-            or regenerating generated files with npm run build), but do NOT run the test suite, npm audit,
+            or regenerating generated files with npm run build — dependencies are already installed, so
+            npm run build works here), but do NOT run the test suite, npm audit,
             npm install or npm ci, or Playwright: this workflow commits your change and then runs the full test
             gate, scope check and security scan itself, and those commands are blocked here. Leave your changes
             uncommitted; the workflow commits them.
