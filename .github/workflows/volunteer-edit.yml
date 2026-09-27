@@ -86,7 +86,7 @@ jobs:
             exit 1
           fi
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       # Files the volunteer attached in the chat (photos, PDFs). siteadmin
       # staged them in R2 after checking them (real file-type sniff, no SVG,
