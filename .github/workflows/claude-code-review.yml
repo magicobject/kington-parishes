@@ -39,8 +39,6 @@ jobs:
           # Review Dependabot's pull requests too (security fixes included) —
           # by default the action skips PRs opened by bots.
           allowed_bots: 'dependabot'
-          # TEMPORARY (27 Sep 2026): print the full result to diagnose a failure. Remove straight after.
-          show_full_output: true
           plugin_marketplaces: 'https://github.com/anthropics/claude-code.git'
           plugins: 'code-review@claude-code-plugins'
           prompt: '/code-review:code-review --comment ${{ github.repository }}/pull/${{ github.event.pull_request.number }}'
