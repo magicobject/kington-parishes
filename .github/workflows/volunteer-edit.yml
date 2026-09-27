@@ -135,7 +135,7 @@ jobs:
       # npx's download of Claude Code below as well as the test gate's
       # packages. No node-version on purpose: keeps the runner's own Node,
       # exactly as before this step existed.
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           cache: npm
 
