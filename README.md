@@ -122,6 +122,17 @@ The homepage also gained a **Find Us** section just above the footer: a full-wid
 
 In other words: **you never bump the build number or rebuild `public/` yourself** — just edit source files under `src/`/`templates/` and commit as normal.
 
+## Daily vulnerability watch
+
+The pre-push `npm audit` only catches advisories that already exist when someone pushes. [.github/workflows/vuln-watch.yml](.github/workflows/vuln-watch.yml) covers the days in between: every morning (06:17 UTC), and on demand from GitHub's Actions tab ("Vulnerability watch" → "Run workflow"), it checks every package in `package-lock.json` against the GitHub Advisory Database (`npm audit`) and [OSV](https://osv.dev) (which also reports malicious packages).
+
+- **Nothing found:** nothing happens; the day's result is still recorded on the run's summary page.
+- **Something found:** one issue per advisory, labelled `security-advisory` (reopened if a closed advisory comes back). Fix it the normal way — update the package, run `npm test`, `npm run test:unit` and `npm run audit`, push.
+- **High or critical:** the run itself fails, so GitHub emails the owner.
+- It never changes code or dependencies itself. [.github/dependabot.yml](.github/dependabot.yml) proposes updates (npm packages and SHA-pinned actions) as PRs.
+
+The decisions live in [scripts/vuln-watch-lib.mjs](scripts/vuln-watch-lib.mjs), unit-tested in `test-unit/vuln-watch.test.mjs`; [scripts/vuln-watch.mjs](scripts/vuln-watch.mjs) does the I/O. Try it locally with `node scripts/vuln-watch.mjs --dry-run` (no issues opened). `test-unit/workflows.test.mjs` guards the workflow itself: actions pinned to full commit SHAs, explicit least-privilege permissions (`contents: read`, `issues: write`), `npm ci --ignore-scripts`. The same files are used across MediaWright's sites — keep them in step.
+
 ## Build tags and the /updates changelog
 
 Every commit gets a matching git tag, `build-<date>.<NNN>` (e.g. `build-2026.08.31.007`) — the same value as `/updates.html`'s "Current build" line for that commit, so any deployed build is checkoutable by name (`git checkout build-2026.08.31.007`) without digging through `git log`.
