@@ -90,13 +90,17 @@
       <div class="kicker">Build history</div>
       <h1 id="site-updates">Site updates</h1>
       <p class="lede">An internal changelog: every build number and what changed. This page isn't linked from anywhere else on the site, and refreshes itself every minute.</p>
-      <p class="build-number">Current build: 2026.09.27.006</p>
+      <p class="build-number">Current build: 2026.09.29.001</p>
     </div>
   </div>
 
   <section>
     <div class="wrap">
       <ul class="changelog">
+        <li>
+          <div class="changelog-meta"><span class="changelog-build">2026.09.29.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">29 September 2026</span></div>
+          <p>Behind the scenes, no visible change: a routine Dependabot patch update to <code>@types/node</code> (26.6.2 to 26.6.3), which is only used to type-check the site's own tests and never reaches visitors. Rebuilding also refreshed the <a href="calendar.html">Calendar</a>'s hidden search-engine event list, which drops events once their date has passed; what visitors see on the page is unchanged.</p>
+        </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.27.006</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">27 September 2026</span></div>
           <p>Fixed changes made through the site assistant only updating the site's source files and not the pages visitors actually see, so they reported success but never went live (the cause of Phillippa Wright's portrait resize not appearing earlier today). The volunteer-edit workflow now installs the site's build tools before making the edit, so the pages are regenerated and the build number bumped as part of every change. A workflow change only; no page changed.</p>
