@@ -75,6 +75,7 @@ jobs:
           echo "capability=$(echo "$body" | jq -r '.capability')" >> "$GITHUB_OUTPUT"
           echo "$body" | jq -c '.globs' > /tmp/globs.json
           echo "$body" | jq -r '"\(.github_owner)/\(.github_repo)"' > /tmp/expected_repo.txt
+          echo "$body" | jq -r '.volunteer_name // empty' | tr -d '\r\n' > /tmp/volunteer_name.txt
 
       # Fail loudly on mismatch rather than proceeding — see
       # ARCHITECTURE.md's "Security testing", "Action self-check".
@@ -183,6 +184,12 @@ jobs:
             gate, scope check and security scan itself, and those commands are blocked here. Leave your changes
             uncommitted; the workflow commits them.
         run: |
+          # Credit the real volunteer in the changelog. The name is the roster's
+          # (from /internal/validate), never the dispatch payload.
+          volunteer_name=$(cat /tmp/volunteer_name.txt 2>/dev/null || true)
+          if [ -n "$volunteer_name" ]; then
+            EDIT_RULES="$EDIT_RULES This change was requested by $volunteer_name. Where the repository's conventions ask for a changelog author, use exactly that name (add them to the repository's people roster if it has one and they are missing) instead of looking one up with gh."
+          fi
           # siteadmin never dispatches an empty spec now (chat.ts's
           # needsAnotherRound), but if one arrives anyway there's nothing to
           # do: skip, and the "changes" step below reports "no changes".
