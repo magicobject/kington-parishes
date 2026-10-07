@@ -37,3 +37,6 @@ blob-report/
 # Zip bundles / backups you might drop in this folder while working
 *.zip
 *.bak
+
+# Personal Claude Code overrides — not shared with the team
+.claude/settings.local.json
