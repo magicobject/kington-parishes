@@ -85,16 +85,17 @@ export const ONE_OFF_EVENTS = [
 export const RECURRING_SERIES = [
   // St Mary's Parish Hall — Mondays 12:15-13:00 & Fridays 10:00-11:00 (see
   // the homepage noticeboard).
-  { title: 'Kington Zero Waste', location: "St Mary's Parish Hall", weekday: 1, time: '12:15', from: '2026-08-31', until: '2026-12-31' },
-  { title: 'Kington Zero Waste', location: "St Mary's Parish Hall", weekday: 5, time: '10:00', from: '2026-09-04', until: '2026-12-31', except: ['2026-12-25'] },
+  { title: 'Kington Zero Waste', location: "St Mary's Parish Hall", weekday: 1, time: '12:15', from: '2026-08-31', until: '2027-12-31' },
+  { title: 'Kington Zero Waste', location: "St Mary's Parish Hall", weekday: 5, time: '10:00', from: '2026-09-04', until: '2027-12-31', except: ['2026-12-25'] },
   // Term-time only (per the homepage noticeboard) — skip Herefordshire
-  // school holidays. Update `except` once next term's dates are known.
-  { title: 'Stay and Play', location: "St Mary's Parish Hall", weekday: 2, time: '09:15', from: '2026-09-01', until: '2026-12-31', except: ['2026-09-22', '2026-09-29', '2026-10-27', '2026-12-22', '2026-12-29'] },
+  // school holidays (council dates for 2026-27 and 2027-28, herefordshire.gov.uk/TermDates).
+  // Update `except` if a school's own dates differ.
+  { title: 'Stay and Play', location: "St Mary's Parish Hall", weekday: 2, time: '09:15', from: '2026-09-01', until: '2027-12-31', except: ['2026-09-22', '2026-09-29', '2026-10-27', '2026-12-22', '2026-12-29', '2027-02-16', '2027-03-30', '2027-04-06', '2027-06-01', '2027-07-27', '2027-08-03', '2027-08-10', '2027-08-17', '2027-08-24', '2027-08-31', '2027-10-26', '2027-12-21', '2027-12-28'] },
   // Not term-time restricted — runs straight through, including the school
   // holidays Stay and Play skips.
-  { title: 'Marches Voices Choir', location: 'Kington Parish Hall', weekday: 2, time: '14:00', from: '2026-09-01', until: '2026-12-31' },
+  { title: 'Marches Voices Choir', location: 'Kington Parish Hall', weekday: 2, time: '14:00', from: '2026-09-01', until: '2027-12-31' },
   // Choral Evensong moved to St Thomas à Becket, Huntington, 4th Sunday of the month.
-  { title: 'Choral Evensong', location: "St Thomas à Becket, Huntington", weekday: 7, nth: 4, time: '18:00', from: '2026-10-01', until: '2026-12-31' },
+  { title: 'Choral Evensong', location: "St Thomas à Becket, Huntington", weekday: 7, nth: 4, time: '18:00', from: '2026-10-01', until: '2027-12-31' },
 ];
 
 // Known venues' addresses, for Event structured data's `location` — each
