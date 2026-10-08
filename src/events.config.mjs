@@ -59,12 +59,14 @@ export const ONE_OFF_EVENTS = [
   { date: '2026-10-28', time: '10:20', title: 'Visiting Ringers', location: "St Mary's, Kington" },
   { date: '2026-11-01', time: '10:00', title: 'Holy Communion', location: "St Mary's, Kington" },
   { date: '2026-11-01', time: '18:00', title: 'Praise & Prayer in the Evening (PPE)', location: "St Mary's, Kington" },
-  { date: '2026-11-08', time: '10:00', title: 'Holy Communion', location: "St Mary's, Kington" },
+  { date: '2026-11-08', time: '10:00', title: 'Remembrance Service', location: "St Mary's, Kington" },
   { date: '2026-11-15', time: '10:00', title: 'Morning Praise', location: "St Mary's, Kington" },
-  { date: '2026-11-15', time: '15:30', title: 'Recital by the Titley Philharmonic Orchestra (Bach Double Violin Concerto and Handel Organ Concerto)', location: "St Mary's, Kington" },
+  { date: '2026-11-14', allDay: true, title: 'Vision Day', location: "St Mary's Parish Hall" },
+  { date: '2026-11-15', time: '15:30', title: 'Titley Philharmonic Orchestra Concert & Organ Recital (£12, including tea)', location: "St Mary's, Kington" },
   { date: '2026-11-18', time: '15:30', title: 'Lego Club', location: "St Mary's, Kington" },
   { date: '2026-11-22', time: '10:00', title: 'Holy Communion', location: "St Mary's, Kington" },
-  { date: '2026-11-29', time: '10:00', title: 'Holy Communion', location: "St Mary's, Kington" },
+  { date: '2026-11-29', time: '10:00', title: 'Advent Sunday: combined benefice service', location: "St Mary's, Kinnerton" },
+  { date: '2026-11-29', time: '16:00', title: "St Michael's Hospice 'Light up a Life' service", location: "St Mary's, Kington" },
   { date: '2026-12-06', time: '18:00', title: 'Praise & Prayer in the Evening (PPE)', location: "St Mary's, Kington" },
   { date: '2026-12-09', time: '15:30', title: 'Lego Club', location: "St Mary's, Kington" },
   { date: '2026-12-11', time: '18:30', title: 'Carols at the Oxford', location: '' },
@@ -78,6 +80,8 @@ export const ONE_OFF_EVENTS = [
 //
 // To carry a series into next year, just extend `until`. To skip a holiday,
 // add its date to `except` — no more hand-typing one row per week.
+// Optional `nth` (e.g. 4) keeps only the nth such weekday of each month —
+// "every 4th Sunday" is weekday 7, nth 4.
 export const RECURRING_SERIES = [
   // St Mary's Parish Hall — Mondays 12:15-13:00 & Fridays 10:00-11:00 (see
   // the homepage noticeboard).
@@ -89,6 +93,8 @@ export const RECURRING_SERIES = [
   // Not term-time restricted — runs straight through, including the school
   // holidays Stay and Play skips.
   { title: 'Marches Voices Choir', location: 'Kington Parish Hall', weekday: 2, time: '14:00', from: '2026-09-01', until: '2026-12-31' },
+  // Choral Evensong moved to St Thomas à Becket, Huntington, 4th Sunday of the month.
+  { title: 'Choral Evensong', location: "St Thomas à Becket, Huntington", weekday: 7, nth: 4, time: '18:00', from: '2026-10-01', until: '2026-12-31' },
 ];
 
 // Known venues' addresses, for Event structured data's `location` — each
@@ -129,7 +135,8 @@ function expandSeries(series) {
   const except = series.except || [];
   while (d <= until) {
     const ds = dateStr(d);
-    if (!except.includes(ds)) {
+    const nthOk = !series.nth || Math.ceil(d.getDate() / 7) === series.nth;
+    if (nthOk && !except.includes(ds)) {
       out.push({ date: ds, time: series.time, title: series.title, location: series.location });
     }
     d.setDate(d.getDate() + 7);
