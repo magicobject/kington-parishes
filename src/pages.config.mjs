@@ -311,6 +311,14 @@ export const PAGES = [
     header: true,
   },
   {
+    slug: 'what-we-believe',
+    title: 'What We Believe — Kington Parishes',
+    description: 'A short, plain-English introduction to the Christian faith, and where to explore it further.',
+    // Reachable from the homepage's Dig Deeper section, not the primary nav.
+    active: null,
+    header: true,
+  },
+  {
     slug: 'get-involved',
     title: 'Get Involved — Kington Parishes',
     description: 'Hire the Parish Hall, join the church fete, support our fundraising, and find out what drives our mission.',

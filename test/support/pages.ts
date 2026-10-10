@@ -90,6 +90,14 @@ export const PRIVACY_POLICY_PAGE: SitePage = {
   heading: /privacy policy/i,
 };
 
+// Not in the primary nav — reachable from the homepage's Dig Deeper section.
+export const WHAT_WE_BELIEVE_PAGE: SitePage = {
+  path: '/what-we-believe.html',
+  navLabel: 'What We Believe',
+  titleContains: 'What We Believe',
+  heading: /what we believe/i,
+};
+
 export const DONATE_PAGE: SitePage = {
   path: '/donate.html',
   navLabel: 'Donate',
@@ -150,4 +158,4 @@ export const CHURCH_KINGTON_HISTORY_PAGE: SitePage = {
 
 // Every generated page, including the ones without primary nav — used by
 // specs that should run against literally everything (footer, tokens).
-export const ALL_PAGES: SitePage[] = [HOME_PAGE, ...NAV_PAGES, SAFEGUARDING_PAGE, PARISH_NEWS_ARCHIVE_PAGE, ...NEWSLETTER_ISSUE_PAGES, NEWSLETTER_ARCHIVE_PAGE, PRIVACY_POLICY_PAGE, DONATE_PAGE, TREASURER_JOB_DESCRIPTION_PAGE, ...CHURCH_PORTAL_PAGES, CHURCH_KINGTON_HISTORY_PAGE, UPDATES_PAGE, ...HELP_PAGES];
+export const ALL_PAGES: SitePage[] = [HOME_PAGE, ...NAV_PAGES, SAFEGUARDING_PAGE, PARISH_NEWS_ARCHIVE_PAGE, ...NEWSLETTER_ISSUE_PAGES, NEWSLETTER_ARCHIVE_PAGE, PRIVACY_POLICY_PAGE, DONATE_PAGE, WHAT_WE_BELIEVE_PAGE, TREASURER_JOB_DESCRIPTION_PAGE, ...CHURCH_PORTAL_PAGES, CHURCH_KINGTON_HISTORY_PAGE, UPDATES_PAGE, ...HELP_PAGES];
