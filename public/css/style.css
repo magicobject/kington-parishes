@@ -942,5 +942,11 @@ footer.site .fine a { color: #C9C3B2; text-decoration: underline; text-underline
   -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5'/%3E%3C/svg%3E") center / contain no-repeat;
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5'/%3E%3C/svg%3E") center / contain no-repeat;
 }
-.safeguard-strip .pill-link { color: #fff; border-color: #fff; text-decoration: none; }
-.safeguard-strip .pill-link:hover { background: #fff; color: var(--heather-dark); }
+/* Highlighted: solid white pill with a shield. heather-dark on white 8.44:1; on dawn-gold hover 4.99:1. */
+.safeguard-strip a.pill-link { text-decoration: none; background: #fff; color: var(--heather-dark); border-color: #fff; font-weight: 700; }
+.safeguard-strip .pill-link:hover { background: var(--dawn-gold); border-color: var(--dawn-gold); color: var(--heather-dark); }
+.safeguard-strip .pill-link::before {
+  content: ""; flex: none; width: 1.1em; height: 1.1em; background-color: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4zm-1 14-3.5-3.5 1.4-1.4L11 13.2l4.1-4.1 1.4 1.4L11 16z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4zm-1 14-3.5-3.5 1.4-1.4L11 13.2l4.1-4.1 1.4 1.4L11 16z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
