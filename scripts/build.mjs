@@ -189,7 +189,7 @@ function renderNewsletterCard({ slug, title, date, summary }) {
           <div class="meta">${formatIssueMonth(date)}</div>
           <h3>${title}</h3>
           <p>${summary}</p>
-          <a href="${slug}.html">Read this issue &rarr;</a>
+          <a class="pill-link" href="${slug}.html">Read this issue</a>
         </div>`;
 }
 

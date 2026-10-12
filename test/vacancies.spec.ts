@@ -13,7 +13,7 @@ test('the Treasurer vacancy links through to the job description and blog post, 
   await page.goto('/vacancies.html');
 
   const card = page.locator('.card', { has: page.getByRole('heading', { name: 'Treasurer', exact: true }) });
-  await expect(card.getByRole('link', { name: 'Treasurer job description →' })).toHaveAttribute(
+  await expect(card.getByRole('link', { name: 'Treasurer job description' })).toHaveAttribute(
     'href',
     'treasurer-job-description.html',
   );
@@ -28,7 +28,7 @@ test('the Kington Foodbank vacancy links to the foodbank\'s own website and cont
   await page.goto('/vacancies.html');
 
   const card = page.locator('.card', { has: page.getByRole('heading', { name: 'Kington Foodbank volunteers', exact: true }) });
-  const websiteLink = card.getByRole('link', { name: 'Visit the Kington Foodbank website →' });
+  const websiteLink = card.getByRole('link', { name: 'Visit the Kington Foodbank website' });
   await expect(websiteLink).toHaveAttribute('href', 'https://kingtonfoodbank.org.uk');
   await expect(websiteLink).toHaveAttribute('target', '_blank');
   await expect(websiteLink).toHaveAttribute('rel', 'noopener');

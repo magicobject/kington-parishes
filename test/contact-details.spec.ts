@@ -75,7 +75,7 @@ test('the donate link is identical in the header and on Get Involved, and points
   await page.goto('/get-involved.html');
 
   await expect(page.locator('a.btn-donate')).toHaveAttribute('href', 'donate.html');
-  await expect(page.getByRole('link', { name: 'Choose a church to support →' })).toHaveAttribute(
+  await expect(page.getByRole('link', { name: 'Choose a church to support' })).toHaveAttribute(
     'href',
     'donate.html',
   );
@@ -86,19 +86,19 @@ test('donate.html links each church (and the combined Old Radnor/Kinnerton entry
 }) => {
   await page.goto('/donate.html');
 
-  await expect(page.getByRole('link', { name: "Donate to St Mary's, Kington →" })).toHaveAttribute(
+  await expect(page.getByRole('link', { name: "Donate to St Mary's, Kington" })).toHaveAttribute(
     'href',
     'https://www.parishgiving.org.uk/donors/find-your-parish/kington-st-mary-herefordshire',
   );
-  await expect(page.getByRole('link', { name: "Donate to St Peter's, Titley →" })).toHaveAttribute(
+  await expect(page.getByRole('link', { name: "Donate to St Peter's, Titley" })).toHaveAttribute(
     'href',
     'https://www.parishgiving.org.uk/donors/find-your-parish/titley-st-peter-hereford',
   );
-  await expect(page.getByRole('link', { name: "Donate to St Stephen's, Old Radnor and St Mary's, Kinnerton →" })).toHaveAttribute(
+  await expect(page.getByRole('link', { name: "Donate to St Stephen's, Old Radnor and St Mary's, Kinnerton" })).toHaveAttribute(
     'href',
     'https://www.parishgiving.org.uk/donors/find-your-parish/old-radnor-st-stephen-hereford',
   );
-  await expect(page.getByRole('link', { name: 'Donate to St Thomas à Becket, Huntington →' })).toHaveAttribute(
+  await expect(page.getByRole('link', { name: 'Donate to St Thomas à Becket, Huntington' })).toHaveAttribute(
     'href',
     'https://www.parishgiving.org.uk/donors/find-your-parish/huntington-st-thomas-a-becket-hereford',
   );

@@ -924,3 +924,23 @@ footer.site .fine a { color: #C9C3B2; text-decoration: underline; text-underline
 }
 .page-header .w3w-help { color: #C4BFAF; }
 .page-header .w3w-help a, .page-header .w3w-help strong { color: #F8F5EE; }
+
+/* Standalone call-to-action links sitewide (same look as the .parish .links-row pills).
+   Contrast (computed): slate on limestone 5.98:1, on parchment 6.66:1, on white 7.25:1; white on heather-dark (strip) 8.2:1+. */
+.pill-link {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 18px;
+  border: 1.5px solid var(--slate); border-radius: 999px; background: transparent;
+  color: var(--slate); font-size: 0.92rem; font-weight: 600; line-height: 1.25; text-decoration: none;
+  transition: background-color .15s, color .15s;
+}
+.pill-link:hover { background: var(--slate); color: #fff; }
+.card .pill-link { display: flex; width: fit-content; margin-top: 12px; }
+.card .pill-link + .pill-link { margin-top: 8px; }
+.card .pill-link + br { display: none; }
+.pill-link[target="_blank"]::after {
+  content: ""; flex: none; width: 1em; height: 1em; background-color: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.safeguard-strip .pill-link { color: #fff; border-color: #fff; text-decoration: none; }
+.safeguard-strip .pill-link:hover { background: #fff; color: var(--heather-dark); }

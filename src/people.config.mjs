@@ -15,9 +15,9 @@ const BELL_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="#A8813C" stroke-
 
 // A person's mailto, obfuscated the same way as any other on-page contact
 // link (see scripts/build.mjs's obfuscateMailtoLinks) — added to their bio
-// as a plain "Get in touch →" link, only when we actually have their email.
+// as a plain "Get in touch" button, only when we actually have their email.
 function contactLink(email) {
-  return email ? ` <a href="{{OBFUSCATE_MAILTO:${email}}}">Get in touch →</a>` : '';
+  return email ? ` <a class="pill-link" href="{{OBFUSCATE_MAILTO:${email}}}">Get in touch</a>` : '';
 }
 
 // Serve all five churches across the benefice — shown on Our People and
