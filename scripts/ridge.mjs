@@ -86,14 +86,19 @@ export function renderJourneyNav({ churches, journey, profile, sketches, scale =
   const lo = Math.min(...heights), hi = Math.max(...heights);
   const pts = profile.points.map((p, i) => [padX + (p[0] / total) * (W - 2 * padX), base - ((heights[i] - lo) / (hi - lo)) * range]);
 
-  let minY = Infinity;
-  const links = stops.map((c, i) => {
+  // Every name sits on one row, level with the highest church's (Kington's);
+  // a dashed leader joins each name down to its sketch where they've parted.
+  const placed = stops.map((c, i) => {
     const [x, y] = pts[profile.stops[i].index];
     const s = sketches[c.slug];
-    const w = s.w * scale, h = s.h * scale, top = y - h + 1 - (s.lift || 0) * scale;
-    const labelY = top - 8;
-    minY = Math.min(minY, labelY - 16);
-    return `<a href="our-churches.html#${c.slug}"><rect class="ridge-hit" x="${f(x - Math.max(w, 90) / 2)}" y="${f(labelY - 16)}" width="${f(Math.max(w, 90))}" height="${f(y - labelY + 20)}" rx="6"/><image href="/img/journey/${c.slug}.png" x="${f(x - w / 2)}" y="${f(top)}" width="${f(w)}" height="${f(h)}"/><text x="${f(x)}" y="${f(labelY)}" text-anchor="middle" class="ridge-label">${esc(c.locality)}</text></a>`;
+    const w = s.w * scale, h = s.h * scale;
+    return { c, x, y, w, h, top: y - h + 1 - (s.lift || 0) * scale };
+  });
+  const labelY = Math.min(...placed.map((p) => p.top)) - 8;
+  const minY = labelY - 16;
+  const links = placed.map(({ c, x, y, w, h, top }) => {
+    const leader = top - labelY > 14 ? `<line class="ridge-leader" x1="${f(x)}" y1="${f(labelY + 6)}" x2="${f(x)}" y2="${f(top - 3)}"/>` : '';
+    return `<a href="our-churches.html#${c.slug}"><rect class="ridge-hit" x="${f(x - Math.max(w, 90) / 2)}" y="${f(labelY - 16)}" width="${f(Math.max(w, 90))}" height="${f(y - labelY + 20)}" rx="6"/>${leader}<image href="/img/journey/${c.slug}.png" x="${f(x - w / 2)}" y="${f(top)}" width="${f(w)}" height="${f(h)}"/><text x="${f(x)}" y="${f(labelY)}" text-anchor="middle" class="ridge-label">${esc(c.locality)}</text></a>`;
   }).join('');
 
   // Crop the empty headroom above the highest label so the hero doesn't waste screen space.
