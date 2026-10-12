@@ -12,7 +12,7 @@ import { NAV, FOOTER_NAV, PAGES } from '../src/pages.config.mjs';
 import { SITE } from '../src/site.config.mjs';
 import { CHURCHES } from '../src/churches.config.mjs';
 import { JOURNEY, SKETCHES } from '../src/journey.config.mjs';
-import { renderRidge } from './ridge.mjs';
+import { renderJourneyNav } from './ridge.mjs';
 import { CLERGY, PTO_CLERGY, CHURCH_OFFICERS } from '../src/people.config.mjs';
 import { NEWSLETTER_ISSUES } from '../src/newsletter.config.mjs';
 import { ONE_OFF_EVENTS, expandEvents, placeFor, formatEventTime, formatEventDate } from '../src/events.config.mjs';
@@ -215,13 +215,14 @@ function renderNewsletterTokens(html) {
   });
 }
 
-// {{PAGE_RIDGE}} -> the journey line at the foot of every page header (see
-// src/journey.config.mjs and scripts/ridge.mjs).
+// {{JOURNEY_NAV}} -> the home page's journey line: an elevation profile of the
+// ride between the five churches, each church's sketch on it and linking to
+// its section of Our Churches (see src/journey.config.mjs, scripts/ridge.mjs).
 const JOURNEY_PROFILE = JSON.parse(read('src/journey-profile.json'));
-function renderRidgeToken(html) {
-  if (!html.includes('{{PAGE_RIDGE}}')) return html;
-  const svg = renderRidge({ churches: CHURCHES, journey: JOURNEY, profile: JOURNEY_PROFILE, sketches: SKETCHES });
-  return html.replaceAll('{{PAGE_RIDGE}}', () => svg);
+function renderJourneyNavToken(html) {
+  if (!html.includes('{{JOURNEY_NAV}}')) return html;
+  const svg = renderJourneyNav({ churches: CHURCHES, journey: JOURNEY, profile: JOURNEY_PROFILE, sketches: SKETCHES });
+  return html.replaceAll('{{JOURNEY_NAV}}', () => svg);
 }
 
 // {{CHURCHES_MAP}} -> the homepage's five-pin map; {{CHURCH_MAP:<slug>}} ->
@@ -375,7 +376,7 @@ for (const page of PAGES) {
   // not unexpanded tokens. Every heading then gets a real, working anchor
   // before anything else touches this page's content — search results and
   // the page itself can never disagree about where a section actually is.
-  const content = ensureSectionIds(renderRidgeToken(renderChurchMapTokens(renderEventsToken(renderNewsletterTokens(renderPeopleTokens(renderSafeguardingEssentials(read(`src/pages/${page.slug}.html`).trimEnd())))))));
+  const content = ensureSectionIds(renderJourneyNavToken(renderChurchMapTokens(renderEventsToken(renderNewsletterTokens(renderPeopleTokens(renderSafeguardingEssentials(read(`src/pages/${page.slug}.html`).trimEnd())))))));
 
   if (isIndexable(page)) {
     const resolvedForSearch = replaceTokens(content, tokens);

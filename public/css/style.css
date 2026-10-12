@@ -312,30 +312,6 @@ nav.links a:hover, nav.links a[aria-current="page"] {
 .page-header p.lede { color: #C4BFAF; max-width: 52ch; margin-top: 14px; font-size: 1.08rem; }
 .page-header p.lede a { color: #F8F5EE; text-decoration: underline; text-underline-offset: 3px; }
 .page-header p.lede a:hover { color: #D8B978; }
-.page-header .ridge-watermark {
-  position: absolute;
-  left: 0; right: 0; bottom: -6px;
-  width: 100%; height: 56px;
-  opacity: 0.85;
-  pointer-events: none;
-}
-.page-header .ridge-watermark path { stroke: var(--dawn-gold); }
-/* The journey line (scripts/ridge.mjs): an elevation profile of the ride
-   between the five churches, each with its own sketch standing on it. It is
-   centred and capped at its natural 1200px width so it never stretches; the
-   header's bottom padding grows with it (11.25vw = its height at that width)
-   so the heading and lede never run into the sketches. */
-.page-header { padding-bottom: calc(20px + min(11.25vw, 135px)); }
-.page-header .ridge-journey {
-  left: 50%; right: auto; bottom: -2px;
-  width: min(100%, 1200px); height: auto;
-  transform: translateX(-50%);
-}
-/* On phones the whole line goes, handing the space back to the content. */
-@media (max-width: 600px) {
-  .page-header { padding-bottom: 46px; }
-  .page-header .ridge-journey { display: none; }
-}
 
 /* ---------- Sections ---------- */
 section { padding: 60px 0; }
@@ -627,7 +603,7 @@ footer.site .fine a { color: #C9C3B2; text-decoration: underline; text-underline
 .build-number { white-space: nowrap; }
 
 /* ---------- Ridge SVG (home hero signature) ---------- */
-.ridge-label { font-family: 'Spectral', serif; font-size: 13px; fill: #E7E2D6; }
+.ridge-label { font-family: 'Spectral', serif; font-size: 19px; fill: #E7E2D6; }
 
 /* ---------- Utility ---------- */
 .visually-hidden {
@@ -652,7 +628,9 @@ footer.site .fine a { color: #C9C3B2; text-decoration: underline; text-underline
 .ridge-nav { margin-top: 44px; }
 .ridge-nav svg { display: block; width: 100%; height: auto; }
 .ridge-nav a { cursor: pointer; }
-.ridge-nav a:focus-visible circle { stroke: #F8F5EE; stroke-width: 3; }
+.ridge-hit { fill: transparent; stroke: transparent; }
+.ridge-nav a:hover .ridge-label, .ridge-nav a:focus-visible .ridge-label { fill: #fff; text-decoration: underline; }
+.ridge-nav a:focus-visible .ridge-hit { stroke: #F8F5EE; stroke-width: 2; }
 .ridge-sub { font-family: 'Public Sans', sans-serif; font-size: 10.5px; fill: #96907E; }
 
 /* ---------- Our Churches ---------- */

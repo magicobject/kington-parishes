@@ -1,9 +1,8 @@
-// Builds the journey line shown at the foot of every page header (the
-// {{PAGE_RIDGE}} token). Pure functions — covered by test-unit/ridge.test.mjs.
+// Builds the journey line on the home page (the {{JOURNEY_NAV}} token). Pure functions — covered by test-unit/ridge.test.mjs.
 
 const EARTH_RADIUS_M = 6371e3;
 const rad = (deg) => (deg * Math.PI) / 180;
-export const SAMPLES_PER_LEG = 14;
+export const SAMPLE_SPACING_M = 150;
 
 export function haversine(a, b) {
   const h = Math.sin((rad(b.lat) - rad(a.lat)) / 2) ** 2
@@ -11,20 +10,24 @@ export function haversine(a, b) {
   return 2 * EARTH_RADIUS_M * Math.asin(Math.sqrt(h));
 }
 
-// Evenly spaced points along the straight line between consecutive stops,
-// each with its distance (m) from the start. Stop i is at index i*SAMPLES_PER_LEG.
+// Points about SAMPLE_SPACING_M apart along the straight line between
+// consecutive stops, each with its distance (m) from the start, plus the
+// index each stop lands on.
 export function legSamplePoints(stops) {
   const points = [];
+  const stopIndexes = [0];
   let travelled = 0;
   for (let i = 0; i < stops.length - 1; i++) {
     const a = stops[i], b = stops[i + 1], len = haversine(a, b);
-    for (let k = i ? 1 : 0; k <= SAMPLES_PER_LEG; k++) {
-      const t = k / SAMPLES_PER_LEG;
+    const n = Math.max(2, Math.round(len / SAMPLE_SPACING_M));
+    for (let k = i ? 1 : 0; k <= n; k++) {
+      const t = k / n;
       points.push({ x: travelled + len * t, lat: a.lat + (b.lat - a.lat) * t, lng: a.lng + (b.lng - a.lng) * t });
     }
+    stopIndexes.push(points.length - 1);
     travelled += len;
   }
-  return points;
+  return { points, stopIndexes };
 }
 
 const f = (n) => Number(n.toFixed(1));
@@ -41,11 +44,30 @@ export function smoothPath(pts) {
   return d;
 }
 
-export const RIDGE_VIEWBOX = { w: 1200, h: 130 };
+export const RIDGE_VIEWBOX = { w: 1200, h: 240 };
 
+// Ground higher than the tallest church is squashed to a quarter of its
+// excess, so a ridge the journey happens to cross never dwarfs the churches
+// themselves (Old Radnor and Kinnerton each stand on their own hill).
+export const RIDGE_COMPRESSION = 0.25;
+
+export function compressHeights(heights, ceiling, factor = RIDGE_COMPRESSION) {
+  return heights.map((h) => (h > ceiling ? ceiling + (h - ceiling) * factor : h));
+}
+
+// Light 3-point smoothing so the 25 m DEM's noise doesn't make the line
+// jittery; the stops themselves keep their exact heights.
+export function smoothHeights(heights, fixed) {
+  return heights.map((h, i) => (fixed.has(i) || i === 0 || i === heights.length - 1 ? h : (heights[i - 1] + 2 * h + heights[i + 1]) / 4));
+}
+
+const esc = (t) => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+// The home page's journey nav: the elevation line with each church's sketch
+// and name on it, every one a link to that church's section on Our Churches.
 // churches: CHURCHES; journey: slugs in order; profile: journey-profile.json;
-// sketches: { slug: { w, h } }. Throws if the profile is stale.
-export function renderRidge({ churches, journey, profile, sketches }) {
+// sketches: { slug: { w, h, lift? } }. Throws if the profile is stale.
+export function renderJourneyNav({ churches, journey, profile, sketches, scale = 1.25 }) {
   const stops = journey.map((slug) => {
     const c = churches.find((x) => x.slug === slug);
     if (!c) throw new Error(`journey: no church "${slug}" in src/churches.config.mjs`);
@@ -56,17 +78,21 @@ export function renderRidge({ churches, journey, profile, sketches }) {
   if (stale) throw new Error('journey: src/journey-profile.json is out of date with churches.config.mjs / journey.config.mjs — run `npm run journey:profile`');
 
   const { w: W, h: H } = RIDGE_VIEWBOX;
-  const padX = 70, top = 62, base = 118;
-  const total = profile.points[profile.points.length - 1].x;
-  const els = profile.points.map((p) => p.e);
-  const lo = Math.min(...els), hi = Math.max(...els);
-  const pts = profile.points.map((p) => [padX + (p.x / total) * (W - 2 * padX), base - ((p.e - lo) / (hi - lo)) * (base - top - 14)]);
+  const padX = 80, base = H - 14, range = 82;
+  const total = profile.points[profile.points.length - 1][0];
+  const stopIdx = new Set(profile.stops.map((s) => s.index));
+  const ceiling = Math.max(...profile.stops.map((s) => profile.points[s.index][1]));
+  const heights = smoothHeights(compressHeights(profile.points.map((p) => p[1]), ceiling), stopIdx);
+  const lo = Math.min(...heights), hi = Math.max(...heights);
+  const pts = profile.points.map((p, i) => [padX + (p[0] / total) * (W - 2 * padX), base - ((heights[i] - lo) / (hi - lo)) * range]);
 
-  const images = stops.map((c, i) => {
-    const [x, y] = pts[i * SAMPLES_PER_LEG];
+  const links = stops.map((c, i) => {
+    const [x, y] = pts[profile.stops[i].index];
     const s = sketches[c.slug];
-    return `<image href="/img/journey/${c.slug}.png" x="${f(x - s.w / 2)}" y="${f(y - s.h + 1 - (s.lift || 0))}" width="${s.w}" height="${s.h}"/>`;
+    const w = s.w * scale, h = s.h * scale, top = y - h + 1 - (s.lift || 0) * scale;
+    const labelY = top - 8;
+    return `<a href="our-churches.html#${c.slug}"><rect class="ridge-hit" x="${f(x - Math.max(w, 90) / 2)}" y="${f(labelY - 16)}" width="${f(Math.max(w, 90))}" height="${f(y - labelY + 20)}" rx="6"/><image href="/img/journey/${c.slug}.png" x="${f(x - w / 2)}" y="${f(top)}" width="${f(w)}" height="${f(h)}"/><text x="${f(x)}" y="${f(labelY)}" text-anchor="middle" class="ridge-label">${esc(c.locality)}</text></a>`;
   }).join('');
 
-  return `<svg class="ridge-watermark ridge-journey" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="${smoothPath(pts)}" fill="none" stroke="#B8A98C" stroke-width="2"/><g class="ridge-sketches">${images}</g></svg>`;
+  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg"><path d="${smoothPath(pts)}" fill="none" stroke="#B8A98C" stroke-width="2" stroke-linecap="round" aria-hidden="true"/>${links}</svg>`;
 }
