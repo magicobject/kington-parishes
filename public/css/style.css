@@ -331,9 +331,10 @@ nav.links a:hover, nav.links a[aria-current="page"] {
   width: min(100%, 1200px); height: auto;
   transform: translateX(-50%);
 }
-/* On phones the sketches would be too small to read, so only the line shows. */
+/* On phones the whole line goes, handing the space back to the content. */
 @media (max-width: 600px) {
-  .page-header .ridge-sketches { display: none; }
+  .page-header { padding-bottom: 46px; }
+  .page-header .ridge-journey { display: none; }
 }
 
 /* ---------- Sections ---------- */

@@ -36,7 +36,7 @@ This repo now has more than one person making changes through Claude Code. `user
 ## Page header journey line ({{PAGE_RIDGE}})
 Every `.page-header` starts with `{{PAGE_RIDGE}}`, which `renderRidgeToken` in `scripts/build.mjs` expands (via `scripts/ridge.mjs`) into an SVG: a schematic elevation profile of the ride Kington → Huntington → Old Radnor → Kinnerton → Titley, with each church's sketch (`public/img/journey/<slug>.png`, cut from `public/img/five-churches.gif`) standing on it. Never paste the SVG into a page — use the token.
 - Church positions come from `src/churches.config.mjs`; the order and sketch sizes from `src/journey.config.mjs`; the ground heights from `src/journey-profile.json`, which is **generated** by `npm run journey:profile` (needs the network, so it isn't part of the build). If you move a church's `lat`/`lng` or change the journey order, re-run it — the build refuses a stale profile.
-- On screens 600px and narrower the sketches are hidden (CSS) and only the line shows. The SVG is `aria-hidden` and decorative.
+- On screens 600px and narrower the whole line is hidden (CSS) and the header padding returns to normal, to give the screen back to the content. `lift` in `SKETCHES` raises a sketch above its point where the line would otherwise cut through it (Kington, Titley). The SVG is `aria-hidden` and decorative.
 - Sketch colour is cream (`#F2E6C4`) on the header's dark gradient; it's decorative, so it isn't part of the text-contrast checks, but check Titley (far right, over the gold glow) stays visible if the gradient changes.
 
 ## Calendar & events

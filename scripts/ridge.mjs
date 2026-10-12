@@ -65,7 +65,7 @@ export function renderRidge({ churches, journey, profile, sketches }) {
   const images = stops.map((c, i) => {
     const [x, y] = pts[i * SAMPLES_PER_LEG];
     const s = sketches[c.slug];
-    return `<image href="/img/journey/${c.slug}.png" x="${f(x - s.w / 2)}" y="${f(y - s.h + 1)}" width="${s.w}" height="${s.h}"/>`;
+    return `<image href="/img/journey/${c.slug}.png" x="${f(x - s.w / 2)}" y="${f(y - s.h + 1 - (s.lift || 0))}" width="${s.w}" height="${s.h}"/>`;
   }).join('');
 
   return `<svg class="ridge-watermark ridge-journey" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="${smoothPath(pts)}" fill="none" stroke="#B8A98C" stroke-width="2"/><g class="ridge-sketches">${images}</g></svg>`;
