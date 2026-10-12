@@ -86,13 +86,17 @@ export function renderJourneyNav({ churches, journey, profile, sketches, scale =
   const lo = Math.min(...heights), hi = Math.max(...heights);
   const pts = profile.points.map((p, i) => [padX + (p[0] / total) * (W - 2 * padX), base - ((heights[i] - lo) / (hi - lo)) * range]);
 
+  let minY = Infinity;
   const links = stops.map((c, i) => {
     const [x, y] = pts[profile.stops[i].index];
     const s = sketches[c.slug];
     const w = s.w * scale, h = s.h * scale, top = y - h + 1 - (s.lift || 0) * scale;
     const labelY = top - 8;
+    minY = Math.min(minY, labelY - 16);
     return `<a href="our-churches.html#${c.slug}"><rect class="ridge-hit" x="${f(x - Math.max(w, 90) / 2)}" y="${f(labelY - 16)}" width="${f(Math.max(w, 90))}" height="${f(y - labelY + 20)}" rx="6"/><image href="/img/journey/${c.slug}.png" x="${f(x - w / 2)}" y="${f(top)}" width="${f(w)}" height="${f(h)}"/><text x="${f(x)}" y="${f(labelY)}" text-anchor="middle" class="ridge-label">${esc(c.locality)}</text></a>`;
   }).join('');
 
-  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg"><path d="${smoothPath(pts)}" fill="none" stroke="#B8A98C" stroke-width="2" stroke-linecap="round" aria-hidden="true"/>${links}</svg>`;
+  // Crop the empty headroom above the highest label so the hero doesn't waste screen space.
+  const vy = Math.max(0, Math.floor(minY) - 4);
+  return `<svg viewBox="0 ${vy} ${W} ${H - vy}" xmlns="http://www.w3.org/2000/svg"><path d="${smoothPath(pts)}" fill="none" stroke="#B8A98C" stroke-width="2" stroke-linecap="round" aria-hidden="true"/>${links}</svg>`;
 }

@@ -22,7 +22,7 @@ export const JOURNEY = ['kington', 'huntington', 'old-radnor', 'kinnerton', 'tit
 export const SKETCHES = {
   kington: { w: 133, h: 89.5, lift: 5 },
   huntington: { w: 70, h: 49.5 },
-  'old-radnor': { w: 84.5, h: 44 },
+  'old-radnor': { w: 84.5, h: 44, lift: 6 },
   kinnerton: { w: 72, h: 45.5 },
-  titley: { w: 106, h: 43, lift: 10 },
+  titley: { w: 106, h: 43, lift: 16 },
 };
