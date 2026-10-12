@@ -705,13 +705,32 @@ footer.site .fine a { color: #C9C3B2; text-decoration: underline; text-underline
 .parish .facts div { color: var(--slate); font-weight: 600; }
 .parish .give-link { display: inline-block; margin-top: 20px; font-weight: 700; }
 .parish .give-note { margin-top: 20px; color: var(--ink-soft); font-size: 0.92rem; }
-.parish .links-row { display: flex; gap: 8px 24px; flex-wrap: wrap; margin-top: 20px; }
-.parish .links-row .give-link { margin-top: 0; }
-.parish .links-row .trust-link,
-.parish .links-row .wiki-link,
-.parish .links-row .w3w-link,
-.parish .links-row .portal-link,
-.parish .links-row .website-link { font-weight: 700; }
+/* Link "pills". Order: what to do (More about, Give), where to find it (Exact location), then reference links.
+   Contrast (computed): white on slate-dark 11.3:1; brass-dark on limestone 4.97:1, on parchment 5.53:1; slate on limestone 5.98:1. */
+.parish .links-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 22px; align-items: center; }
+.parish .links-row a {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 18px;
+  border: 1.5px solid var(--slate); border-radius: 999px; background: transparent;
+  color: var(--slate); font-size: 0.92rem; font-weight: 600; line-height: 1.25; text-decoration: none;
+  order: 3; transition: background-color .15s, color .15s;
+}
+.parish .links-row a:hover { background: var(--slate); color: #fff; }
+.parish .links-row .portal-link { order: 0; background: var(--slate-dark); border-color: var(--slate-dark); color: #fff; font-weight: 700; }
+.parish .links-row .portal-link:hover { background: var(--slate); border-color: var(--slate); }
+.parish .links-row .give-link { order: 1; margin-top: 0; border-color: var(--brass-dark); color: var(--brass-dark); font-weight: 700; }
+.parish .links-row .give-link:hover { background: var(--brass-dark); color: #fff; }
+.parish .links-row .w3w-link { order: 2; border-style: dashed; }
+.parish .links-row .w3w-link::before, .parish .links-row a[target="_blank"]:not(.give-link)::after, .parish .links-row .give-link::after {
+  content: ""; flex: none; width: 1em; height: 1em; background-color: currentColor;
+  -webkit-mask: var(--pill-icon) center / contain no-repeat; mask: var(--pill-icon) center / contain no-repeat;
+}
+.parish .links-row a[target="_blank"]:not(.give-link)::after { --pill-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5'/%3E%3C/svg%3E"); }
+.parish .links-row .give-link::after { --pill-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M12 21s-8-5.2-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 5.8-8 11-8 11z'/%3E%3C/svg%3E"); }
+.parish .links-row .w3w-link::before { --pill-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z'/%3E%3C/svg%3E"); }
+.parish .links-row .w3w-label { font-weight: 700; }
+.parish .links-row .w3w-words { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.85em; font-weight: 500; }
+.w3w-help { margin-top: 18px; max-width: 66ch; font-size: 0.92rem; }
+.w3w-words-inline { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.9em; }
 .parish-body { margin-top: 20px; }
 .parish-photo { max-width: 640px; margin: 0 0 28px; }
 .parish-photo a { display: block; border-radius: var(--radius); }
@@ -903,3 +922,5 @@ footer.site .fine a { color: #C9C3B2; text-decoration: underline; text-underline
   .cal-month-label { font-size: 1.1rem; min-width: 0; }
   .cal-nav { width: 34px; height: 34px; }
 }
+.page-header .w3w-help { color: #C4BFAF; }
+.page-header .w3w-help a, .page-header .w3w-help strong { color: #F8F5EE; }

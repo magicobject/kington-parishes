@@ -10,17 +10,18 @@ import { join } from 'node:path';
 // reached both pages, not that someone kept two hand-written lists in sync.
 
 const CHURCHES = [
-  { anchor: 'kington', label: "More about St Mary's, Kington →", photoLabel: "More about St Mary's, Kington", portal: '/church-kington.html', heading: /st mary the virgin, kington/i },
-  { anchor: 'titley', label: "More about St Peter's, Titley →", photoLabel: "More about St Peter's, Titley", portal: '/church-titley.html', heading: /st peter's, titley/i },
-  { anchor: 'old-radnor', label: "More about St Stephen's, Old Radnor →", photoLabel: "More about St Stephen's, Old Radnor", portal: '/church-old-radnor.html', heading: /st stephen's, old radnor/i },
-  { anchor: 'kinnerton', label: "More about St Mary's, Kinnerton →", photoLabel: "More about St Mary's, Kinnerton", portal: '/church-kinnerton.html', heading: /st mary's, kinnerton/i },
-  { anchor: 'huntington', label: 'More about St Thomas à Becket, Huntington →', photoLabel: 'More about St Thomas à Becket, Huntington', portal: '/church-huntington.html', heading: /st thomas à becket, huntington/i },
+  { anchor: 'kington', label: "More about St Mary's, Kington", photoLabel: "More about St Mary's, Kington", portal: '/church-kington.html', heading: /st mary the virgin, kington/i },
+  { anchor: 'titley', label: "More about St Peter's, Titley", photoLabel: "More about St Peter's, Titley", portal: '/church-titley.html', heading: /st peter's, titley/i },
+  { anchor: 'old-radnor', label: "More about St Stephen's, Old Radnor", photoLabel: "More about St Stephen's, Old Radnor", portal: '/church-old-radnor.html', heading: /st stephen's, old radnor/i },
+  { anchor: 'kinnerton', label: "More about St Mary's, Kinnerton", photoLabel: "More about St Mary's, Kinnerton", portal: '/church-kinnerton.html', heading: /st mary's, kinnerton/i },
+  { anchor: 'huntington', label: 'More about St Thomas à Becket, Huntington', photoLabel: 'More about St Thomas à Becket, Huntington', portal: '/church-huntington.html', heading: /st thomas à becket, huntington/i },
 ];
 
 for (const church of CHURCHES) {
   test(`Our Churches links to the ${church.portal} portal page for #${church.anchor}`, async ({ page }) => {
     await page.goto('/our-churches.html');
-    const link = page.locator(`#${church.anchor}`).getByRole('link', { name: church.label });
+    const link = page.locator(`#${church.anchor} .portal-link`);
+    await expect(link).toHaveText(church.label);
     await expect(link).toHaveAttribute('href', church.portal.slice(1));
 
     await link.click();
@@ -121,7 +122,7 @@ test('Ruth Jones contacts to the same address on every church she serves', async
   for (const path of ['/church-kinnerton.html', '/church-old-radnor.html', '/church-titley.html', '/our-people.html']) {
     await page.goto(path);
     const card = page.locator('.card', { has: page.getByRole('heading', { name: 'Ruth Jones', exact: true }) }).first();
-    await expect(card.getByRole('link', { name: 'Get in touch →' })).toHaveAttribute(
+    await expect(card.getByRole('link', { name: 'Get in touch' })).toHaveAttribute(
       'href',
       'mailto:lewisjonesruth@yahoo.co.uk',
     );
@@ -153,7 +154,7 @@ test("St Thomas à Becket, Huntington's own website is linked on both Our Church
   for (const path of ['/our-churches.html', '/church-huntington.html']) {
     await page.goto(path);
     await expect(
-      page.getByRole('link', { name: "St Thomas à Becket, Huntington's website →" }),
+      page.getByRole('link', { name: "St Thomas à Becket, Huntington's website" }),
     ).toHaveAttribute('href', 'https://www.huntingtonchurch.co.uk/');
   }
 });
