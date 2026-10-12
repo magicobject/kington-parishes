@@ -4,7 +4,7 @@
 // the recurring-series expansion and the 12h time/date formatters.
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
-import { placeFor, expandEvents, formatTime12h, formatEventTime, formatEventDate } from '../src/events.config.mjs';
+import { RECURRING_SERIES, placeFor, expandEvents, formatTime12h, formatEventTime, formatEventDate } from '../src/events.config.mjs';
 
 describe('placeFor', () => {
   test('a location matching a known church gets a full postal address', () => {
@@ -49,11 +49,12 @@ describe('placeFor', () => {
 describe('expandEvents', () => {
   test('a recurring series expands to one occurrence per matching weekday between from and until, inclusive', () => {
     const events = expandEvents().filter((e) => e.title === 'Marches Voices Choir');
-    // Tuesdays, 2026-09-01 to 2026-12-31, no exceptions.
+    // Tuesdays, between the series' own from/until dates, no exceptions.
+    const { from, until } = RECURRING_SERIES.find((s) => s.title === 'Marches Voices Choir');
     assert.ok(events.length > 0);
     for (const e of events) {
       assert.equal(new Date(`${e.date}T00:00:00`).getDay(), 2); // Tuesday
-      assert.ok(e.date >= '2026-09-01' && e.date <= '2026-12-31');
+      assert.ok(e.date >= from && e.date <= until);
     }
   });
 
