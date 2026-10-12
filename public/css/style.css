@@ -320,6 +320,21 @@ nav.links a:hover, nav.links a[aria-current="page"] {
   pointer-events: none;
 }
 .page-header .ridge-watermark path { stroke: var(--dawn-gold); }
+/* The journey line (scripts/ridge.mjs): an elevation profile of the ride
+   between the five churches, each with its own sketch standing on it. It is
+   centred and capped at its natural 1200px width so it never stretches; the
+   header's bottom padding grows with it (11.25vw = its height at that width)
+   so the heading and lede never run into the sketches. */
+.page-header { padding-bottom: calc(20px + min(11.25vw, 135px)); }
+.page-header .ridge-journey {
+  left: 50%; right: auto; bottom: -2px;
+  width: min(100%, 1200px); height: auto;
+  transform: translateX(-50%);
+}
+/* On phones the sketches would be too small to read, so only the line shows. */
+@media (max-width: 600px) {
+  .page-header .ridge-sketches { display: none; }
+}
 
 /* ---------- Sections ---------- */
 section { padding: 60px 0; }

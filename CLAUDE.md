@@ -33,6 +33,12 @@ This repo now has more than one person making changes through Claude Code. `user
 - **Never hand-write a `?v=` on a `<link>`/`<script>`.** `versionAssetUrls` in `scripts/build.mjs` appends `?v=<content hash>` to every same-origin `href`/`src` on those tags, and fails the build if the file doesn't exist. The build number deliberately appears only on `/updates.html` (not in footers, not in cache-busters, and there's no sitemap `<lastmod>`), so a commit only changes the generated pages it actually affects — keep it that way rather than stamping anything per-build into every page.
 - **Pages with a Leaflet map use the `{{LEAFLET}}` token** (`templates/leaflet.html`) for Leaflet's own CSS/JS, followed by their own map script.
 
+## Page header journey line ({{PAGE_RIDGE}})
+Every `.page-header` starts with `{{PAGE_RIDGE}}`, which `renderRidgeToken` in `scripts/build.mjs` expands (via `scripts/ridge.mjs`) into an SVG: a schematic elevation profile of the ride Kington → Huntington → Old Radnor → Kinnerton → Titley, with each church's sketch (`public/img/journey/<slug>.png`, cut from `public/img/five-churches.gif`) standing on it. Never paste the SVG into a page — use the token.
+- Church positions come from `src/churches.config.mjs`; the order and sketch sizes from `src/journey.config.mjs`; the ground heights from `src/journey-profile.json`, which is **generated** by `npm run journey:profile` (needs the network, so it isn't part of the build). If you move a church's `lat`/`lng` or change the journey order, re-run it — the build refuses a stale profile.
+- On screens 600px and narrower the sketches are hidden (CSS) and only the line shows. The SVG is `aria-hidden` and decorative.
+- Sketch colour is cream (`#F2E6C4`) on the header's dark gradient; it's decorative, so it isn't part of the text-contrast checks, but check Titley (far right, over the gold glow) stays visible if the gradient changes.
+
 ## Calendar & events
 `src/events.config.mjs` (`ONE_OFF_EVENTS`, `RECURRING_SERIES`) is the single source of truth for the parish calendar — edit the arrays there, then `npm run build`. Three things come from it:
 - `public/js/calendar-events.js` — generated (pre-expanded, flat, sorted) for the interactive calendar (`calendar.js`). Don't hand-edit this file; it's overwritten on every build, same as `public/*.html`.
