@@ -411,6 +411,12 @@ section + section { border-top: 1px solid var(--line); }
 .noticeboard-card .body { padding: 16px 18px 18px; }
 .noticeboard-card h3 { font-size: 1.02rem; font-weight: 600; margin-bottom: 4px; }
 .noticeboard-card .date { font-size: 0.8rem; color: var(--ink-soft); }
+/* Highlighted works notice (ink #262521 on #FBF0D2 = 14:1; brass-dark border is decorative) */
+.works-notice { background: #FBF0D2; color: var(--ink); border-left: 4px solid var(--brass-dark); border-radius: var(--radius); padding: 10px 12px; margin-top: 10px; font-size: 0.85rem; line-height: 1.5; }
+.works-notice a { color: var(--brass-dark); }
+.works-notice-page { font-size: 1rem; padding: 16px 20px; margin: 28px 0 8px; }
+.works-notice-page p { margin: 0; }
+.works-notice-page .works-notice-title { font-weight: 700; margin-bottom: 6px; }
 
 .pilgrim-card {
   background: var(--limestone);
