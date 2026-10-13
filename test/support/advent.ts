@@ -4,13 +4,18 @@ import { join } from 'node:path';
 import type { Page } from '@playwright/test';
 import { ADVENT_PAGE } from './pages';
 
-// Reads the theme's publicListing switch from its source (theme.mjs is an ES module and the
-// specs are CommonJS), so the specs follow the switch instead of hard-coding today's value.
+// The theme and the content are the site's own ES modules; Node loads them straight into these CommonJS specs (no regular
+// expression over their source), so the specs follow the real flags and the real number of days.
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const { theme } = require('../../modules/advent/theme.mjs') as { theme: { publicListing: boolean; goLive: boolean; artRequired: boolean; bonus?: { label: string } | null } };
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const { content } = require('../../modules/advent/content.mjs') as { content: { days: { day: number }[]; bonus?: { day: number } } };
+
+/** How many numbered doors the content has (25 for Kington). */
+export const DAY_COUNT: number = content.days.length;
+
 export function adventPubliclyListed(): boolean {
-  const source = readFileSync(join(__dirname, '..', '..', 'modules', 'advent', 'theme.mjs'), 'utf8');
-  const match = /^\s*publicListing:\s*(true|false)\s*,/m.exec(source);
-  if (!match) throw new Error('could not read publicListing from modules/advent/theme.mjs');
-  return match[1] === 'true';
+  return theme.publicListing === true;
 }
 
 /** Paths that should carry noindex and be missing from the sitemap, besides the help guide and changelog. */
@@ -31,16 +36,22 @@ export interface DayFile {
   art?: string;
 }
 
-/** The built day file for day n (what the browser fetches). Day 26 does not exist in the real build. */
+/** The built day file for day n (what the browser fetches). The bonus day (DAY_COUNT + 1) exists only when the content has one. */
 export function builtDay(n: number): DayFile {
   const name = `day-${String(n).padStart(2, '0')}.json`;
   return JSON.parse(readFileSync(join(__dirname, '..', '..', 'public', 'advent', name), 'utf8'));
 }
 
-export const TITLES: Record<number, string> = Object.fromEntries(Array.from({ length: 25 }, (_, i) => [i + 1, builtDay(i + 1).title]));
+export const TITLES: Record<number, string> = Object.fromEntries(Array.from({ length: DAY_COUNT }, (_, i) => [i + 1, builtDay(i + 1).title]));
 
-/** The real bonus day (6 January, "Gifts for a King"), as the build publishes it. */
-export const BONUS_FILE: DayFile = builtDay(26);
+/** True when the real content has a bonus day (a site without one simply has no bonus door). */
+export const HAS_BONUS: boolean = Boolean(content.bonus);
+
+/** The real bonus day (6 January, "Gifts for a King"), as the build publishes it. Lazy: importing this file never fails when there is none. */
+export function bonusFile(): DayFile {
+  if (!content.bonus) throw new Error('this site has no bonus day');
+  return builtDay(content.bonus.day);
+}
 
 const LIVE_PAGE = /^https?:\/\/localhost:\d+\/(?:advent\.html|index\.html)?(?:\?.*)?$/;
 const GO_LIVE_OFF = 'data-go-live="false"';

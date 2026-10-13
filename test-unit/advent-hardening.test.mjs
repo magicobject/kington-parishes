@@ -172,10 +172,10 @@ describe('caps, keys and shapes', () => {
     assert.throws(() => validateTheme(withTheme((t) => { t.colours.night = '#123456\n'; })), /"night"/);
   });
 
-  test('theme: archiveUntil equal to the start or the end is rejected; start equal to end is fine', () => {
+  test('theme: archiveUntil equal to the start or the end is rejected; a season of exactly 25 days with no archive is fine', () => {
     assert.throws(() => validateTheme(withTheme((t) => { t.season.archiveUntil = { month: 12, day: 1 }; })), /archiveUntil/);
     assert.throws(() => validateTheme(withTheme((t) => { t.season.archiveUntil = { month: 12, day: 25 }; })), /archiveUntil/);
-    validateTheme(withTheme((t) => { t.bonus = null; t.season = { start: { month: 12, day: 5 }, end: { month: 12, day: 5 }, archiveUntil: null }; }));
+    validateTheme(withTheme((t) => { t.bonus = null; t.season = { start: { month: 12, day: 5 }, end: { month: 12, day: 29 }, archiveUntil: null }; })); // a 25-day season (start equal to end is no longer possible: the season must match the 25 doors)
   });
 });
 

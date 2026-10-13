@@ -13,7 +13,8 @@ import { validateTheme } from '../modules/advent/schema.mjs';
 import { theme as realTheme } from '../modules/advent/theme.mjs';
 // These tests build into empty temporary folders, so they use the real theme without its own scene file
 // (the scene is tested in advent-ui-build.test.mjs).
-const theme = { ...realTheme, scene: null };
+import { pinFlags } from './support/fixture-flags.mjs';
+const theme = { ...pinFlags(realTheme), scene: null };
 import { content as realContent } from '../modules/advent/content.mjs';
 // The 25 days only: these tests build with and without a bonus day on purpose (the real bonus is tested in advent-built).
 const content = { days: realContent.days };
@@ -430,13 +431,20 @@ describe('renderAdventToken', () => {
     ]) assert.ok(out.includes(attribute), attribute);
   });
 
-  test('shows the calm message by default, with a hidden region and a noscript note', () => {
-    assert.ok(/<div class="advent-calm" data-advent-calm>[\s\S]*The Advent calendar opens on 1&nbsp;December\./.test(out));
+  test('the page as served (no JavaScript) is DATE-NEUTRAL: it says the calendar needs JavaScript and when it runs, never "opens on 1 December"', () => {
+    assert.ok(out.includes('<p data-advent-calm-text>The Advent calendar needs JavaScript to open its doors. It runs from 1 to 25 December.</p>'));
+    assert.ok(!/<p data-advent-calm-text>[^<]*opens on/.test(out));
+    assert.ok(!out.includes('<noscript'), 'the served text already says it, so no separate noscript note');
+    assert.ok(out.includes('data-opens-text="The Advent calendar opens on 1&nbsp;December."'), 'the script sets the date-specific sentence from this');
     assert.ok(!out.includes('comes round again'));
-    assert.ok(!out.includes('data-again-text'));
     assert.match(out, /<div class="advent-live" data-advent-live hidden>/);
-    assert.match(out, /<noscript><p>[^<]*JavaScript[^<]*<\/p><\/noscript>/);
-    assert.ok(out.includes('Kington Parishes Advent calendar'));
+  });
+
+  test('ONE h2 for the whole calendar section (it moves between the calm and live parts), so the search finds one result', () => {
+    assert.equal((out.match(/<h2/g) ?? []).length, 1);
+    assert.match(out, /<div class="advent-calm" data-advent-calm>\s*<h2 data-advent-heading>Kington Parishes Advent calendar<\/h2>/);
+    const live = out.slice(out.indexOf('data-advent-live'));
+    assert.ok(!live.includes('<h2'));
   });
 
   test('an outline that cannot skip levels: h2 only, never an h1 or h3', () => {
@@ -512,8 +520,8 @@ describe('adventPageEntry: listing follows theme.publicListing', () => {
 
   test('uses the site name, escaped, and loads the three assets through plain paths (the build adds ?v=)', () => {
     const entry = adventPageEntry(withTheme((t) => { t.siteName = "St Mary's Hall"; }));
-    assert.equal(entry.title, "Advent \u2014 St Mary&#39;s Hall");
-    assert.ok(entry.description.includes('St Mary&#39;s Hall'));
+    assert.equal(entry.title, "Advent calendar \u2014 St Mary&#39;s Hall");
+    assert.equal(entry.description, 'Open a new door each day from 1 to 25 December to read the Christmas story, from Genesis to Bethlehem.');
     assert.ok(entry.headHtml.includes('href="/css/advent-theme.css"'));
     assert.ok(entry.headHtml.includes('href="/css/advent.css"'));
     assert.ok(entry.headHtml.includes('<script type="module" src="/js/advent.js"></script>'));
@@ -528,7 +536,7 @@ describe('adventPageEntry: listing follows theme.publicListing', () => {
     const { PAGES } = await import('../src/pages.config.mjs');
     const declared = PAGES.find((p) => p.slug === theme.slug);
     assert.ok(declared, 'the advent page should be declared');
-    assert.deepEqual(declared, adventPageEntry(theme));
+    assert.deepEqual(declared, adventPageEntry(realTheme)); // the real flags, whatever they are
     assert.ok(existsSync(new URL(`../src/pages/${theme.slug}.html`, import.meta.url)));
   });
 });

@@ -30,7 +30,13 @@ const part = (root, name) => root.querySelector(`[data-advent-${name}]`);
 // ---------------------------------------------------------------------------
 // Small page states
 
-function showCalm(root, text) {
+// The ONE heading of the calendar section lives in the calm part (as served) and moves into the live part while the
+// calendar shows, so there is exactly one visible h2 (and one search result) in every state.
+function showCalm(root, text, headingText) {
+  const heading = part(root, 'heading');
+  heading.textContent = headingText;
+  part(root, 'calm').prepend(heading);
+  // The served sentence is date-neutral (no JavaScript); the script says what is true today.
   if (text) part(root, 'calm-text').textContent = text;
   part(root, 'live').hidden = true;
   part(root, 'calm').hidden = false;
@@ -69,7 +75,7 @@ class Calendar {
     this.hasBonus = Boolean(config.bonus);
     this.days = Array.from({ length: config.dayCount + (this.hasBonus ? 1 : 0) }, (_, index) => index + 1);
     this.heading = part(root, 'heading');
-    this.defaultHeading = this.heading.textContent;
+    this.defaultHeading = `${config.siteName} Advent calendar`;
     this.parts = null;
     this.season = null;
     this.states = new Map();
@@ -107,6 +113,8 @@ class Calendar {
   build() {
     this.primary = part(this.root, 'primary');
     this.primary.addEventListener('click', () => { if (this.currentToday) this.openDay(this.currentToday, this.primary); });
+    const startButton = part(this.root, 'start').querySelector('button');
+    startButton.addEventListener('click', () => this.openDay(1, startButton));
     this.status = part(this.root, 'status');
     this.dialog = this.buildDialog();
     this.root.append(this.dialog);
@@ -125,11 +133,13 @@ class Calendar {
     this.currentToday = this.days.find((day) => this.states.get(day) === 'today') ?? 0;
 
     this.heading.textContent = season === 'archive' ? 'The Christmas Story' : this.defaultHeading;
+    part(this.root, 'live').prepend(this.heading);
     this.status.textContent = statusText({ season, today: this.todayNumber(), title: this.titles.get(this.todayNumber()), bonusToday: this.bonusToday() }, this.config);
     this.doors = new Map();
     part(this.root, 'doors').replaceChildren(...this.days.map((day) => this.doorItem(day)));
     this.primary.hidden = !this.currentToday;
     this.buildScene(part(this.root, 'scene'), season === 'archive' || this.todayNumber() === this.config.dayCount);
+    part(this.root, 'start').hidden = season !== 'archive'; // a quiet place to begin when no door is "today"
     part(this.root, 'calm').hidden = true;
     part(this.root, 'live').hidden = false;
 
@@ -327,7 +337,9 @@ class Calendar {
     else this.showGentle(target, this.shown);
   }
 
-  setView(view) {
+  // `card`: the short messages (not yet, a day that will not load) are a small centred card; a day is the full sheet.
+  setView(view, card = false) {
+    this.dialog.classList.toggle('advent-dialog-card', card);
     this.message.hidden = view === 'day';
     this.body.hidden = view !== 'day';
     this.nav.hidden = view !== 'day';
@@ -342,28 +354,30 @@ class Calendar {
     this.ticket += 1;
     this.shown = 0;
     this.returnTo = returnTo;
-    this.setView('message');
+    this.setView('message', true);
     this.art.hidden = true;
     this.count.textContent = '';
     this.eyebrow.textContent = this.eyebrowText(day);
-    this.title.textContent = 'Not yet';
+    this.title.textContent = 'Not quite yet';
     this.messageText.textContent = `This door opens on ${dateLabel(day, this.config)}.`;
-    const anyway = actionButton('advent-pill', 'Open it anyway', () => this.showDay(day));
-    const notYet = actionButton('advent-pill advent-pill-quiet', 'Not yet', () => (returnTo ? this.showDay(returnTo) : this.dialog.close()));
-    this.messageActions.replaceChildren(anyway, notYet);
-    this.title.focus();
-    this.say(`Not yet. This door opens on ${dateLabel(day, this.config)}.`);
+    // Which of the two buttons looks primary is set in the stylesheet by two custom properties (see advent.css).
+    const anyway = actionButton('advent-pill advent-gentle-anyway', 'Open it anyway', () => this.showDay(day));
+    const later = actionButton('advent-pill advent-gentle-later', 'Maybe later', () => (returnTo ? this.showDay(returnTo) : this.dialog.close()));
+    this.messageActions.replaceChildren(anyway, later);
+    this.focusTitle();
+    // The heading (focused, and the dialog's name) says "Not quite yet"; the live region adds only the date, so it is heard once.
+    this.say(`This door opens on ${dateLabel(day, this.config)}.`);
   }
 
   showError(day) {
-    this.setView('message');
+    this.setView('message', true);
     this.art.hidden = true;
     this.count.textContent = '';
     this.eyebrow.textContent = this.eyebrowText(day);
     this.title.textContent = day === BONUS_DAY ? this.config.bonus.label : `Day ${day}`;
     this.messageText.textContent = FRIENDLY_ERROR;
     this.messageActions.replaceChildren(actionButton('advent-pill', 'Try again', () => this.showDay(day)));
-    this.title.focus();
+    this.focusTitle();
     this.say(FRIENDLY_ERROR);
   }
 
@@ -416,7 +430,7 @@ class Calendar {
     this.renderNav(day);
     this.shareButton.textContent = typeof navigator.share === 'function' ? 'Share this day' : 'Copy link';
     this.shareStatus.replaceChildren();
-    this.title.focus();
+    this.focusTitle();
     this.say(day === BONUS_DAY ? `${config.bonus.label} door opened` : `Day ${day} opened`);
   }
 
@@ -436,6 +450,11 @@ class Calendar {
       button.textContent = label.visible;
       button.setAttribute('aria-label', label.name);
     }
+  }
+
+  // Focus goes to the title (so a screen reader reads it) WITHOUT scrolling: the sheet stays where it is and Close stays in view.
+  focusTitle() {
+    this.title.focus({ preventScroll: true });
   }
 
   say(text) {
@@ -538,7 +557,7 @@ class CalendarPage {
       }
       this.calendar.apply(state.parts, state.season);
     } else {
-      showCalm(this.root, this.config.opensText);
+      showCalm(this.root, this.config.opensText, `${this.config.siteName} Advent calendar`);
     }
   }
 

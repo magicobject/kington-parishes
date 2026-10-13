@@ -135,6 +135,10 @@ export function validateTheme(theme) {
   validateMonthDay(season.start, 'theme.season.start');
   validateMonthDay(season.end, 'theme.season.end');
   if (monthDay(season.end) < monthDay(season.start)) fail('theme.season', 'the end must not be before the start');
+  // One door per day: the live season must be exactly as many days as there are numbered doors, or a door would have no day
+  // (or a day no door).
+  const days = Math.round((Date.UTC(2001, season.end.month - 1, season.end.day) - Date.UTC(2001, season.start.month - 1, season.start.day)) / 86400000) + 1;
+  if (days !== DAY_COUNT) fail('theme.season', `the live season (start to end) must be exactly ${DAY_COUNT} days, one for each of the ${DAY_COUNT} doors, but it is ${days} days`);
   if (season.archiveUntil !== null) {
     validateMonthDay(season.archiveUntil, 'theme.season.archiveUntil');
     if (monthDay(season.archiveUntil) >= monthDay(season.start) && monthDay(season.archiveUntil) <= monthDay(season.end)) {

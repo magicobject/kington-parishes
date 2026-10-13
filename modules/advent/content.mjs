@@ -9,7 +9,7 @@ export const content = {
       "title": "Let There Be Light",
       "ref": "Genesis 1:1-5",
       "paragraphs": [
-        "Before there were hills or rivers or people, there was only dark and quiet. And God spoke. \"Let there be light.\" And light came, soft at first, the way morning creeps over a ridge. God looked at it and saw that it was good. Then God kept going: sky, sea, earth, trees, birds, creatures of every kind, and last of all, people, to share it with. The whole story begins with love making room for others. Every night since then, every dawn has been a small reminder that the dark does not get the last word. This calendar follows one thread of that light, from the very first morning all the way to a baby in a manger."
+        "Before there were hills or rivers or people, there was only dark and quiet. And God spoke. \"Let there be light.\" And light came, soft at first, the way morning creeps over a ridge. God looked at it and saw that it was good. Then God kept going: sky, sea, earth, trees, birds, creatures of every kind, and last of all, people, to share it with. The whole story begins with love making room for others. Every dawn since then has been a small reminder that the dark does not get the last word. This calendar follows one thread of that light, from the very first morning all the way to a baby in a manger."
       ],
       "wonder": "I wonder what the very first light looked like?",
       "prayer": "God of the first light, thank you for the world you made. Help us to see it and love it. Amen.",
@@ -23,7 +23,7 @@ export const content = {
       "title": "The Whisper in the Garden",
       "ref": "Genesis 3:8-15, 21",
       "paragraphs": [
-        "In the garden, God and the first people walked and talked in the cool of the evening. But they chose their own way, and something broke: shame, hiding, and the first hurt between people and God. God did not leave them. He came looking, \"Where are you?\" Even then, he made clothes for them and spoke a promise that someday one of their family would put things right. It is a quiet promise, almost a whisper, but the whole Bible leans towards it. We all know what it is to get things wrong and want to hide. This door says God comes looking, with a promise, not with a slammed door."
+        "In the garden, God and the first people walked and talked in the cool of the evening. But they chose their own way, and something broke: shame, hiding, and the first hurt between people and God. God did not leave them. He came looking. \"Where are you?\" he asked. Even then, he made clothes for them and spoke a promise that someday one of their family would put things right. It is a quiet promise, almost a whisper, but the whole Bible leans towards it. We all know what it is to get things wrong and want to hide. This door says God comes looking, with a promise, not with a slammed door."
       ],
       "wonder": "I wonder how it felt to hear God ask, \"Where are you?\"",
       "prayer": "God who comes looking for us, find us when we hide, and help us begin again. Amen.",
@@ -51,7 +51,7 @@ export const content = {
       "title": "Count the Stars",
       "ref": "Genesis 12:1-3; 15:1-6",
       "paragraphs": [
-        "Abram was an old man with no children when God told him to leave his country and go to a land that God would show him, and promised that all the families of the earth would be blessed through him. So Abram packed up, left his home, and went, without a map. One night God took him outside and said, \"Look now toward the sky, and count the stars, if you are able to count them.\" And God said, \"So will your offspring be.\" Abram looked at the huge, glittering sky and believed. He couldn't see how it would happen. But he trusted the one who promised. Many hundreds of years later a child would be born from that long line, and the blessing was meant for everyone, not just one family."
+        "Abram was an old man with no children when God told him to leave his country and go to a land that God would show him, and promised that all the families of the earth would be blessed through him. So Abram packed up, left his home, and went, without a map. One night God took him outside and said, \"Look now toward the sky, and count the stars, if you are able to count them.\" And God said, \"So will your offspring be.\" Abram looked at the huge, glittering sky and believed. He couldn't see how it would happen. But he trusted the one who promised. Many centuries later a child would be born from that long line, and the blessing was meant for everyone, not just one family."
       ],
       "wonder": "I wonder what it's like to trust someone when you can't see the road?",
       "prayer": "God of the stars, help us to trust you even when we cannot see the way. Amen.",

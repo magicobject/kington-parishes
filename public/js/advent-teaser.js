@@ -11,7 +11,7 @@
 // (today's day file, for its title), and the link to the calendar page never carries the preview date.
 import { seasonState } from './advent/date.js?v=437781ad7f';
 import { effectiveDate, formatPreviewNotice } from './advent/preview.js?v=0a66911aae';
-import { calendarUrl, fetchDayFile, readConfig, stylesheetUrl, teaserText, todayDoor, visibleSeason } from './advent/logic.js?v=89613fa558';
+import { artUrl, calendarUrl, fetchDayFile, readConfig, stylesheetUrl, teaserText, todayDoor, visibleSeason } from './advent/logic.js?v=89613fa558';
 
 function make(tag, className, text) {
   const node = document.createElement(tag);
@@ -68,12 +68,12 @@ async function show(root, config, season, parts, preview) {
   const banner = season ? make('div', 'advent-teaser-banner') : null;
   if (banner) inner.append(banner);
   const words = season ? teaserText({ season, today }, config) : null;
-  if (banner && config.scene) {
-    const picture = make('img', 'advent-teaser-scene');
-    picture.alt = '';
-    picture.src = config.scene;
-    banner.append(picture);
-  }
+  // The thumbnail: a reserved 16:9 box (CSS), first showing the site's scene, then today's day picture once the day file
+  // says what it is. Its alt is empty because the heading and the line beside it carry the meaning.
+  const thumb = make('img', 'advent-teaser-thumb');
+  thumb.alt = '';
+  if (config.scene) thumb.src = config.scene;
+  if (banner) banner.append(thumb);
   const text = make('div', 'advent-teaser-text');
   const heading = make('h2', 'advent-teaser-heading', words?.heading ?? '');
   const line = make('p', 'advent-teaser-line', words?.line ?? '');
@@ -95,6 +95,7 @@ async function show(root, config, season, parts, preview) {
     try {
       const file = await fetchDayFile(today, (url, init) => fetch(url, init));
       line.textContent = teaserText({ season, today, title: file.title }, config).line;
+      if (file.art) thumb.src = artUrl(file.art); // already checked as a plain picture file name by the shared day rules
     } catch {
       // Without the title the banner simply says "Day N".
     }

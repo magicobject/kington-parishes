@@ -300,10 +300,48 @@ describe('gradients are charged for their stops, per shape that uses them', () =
     assert.match(lintSvg(gradient(17, 1))[0], /16 stops/);
   });
 
-  test('each shape that fills or strokes with a gradient pays floor(stops / 5) more', () => {
-    assert.equal(svgDrawWeight(gradient(4, 10)), 1 + 10); // 4 stops: free (real art has up to 4)
-    assert.equal(svgDrawWeight(gradient(10, 10)), 1 + 10 * (1 + 2));
-    assert.equal(svgDrawWeight(R(`<defs><linearGradient id="g">${stops(15)}</linearGradient></defs><circle r="9" stroke="url(#g)" fill="url(#g)"/>`)), 1 + (1 + 3 + 3));
+  test('each paint reference to a gradient pays ceil(stops / 2), +8 if it repeats or reflects, +10 if the shape covers more than 25% of the picture', () => {
+    // A full-size rectangle: 1 + ceil(4/2)=2 + 10 (large) = 13 each, plus the svg
+    assert.equal(svgDrawWeight(gradient(4, 10)), 1 + 10 * 13);
+    assert.equal(svgDrawWeight(gradient(10, 10)), 1 + 10 * (1 + 5 + 10));
+    // A small circle with the same gradient as fill AND stroke pays twice (no large-area charge): 1 + 8 + 8
+    assert.equal(svgDrawWeight(R(`<defs><linearGradient id="g">${stops(15)}</linearGradient></defs><circle r="9" stroke="url(#g)" fill="url(#g)"/>`)), 1 + (1 + 8 + 8));
+    // Repeat and reflect cost 8 more per reference
+    const spread = (kind) => R(`<defs><linearGradient id="g" spreadMethod="${kind}">${stops(4)}</linearGradient></defs><circle r="9" fill="url(#g)"/>`);
+    assert.equal(svgDrawWeight(spread('pad')), 1 + (1 + 2));
+    assert.equal(svgDrawWeight(spread('repeat')), 1 + (1 + 2 + 8));
+    assert.equal(svgDrawWeight(spread('reflect')), 1 + (1 + 2 + 8));
+    // Large circles and ellipses count too (a 100000-radius circle covers the picture); a small rectangle does not
+    assert.equal(svgDrawWeight(R(`<defs><linearGradient id="g">${stops(4)}</linearGradient></defs><circle r="99999" fill="url(#g)"/>`)), 1 + (1 + 2 + 10));
+    assert.equal(svgDrawWeight(R(`<defs><linearGradient id="g">${stops(4)}</linearGradient></defs><rect width="50" height="50" fill="url(#g)"/>`)), 1 + (1 + 2));
+  });
+
+  // The security engineer's accepted files from the third review (a06_radial_rects, a14_lin_rects, a01_bigcircle_grad):
+  // 16-stop repeat/reflect gradients on hundreds of full-size shapes took 0.7 to 2.1 seconds at 800 and 1200px.
+  const hostileStops = (n = 16) => Array.from({ length: n }, (_, i) => `<stop offset="${(i / (n - 1)).toFixed(3)}" stop-color="#${(i * 16).toString(16).padStart(2, '0')}80ff" stop-opacity=".6"/>`).join('');
+  const radial = `<defs><radialGradient id="g" cx="0.5" cy="0.5" r="0.02" fx="0.9" fy="0.1" spreadMethod="reflect">${hostileStops()}</radialGradient></defs>`;
+  const linear = `<defs><linearGradient id="l" x1="0" x2="0.003" spreadMethod="repeat">${hostileStops()}</linearGradient></defs>`;
+
+  test('a06: 200 full-size rectangles filled with a reflecting 16-stop radial gradient are refused', () => {
+    assert.match(lintSvg(R(radial + '<rect width="400" height="225" fill="url(#g)"/>'.repeat(200)))[0], /too costly/);
+    assert.match(lintSvg(R(radial + '<rect width="400" height="225" fill="url(#g)"/>'.repeat(213)))[0], /too costly/); // the reviewer's accepted count
+  });
+
+  test('a14: 120 full-size rectangles with a repeating 16-stop linear gradient as fill and stroke are refused', () => {
+    assert.match(lintSvg(R(linear + '<rect width="400" height="225" fill="url(#l)" fill-opacity=".3" stroke="url(#l)" stroke-width="50"/>'.repeat(126)))[0], /too costly/);
+    assert.match(lintSvg(R(linear + '<rect width="400" height="225" fill="url(#l)" fill-opacity=".3" stroke="url(#l)" stroke-width="50"/>'.repeat(60)))[0], /too costly/);
+  });
+
+  test('a01: 126 huge circles with gradient fill and stroke are refused', () => {
+    const both = radial.replace('</defs>', '') + linear.replace('<defs>', '');
+    assert.match(lintSvg(R(both + '<circle cx="200" cy="100" r="99999" fill="url(#g)" stroke="url(#l)" stroke-width="99999" fill-opacity=".4"/>'.repeat(126)))[0], /too costly/);
+  });
+
+  test('ordinary use stays accepted: a few big gradient backgrounds and a handful of gradient shapes', () => {
+    const sky = '<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0d1530"/><stop offset=".7" stop-color="#1b2a55"/><stop offset="1" stop-color="#34406b"/></linearGradient></defs>';
+    const picture = R(sky + '<rect width="400" height="225" fill="url(#g)"/>' + '<circle cx="50" cy="50" r="20" fill="url(#g)"/>'.repeat(10) + '<rect width="400" height="60" y="165" fill="url(#g)"/>');
+    assert.deepEqual(lintSvg(picture), []);
+    assert.ok(svgDrawWeight(picture) < 100);
   });
 
   test('450 stops on 300 full-size rectangles (607 ms in a browser) and 16 stops on 300 shapes (over the budget) are refused', () => {
@@ -313,6 +351,6 @@ describe('gradients are charged for their stops, per shape that uses them', () =
 
   test('a use of a shape with a gradient charges it again each time', () => {
     const body = `<defs><radialGradient id="g">${stops(15)}</radialGradient><rect id="r" width="400" height="225" fill="url(#g)"/></defs>`;
-    assert.equal(svgDrawWeight(R(`${body}${'<use href="#r"/>'.repeat(10)}`)), 1 + 10 * (1 + 1 + 3));
+    assert.equal(svgDrawWeight(R(`${body}${'<use href="#r"/>'.repeat(10)}`)), 1 + 10 * (1 + 1 + 8 + 10)); // use 1, rect 1, 15 stops 8, large 10
   });
 });

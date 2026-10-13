@@ -251,7 +251,7 @@ describe('validateTheme', () => {
   test('allows leap day only as 29 Feb and null for no archive', () => {
     const ok = clone(theme);
     ok.bonus = null;
-    ok.season = { start: { month: 2, day: 28 }, end: { month: 2, day: 29 }, archiveUntil: null };
+    ok.season = { start: { month: 2, day: 5 }, end: { month: 2, day: 29 }, archiveUntil: null }; // 25 days, ending on 29 Feb
     validateTheme(ok);
   });
 
@@ -264,5 +264,30 @@ describe('validateTheme', () => {
 
   test('rejects a theme that is not an object', () => {
     assert.throws(() => validateTheme(null), /theme: must be an object/);
+  });
+});
+
+describe('the live season must match the number of doors (architect review, 13 Oct 2026)', () => {
+  const withSeason = (start, end, archiveUntil = { month: 1, day: 6 }) => ({ ...clone(theme), bonus: null, season: { start, end, archiveUntil } });
+
+  test('the real season (1 to 25 December) is exactly 25 days and passes', () => {
+    assert.doesNotThrow(() => validateTheme(clone(theme)));
+  });
+
+  test('a season of any other length is refused with a clear message: it would leave doors with no day, or days with no door', () => {
+    for (const end of [{ month: 12, day: 20 }, { month: 12, day: 24 }, { month: 12, day: 26 }, { month: 12, day: 31 }]) {
+      assert.throws(() => validateTheme(withSeason({ month: 12, day: 1 }, end)), /season.*25 days|25 doors/, JSON.stringify(end));
+    }
+    assert.throws(() => validateTheme(withSeason({ month: 12, day: 2 }, { month: 12, day: 25 })), /25 days|25 doors/);
+  });
+
+  test('another church can run its 25 days at another time of year, including across a month end', () => {
+    assert.doesNotThrow(() => validateTheme(withSeason({ month: 3, day: 10 }, { month: 4, day: 3 }, null)));
+    assert.doesNotThrow(() => validateTheme(withSeason({ month: 11, day: 20 }, { month: 12, day: 14 }, { month: 1, day: 6 })));
+  });
+
+  test('the length is counted in whole days from the start date to the end date, both included', () => {
+    assert.doesNotThrow(() => validateTheme(withSeason({ month: 12, day: 7 }, { month: 12, day: 31 }, null))); // 25 days
+    assert.throws(() => validateTheme(withSeason({ month: 12, day: 7 }, { month: 12, day: 30 }, null)), /25 days|25 doors/); // 24 days
   });
 });

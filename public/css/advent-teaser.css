@@ -15,10 +15,15 @@
 .advent-teaser .advent-teaser-notice a { color: var(--advent-accent-ink); font-weight: 600; }
 .advent-teaser .advent-teaser-notice a:focus-visible { outline: 3px solid var(--advent-night); outline-offset: 3px; }
 .advent-teaser .advent-teaser-banner { display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap; }
-.advent-teaser .advent-teaser-scene { display: block; width: 10rem; max-width: 100%; height: auto; flex: none; }
+/* The thumbnail is a reserved 16:9 box (so nothing jumps when today's picture replaces the scene): 120px wide on a phone, 192px
+   from 40rem. The line beside it reserves two lines for the same reason. */
+.advent-teaser .advent-teaser-thumb { display: block; width: 7.5rem; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 4px; background: var(--advent-night); flex: none; }
+@media (min-width: 40rem) {
+  .advent-teaser .advent-teaser-thumb { width: 12rem; }
+}
 .advent-teaser .advent-teaser-text { flex: 1 1 16rem; }
 .advent-teaser .advent-teaser-heading { margin: 0 0 0.25rem; font-size: 1.4rem; color: var(--advent-accent); }
-.advent-teaser .advent-teaser-line { margin: 0 0 0.75rem; color: var(--advent-cream); }
+.advent-teaser .advent-teaser-line { margin: 0 0 0.75rem; min-height: 3em; color: var(--advent-cream); }
 .advent-teaser .advent-pill {
   display: inline-block; min-height: 48px; padding: 0.6em 1.4em; border-radius: 999px; font: inherit; font-weight: 600; line-height: 1.3;
   background: var(--advent-accent); color: var(--advent-accent-ink); border: 2px solid var(--advent-accent-ink); text-decoration: none;

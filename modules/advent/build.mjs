@@ -169,7 +169,8 @@ function geometryWeight(record) {
 //   - there are no dashed lines (stroke-dasharray is not an allowed attribute: the dash count is the path length over
 //     the dash length, which no weight can bound), and no number in a size, position, path or transform attribute may
 //     be larger than 100000;
-//   - a gradient has at most 16 stops, and every shape that fills or strokes with one pays floor(stops / 5) more.
+//   - a gradient has at most 16 stops, and every shape that fills or strokes with one pays ceil(stops / 2) more, 8 more for a
+//     repeating or reflecting gradient and 10 more when the shape covers over 25% of the picture.
 export const MAX_DRAW_WEIGHT = 900;
 const MAX_NUMBER = 100000;
 const NOT_DRAWN_DIRECTLY = new Set(['defs', 'symbol', 'mask', 'clipPath', 'linearGradient', 'radialGradient', 'title', 'desc']);
@@ -203,6 +204,32 @@ const MAX_RESOURCE_CHILDREN = 50;
 const RESOURCE_REFERENCE = /^url\(#([A-Za-z][A-Za-z0-9_-]*)\)$/;
 
 const MAX_STOPS = 16;
+const LARGE_SHARE = 0.25;
+
+// The area of the picture, from the root's viewBox (or width and height), for the large-shape test below.
+function pictureArea(root) {
+  const box = (root?.attrs.viewBox ?? '').split(/[ ,]+/).map(Number);
+  if (box.length === 4 && box.every(Number.isFinite) && box[2] > 0 && box[3] > 0) return box[2] * box[3];
+  const [width, height] = [Number(root?.attrs.width), Number(root?.attrs.height)];
+  return width > 0 && height > 0 ? width * height : 400 * 225;
+}
+
+// Whether a rect, circle or ellipse covers more than a quarter of the picture (a paint over a large area costs more).
+function coversMuch(record, area) {
+  const n = (name) => Number(record.attrs[name] ?? 0);
+  if (record.name === 'rect') return n('width') * n('height') > LARGE_SHARE * area;
+  if (record.name === 'circle') return Math.PI * n('r') * n('r') > LARGE_SHARE * area;
+  if (record.name === 'ellipse') return Math.PI * n('rx') * n('ry') > LARGE_SHARE * area;
+  return false;
+}
+
+// What one shape pays for ONE paint (fill or stroke) that is a gradient: ceil(stops / 2); 8 more if the gradient repeats or
+// reflects (a browser works through every repeat); 10 more if the shape covers more than 25% of the picture (a gradient
+// over a large area is rasterised pixel by pixel). Real art uses gradients of up to 4 stops on a few shapes.
+function gradientCharge(gradient, shape, area) {
+  const spread = gradient.attrs.spreadMethod;
+  return Math.ceil(stopCount(gradient) / 2) + (spread === 'repeat' || spread === 'reflect' ? 8 : 0) + (coversMuch(shape, area) ? 10 : 0);
+}
 const stopCount = (record) => record.children.filter((child) => child.name === 'stop').length;
 
 function descendantCount(record) {
@@ -230,12 +257,14 @@ function drawCost(records) {
   let weight = 0;
   let references = 0;
   const referenceCounts = new Map(); // id of a mask or clipPath -> how many drawn elements reference it
+  const root = records.find((record) => !record.parent);
+  const viewBoxArea = pictureArea(root);
   const draw = (record) => {
     weight += ownWeight(record);
     for (const name of ['fill', 'stroke']) {
       const paint = RESOURCE_REFERENCE.exec(record.attrs[name] ?? '');
       const gradient = paint ? byId.get(paint[1]) : null;
-      if (gradient && (gradient.name === 'linearGradient' || gradient.name === 'radialGradient')) weight += Math.floor(stopCount(gradient) / 5);
+      if (gradient && (gradient.name === 'linearGradient' || gradient.name === 'radialGradient')) weight += gradientCharge(gradient, record, viewBoxArea);
     }
     for (const name of RESOURCE_ATTRIBUTES) {
       const match = RESOURCE_REFERENCE.exec(record.attrs[name] ?? '');
@@ -697,6 +726,14 @@ function settingsAttributes(ctx) {
   };
 }
 
+// "1 to 25 December" (or "20 December to 5 January" when the season crosses a month), from the theme's season dates.
+function seasonRangeText({ start, end }) {
+  const month = (value, where) => MONTH_NAMES[wholeNumber(value, where) - 1];
+  const first = `${wholeNumber(start.day, 'start.day')}`;
+  if (start.month === end.month) return `${first} to ${wholeNumber(end.day, 'end.day')} ${month(end.month, 'end.month')}`;
+  return `${first} ${month(start.month, 'start.month')} to ${wholeNumber(end.day, 'end.day')} ${month(end.month, 'end.month')}`;
+}
+
 const attributeText = (pairs) => pairs.map(([name, value]) => `${name}="${escapeText(value)}"`).join(' ');
 
 /**
@@ -706,25 +743,27 @@ const attributeText = (pairs) => pairs.map(([name, value]) => `${name}="${escape
  */
 export function renderAdventToken(html, ctx) {
   if (!html.includes(TOKEN)) return html;
-  const { opens, pairs } = settingsAttributes(ctx);
+  const { pairs } = settingsAttributes(ctx);
   const heading = escapeText(`${ctx.theme.siteName} Advent calendar`);
+  // What a visitor WITHOUT JavaScript is told. It is date-neutral (it must be true on any date, in or out of the season); the
+  // script replaces it with the date-specific sentence (data-opens-text) when the calendar is calm.
+  const servedText = `The Advent calendar needs JavaScript to open its doors. It runs from ${seasonRangeText(ctx.theme.season)}.`;
 
   const markup = `<section class="advent" ${attributeText(pairs)}>
   <div class="advent-notice" data-advent-notice role="status" hidden>
     <p data-advent-notice-text></p>
   </div>
   <div class="advent-calm" data-advent-calm>
-    <h2>${heading}</h2>
-    <p data-advent-calm-text>${escapeText(opens)}</p>
+    <h2 data-advent-heading>${heading}</h2>
+    <p data-advent-calm-text>${escapeText(servedText)}</p>
   </div>
   <div class="advent-live" data-advent-live hidden>
-    <h2 data-advent-heading>${heading}</h2>
     <p class="advent-status" data-advent-status></p>
     <p class="advent-primary"><button type="button" class="advent-pill" data-advent-primary hidden>${escapeText("Open today's door")}</button></p>
+    <p class="advent-start" data-advent-start hidden><button type="button" class="advent-pill advent-pill-quiet">Start with Day 1</button></p>
     <ul class="advent-doors" data-advent-doors></ul>
     <div class="advent-scene" data-advent-scene aria-hidden="true"></div>
   </div>
-  <noscript><p>The Advent calendar needs JavaScript to open its doors. Please switch JavaScript on and reload this page.</p></noscript>
 </section>`;
   return html.split(TOKEN).join(markup);
 }
@@ -756,8 +795,8 @@ export function adventPageEntry(theme) {
   const name = escapeText(checked.siteName);
   const entry = {
     slug: checked.slug,
-    title: `Advent \u2014 ${name}`,
-    description: `The ${name} Advent calendar.`,
+    title: `Advent calendar \u2014 ${name}`,
+    description: `Open a new door each day from ${seasonRangeText(checked.season)} to read the Christmas story, from Genesis to Bethlehem.`,
     active: null,
     header: true,
     headHtml: [

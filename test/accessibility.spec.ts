@@ -119,7 +119,7 @@ const ADVENT_STATES: AdventState[] = [
   },
   {
     name: 'the gentle "not yet" message (12 December, door 20)', time: '2026-12-12T12:00:00Z', query: '', ready: readyDoors(25),
-    act: async (page) => { await advDoors(page).nth(19).click(); await expect(page.locator('#advent-dialog-title')).toHaveText('Not yet'); },
+    act: async (page) => { await advDoors(page).nth(19).click(); await expect(page.locator('#advent-dialog-title')).toHaveText('Not quite yet'); },
   },
   {
     name: 'the friendly error (a day file that will not load)', time: '2026-12-12T12:00:00Z', query: '', ready: readyDoors(25),

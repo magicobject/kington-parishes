@@ -1,6 +1,6 @@
 import { test, expect, type Page, type Locator } from '@playwright/test';
 import { ADVENT_PAGE } from './support/pages';
-import { BONUS_FILE, TEST_ART, TITLES, builtDay, forceGoLive, withBonusDoor } from './support/advent';
+import { bonusFile, TEST_ART, TITLES, builtDay, forceGoLive, withBonusDoor } from './support/advent';
 
 // The Advent calendar page (phase 3): the real doors, the opened-day dialog, the gentle "not yet" message,
 // sharing, printing, the archive, the bonus door, preview mode and the home-page banner. Every test fixes the
@@ -182,6 +182,34 @@ test.describe('a visitor in New Zealand still sees London\'s date', () => {
   });
 });
 
+test.describe('one heading for the calendar section', () => {
+  test('exactly one visible h2 in the calendar in every state: calm, live and archive (it moves between the parts)', async ({ page }) => {
+    for (const [time, where] of [[REAL_TODAY, 'calm'], ['2026-12-12T12:00:00Z', 'live'], ['2026-12-28T12:00:00Z', 'live']] as const) {
+      await openAt(page, time);
+      const visible = await section(page).locator('h2:not(.advent-title)').evaluateAll((els) => els.filter((el) => (el as HTMLElement).offsetParent !== null).map((el) => ({ text: el.textContent, inLive: !!el.closest('[data-advent-live]'), inCalm: !!el.closest('[data-advent-calm]') })));
+      expect(visible, time).toHaveLength(1);
+      expect(visible[0][where === 'calm' ? 'inCalm' : 'inLive']).toBe(true);
+      expect(await section(page).locator('h2:not(.advent-title)').count()).toBe(1); // not even a hidden second one
+    }
+  });
+
+  test('the anchor id of the calendar heading points at a visible element in every state', async ({ page }) => {
+    for (const time of [REAL_TODAY, '2026-12-12T12:00:00Z']) {
+      await openAt(page, time);
+      const id = await section(page).locator('h2:not(.advent-title)').getAttribute('id');
+      expect(id).toBeTruthy();
+      expect(await page.locator(`#${id}`).count()).toBe(1);
+      await expect(page.locator(`#${id}`)).toBeVisible();
+    }
+  });
+
+  test('the page title and description say what the calendar is', async ({ page }) => {
+    await page.goto(PATH);
+    await expect(page).toHaveTitle('Advent calendar \u2014 Kington Parishes');
+    await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', 'Open a new door each day from 1 to 25 December to read the Christmas story, from Genesis to Bethlehem.');
+  });
+});
+
 test.describe('the opened-day dialog', () => {
   test('clicking an available door opens a modal dialog named by the day title, focus moves to the title, the live region says "Day 7 opened"', async ({ page }) => {
     await openAt(page, '2026-12-12T12:00:00Z');
@@ -274,7 +302,7 @@ test.describe('the opened-day dialog', () => {
     await expect(dialog(page).locator('.advent-next')).toBeHidden();
   });
 
-  test('going on to a day that is not open yet shows the gentle message, and "Not yet" comes back to the day you were reading', async ({ page }) => {
+  test('going on to a day that is not open yet shows the gentle message, and "Maybe later" comes back to the day you were reading', async ({ page }) => {
     await openAt(page, '2026-12-12T12:00:00Z');
     await expectDoors(page, 12);
     await door(page, 12).click();
@@ -282,9 +310,9 @@ test.describe('the opened-day dialog', () => {
     const next = dialog(page).locator('.advent-next');
     await expect(next).toHaveAttribute('aria-label', 'Next: Day 13, not yet');
     await next.click();
-    await expect(dialogTitle(page)).toHaveText('Not yet');
+    await expect(dialogTitle(page)).toHaveText('Not quite yet');
     await expect(dialog(page).locator('.advent-message-text')).toHaveText('This door opens on 13 December.');
-    await dialog(page).getByRole('button', { name: 'Not yet' }).click();
+    await dialog(page).getByRole('button', { name: 'Maybe later' }).click();
     await expect(dialogTitle(page)).toHaveText(TITLES[12]);
     await expect(dialog(page)).toBeVisible();
   });
@@ -329,25 +357,25 @@ test.describe('the opened-day dialog', () => {
 });
 
 test.describe('the gentle rule for doors that are not open yet', () => {
-  test('a future door opens a small message, never saying "can\'t": "Not yet. This door opens on 15 December."', async ({ page }) => {
+  test('a future door opens a small message, never saying "can\'t": "Not quite yet. This door opens on 15 December."', async ({ page }) => {
     await openAt(page, '2026-12-12T12:00:00Z');
     await expectDoors(page, 12);
     await door(page, 15).click();
-    await expect(page.getByRole('dialog', { name: 'Not yet' })).toBeVisible();
+    await expect(page.getByRole('dialog', { name: 'Not quite yet' })).toBeVisible();
     await expect(dialog(page).locator('.advent-message-text')).toHaveText('This door opens on 15 December.');
     await expect(dialog(page).getByRole('button', { name: 'Open it anyway' })).toBeVisible();
-    await expect(dialog(page).getByRole('button', { name: 'Not yet' })).toBeVisible();
+    await expect(dialog(page).getByRole('button', { name: 'Maybe later' })).toBeVisible();
     expect(await dialog(page).innerText()).not.toMatch(/can.?t|cannot|forbidden|denied|locked/i);
-    await expect(live(page)).toHaveText('Not yet. This door opens on 15 December.');
+    await expect(live(page)).toHaveText('This door opens on 15 December.');
     // Nothing from day 15 has been fetched or shown.
     expect(await page.content()).not.toContain(TITLES[15]);
   });
 
-  test('"Not yet" closes it and focus goes back to the door', async ({ page }) => {
+  test('"Maybe later" closes it and focus goes back to the door', async ({ page }) => {
     await openAt(page, '2026-12-12T12:00:00Z');
     await expectDoors(page, 12);
     await door(page, 15).click();
-    await dialog(page).getByRole('button', { name: 'Not yet' }).click();
+    await dialog(page).getByRole('button', { name: 'Maybe later' }).click();
     await expect(dialog(page)).toBeHidden();
     await expect(door(page, 15)).toBeFocused();
   });
@@ -364,7 +392,7 @@ test.describe('the gentle rule for doors that are not open yet', () => {
     // Nothing is remembered: the door is still "not yet" and still asks.
     await expect(door(page, 15)).toHaveAttribute('aria-label', 'Day 15, 15 December, not yet');
     await door(page, 15).click();
-    await expect(dialogTitle(page)).toHaveText('Not yet');
+    await expect(dialogTitle(page)).toHaveText('Not quite yet');
     await page.keyboard.press('Escape');
     await expect(dialog(page)).toBeHidden();
   });
@@ -379,7 +407,7 @@ test.describe('#day-N deep links', () => {
 
   test('#day-20 (not open yet) shows the gentle message', async ({ page }) => {
     await openAt(page, '2026-12-12T12:00:00Z', '#day-20');
-    await expect(dialogTitle(page)).toHaveText('Not yet');
+    await expect(dialogTitle(page)).toHaveText('Not quite yet');
     await expect(dialog(page).locator('.advent-message-text')).toHaveText('This door opens on 20 December.');
   });
 
@@ -537,10 +565,10 @@ test.describe('the bonus door (Epiphany, 6 January), with test-fixture content',
     await expect(section(page).locator('.advent-door-future')).toHaveCount(1);
     await expect(section(page).locator('.advent-door-today')).toHaveCount(0);
     await door(page, 26).click();
-    await expect(dialogTitle(page)).toHaveText('Not yet');
+    await expect(dialogTitle(page)).toHaveText('Not quite yet');
     await expect(dialog(page).locator('.advent-message-text')).toHaveText('This door opens on 6 January.');
     await dialog(page).getByRole('button', { name: 'Open it anyway' }).click();
-    await expect(dialogTitle(page)).toHaveText(BONUS_FILE.title);
+    await expect(dialogTitle(page)).toHaveText(bonusFile().title);
     await expect(dialog(page).locator('.advent-eyebrow')).toHaveText('Epiphany \u00B7 6 January');
     await expect(dialog(page).locator('.advent-count')).toHaveText('Bonus door');
     await expect(live(page)).toHaveText('Epiphany door opened');
@@ -552,12 +580,12 @@ test.describe('the bonus door (Epiphany, 6 January), with test-fixture content',
     await expect(doors(page)).toHaveCount(26);
     await expect(door(page, 26)).toHaveClass(/advent-door-today/);
     await expect(door(page, 26)).toContainText('Today');
-    await expect(door(page, 26)).toHaveAttribute('aria-label', `Epiphany door, 6 January, today. ${BONUS_FILE.title}`);
+    await expect(door(page, 26)).toHaveAttribute('aria-label', `Epiphany door, 6 January, today. ${bonusFile().title}`);
     await expect(section(page).locator('.advent-door-available')).toHaveCount(25);
     await expect(status(page)).toHaveText('All 25 doors are open. The Epiphany door opens today. Read at your own pace.');
     await expect(primary(page)).toBeVisible();
     await primary(page).click();
-    await expect(dialogTitle(page)).toHaveText(BONUS_FILE.title);
+    await expect(dialogTitle(page)).toHaveText(bonusFile().title);
     await expect(dialog(page).locator('.advent-previous')).toHaveAttribute('aria-label', `Previous: Day 25, ${TITLES[25]}`);
     await expect(dialog(page).locator('.advent-next')).toBeHidden();
   });
@@ -565,11 +593,11 @@ test.describe('the bonus door (Epiphany, 6 January), with test-fixture content',
   test('day 25 leads on to the bonus door in the archive, and from the bonus you can step back to 25', async ({ page }) => {
     await withBonusDoor(page);
     await openAt(page, '2027-01-06T12:00:00Z');
-    await expect(door(page, 26)).toHaveAttribute('aria-label', new RegExp(escapeRegExp(BONUS_FILE.title))); // its title has loaded
+    await expect(door(page, 26)).toHaveAttribute('aria-label', new RegExp(escapeRegExp(bonusFile().title))); // its title has loaded
     await door(page, 25).click();
-    await expect(dialog(page).locator('.advent-next')).toHaveAttribute('aria-label', `Next: Epiphany, ${BONUS_FILE.title}`);
+    await expect(dialog(page).locator('.advent-next')).toHaveAttribute('aria-label', `Next: Epiphany, ${bonusFile().title}`);
     await dialog(page).locator('.advent-next').click();
-    await expect(dialogTitle(page)).toHaveText(BONUS_FILE.title);
+    await expect(dialogTitle(page)).toHaveText(bonusFile().title);
     await dialog(page).locator('.advent-previous').click();
     await expect(dialogTitle(page)).toHaveText(TITLES[25]);
   });
@@ -577,7 +605,7 @@ test.describe('the bonus door (Epiphany, 6 January), with test-fixture content',
   test('#day-26 opens the bonus when it is open', async ({ page }) => {
     await withBonusDoor(page);
     await openAt(page, '2027-01-06T12:00:00Z', '#day-26');
-    await expect(dialogTitle(page)).toHaveText(BONUS_FILE.title);
+    await expect(dialogTitle(page)).toHaveText(bonusFile().title);
   });
 
   test('during the live days the bonus door is shown as not yet; 7 January is calm again', async ({ page }) => {
@@ -939,13 +967,17 @@ test.describe('when things go wrong', () => {
 test.describe('without JavaScript', () => {
   test.use({ javaScriptEnabled: false });
 
-  test('the calm message is there and a note explains the calendar needs JavaScript; nothing from the days', async ({ page }) => {
-    await page.goto(PATH);
-    await expect(calmText(page)).toHaveText('The Advent calendar opens on 1 December.');
-    await expect(section(page).locator('noscript')).toHaveCount(1);
-    expect(await section(page).locator('noscript').innerHTML()).toContain('needs JavaScript');
-    await expect(section(page).locator('button')).toBeHidden();
+  test('the served text is true on ANY date: it says the calendar needs JavaScript and when it runs (not "opens on 1 December"); nothing from the days', async ({ page }) => {
+    for (const time of [REAL_TODAY, '2026-12-12T12:00:00Z']) {
+      await page.clock.install({ time: new Date(time) }).catch(() => undefined);
+      await page.goto(PATH);
+      await expect(calmText(page), time).toHaveText('The Advent calendar needs JavaScript to open its doors. It runs from 1 to 25 December.');
+      await expect(section(page).locator('[data-advent-heading]')).toBeVisible();
+    }
+    await expect(section(page).locator('noscript')).toHaveCount(0);
+    await expect(section(page).locator('button:visible')).toHaveCount(0);
     await expect(doors(page)).toHaveCount(0);
+    expect(await page.locator('main').innerText()).not.toMatch(/opens on/);
   });
 
   test('the home page shows nothing of the banner', async ({ page }) => {
@@ -994,7 +1026,7 @@ test.describe('keyboard', () => {
     await expectDoors(page, 12);
     await door(page, 20).focus();
     await page.keyboard.press('Space');
-    await expect(dialogTitle(page)).toHaveText('Not yet');
+    await expect(dialogTitle(page)).toHaveText('Not quite yet');
     await page.keyboard.press('Tab'); // from the title straight to "Open it anyway" (Close comes before the title)
     await expect(dialog(page).getByRole('button', { name: 'Open it anyway' })).toBeFocused();
     await page.keyboard.press('Enter');

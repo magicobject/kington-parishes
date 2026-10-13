@@ -59,7 +59,7 @@ for (const { url } of realFiles) {
 }
 
 for (const name of ['heaviest-accepted.svg', 'heaviest-mask-accepted.svg', 'heaviest-path-accepted.svg']) {
-  for (const width of [400, 800]) {
+  for (const width of [400, 800, 1200]) {
     test(`${name} (the heaviest the check accepts) renders at ${width}px in under a second`, async ({ page }) => {
       const svg = readFileSync(join(__dirname, 'support', name), 'utf8');
       await page.route('**/advent/art/heaviest-fixture.svg*', (route) => route.fulfill({ contentType: 'image/svg+xml', body: svg }));

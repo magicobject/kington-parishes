@@ -33,7 +33,8 @@ describe('the built calendar page', () => {
   });
 
   test('says only the calm message: no door contents, no day titles, no day text', () => {
-    assert.ok(page.includes('The Advent calendar opens on 1&nbsp;December.'));
+    assert.ok(page.includes('The Advent calendar needs JavaScript to open its doors. It runs from 1 to 25 December.'));
+    assert.ok(!page.includes('<p data-advent-calm-text>The Advent calendar opens'), 'the served sentence must not be date-specific');
     assert.ok(!page.includes('comes round again'));
     for (const day of content.days) {
       assert.ok(!page.includes(day.title), day.title);
@@ -42,8 +43,9 @@ describe('the built calendar page', () => {
     const calendar = page.slice(page.indexOf('<section class="advent"'), page.indexOf('</section>', page.indexOf('<section class="advent"')));
     assert.ok(calendar.length > 100);
     // The only button is the "Open today's door" one, and it starts hidden. The doors, dialog and every text come from the script.
-    assert.equal((calendar.match(/<button/g) ?? []).length, 1);
+    assert.equal((calendar.match(/<button/g) ?? []).length, 2);
     assert.match(calendar, /<button type="button" class="advent-pill" data-advent-primary hidden>/);
+    assert.ok(calendar.includes('<p class="advent-start" data-advent-start hidden><button type="button" class="advent-pill advent-pill-quiet">Start with Day 1</button></p>'));
     assert.ok(!/<li|<dialog|<img/.test(calendar));
   });
 
@@ -58,7 +60,7 @@ describe('the built calendar page', () => {
 
   test('its headings got anchor ids and the outline starts at h1 then only h2', () => {
     const headings = [...page.matchAll(/<h([1-6])([^>]*)>/g)].filter((m) => !/class="(?:site-search|footer)/.test(m[2]));
-    assert.ok(headings.length >= 3);
+    assert.ok(headings.length >= 2); // the h1 and the calendar's ONE h2
     assert.ok(headings.every((m) => /\sid="[a-z0-9-]+"/.test(m[2])), 'every heading should have an id');
     const levels = headings.map((m) => Number(m[1]));
     assert.equal(levels[0], 1);

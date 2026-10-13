@@ -11,7 +11,8 @@ import { validateContent, validateTheme, validateDay, DAY_COUNT } from '../modul
 import { buildAdvent, renderAdventToken, validateDayFile } from '../modules/advent/build.mjs';
 import { theme as realTheme } from '../modules/advent/theme.mjs';
 // Builds into empty temporary folders, so use the real theme without its own scene file.
-const theme = { ...realTheme, scene: null };
+import { pinFlags } from './support/fixture-flags.mjs';
+const theme = { ...pinFlags(realTheme), scene: null };
 import { content as realContent } from '../modules/advent/content.mjs';
 // The 25 days only: these tests build with and without a bonus day on purpose (the real bonus is tested in advent-built).
 const content = { days: realContent.days };

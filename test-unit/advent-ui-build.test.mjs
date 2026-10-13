@@ -6,9 +6,11 @@ import assert from 'node:assert/strict';
 import { mkdtempSync, rmSync, readFileSync, existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { buildAdvent, renderAdventToken, renderAdventTeaserToken, lintSvg } from '../modules/advent/build.mjs';
+import { buildAdvent, renderAdventToken, renderAdventTeaserToken, lintSvg, svgDrawWeight } from '../modules/advent/build.mjs';
 import { validateTheme, sceneNameIsSafe } from '../modules/advent/schema.mjs';
-import { theme } from '../modules/advent/theme.mjs';
+import { theme as realTheme } from '../modules/advent/theme.mjs';
+import { pinFlags } from './support/fixture-flags.mjs';
+const theme = pinFlags(realTheme);
 import { content } from '../modules/advent/content.mjs';
 
 const dirs = [];
@@ -198,5 +200,48 @@ describe('the home-page banner token {{ADVENT_TEASER}}', () => {
 
   test('the token is not confused with {{ADVENT}} (a page with only the teaser token is untouched by renderAdventToken)', () => {
     assert.equal(renderAdventToken('{{ADVENT_TEASER}}', ctx), '{{ADVENT_TEASER}}');
+  });
+});
+
+describe('the calendar in the site search (as it will be once publicListing is true)', () => {
+  test('the calendar section yields exactly ONE search entry with a unique id, and no entry sits in a hidden block', async () => {
+    const { ensureSectionIds, extractSearchEntries } = await import('../scripts/build-search-index.mjs');
+    const ctx = run().result.tokenContext;
+    const page = `<main><div class="page-header"><h1>Advent</h1></div><section>${renderAdventToken('{{ADVENT}}', ctx)}</section></main>`;
+    const entries = extractSearchEntries(ensureSectionIds(page), { slug: 'advent', title: 'Advent', description: 'x' });
+    const calendar = entries.filter((entry) => /Advent calendar/.test(entry.heading ?? entry.title ?? ''));
+    assert.equal(calendar.length, 1, JSON.stringify(entries.map((e) => e.heading ?? e.title)));
+    assert.equal(new Set(entries.map((entry) => entry.href ?? entry.id ?? entry.anchor)).size, entries.length, 'every entry has its own address');
+  });
+});
+
+describe('the scene picture has a sprinkling of tiny stars', () => {
+  const text = readFileSync(new URL('../public/advent/scene.svg', import.meta.url), 'utf8');
+  const dots = [...text.matchAll(/<circle cx="([\d.]+)" cy="([\d.]+)" r="([\d.]+)" fill="#F2E6C4" fill-opacity="([\d.]+)"\/>/g)].map((m) => m.slice(1).map(Number));
+
+  test('14 to 18 cream dots, radius 0.6 to 1.6, fill-opacity 0.35 to 0.9, never an opacity attribute (static, aria-hidden as before)', () => {
+    assert.ok(dots.length >= 14 && dots.length <= 18, `${dots.length} dots`);
+    for (const [, , r, opacity] of dots) {
+      assert.ok(r >= 0.6 && r <= 1.6, `radius ${r}`);
+      assert.ok(opacity >= 0.35 && opacity <= 0.9, `fill-opacity ${opacity}`);
+    }
+    assert.ok(new Set(dots.map((d) => d[2])).size >= 4, 'varied radii');
+    assert.ok(new Set(dots.map((d) => d[3])).size >= 4, 'varied opacities');
+    assert.ok(!/<circle[^>]* opacity=/.test(text), 'the dots use fill-opacity, never an opacity attribute');
+    assert.match(text, /aria-hidden="true"/);
+  });
+
+  test('the stars are in the upper sky (y 3 to 38 of 130) and clear of the star the page puts over the ridge (top right corner)', () => {
+    for (const [x, y] of dots) {
+      assert.ok(y >= 3 && y <= 38, `y ${y}`);
+      assert.ok(!(x > 530 && y < 32), `a dot at ${x},${y} sits where the page star goes`);
+      assert.ok(x >= 2 && x <= 598);
+    }
+  });
+
+  test('the scene stays small and passes the picture check and a low draw weight', () => {
+    assert.deepEqual(lintSvg(text), []);
+    assert.ok(Buffer.byteLength(text) < 4096);
+    assert.ok(svgDrawWeight(text) < 80, `weight ${svgDrawWeight(text)}`);
   });
 });
