@@ -19,21 +19,21 @@ const mayMention = (name) => name === calendarFile || isHelp(name) || name === '
 describe('the built calendar page', () => {
   const page = read(calendarFile);
 
-  test('exists and is noindex while publicListing is false', () => {
-    assert.equal(theme.publicListing, false);
-    assert.match(page, /<meta name="robots" content="noindex, nofollow">/);
+  test('is noindex while publicListing is false, and has no robots tag once it is true', () => {
+    if (theme.publicListing) assert.ok(!/<meta name="robots"/.test(page));
+    else assert.match(page, /<meta name="robots" content="noindex, nofollow">/);
   });
 
-  test('is not in the sitemap, and not in the search index in any scope', () => {
-    assert.ok(!read('sitemap.xml').includes(theme.slug + '.html'));
+  test('is in the sitemap and the search index exactly when publicListing is true', () => {
+    assert.equal(read('sitemap.xml').includes(theme.slug + '.html'), theme.publicListing);
     const entries = JSON.parse(read('search-index.json'));
     assert.ok(entries.length > 0);
-    assert.ok(!entries.some((entry) => entry.page === calendarFile));
-    assert.ok(!entries.some((entry) => /advent calendar/i.test(entry.pageTitle) && entry.page !== 'help-advent.html'));
+    assert.equal(entries.some((entry) => entry.page === calendarFile), theme.publicListing);
   });
 
   test('says only the calm message: no door contents, no day titles, no day text', () => {
-    assert.ok(page.includes('Advent opens on 1 December.'));
+    assert.ok(page.includes('The Advent calendar opens on 1&nbsp;December.'));
+    assert.ok(!page.includes('comes round again'));
     for (const day of content.days) {
       assert.ok(!page.includes(day.title), day.title);
       assert.ok(!page.includes(day.paragraphs[0].slice(0, 40)), day.title);
@@ -86,9 +86,9 @@ describe('nothing else on the public site points at the calendar', () => {
     }
   });
 
-  test('the sitemap and robots.txt do not mention it', () => {
-    assert.ok(!/advent/i.test(read('sitemap.xml')));
+  test('robots.txt never mentions it, and the sitemap does not while the calendar is hidden', () => {
     assert.ok(!/advent/i.test(read('robots.txt')));
+    if (!theme.publicListing) assert.ok(!/advent/i.test(read('sitemap.xml')));
   });
 });
 
@@ -114,5 +114,32 @@ describe('generated files', () => {
     assert.match(headers, /^\/advent\/art\/\*\n {2}Content-Security-Policy: default-src 'none'; style-src 'unsafe-inline'; sandbox$/m);
     assert.match(headers, /^\/\*\n {2}Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-4RwqUYD4JP\/ewBt0bVqlJ2A4I4YwLluTC3ZXzQNSUbs='; /);
     assert.ok(blocks.length >= 2);
+  });
+});
+
+describe('public/_headers for the Advent files', () => {
+  const headers = read('_headers');
+  const lines = headers.split('\n');
+
+  test('/advent/day-*.json gets exactly one header, X-Robots-Tag: noindex (and no Cache-Control)', () => {
+    const at = lines.indexOf('/advent/day-*.json');
+    assert.ok(at > 0, 'the rule should exist');
+    assert.equal(lines[at + 1], '  X-Robots-Tag: noindex');
+    assert.ok(lines[at + 2] === undefined || lines[at + 2] === '', 'nothing else in the rule');
+    assert.ok(lines[at - 1].startsWith('#'), 'a comment line comes first');
+    assert.ok(!/cache-control/i.test(headers));
+  });
+
+  test('every rule in the file is well formed: a path at the left edge, then two-space-indented Name: value lines, no tabs', () => {
+    assert.ok(!headers.includes('\t'));
+    assert.ok(!headers.includes('\r'));
+    let inRule = false;
+    for (const line of lines) {
+      if (line === '' || line.startsWith('#')) { inRule = false; continue; }
+      if (!line.startsWith(' ')) { assert.match(line, /^\/\S*$/, line); inRule = true; continue; }
+      assert.ok(inRule, `header line outside a rule: ${line}`);
+      assert.match(line, /^ {2}[A-Za-z][A-Za-z-]*: \S.*$/, line);
+    }
+    assert.ok(headers.endsWith('\n'));
   });
 });

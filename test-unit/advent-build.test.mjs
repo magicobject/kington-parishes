@@ -3,16 +3,17 @@
 // Everything builds into a temporary folder; nothing here touches public/.
 import { test, describe, before, after } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, rmSync, readFileSync, existsSync, mkdirSync, writeFileSync, readdirSync } from 'node:fs';
+import { mkdtempSync, rmSync, readFileSync, existsSync, mkdirSync, writeFileSync, readdirSync, symlinkSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import {
-  buildAdvent, renderAdventToken, lintSvg, artFilePath, validateDayFile, adventPageEntry,
+  buildAdvent, renderAdventToken, lintSvg, artFilePath, validateDayFile, adventPageEntry, rewriteImports,
 } from '../modules/advent/build.mjs';
 import { validateTheme } from '../modules/advent/schema.mjs';
 import { theme } from '../modules/advent/theme.mjs';
 import { content } from '../modules/advent/content.mjs';
 import { isIndexable, isSearchablePage } from '../scripts/build-search-index.mjs';
+import { cases as REVIEW_SAMPLES } from './support/hostile-svgs.mjs';
 
 const GOOD_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><defs><linearGradient id="g"><stop offset="0" stop-color="#fff"/></linearGradient></defs><path fill="url(#g)" d="M0 0L10 10"/><use href="#g"/></svg>';
 const dayName = (n) => `day-${String(n).padStart(2, '0')}.svg`;
@@ -168,10 +169,24 @@ describe('buildAdvent: generated and copied site files', () => {
   });
 });
 
-describe('lintSvg', () => {
+// Three small, legitimate pictures in the style of the approved mock-up (docs/advent/mockups/advent-mockup.html):
+// shapes, a gradient, and figures defined once as a symbol and drawn with <use>.
+const LEGIT = {
+  'sky, thread and star': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 225" role="img" aria-label="A golden thread across a night sky."><defs><linearGradient id="g4" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0d1530"/><stop offset=".7" stop-color="#1b2a55"/></linearGradient><radialGradient id="s1"><stop offset="0" stop-color="#fffbe8"/><stop offset="1" stop-color="#fffbe8" stop-opacity="0"/></radialGradient><symbol id="star4" viewBox="-10 -10 20 20"><path d="M0-10C1.2-3 3-1.2 10 0 3 1.2 1.2 3 0 10-1.2 3-3 1.2-10 0-3-1.2-1.2-3 0-10z" fill="#fff3c8"/></symbol></defs><rect width="400" height="225" fill="url(#g4)"/><path d="M0 190C80 160 150 175 220 190S340 178 400 184V225H0z" fill="#10182f"/><path d="M125 142C160 108 205 138 226 96" fill="none" stroke="#E8C27A" stroke-width="3" stroke-linecap="round"/><circle cx="200" cy="118" r="22" fill="url(#s1)"/><use href="#star4" x="288" y="38" width="38" height="38"/></svg>',
+  'shepherd and sheep': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 225"><title>A shepherd with a sheep</title><desc>Two simple figures on a hill.</desc><defs><symbol id="sheep" viewBox="0 0 60 40"><g fill="#2b303b"><rect x="19" y="28" width="3.2" height="10" rx="1.4"/></g><g fill="#F2E6C4"><circle cx="16" cy="19" r="9"/></g><g fill="#2b303b"><ellipse cx="53" cy="20" rx="6" ry="5.2" transform="rotate(14 53 20)"/></g></symbol><symbol id="shepherd" viewBox="0 0 40 90"><path d="M33 89V12c0-7-7-9-10-4" fill="none" stroke="#8a6a3c" stroke-width="2.6" stroke-linecap="round"/><path d="M12 52q8 5 16 0" fill="none" stroke="#000" stroke-opacity=".25" stroke-width="2"/><ellipse cx="20" cy="13" rx="5" ry="6" fill="#d8b48d"/></symbol></defs><!-- a hill --><path d="M0 195C70 160 130 170 200 190V225H0z" fill="#0b141c"/><use href="#shepherd" x="102" y="140" width="28" height="63" style="color:#6a4a3a"/><use href="#sheep" x="200" y="170" width="40" height="27"/></svg>',
+  'kneeler and clipped light': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 225" aria-hidden="true" focusable="false"><defs><clipPath id="c"><rect width="400" height="225"/></clipPath><symbol id="kneeler" viewBox="0 0 60 60"><path d="M4 58C4 38 14 26 29 26c9 0 15 5 17 14l6 18z" fill="currentColor"/><circle cx="56" cy="37" r="3" fill="#d8b48d"/></symbol></defs><g clip-path="url(#c)" opacity=".9"><polygon points="0,0 400,0 200,120" fill="#E8C27A" fill-opacity=".3"/><line x1="0" y1="200" x2="400" y2="200" stroke="#fff" stroke-width="1"/><polyline points="10,10 20,30 30,10" fill="none" stroke="#fff"/></g><use href="#kneeler" x="150" y="120" width="60" height="60" style="color:#6a4a3a;opacity:.8"/></svg>',
+};
+
+describe('lintSvg: a parse-based allow-list', () => {
   test('accepts a clean picture, including internal #links and url(#fragment)', () => {
     assert.deepEqual(lintSvg(GOOD_SVG), []);
   });
+
+  for (const [name, sample] of Object.entries(LEGIT)) {
+    test(`accepts a legitimate picture: ${name}`, () => {
+      assert.deepEqual(lintSvg(sample), []);
+    });
+  }
 
   const HOSTILE = {
     'script element': '<svg><script>alert(1)</script></svg>',
@@ -197,15 +212,71 @@ describe('lintSvg', () => {
     iframe: '<svg><iframe src="x"></iframe></svg>',
     'animate href': '<svg><a><set attributeName="href" to="javascript:alert(1)"/></a></svg>',
     'processing instruction stylesheet': '<?xml-stylesheet href="x.css"?><svg></svg>',
+    'xml declaration': '<?xml version="1.0"?><svg xmlns="http://www.w3.org/2000/svg"></svg>',
     'not an svg': 'hello',
     empty: '',
-    'too big': `<svg>${'a'.repeat(100 * 1024)}</svg>`,
+    'too big': `<svg>${'<rect/>'.repeat(20000)}</svg>`,
+    'text element': '<svg><text x="1" y="2">hi</text></svg>',
+    'text outside title': '<svg>hello</svg>',
+    'a element with a hash link': '<svg><a href="#x"><rect/></a></svg>',
+    'style element': '<svg><style>rect{fill:red}</style></svg>',
+    'namespace prefix on an element': '<svg><svg:rect/></svg>',
+    'namespace prefix on an attribute': '<svg><rect xlink:title="x"/></svg>',
+    'xml:base': '<svg><g xml:base="http://e/"/></svg>',
+    'xmlns off the root': '<svg><g xmlns="http://www.w3.org/2000/svg"/></svg>',
+    'wrong xmlns on the root': '<svg xmlns="http://evil.example/ns"></svg>',
+    cdata: '<svg><![CDATA[x]]></svg>',
+    'comment with markup': '<svg><!-- <script>x</script> --></svg>',
+    'comment with double hyphen trick': '<svg><!-- a --!> <rect/> --></svg>',
+    'unclosed comment': '<svg><!-- x</svg>',
+    'entity in a value': '<svg><rect fill="&#35;fff"/></svg>',
+    'entity in a comment': '<svg><!-- &amp; --></svg>',
+    'nul character': '<svg><rect/>\u0000</svg>',
+    'byte order mark': '\uFEFF<svg></svg>',
+    'unquoted attribute': '<svg><rect width=5/></svg>',
+    'two roots': '<svg></svg><svg></svg>',
+    'unclosed element': '<svg><g></svg>',
+    'mismatched close': '<svg><g></svg></g>',
+    'duplicate attribute': '<svg><rect x="1" x="2"/></svg>',
+    'class attribute': '<svg><rect class="a"/></svg>',
+    'style with url': '<svg><rect style="fill:url(#g)"/></svg>',
+    'style with a backslash': '<svg><rect style="fill:\\75rl(x)"/></svg>',
+    'style with expression': '<svg><rect style="width:expression(1)"/></svg>',
+    'style with a comment': '<svg><rect style="fill:red/**/"/></svg>',
+    'style with image-set': '<svg><rect style="fill:image-set(x)"/></svg>',
+    'style with a property that is not on the list': '<svg><rect style="cursor:pointer"/></svg>',
+    'use without a hash': '<svg><use href="x.svg#a"/></svg>',
+    'href on a non-use element': '<svg><rect href="#a"/></svg>',
+    'deeper than 20 levels': `<svg>${'<g>'.repeat(21)}${'</g>'.repeat(21)}</svg>`,
   };
   for (const [name, sample] of Object.entries(HOSTILE)) {
     test(`rejects: ${name}`, () => {
       assert.ok(lintSvg(sample).length > 0, name);
     });
   }
+
+  test('rejects every sample from the independent review (all but the two legitimate ones)', () => {
+    const legitimate = new Set(['clean', 'useHash']);
+    let rejected = 0;
+    for (const [name, sample] of Object.entries(REVIEW_SAMPLES)) {
+      // These two are fine pictures wrapped in a header that declares the old xlink prefix, which we refuse: without it they pass.
+      const problems = lintSvg(sample);
+      if (legitimate.has(name)) {
+        assert.ok(problems.length > 0, name);
+        assert.deepEqual(lintSvg(sample.replace(/ xmlns:xlink="[^"]*"/, '')), [], name);
+      }
+      else {
+        assert.ok(problems.length > 0, `${name} should be refused`);
+        rejected += 1;
+      }
+    }
+    assert.ok(rejected >= 75, `only ${rejected} samples were checked`);
+  });
+
+  test('refuses more than 2000 elements and accepts 20 levels of nesting', () => {
+    assert.ok(lintSvg(`<svg>${'<rect/>'.repeat(2001)}</svg>`).length > 0);
+    assert.deepEqual(lintSvg(`<svg>${'<g>'.repeat(19)}${'</g>'.repeat(19)}</svg>`), []);
+  });
 
   test('rejects a non-string', () => {
     assert.ok(lintSvg(null).length > 0);
@@ -215,6 +286,7 @@ describe('lintSvg', () => {
   test('allows a picture just under the size cap', () => {
     const body = 'a'.repeat(100 * 1024 - 40);
     assert.deepEqual(lintSvg(`<svg><desc>${body}</desc></svg>`), []);
+    assert.ok(lintSvg(`<svg><desc>${body}${'a'.repeat(100)}</desc></svg>`).length > 0);
   });
 });
 
@@ -222,12 +294,12 @@ describe('art checks', () => {
   test('artFilePath stays inside the art folder', () => {
     const dir = tempPublic();
     assert.ok(artFilePath(dir, 'day-01.svg').startsWith(dir));
-    for (const bad of ['../day-01.svg', '..\\day-01.svg', '/etc/passwd', 'a/b.svg', 'day-01.svg/..', 'DAY-01.svg', '']) {
+    for (const bad of ['../day-01.svg', '..\\day-01.svg', '/etc/passwd', 'a/b.svg', 'day-01.svg/..', 'DAY-01.svg', '', 'day-01.svg::$DATA', 'day-01.svg ', 'day-01.svg.', 'nul.svg', 'com1.svg']) {
       assert.throws(() => artFilePath(dir, bad), /art/, bad);
     }
   });
 
-  test('artRequired false: missing pictures are allowed', () => {
+  test('artRequired false: missing pictures are allowed, and so is a missing art folder', () => {
     assert.doesNotThrow(() => run({ theme: withTheme((t) => { t.artRequired = false; }) }));
   });
 
@@ -247,6 +319,13 @@ describe('art checks', () => {
     assert.equal(JSON.parse(readFileSync(join(dir, 'advent', 'day-25.json'), 'utf8')).art, 'day-25.svg');
   });
 
+  test('the legitimate sample pictures pass as real art files', () => {
+    const dir = tempPublic();
+    mkdirSync(join(dir, 'advent', 'art'), { recursive: true });
+    Object.values(LEGIT).forEach((svg, i) => writeFileSync(join(dir, 'advent', 'art', dayName(i + 1)), svg));
+    assert.equal(run({ publicDir: dir }).result.artPresent.length, 3);
+  });
+
   test('a hostile picture is refused whether art is required or not', () => {
     for (const required of [true, false]) {
       const dir = tempPublic();
@@ -256,11 +335,41 @@ describe('art checks', () => {
     }
   });
 
-  test('a hostile svg that no day names is also refused', () => {
+  test('ANY file in the art folder other than day-01.svg to day-25.svg is refused', () => {
+    for (const name of ['stray.svg', 'day-26.svg', 'day-00.svg', 'day-1.svg', 'DAY-01.svg', 'day-01.svg.bak', 'notes.txt', 'Thumbs.db', 'day-01.png', '.hidden']) {
+      const dir = tempPublic();
+      mkdirSync(join(dir, 'advent', 'art'), { recursive: true });
+      writeFileSync(join(dir, 'advent', 'art', name), name.endsWith('.svg') ? GOOD_SVG : 'x');
+      assert.throws(() => run({ publicDir: dir }), new RegExp(name.replace(/\./g, '\\.')), name);
+    }
+  });
+
+  test('a sub-folder inside the art folder is refused', () => {
+    const dir = tempPublic();
+    mkdirSync(join(dir, 'advent', 'art', 'more'), { recursive: true });
+    assert.throws(() => run({ publicDir: dir }), /more/);
+  });
+
+  test('a picture that is a link is refused (skipped where the machine cannot make file links)', (t) => {
+    const outside = tempPublic();
+    writeFileSync(join(outside, 'x.svg'), GOOD_SVG);
     const dir = tempPublic();
     mkdirSync(join(dir, 'advent', 'art'), { recursive: true });
-    writeFileSync(join(dir, 'advent', 'art', 'stray.svg'), '<svg onload="x()"></svg>');
-    assert.throws(() => run({ publicDir: dir }), /stray\.svg/);
+    try {
+      symlinkSync(join(outside, 'x.svg'), join(dir, 'advent', 'art', 'day-02.svg'), 'file');
+    } catch {
+      t.skip('this machine cannot create file links');
+      return;
+    }
+    assert.throws(() => run({ publicDir: dir }), /link/);
+  });
+
+  test('the art folder itself being a link (or junction) is refused', () => {
+    const outside = tempPublic();
+    const dir = tempPublic();
+    mkdirSync(join(dir, 'advent'), { recursive: true });
+    symlinkSync(outside, join(dir, 'advent', 'art'), 'junction');
+    assert.throws(() => run({ publicDir: dir }), /link/);
   });
 });
 
@@ -284,12 +393,14 @@ describe('renderAdventToken', () => {
       'data-advent="true"', 'data-slug="advent"', 'data-time-zone="Europe/London"', 'data-start-month="12"', 'data-start-day="1"',
       'data-end-month="12"', 'data-end-day="25"', 'data-archive-month="1"', 'data-archive-day="6"', 'data-preview="true"',
       'data-enabled="true"', 'data-day-count="25"', 'data-month-name="December"',
-      'data-opens-text="Advent opens on 1 December."', 'data-again-text="Advent comes round again on 1 December."',
+      'data-opens-text="The Advent calendar opens on 1&nbsp;December."',
     ]) assert.ok(out.includes(attribute), attribute);
   });
 
   test('shows the calm message by default, with a hidden region and a noscript note', () => {
-    assert.match(out, /<div class="advent-calm" data-advent-calm>[\s\S]*Advent opens on 1 December\./);
+    assert.ok(/<div class="advent-calm" data-advent-calm>[\s\S]*The Advent calendar opens on 1&nbsp;December\./.test(out));
+    assert.ok(!out.includes('comes round again'));
+    assert.ok(!out.includes('data-again-text'));
     assert.match(out, /<div class="advent-live" data-advent-live hidden>/);
     assert.match(out, /<noscript><p>[^<]*JavaScript[^<]*<\/p><\/noscript>/);
     assert.ok(out.includes('Kington Parishes Advent calendar'));
@@ -368,7 +479,7 @@ describe('adventPageEntry: listing follows theme.publicListing', () => {
 
   test('uses the site name, escaped, and loads the three assets through plain paths (the build adds ?v=)', () => {
     const entry = adventPageEntry(withTheme((t) => { t.siteName = "St Mary's Hall"; }));
-    assert.equal(entry.title, "Advent — St Mary&#39;s Hall");
+    assert.equal(entry.title, "Advent \u2014 St Mary&#39;s Hall");
     assert.ok(entry.description.includes('St Mary&#39;s Hall'));
     assert.ok(entry.headHtml.includes('href="/css/advent-theme.css"'));
     assert.ok(entry.headHtml.includes('href="/css/advent.css"'));
@@ -386,5 +497,46 @@ describe('adventPageEntry: listing follows theme.publicListing', () => {
     assert.ok(declared, 'the advent page should be declared');
     assert.deepEqual(declared, adventPageEntry(theme));
     assert.ok(existsSync(new URL(`../src/pages/${theme.slug}.html`, import.meta.url)));
+  });
+});
+
+describe('rewriteImports fails closed', () => {
+  const known = { '../date.mjs': './advent/date.js?v=abc' };
+  const okLine = "import { a } from '../date.mjs';\n";
+  test('rewrites a plain static import of a known file', () => {
+    assert.equal(rewriteImports(`${okLine}x();`, known, 'f'), "import { a } from './advent/date.js?v=abc';\nx();");
+  });
+  const BAD = {
+    'an unknown file': "import { a } from '../other.mjs';\n",
+    'a bare import': `${okLine}import './x.js';\n`,
+    'a dynamic import': `${okLine}const m = import('./x.js');\n`,
+    'a dynamic import with a space': `${okLine}const m = import ('./x.js');\n`,
+    'import.meta': `${okLine}const u = import.meta.url;\n`,
+    'the word in a comment': `${okLine}// we import { b } from '../date.mjs' here\n`,
+    'the word in a block comment': `${okLine}/* import('x') */\n`,
+    'a re-export': `${okLine}export { a } from '../date.mjs';\n`,
+    'a star re-export': `${okLine}export * from '../date.mjs';\n`,
+    'an import hidden after code on one line': `${okLine}x(); import { b } from '../date.mjs';\n`,
+    'a default import': "import a from '../date.mjs';\n",
+    'a missing expected import': 'x();\n',
+  };
+  for (const [name, text] of Object.entries(BAD)) {
+    test(`refuses ${name}`, () => assert.throws(() => rewriteImports(text, known, 'f')));
+  }
+  test('the real client files only ever pass', () => {
+    assert.doesNotThrow(() => run());
+  });
+});
+
+describe('slugs that Windows treats as devices', () => {
+  for (const name of ['con', 'prn', 'aux', 'nul', 'com1', 'com9', 'lpt1', 'lpt9']) {
+    test(`refuses "${name}" as the calendar page name`, () => {
+      assert.throws(() => validateTheme(withTheme((t) => { t.slug = name; })), /"slug"/);
+    });
+  }
+  test('does not refuse look-alikes', () => {
+    for (const name of ['console', 'com10', 'lpt0', 'com', 'auxiliary']) {
+      assert.doesNotThrow(() => validateTheme(withTheme((t) => { t.slug = name; })), name);
+    }
   });
 });

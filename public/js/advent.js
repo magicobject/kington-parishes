@@ -37,7 +37,6 @@ function readConfig(root) {
     dayCount,
     monthName: data.monthName || '',
     opensText: data.opensText || '',
-    againText: data.againText || '',
   };
 }
 
@@ -74,6 +73,8 @@ function showDoors(root, parts, config) {
   const list = part(root, 'doors');
   const note = document.createElement('p');
   note.className = 'advent-placeholder-note';
+  note.id = 'advent-placeholder-note';
+  list.setAttribute('aria-describedby', note.id);
   note.textContent = 'Placeholder doors: the full calendar is still being built. These only show which days would be open.';
   const doors = [];
   for (let day = 1; day <= config.dayCount; day += 1) {
@@ -130,7 +131,7 @@ function start(root) {
   if (state === 'live' || state === 'archive') {
     showDoors(root, parts, config);
   } else {
-    showCalm(root, state === 'after' ? config.againText : config.opensText);
+    showCalm(root, config.opensText);
   }
 }
 

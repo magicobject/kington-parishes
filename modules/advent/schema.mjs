@@ -235,6 +235,7 @@ export function validateTheme(theme) {
   if (typeof copy.slug !== 'string' || copy.slug.length > 32 || !/^[a-z0-9]+(-[a-z0-9]+)*$/.test(copy.slug)) {
     fail('theme', '"slug" must be lower-case words and numbers joined by single hyphens, up to 32 characters');
   }
+  if (/^(?:con|prn|aux|nul|com[1-9]|lpt[1-9])$/.test(copy.slug)) fail('theme', '"slug" is a device name that Windows will not allow as a file name');
   if (!Array.isArray(copy.reservedSlugs) || copy.reservedSlugs.length > 200 ||
       !copy.reservedSlugs.every((name) => typeof name === 'string' && /^[a-z0-9_-]{1,64}$/.test(name))) {
     fail('theme', '"reservedSlugs" must be a list of up to 200 page names');

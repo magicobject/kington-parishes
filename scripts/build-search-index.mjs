@@ -89,6 +89,8 @@ export function ensureSectionIds(html) {
 // heading, and the shared boundary element's text once, not once per h3.
 export function extractSearchEntries(html, page) {
   const root = parse(html);
+  // An element marked data-search-skip is left out of the index entirely (the hidden help hub's Advent card).
+  root.querySelectorAll('[data-search-skip]').forEach((node) => node.remove());
   const headings = root.querySelectorAll('h1, h2, h3');
 
   const groups = new Map(); // anchor -> { headings: [], boundary }
@@ -146,6 +148,9 @@ export function extractSearchEntries(html, page) {
 // automatically the moment the flag goes.
 const NEVER_INDEXED_SLUGS = new Set(['updates', '404']);
 export function isIndexable(page) {
+  if ('unlisted' in page && typeof page.unlisted !== 'boolean') {
+    throw new Error('build: page "' + page.slug + '" has an unlisted flag that is not true or false');
+  }
   return !NEVER_INDEXED_SLUGS.has(page.slug) && page.unlisted !== true;
 }
 

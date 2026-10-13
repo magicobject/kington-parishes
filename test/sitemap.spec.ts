@@ -54,3 +54,12 @@ test('the Advent calendar page is in the sitemap exactly when its theme says it 
   const body = await (await request.get('/sitemap.xml')).text();
   expect(body.includes('/advent.html')).toBe(adventPubliclyListed());
 });
+
+// PRE-LAUNCH GUARD (hard-coded on purpose, it does not follow the theme's flags). DELETE THIS TEST AT LAUNCH:
+// see docs/advent/launch-checklist.md. While the Advent calendar is hidden, neither public file may mention it.
+test('PRE-LAUNCH: the sitemap and the search index do not mention the Advent calendar', async ({ request }) => {
+  const sitemap = await (await request.get('/sitemap.xml')).text();
+  expect(sitemap.toLowerCase()).not.toContain('advent');
+  const index = await (await request.get('/search-index.json')).text();
+  expect(index.replace(/Advent Sunday/g, '').toLowerCase()).not.toContain('advent');
+});

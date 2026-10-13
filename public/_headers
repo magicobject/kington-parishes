@@ -10,3 +10,7 @@
 # browser enforces both policies, so the strictest wins. A picture may use inline styles and nothing else.
 /advent/art/*
   Content-Security-Policy: default-src 'none'; style-src 'unsafe-inline'; sandbox
+
+# Keeps crawlers away from the Advent day files. It does not hide them: anyone who knows an address can still fetch it.
+/advent/day-*.json
+  X-Robots-Tag: noindex

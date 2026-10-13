@@ -50,13 +50,13 @@ async function expectCalm(page: Page, text: string) {
 test.describe('the season, by date (London time)', () => {
   test('30 November: the calm message only, no doors', async ({ page }) => {
     await openAt(page, '2026-11-30T12:00:00Z');
-    await expectCalm(page, 'Advent opens on 1 December.');
+    await expectCalm(page, 'The Advent calendar opens on 1 December.');
     await expect(section(page).locator('button')).toHaveCount(0);
   });
 
   test('the very last second of 30 November is still calm; 1 December 00:00 opens door 1', async ({ page }) => {
     await openAt(page, '2026-11-30T23:59:59Z');
-    await expectCalm(page, 'Advent opens on 1 December.');
+    await expectCalm(page, 'The Advent calendar opens on 1 December.');
     await page.clock.setFixedTime(new Date('2026-12-01T00:00:00Z'));
     await page.reload();
     expect(await doorLabels(page)).toEqual(expectedLabels(1));
@@ -83,17 +83,17 @@ test.describe('the season, by date (London time)', () => {
     expect(await doorLabels(page)).toEqual(expectedLabels(null, true));
   });
 
-  test('6 January is still the archive; 7 January is the calm "comes round again" message', async ({ page }) => {
+  test('6 January is still the archive; 7 January is the same calm message', async ({ page }) => {
     await openAt(page, '2027-01-06T12:00:00Z');
     expect(await doorLabels(page)).toEqual(expectedLabels(null, true));
     await page.clock.setFixedTime(new Date('2027-01-07T12:00:00Z'));
     await page.reload();
-    await expectCalm(page, 'Advent comes round again on 1 December.');
+    await expectCalm(page, 'The Advent calendar opens on 1 December.');
   });
 
-  test('the real date today (October) shows the calm "comes round again" message', async ({ page }) => {
+  test('the real date today (October) shows the same calm message', async ({ page }) => {
     await openAt(page, REAL_TODAY);
-    await expectCalm(page, 'Advent comes round again on 1 December.');
+    await expectCalm(page, 'The Advent calendar opens on 1 December.');
   });
 
   test('every door is a real button with a visible number and the right accessible name', async ({ page }) => {
@@ -103,6 +103,18 @@ test.describe('the season, by date (London time)', () => {
     await expect(page.getByRole('button', { name: 'Day 2, 2 December, available' })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Day 4, 4 December, not yet' })).toBeVisible();
     await expect(section(page).locator('.advent-placeholder-note')).toContainText('Placeholder');
+    // The note is tied to the list, so a screen reader hears that these doors are placeholders.
+    const describedBy = await section(page).locator('.advent-doors').getAttribute('aria-describedby');
+    expect(describedBy).toBeTruthy();
+    await expect(page.locator(`#${describedBy}`)).toHaveClass(/advent-placeholder-note/);
+  });
+
+  test('before and after the season say the same one sentence, with a non-breaking space in the date', async ({ page }) => {
+    for (const time of ['2026-11-01T12:00:00Z', '2026-10-13T12:00:00Z', '2027-01-07T12:00:00Z']) {
+      await openAt(page, time);
+      expect(await calmText(page).evaluate((el) => el.textContent), time).toBe('The Advent calendar opens on 1\u00A0December.');
+    }
+    expect(await page.locator('main').innerText()).not.toContain('comes round again');
   });
 });
 
@@ -112,7 +124,7 @@ test.describe('a visitor in New Zealand still sees London\'s date', () => {
   test('at 12:00 UTC on 30 November it is already 1 December in Auckland, but the calendar is still calm', async ({ page }) => {
     await openAt(page, '2026-11-30T12:00:00Z');
     expect(await page.evaluate(() => new Date().getDate())).toBe(1); // proves the browser really is on NZ time
-    await expectCalm(page, 'Advent opens on 1 December.');
+    await expectCalm(page, 'The Advent calendar opens on 1 December.');
   });
 
   test('at 23:30 UTC on 11 December it is 12 December in Auckland, but London is still on door 11', async ({ page }) => {
@@ -136,13 +148,13 @@ test.describe('the preview switch', () => {
 
     await exit.click();
     await expect(page).toHaveURL(new RegExp(`${PATH}$`));
-    await expectCalm(page, 'Advent comes round again on 1 December.');
+    await expectCalm(page, 'The Advent calendar opens on 1 December.');
     await expect(section(page).locator('[data-advent-notice]')).toBeHidden();
   });
 
   test('a preview date before December gives the calm message and still shows the notice', async ({ page }) => {
     await openAt(page, REAL_TODAY, '?advent-preview=2026-11-15');
-    await expectCalm(page, 'Advent opens on 1 December.');
+    await expectCalm(page, 'The Advent calendar opens on 1 December.');
     await expect(noticeText(page)).toHaveText("Preview mode: not today's date. Showing 15 November 2026.");
   });
 
@@ -160,7 +172,7 @@ test.describe('the preview switch', () => {
     for (const query of bad) {
       await openAt(page, REAL_TODAY, query);
       await expect(section(page).locator('[data-advent-notice]'), query).toBeHidden();
-      await expectCalm(page, 'Advent comes round again on 1 December.');
+      await expectCalm(page, 'The Advent calendar opens on 1 December.');
     }
   });
 
@@ -247,7 +259,7 @@ test.describe('when things go wrong', () => {
       (Intl as unknown as { DateTimeFormat: unknown }).DateTimeFormat = function broken() { throw new Error('no Intl'); };
     });
     await openAt(page, '2026-12-12T12:00:00Z');
-    await expectCalm(page, 'Advent comes round again on 1 December.');
+    await expectCalm(page, 'The Advent calendar opens on 1 December.');
   });
 });
 
@@ -256,7 +268,7 @@ test.describe('without JavaScript', () => {
 
   test('the calm message is there and a note explains the calendar needs JavaScript; nothing from the days', async ({ page }) => {
     await page.goto(PATH);
-    await expect(calmText(page)).toHaveText('Advent opens on 1 December.');
+    await expect(calmText(page)).toHaveText('The Advent calendar opens on 1 December.');
     await expect(section(page).locator('noscript')).toHaveCount(1);
     expect(await section(page).locator('noscript').innerHTML()).toContain('needs JavaScript');
     await expect(section(page).locator('button')).toHaveCount(0);

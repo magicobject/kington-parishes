@@ -64,17 +64,17 @@ describe('modules/advent folder', () => {
     }
   });
 
-  // Only build.mjs may use Node itself, and only these built-in modules. Nothing else may import a package.
+  // Only build.mjs and make-manifest.mjs may use Node itself, and only these built-in modules. Nothing else may import a package.
   const NODE_ALLOWED = ['node:crypto', 'node:fs', 'node:path', 'node:url'];
   const specifier = /(?:\bfrom\s*|\bimport\s*\(?\s*|\brequire\s*\(\s*)(['"])([^'"]+)\1/g;
 
-  test('every import is a file inside this folder, or (build.mjs only) a Node built-in from the allowed few', () => {
+  test('every import is a file inside this folder, or (build.mjs and make-manifest.mjs only) a Node built-in from the allowed few', () => {
     let relativeImports = 0;
     for (const file of codeFiles) {
       for (const match of file.text.matchAll(specifier)) {
         const path = match[2];
         if (path.startsWith('node:')) {
-          assert.equal(file.name, 'build.mjs', `${file.name} imports "${path}"`);
+          assert.ok(['build.mjs', 'make-manifest.mjs'].includes(file.name), `${file.name} imports "${path}"`);
           assert.ok(NODE_ALLOWED.includes(path), `${file.name} imports "${path}"`);
           continue;
         }

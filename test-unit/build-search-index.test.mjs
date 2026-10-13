@@ -235,3 +235,23 @@ describe('unlisted pages (the Advent calendar before launch)', () => {
     assert.equal(isIndexable({ slug: 'help-advent' }), true);
   });
 });
+
+describe('unlisted must be a real boolean', () => {
+  test('anything else is a build error, not a silent "listed"', () => {
+    for (const bad of ['true', 'false', 1, 0, null, undefined, {}, []]) {
+      assert.throws(() => isIndexable({ slug: 'x', unlisted: bad }), /unlisted/, String(bad));
+      assert.throws(() => isSearchablePage({ slug: 'x', unlisted: bad }), /unlisted/, String(bad));
+    }
+  });
+});
+
+describe('data-search-skip', () => {
+  const html = '<section id="next"><h2>Things</h2><div class="card"><h3>Public card</h3><p>Visible words</p></div><div class="card" data-search-skip><h3>Hidden card</h3><p>Secret words</p></div></section>';
+  test('keeps marked elements out of the index text', () => {
+    const entries = extractSearchEntries(ensureSectionIds(html), { slug: 'p', title: 'P' });
+    const all = JSON.stringify(entries);
+    assert.ok(all.includes('Visible words'));
+    assert.ok(!all.includes('Secret'));
+    assert.ok(!all.includes('Hidden card'));
+  });
+});

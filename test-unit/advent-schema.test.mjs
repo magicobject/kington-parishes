@@ -19,9 +19,10 @@ describe('the real files', () => {
     assert.equal(content.days.length, DAY_COUNT);
   });
 
-  test('theme.mjs is valid and the site is not publicly listed yet', () => {
+  test('theme.mjs is valid (the launch switches are checked by advent-prelaunch.test.mjs until launch)', () => {
     assert.deepEqual(validateTheme(theme), theme);
-    assert.equal(theme.publicListing, false);
+    assert.equal(typeof theme.publicListing, 'boolean');
+    assert.equal(typeof theme.artRequired, 'boolean');
     assert.equal(theme.timeZone, 'Europe/London');
     assert.equal(theme.slug, 'advent');
   });

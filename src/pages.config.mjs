@@ -67,6 +67,22 @@ export const FOOTER_NAV = [
   { href: 'https://www.facebook.com/kingtonparishes', label: 'Our Facebook Community' },
 ];
 
+// The hidden Advent help guide. While the calendar is not public (theme.publicListing false) this page is
+// unlisted too, so the search index (a public file) says nothing about the calendar; it rejoins the help-scope
+// search automatically when the calendar goes public. It stays noindex either way, like every help page.
+export function helpAdventPage(theme) {
+  return {
+    slug: 'help-advent',
+    title: 'Advent Calendar — Help — Kington Parishes',
+    description: "How to preview the Advent calendar on any date, what to expect each day, how to change a day's words or picture, and how to switch it on for everyone.",
+    active: null,
+    header: true,
+    safeguardStrip: false,
+    robots: 'noindex, nofollow',
+    unlisted: theme.publicListing !== true,
+  };
+}
+
 export const PAGES = [
   {
     slug: 'index',
@@ -470,15 +486,7 @@ export const PAGES = [
     safeguardStrip: false,
     robots: 'noindex, nofollow',
   },
-  {
-    slug: 'help-advent',
-    title: 'Advent Calendar — Help — Kington Parishes',
-    description: "How to preview the Advent calendar on any date, what to expect each day, how to change a day's words or picture, and how to switch it on for everyone.",
-    active: null,
-    header: true,
-    safeguardStrip: false,
-    robots: 'noindex, nofollow',
-  },
+  helpAdventPage(adventTheme),
   {
     slug: '404',
     title: 'Page not found — Kington Parishes',
