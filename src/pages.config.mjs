@@ -77,7 +77,6 @@ export function helpAdventPage(theme) {
     description: "How to preview the Advent calendar on any date, what to expect each day, how to change a day's words or picture, and how to switch it on for everyone.",
     active: null,
     header: true,
-    safeguardStrip: false,
     robots: 'noindex, nofollow',
     unlisted: theme.publicListing !== true,
   };
@@ -86,6 +85,7 @@ export function helpAdventPage(theme) {
 export const PAGES = [
   {
     slug: 'index',
+    safeguardStrip: false, // The homepage carries its own full safeguarding section (#safeguarding), so the strip would just repeat it.
     title: 'Kington Parishes — Five churches on the Herefordshire/Powys border',
     description: "Kington Parishes: St Mary's Kington, St Peter's Titley, St Stephen's Old Radnor, St Mary's Kinnerton and St Thomas à Becket Huntington. Services, news, and community events.",
     active: 'index.html',
@@ -93,7 +93,6 @@ export const PAGES = [
     // The homepage carries its own full safeguarding section (#safeguarding)
     // now, which already links to safeguarding.html — the small strip above
     // the footer would just repeat that on the same page.
-    safeguardStrip: false,
     structuredData: {
       '@context': 'https://schema.org',
       '@type': 'Organization',
@@ -390,12 +389,12 @@ export const PAGES = [
   },
   {
     slug: 'safeguarding',
+    safeguardStrip: false, // The safeguarding page doesn't need to link to itself.
     title: 'Safeguarding — Kington Parishes',
     description: 'Safeguarding contacts and national helplines for Kington Parishes.',
     active: null,
     header: true,
     // The safeguarding page doesn't need to link to itself.
-    safeguardStrip: false,
   },
   // The Advent calendar page. Its entry comes from the module: while the theme's
   // publicListing is false it is unlisted (not in the sitemap or search) and noindex,
@@ -409,7 +408,6 @@ export const PAGES = [
     header: true,
     // Not pastoral content — skip the safeguard-strip banner, same
     // reasoning as the 404 page.
-    safeguardStrip: false,
     robots: 'noindex, nofollow',
   },
   // Hidden how-it-works guide for non-technical members of the website
@@ -427,7 +425,6 @@ export const PAGES = [
     description: 'A plain-English guide for the website team: how changes reach the live site, and how to set up a laptop to make one.',
     active: null,
     header: true,
-    safeguardStrip: false,
     robots: 'noindex, nofollow',
   },
   {
@@ -436,7 +433,6 @@ export const PAGES = [
     description: 'How to install Claude Desktop, create a GitHub account, and paste one block of instructions that gets Claude to set everything else up for you.',
     active: null,
     header: true,
-    safeguardStrip: false,
     robots: 'noindex, nofollow',
   },
   {
@@ -445,7 +441,6 @@ export const PAGES = [
     description: 'What happens, step by step, when you ask Claude to update this website — plus answers to the questions people usually ask first.',
     active: null,
     header: true,
-    safeguardStrip: false,
     robots: 'noindex, nofollow',
   },
   // More technical than the other three help- pages, deliberately — for
@@ -458,7 +453,6 @@ export const PAGES = [
     description: 'Hosting on Cloudflare Workers, DNS, the templated build that keeps the site DRY, what gets tested before a change goes live, the MailerLite-powered newsletter, how the API is secured, and where the source code lives.',
     active: null,
     header: true,
-    safeguardStrip: false,
     robots: 'noindex, nofollow',
   },
   // A deeper-still dive off Technical details' DNS section — the domain's
@@ -474,7 +468,6 @@ export const PAGES = [
     description: "A closer look at kingtonparishes.org.uk's DNS records: the A records pointing at Cloudflare, the MX records handing email to 123 Reg/GoDaddy, and what the SPF/DMARC/verification TXT records are for.",
     active: null,
     header: true,
-    safeguardStrip: false,
     robots: 'noindex, nofollow',
   },
   {
@@ -483,7 +476,6 @@ export const PAGES = [
     description: 'What to do if a change looks wrong: ask Claude, revert it, or fail forward — plus why nothing is ever permanently broken.',
     active: null,
     header: true,
-    safeguardStrip: false,
     robots: 'noindex, nofollow',
   },
   helpAdventPage(adventTheme),
@@ -496,7 +488,6 @@ export const PAGES = [
     // Footer stays (build number, mediawright credit, contact details) —
     // only the header nav and safeguard-strip banner are dropped, since
     // this page isn't a nav destination.
-    safeguardStrip: false,
     canonical: false,
     robots: 'noindex, nofollow',
   },

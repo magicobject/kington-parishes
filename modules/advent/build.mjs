@@ -760,7 +760,6 @@ export function adventPageEntry(theme) {
     description: `The ${name} Advent calendar.`,
     active: null,
     header: true,
-    safeguardStrip: false,
     headHtml: [
       '<link rel="stylesheet" href="/css/advent-theme.css">',
       '<link rel="stylesheet" href="/css/advent.css">',
