@@ -201,3 +201,19 @@ describe('review fixes', () => {
     assert.equal(formatPreviewNotice({ year: 2028, month: 2, day: 29 }), "Preview mode: not today's date. Showing 29 February 2028.");
   });
 });
+
+describe('review gaps: slugs that are not plain slugs', () => {
+  test('a bad slug never enables preview anywhere except the home page, and never falls back to /advent', () => {
+    const paths = ['/a/b', '/../x', '/UPPER', '/a--b', '/', '/advent', '/advent.html'];
+    for (const slug of ['a/b', '../x', 'UPPER', 'a--b', '', 123, null]) {
+      for (const pathname of paths) {
+        const result = effectiveDate({ realNow: REAL_NOW, search: '?advent-preview=2026-12-07', pathname, previewEnabled: true, slug });
+        assert.equal(result.preview, pathname === '/', `${JSON.stringify(slug)} ${pathname}`);
+      }
+    }
+  });
+
+  test('the notice fails to the plain fallback for day 0', () => {
+    assert.equal(formatPreviewNotice({ year: 2026, month: 12, day: 0 }), "Preview mode: not today's date.");
+  });
+});

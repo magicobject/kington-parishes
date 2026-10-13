@@ -62,8 +62,25 @@ const DAYS_IN_MONTH = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
 // Angle brackets, "@", control, format (invisible, joiners, bidi, soft hyphen, BOM),
 // line and paragraph separators, tag characters, annotation marks, and lone surrogates.
-const BAD_CHARACTER = /[<>@\p{Cc}\p{Cf}\p{Zl}\p{Zp}\u{E0000}-\u{E007F}\uFFF9-\uFFFB\uFE00-\uFE0F\u{E0100}-\u{E01EF}]|\p{Cs}/u;
-const INVISIBLE = /[\p{Cc}\p{Cf}\p{Zl}\p{Zp}\u{E0000}-\u{E007F}\uFFF9-\uFFFB\uFE00-\uFE0F\u{E0100}-\u{E01EF}]|\p{Cs}/gu;
+// Also the blank-looking letters and marks: combining grapheme joiner, Hangul fillers,
+// Khmer inherent vowels, Mongolian selectors, Braille blank.
+const BAD_CHARACTER = /[<>@\p{Cc}\p{Cf}\p{Zl}\p{Zp}\u{E0000}-\u{E007F}\uFFF9-\uFFFB\uFE00-\uFE0F\u{E0100}-\u{E01EF}\u034F\u115F\u1160\u3164\uFFA0\u17B4\u17B5\u180B-\u180F\u2800]|\p{Cs}/u;
+const INVISIBLE = /[\p{Cc}\p{Cf}\p{Zl}\p{Zp}\u{E0000}-\u{E007F}\uFFF9-\uFFFB\uFE00-\uFE0F\u{E0100}-\u{E01EF}\u034F\u115F\u1160\u3164\uFFA0\u17B4\u17B5\u180B-\u180F\u2800]|\p{Cs}/gu;
+
+// POSITIVE ALLOW-LISTS (checked on the text exactly as written, after the deny rules above).
+// Content: letters, accent marks, ASCII digits, a plain space, and . , ; : ' " ( ) ? ! - plus
+// the en dash, em dash and typographic quotes. No ampersand, slash, bracket, hash or symbol.
+const CONTENT_ALLOWED = /^[\p{L}\p{M}0-9 .,;:'"()?!\-\u2013\u2014\u2018\u2019\u201C\u201D]*$/u;
+// Names (siteName, translationName): letters, accent marks, digits, space, . , ' - and the
+// typographic apostrophe. No ampersand or double quote: the build HTML-escapes names anyway.
+const NAME_ALLOWED = /^[\p{L}\p{M}0-9 .,'\-\u2019]*$/u;
+// A spreadsheet treats a cell starting with one of these as a formula.
+const FORMULA_START = /^\s*[=+@-]/;
+// A scripture reference needs a space: "John 3:16", not "John3:16".
+const GLUED_REFERENCE = /[a-z]\d+:\d/i;
+const SPACED_SCHEME = /\b(?:tel|sms|data|javascript|vbscript|mailto|file|ftp|https?|wss?|blob|about)\s*:/i;
+const DOT_BETWEEN_WORDS = /[\p{L}\p{N}]\.[\p{L}\p{N}]/u; // bit.ly, 192.168.0.1, example.org
+const DOMAIN_ENDING = /[a-z0-9-]+\.(?:com|org|net|uk|co|io|info|app|dev)\b/i;
 const BAD_ADDRESS = [
   /[a-z][a-z0-9+.-]*:\S/i, // a scheme glued to what follows: data:x, mailto:a, ftp://x
   /\/\//, // protocol-relative or any double slash
@@ -121,8 +138,19 @@ function checkText(value, field, where, maxLength, { content = true } = {}) {
     fail(where, `"${field}" contains angle brackets, "@", or an invisible, control or direction character`);
   }
   if (normalised.includes('{{') || normalised.includes('}}')) fail(where, `"${field}" contains template braces`);
-  if (content && BAD_ADDRESS.some((pattern) => pattern.test(normalised))) {
-    fail(where, `"${field}" contains something that looks like a web address or link`);
+  if (content) {
+    if (GLUED_REFERENCE.test(normalised)) {
+      fail(where, `"${field}" needs a space between a book name and its chapter number, like "John 3:16"`);
+    }
+    const unspaced = normalised.replace(/ /g, '');
+    if (BAD_ADDRESS.some((pattern) => pattern.test(normalised)) || SPACED_SCHEME.test(normalised) ||
+        DOT_BETWEEN_WORDS.test(normalised) || DOMAIN_ENDING.test(unspaced)) {
+      fail(where, `"${field}" contains something that looks like a web address or link`);
+    }
+  }
+  if (FORMULA_START.test(value)) fail(where, `"${field}" must not start with = + @ or -`);
+  if (!(content ? CONTENT_ALLOWED : NAME_ALLOWED).test(value)) {
+    fail(where, `"${field}" contains a character that is not allowed (plain letters, digits, spaces and simple punctuation only)`);
   }
 }
 

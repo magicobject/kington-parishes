@@ -102,8 +102,8 @@ describe('text rule: web addresses and markup in disguise (one case each)', () =
     assert.throws(() => validateContent(withDay1('wonder', 'metadata:x')), /"wonder"/);
   });
 
-  test('everyday text with slashes, ampersand-free punctuation and times passes', () => {
-    validateContent(withDay1('wonder', 'I wonder if 1/2 of us can sing at 10:30? Yes (maybe) - "quoted"!'));
+  test('everyday punctuation and times pass', () => {
+    validateContent(withDay1('wonder', 'I wonder if half of us can sing at 10:30? Yes (maybe) - "quoted"!'));
   });
 });
 
@@ -244,5 +244,27 @@ describe('art names', () => {
     for (const ok of ['day-05.svg', 'console.svg', 'com10.svg', 'comet.svg', 'a.svg']) {
       assert.equal(artPathIsSafe(ok), true, ok);
     }
+  });
+});
+
+describe('review gaps: schemes, domains, full-width forms and code-point ranges', () => {
+  const rejectsInWonder = (value, label = value) => {
+    assert.throws(() => validateContent(withDay1('wonder', value)), /day 1: "wonder"/, label);
+  };
+
+  test('schemes are matched whatever the case', () => {
+    for (const value of ['JAVASCRIPT:alert(1)', 'MAILTO:a', 'DATA:text/html,x', 'JavaScript:x']) rejectsInWonder(value);
+  });
+
+  test('each listed domain ending is caught', () => {
+    for (const tld of ['io', 'dev', 'co', 'info', 'app', 'uk', 'com', 'org', 'net']) rejectsInWonder(`see example.${tld}`);
+  });
+
+  test('full-width braces and a full-width dot domain are caught', () => {
+    for (const value of ['\uFF5B\uFF5Bx', 'x\uFF5D\uFF5D', '\uFF57\uFF57\uFF57\uFF0Eexample\uFF0Ecom', 'example\uFF0E\uFF4F\uFF52\uFF47']) rejectsInWonder(value);
+  });
+
+  test('the variation selector supplement and the unassigned tag-block code points are caught', () => {
+    for (const point of [0xE0100, 0xE01EF, 0xE0000, 0xE0002]) rejectsInWonder('a' + String.fromCodePoint(point) + 'b', point.toString(16));
   });
 });

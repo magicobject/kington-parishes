@@ -163,9 +163,9 @@ describe('validateContent: forbidden characters and patterns', () => {
     rejects((c) => { dayOf(c, 10).translation = 'see http://x.org'; }, /day 10: "translation"/);
   });
 
-  test('plain punctuation, quotes, apostrophes and a normal slash are fine', () => {
+  test('plain punctuation, quotes and apostrophes are fine', () => {
     const ok = clone(content);
-    dayOf(ok, 10).paragraphs = ['"Don\'t be afraid," she said; it\'s 1/2 done: really (yes) - 1 Samuel 16:1-13!'];
+    dayOf(ok, 10).paragraphs = ['"Don\'t be afraid," she said; it\'s half done: really (yes) - 1 Samuel 16:1-13!'];
     validateContent(ok);
   });
 });

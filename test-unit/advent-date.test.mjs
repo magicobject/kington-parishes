@@ -236,3 +236,19 @@ describe('review fixes: other start dates, odd inputs, fail closed', () => {
     assert.throws(() => doorState(0, null, CFG), RangeError);
   });
 });
+
+describe('review gaps: malformed parts and config fail closed', () => {
+  const cfg = { start: { month: 12, day: 1 }, end: { month: 12, day: 25 }, archiveUntil: null };
+
+  test('impossible month or day numbers give after', () => {
+    for (const parts of [{ year: 2026, month: 13, day: 1 }, { year: 2026, month: 12, day: 0 }, { year: 2026, month: 12, day: 99 }, { year: 2026, month: '12', day: 5 }]) {
+      assert.equal(seasonState(parts, cfg), 'after', JSON.stringify(parts));
+    }
+  });
+
+  test('a config with text numbers gives after', () => {
+    const parts = { year: 2026, month: 12, day: 5 };
+    assert.equal(seasonState(parts, { ...cfg, start: { month: '12', day: 1 } }), 'after');
+    assert.equal(seasonState(parts, { ...cfg, archiveUntil: { month: 'x', day: 1 } }), 'after');
+  });
+});

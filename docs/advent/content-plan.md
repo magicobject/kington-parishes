@@ -305,7 +305,7 @@ The calendar tells one story: God has been leaning toward the world since the be
 
 ### Day 24: "Glory in the Sky"
 **Bible:** Luke 2:13-16 (WEB: "Glory to God in the highest, on earth peace, good will toward men")
-**Story:** And then it was not just one angel. The whole sky filled with them, a great choir praising God: "Glory to God in the highest, and on earth peace, good will toward men" (WEB). The shepherds stood open-mouthed. When the angels had gone and the sky was dark again, they looked at each other. They said to one another that they should go to Bethlehem and see what had happened. They did not wait until morning or sort out the sheep. They hurried down the hill in the dark, towards the town, to find a baby in a manger. It's Christmas Eve. Tonight, perhaps, the hurry is in us too.
+**Story:** And then it was not just one angel. The whole sky filled with them, a great choir praising God: "Glory to God in the highest, on earth peace, good will toward men" (WEB). The shepherds stood open-mouthed. When the angels had gone and the sky was dark again, they looked at each other. They said to one another that they should go to Bethlehem and see what had happened. They did not wait until morning or sort out the sheep. They hurried down the hill in the dark, towards the town, to find a baby in a manger. It's Christmas Eve. Tonight, perhaps, the hurry is in us too.
 **Wonder:** I wonder what the angels' song sounded like?
 **Activity:** Sing or hum a favourite carol together, as the shepherds might have, running down the hill.
 **Prayer:** God of glory and peace, fill our hearts with your song, and send us to find you. Amen.
