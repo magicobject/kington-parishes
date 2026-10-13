@@ -41,7 +41,7 @@ The calendar tells one story: God has been leaning toward the world since the be
 
 ## 4. The 25 doors
 
-> Note (13 Oct 2026, Greg): the "Try this together" activity and the "Hidden detail" fields below were DROPPED from the live content (`modules/advent/content.mjs` no longer has `activity` or `hidden`; the pictures keep their hidden objects). Day 3 now says "Hergest Ridge" (not "Radnor hills"); Day 24 and Day 25 were made date-neutral. The plan text below is the historical draft.
+> Note (13 Oct 2026, Greg): the "Try this together" activity and the "Hidden detail" fields below were DROPPED from the live content (`modules/advent/content.mjs` no longer has `activity` or `hidden`; the pictures keep their hidden objects). Day 3 now says "Hergest Ridge" (not "Radnor hills"); Day 24 and Day 25 were made date-neutral. Day 25's picture was simplified on 13 Oct 2026 at Greg's request: the front ledge gathering the hidden objects from the earlier days is gone (the live picture is a manger, a star, watchers and the golden thread). The plan text below is the historical draft.
 
 ### Day 1: "Let There Be Light"
 **Bible:** Genesis 1:1-5 (KJV quote: "Let there be light")

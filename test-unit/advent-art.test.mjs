@@ -6,7 +6,7 @@ import { cpSync, mkdtempSync, mkdirSync, readFileSync, readdirSync, rmSync } fro
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { buildAdvent, lintSvg } from '../modules/advent/build.mjs';
+import { buildAdvent, lintSvg, svgDrawWeight } from '../modules/advent/build.mjs';
 import { theme } from '../modules/advent/theme.mjs';
 import { content } from '../modules/advent/content.mjs';
 
@@ -60,5 +60,12 @@ describe('the real pictures', () => {
 
   test('the alt text is one sentence of a sensible length for every day', () => {
     for (const day of allDays) assert.ok(day.alt.length >= 40 && day.alt.length <= 200, `day ${day.day}: ${day.alt.length}`);
+  });
+
+  test('Day 25 is the simplified picture (Greg, 13 Oct 2026): no front ledge of 24 tiny objects, a light picture with the same alt text', () => {
+    const text = readFileSync(join(ART, 'day-25.svg'), 'utf8');
+    assert.ok(text.length < 12000, `day-25.svg is ${text.length} bytes`);
+    assert.ok(svgDrawWeight(text) < 250, `weight ${svgDrawWeight(text)}`);
+    assert.equal(/aria-label="([^"]*)"/.exec(text)[1], 'A manger glows at the centre of a stable, wrapped in a golden thread, with a star above and watchers kneeling.');
   });
 });
