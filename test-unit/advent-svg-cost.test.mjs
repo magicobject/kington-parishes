@@ -50,8 +50,8 @@ describe('the weighted draw budget', () => {
     assert.equal(svgDrawWeight('<svg><rect/></svg>'), 2);
     assert.equal(svgDrawWeight('<svg><rect opacity=".5"/></svg>'), 1 + 1 + 5);
     assert.equal(svgDrawWeight('<svg><rect style="opacity:.5"/></svg>'), 1 + 1 + 5);
-    assert.equal(svgDrawWeight('<svg><defs><clipPath id="c"><rect/></clipPath></defs><rect clip-path="url(#c)"/></svg>'), 1 + (1 + 5 + 5));
-    assert.equal(svgDrawWeight('<svg><defs><mask id="m"><rect/></mask></defs><rect mask="url(#m)" opacity=".5"/></svg>'), 1 + (1 + 5 + 5));
+    assert.equal(svgDrawWeight('<svg><defs><clipPath id="c"><rect/></clipPath></defs><rect clip-path="url(#c)"/></svg>'), 1 + (1 + 5 + 5) + 2); // plus the clipPath and its rect, once
+    assert.equal(svgDrawWeight('<svg><defs><mask id="m"><rect/></mask></defs><rect mask="url(#m)" opacity=".5"/></svg>'), 1 + (1 + 5 + 5) + 2);
     // A use weighs its whole target: a symbol (1) holding three rects (3), plus the use itself (1), plus the svg (1).
     assert.equal(svgDrawWeight('<svg><defs><symbol id="s"><rect/><rect/><rect/></symbol></defs><use href="#s"/></svg>'), 1 + 1 + 4);
     // Things inside defs are only drawn through a use.
@@ -70,8 +70,7 @@ describe('the weighted draw budget', () => {
     const sample = R(`<defs><mask id="m"><rect width="9" height="9" fill="#fff"/></mask><g id="heavy">${rects}</g></defs>${'<use href="#heavy"/>'.repeat(50)}`);
     assert.ok(sample.length < 100 * 1024, 'small enough that the size rule is not what refuses it');
     const stats = {};
-    assert.match(lintSvg(sample, stats)[0], /too costly to draw/);
-    assert.ok(stats.weight > 500000);
+    assert.match(lintSvg(sample, stats)[0], /too costly to draw|at most 20/);
   });
 
   test('50 uses of a plain 100-rect group are refused too (50 x 101 > cap)', () => {
@@ -118,5 +117,64 @@ describe('earlier rules still stand', () => {
   test('51 uses, a use of a use, and the billion-laughs shape are still refused', () => {
     assert.match(lintSvg(R(`<defs><rect id="r" width="1" height="1"/></defs>${'<use href="#r"/>'.repeat(51)}`))[0], /more than 50/);
     assert.match(lintSvg(R('<defs><rect id="r"/><use id="u" href="#r"/></defs><use href="#u"/>'))[0], /use/);
+  });
+});
+
+// A browser redraws the WHOLE content of a mask or clipPath for EVERY element that references it (security review,
+// round 3). So a mask costs (its subtree) x (the number of references to it, counting each use of a group that holds
+// a reference), and there are hard caps on references and on the size of a mask.
+describe('masks and clip paths are charged per reference', () => {
+  const circles = (count) => '<circle cx="200" cy="112" r="300" fill-opacity=".5"/>'.repeat(count);
+  const maskPicture = (inside, references, element = 'mask') => {
+    const attribute = element === 'mask' ? 'mask' : 'clip-path';
+    const tag = element === 'mask' ? 'mask' : 'clipPath';
+    return R(`<defs><${tag} id="m">${inside}</${tag}></defs>${`<rect width="400" height="225" ${attribute}="url(#m)"/>`.repeat(references)}`);
+  };
+  const costly = /too costly to draw|at most (?:20|50)/;
+
+  test('the security engineer\'s reproducer (1800 circles in one mask, 136 references) is refused', () => {
+    assert.match(lintSvg(maskPicture(circles(1800), 136))[0], costly);
+  });
+
+  test('mask900x130 and the clipPath variants (900 or 1800 shapes, 130 or 136 references) are refused', () => {
+    assert.match(lintSvg(maskPicture(circles(900), 130))[0], costly);
+    assert.match(lintSvg(maskPicture('<path d="M0 0L400 0L200 225z" opacity=".5"/>'.repeat(1800), 136, 'clip'))[0], costly);
+    assert.match(lintSvg(maskPicture('<rect width="400" height="225"/>'.repeat(1800), 136, 'clip'))[0], costly);
+    assert.match(lintSvg(maskPicture(circles(1500), 130))[0], costly);
+  });
+
+  test('a mask holding at most 50 elements is allowed; 51 are refused, however few references there are', () => {
+    assert.deepEqual(lintSvg(maskPicture(circles(50), 1)), []);
+    assert.match(lintSvg(maskPicture(circles(51), 1))[0], /at most 50/);
+    assert.match(lintSvg(maskPicture('<rect width="4" height="4"/>'.repeat(51), 1, 'clip'))[0], /at most 50/);
+  });
+
+  test('at most 20 mask or clip-path references in a picture; 21 are refused', () => {
+    assert.deepEqual(lintSvg(maskPicture('<rect width="9" height="9"/>', 20)), []);
+    assert.match(lintSvg(maskPicture('<rect width="9" height="9"/>', 21))[0], /at most 20/);
+  });
+
+  test('a use of a group that holds a reference multiplies the mask cost (and counts toward the 20)', () => {
+    const body = `<defs><mask id="m">${circles(40)}</mask><g id="g"><rect width="400" height="225" mask="url(#m)"/></g></defs>`;
+    assert.deepEqual(lintSvg(R(`${body}${'<use href="#g"/>'.repeat(3)}`)), []);
+    assert.match(lintSvg(R(`${body}${'<use href="#g"/>'.repeat(21)}`))[0], /at most 20/);
+    // 20 uses x 41-element mask = 820 plus the references themselves (20 x 12), the rects and uses: over the cap together with more shapes
+    const heavy = R(`${body}${'<use href="#g"/>'.repeat(20)}${'<rect width="9" height="9" opacity=".5"/>'.repeat(300)}`);
+    assert.match(lintSvg(heavy)[0], costly);
+  });
+
+  test('a small legitimate gradient mask on a few shapes is still accepted, with its cost counted', () => {
+    const sample = R('<defs><linearGradient id="fade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#000"/></linearGradient><mask id="soft"><rect width="400" height="225" fill="url(#fade)"/></mask></defs><circle cx="100" cy="100" r="50" mask="url(#soft)"/><circle cx="200" cy="100" r="50" mask="url(#soft)"/><circle cx="300" cy="100" r="50" mask="url(#soft)"/>');
+    assert.deepEqual(lintSvg(sample), []);
+    // svg 1, three circles 11 each (1 + 5 + 5), the mask (rect 1 + mask 1 = 2) x 3 references = 6
+    assert.equal(svgDrawWeight(sample), 1 + 33 + 6);
+  });
+
+  test('the heaviest accepted MASK fixture (for the browser timing test) is accepted and sits near the cap', () => {
+    const text = readFileSync(new URL('../test/support/heaviest-mask-accepted.svg', import.meta.url), 'utf8');
+    assert.deepEqual(lintSvg(text), []);
+    const weight = svgDrawWeight(text);
+    assert.ok(weight > 0.6 * MAX_DRAW_WEIGHT && weight <= MAX_DRAW_WEIGHT, `weight ${weight}`);
+    assert.ok((text.match(/mask="url/g) ?? []).length >= 15, 'it uses most of the 20 references');
   });
 });

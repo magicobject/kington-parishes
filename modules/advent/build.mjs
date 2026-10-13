@@ -112,7 +112,9 @@ const MAX_USES = 50;
 //     carry a mask or clip-path attribute or contain a <use>;
 //   - a weighted draw budget: every drawn element weighs 1; a <use> weighs the whole subtree of its target;
 //     an element with a mask, clip-path or opacity weighs 5 more, and 5 more again per mask or clip-path
-//     reference. The total may not exceed MAX_DRAW_WEIGHT;
+//     reference; and a <mask> or <clipPath> weighs (its subtree) x (its references), because a browser redraws it
+//     for every element that uses it. The total may not exceed MAX_DRAW_WEIGHT; there are at most 20 references
+//     and at most 50 elements inside any mask or clipPath;
 //   - a dash pattern may not contain a number between 0 and 0.5 (thousands of tiny dashes), and no number in a
 //     size, position, path or transform attribute may be larger than 100000.
 export const MAX_DRAW_WEIGHT = 1500;
@@ -138,6 +140,20 @@ function subtreeWeight(record) {
 }
 
 // Returns a problem sentence (or null) and the total weight, for the elements the parser collected.
+//
+// A browser redraws the WHOLE content of a <mask> or <clipPath> for EVERY element that references it, so a mask is
+// charged (the weight of its subtree) x (the number of references to it). References are counted per DRAWN
+// instance: a <use> of a group that holds a reference counts once per use. Hard caps keep the numbers small:
+// at most MAX_RESOURCE_REFERENCES references in a picture and at most MAX_RESOURCE_CHILDREN elements inside any
+// one mask or clipPath.
+const MAX_RESOURCE_REFERENCES = 20;
+const MAX_RESOURCE_CHILDREN = 50;
+const RESOURCE_REFERENCE = /^url\(#([A-Za-z][A-Za-z0-9_-]*)\)$/;
+
+function descendantCount(record) {
+  return record.children.reduce((sum, child) => sum + 1 + descendantCount(child), 0);
+}
+
 function drawCost(records) {
   const byId = new Map();
   for (const record of records) if (record.id && !byId.has(record.id)) byId.set(record.id, record);
@@ -148,20 +164,49 @@ function drawCost(records) {
     if (inside && (RESOURCE_ATTRIBUTES.some((name) => name in record.attrs) || record.name === 'use')) {
       return { problem: 'has a mask, clip-path or use inside a mask or clipPath (resource references may not nest)', weight: 0 };
     }
+    if (RESOURCE_ELEMENTS.has(record.name) && descendantCount(record) > MAX_RESOURCE_CHILDREN) {
+      return { problem: `has a mask or clipPath with more than ${MAX_RESOURCE_CHILDREN} elements inside (at most ${MAX_RESOURCE_CHILDREN} are allowed)`, weight: 0 };
+    }
   }
 
   let weight = 0;
+  let references = 0;
+  const referenceCounts = new Map(); // id of a mask or clipPath -> how many drawn elements reference it
+  const draw = (record) => {
+    weight += ownWeight(record);
+    for (const name of RESOURCE_ATTRIBUTES) {
+      const match = RESOURCE_REFERENCE.exec(record.attrs[name] ?? '');
+      if (!(name in record.attrs)) continue;
+      references += 1;
+      if (match) referenceCounts.set(match[1], (referenceCounts.get(match[1]) ?? 0) + 1);
+    }
+  };
   const walk = (record) => {
     if (NOT_DRAWN_DIRECTLY.has(record.name)) return;
     if (record.name === 'use') {
+      weight += 1;
       const target = record.attrs.href ? byId.get(record.attrs.href.slice(1)) : null;
-      weight += 1 + (target ? subtreeWeight(target) : 1);
+      if (!target) {
+        weight += 1;
+        return;
+      }
+      const drawSubtree = (node) => { draw(node); node.children.filter((child) => !NOT_DRAWN_DIRECTLY.has(child.name)).forEach(drawSubtree); };
+      // The target itself (a symbol, group or shape) is drawn whatever its kind; its drawn descendants follow.
+      drawSubtree(target);
       return;
     }
-    weight += ownWeight(record);
+    draw(record);
     record.children.forEach(walk);
   };
   records.filter((record) => !record.parent).forEach(walk);
+
+  if (references > MAX_RESOURCE_REFERENCES) {
+    return { problem: `has more mask or clip-path references than allowed (at most ${MAX_RESOURCE_REFERENCES}, counting each use of a group that holds one)`, weight };
+  }
+  for (const [id, count] of referenceCounts) {
+    const resource = byId.get(id);
+    if (resource && RESOURCE_ELEMENTS.has(resource.name)) weight += subtreeWeight(resource) * count;
+  }
   if (weight > MAX_DRAW_WEIGHT) return { problem: `would be too costly to draw (weight ${weight}, the limit is ${MAX_DRAW_WEIGHT})`, weight };
   return { problem: null, weight };
 }

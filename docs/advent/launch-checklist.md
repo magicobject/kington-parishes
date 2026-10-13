@@ -65,7 +65,8 @@ header only keeps crawlers away). The calendar is hidden, not secret.
 - DONE: `lintSvg` caps `<use>` elements at 50 and refuses a `<use>` of an element that contains (or is) another
   `<use>` (no cycles, no self-reference): the "billion laughs" fix.
 - DONE: `lintSvg` also bounds DRAW COST: resource references (mask, clip-path) may not nest or sit inside a mask or
-  clipPath, a weighted draw budget caps the total work (see the README for the weights and the cap), dash
+  clipPath, a weighted draw budget caps the total work, with masks and clip paths charged per reference (see the README for the weights and the limits), dash
   patterns finer than 0.5 and numbers over 100000 are refused. The hostile samples (mask and clipPath towers, a
   50-times-used group of 1500 masked rects) are must-reject tests, and a browser test times the heaviest accepted
   picture. Nothing to do at launch.
+- New files under `public/js/advent*`, `public/js/advent/` or `public/css/advent*` need their own exact immutable rule in `public/_headers` (a unit test fails until they have one).

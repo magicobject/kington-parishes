@@ -249,17 +249,28 @@ describe('the hashed Advent assets and their immutable cache rule', () => {
     assert.ok(imports >= 8);
   });
 
-  test('the cache rules cover exactly the hashed script and stylesheet paths, and nothing else (not the day files, the scene or the pictures)', () => {
+  // The built scripts and stylesheets the rules must cover: exactly these, each by its exact path.
+  const builtAssets = () => [
+    ...readdirSync(join(PUBLIC, 'js')).filter((n) => /^advent.*[.]js$/.test(n)).map((n) => `/js/${n}`),
+    ...readdirSync(join(PUBLIC, 'js', 'advent')).map((n) => `/js/advent/${n}`),
+    ...readdirSync(join(PUBLIC, 'css')).filter((n) => /^advent.*[.]css$/.test(n)).map((n) => `/css/${n}`),
+  ].sort();
+
+  test('every built Advent script and stylesheet has its own EXACT immutable rule: no wildcard, none for a file that does not exist, exactly one per file', () => {
     const lines = read('_headers').split('\n');
     const cacheLines = lines.map((line, index) => [line, index]).filter(([line]) => /^\s+cache-control:/i.test(line));
-    assert.equal(cacheLines.length, IMMUTABLE_PATHS.length);
     const paths = [];
     for (const [line, index] of cacheLines) {
       assert.equal(line, '  Cache-Control: public, max-age=31536000, immutable');
-      paths.push(lines[index - 1]);
+      const path = lines[index - 1];
+      assert.ok(!path.includes('*'), `a wildcard cache rule: ${path}`);
+      assert.ok(existsSync(join(PUBLIC, path)), `${path} has a cache rule but the file does not exist`);
       assert.ok(lines[index + 1] === undefined || lines[index + 1] === '', 'nothing else in the rule');
+      paths.push(path);
     }
-    assert.deepEqual(paths.sort(), [...IMMUTABLE_PATHS].sort());
+    assert.equal(new Set(paths).size, paths.length, 'a path has two cache rules');
+    assert.deepEqual(paths.slice().sort(), builtAssets());
+    assert.ok(paths.length >= 9);
     for (const risky of ['/advent/day-*.json', '/advent/scene*.svg', '/advent/art/*', '/*']) {
       const at = lines.indexOf(risky);
       assert.ok(at >= 0);
