@@ -1,6 +1,6 @@
 import { test, expect } from './support/fixtures';
 import type { Page } from '@playwright/test';
-import { HOME_PAGE, NAV_PAGES, SAFEGUARDING_PAGE } from './support/pages';
+import { ALL_PAGES, HOME_PAGE, NAV_PAGES, SAFEGUARDING_PAGE } from './support/pages';
 
 async function activeNavLabel(page: Page): Promise<string | null> {
   const active = page.locator('nav.links a[aria-current="page"]');
@@ -75,6 +75,13 @@ test("safeguarding is highlighted in the footer's top row, but not in the primar
   await expect(page).toHaveURL(new RegExp(`${SAFEGUARDING_PAGE.path}$`));
   await expect(page).toHaveTitle(new RegExp(SAFEGUARDING_PAGE.titleContains));
   expect(await activeNavLabel(page)).toBeNull();
+});
+
+test('every page, including the home and safeguarding pages, has the safeguarding strip in its footer', async ({ page }) => {
+  for (const p of [...ALL_PAGES.map((x) => x.path), '/404.html']) {
+    await page.goto(p);
+    await expect(page.locator('footer.site .safeguard-strip'), p).toHaveCount(1);
+  }
 });
 
 // Below 860px the primary nav collapses behind an ellipsis "Menu" toggle

@@ -17,7 +17,7 @@ npm test          # run the Playwright suite
 
 Twelve real pages (`index`, `our-churches`, `our-people`, `walkers`, `services`, `parish-news`, `parish-news-archive`, `life-events`, `get-involved`, `calendar`, `contact`, `safeguarding`) plus the `404` page are assembled from four pieces by [scripts/build.mjs](scripts/build.mjs):
 
-1. **[templates/header.html](templates/header.html)**, **[templates/safeguard-strip.html](templates/safeguard-strip.html)**, **[templates/footer.html](templates/footer.html)**, **[templates/page.html](templates/page.html)** — the shared page shell (nav, the "concerned about a child or adult's safety" banner, footer, `<head>`) with `{{PLACEHOLDER}}` tokens. Each is optional per page — see `header`, `safeguardStrip` and `footer` flags in `src/pages.config.mjs` (the 404 page skips the header and safeguard-strip but keeps the footer, so the mediawright credit and contact details still show there; the safeguarding page skips the safeguard-strip since it would just link to itself).
+1. **[templates/header.html](templates/header.html)**, **[templates/footer.html](templates/footer.html)**, **[templates/page.html](templates/page.html)** — the shared page shell (nav, the "concerned about a child or adult's safety" banner, footer, `<head>`) with `{{PLACEHOLDER}}` tokens. Each is optional per page — see `header`, `safeguardStrip` and `footer` flags in `src/pages.config.mjs` (the 404 page skips the header and safeguard-strip but keeps the footer, so the mediawright credit and contact details still show there; the safeguarding page skips the safeguard-strip since it would just link to itself).
 2. **[src/pages/\*.html](src/pages)** — just the content unique to each page. No `<head>`, no header, no footer — the build script wraps that around it.
 3. **[src/pages.config.mjs](src/pages.config.mjs)** — the primary nav (`NAV`), the footer's shorter "Explore" list (`FOOTER_NAV` — deliberately a different set: it includes Safeguarding, which isn't in the primary nav), and each page's `<title>`/meta description/robots behaviour.
 4. **[src/site.config.mjs](src/site.config.mjs)** — the single source of truth for contact details, the donate link and other facts repeated across pages (email, phone, address, the booking secretary's contact, the Parish Giving Scheme URL). Every `camelCase` key becomes an `{{UPPER_SNAKE_CASE}}` token (e.g. `donateUrl` → `{{DONATE_URL}}`), substituted wherever it appears — in the templates *and* in `src/pages/*.html` content.
@@ -31,7 +31,7 @@ Running `npm run build` reads all four and writes the finished files into `publi
 | Email, phone, address, donate link, booking contact | `src/site.config.mjs` | Any hard-coded string in `src/pages/` or `templates/` |
 | Page content (wording, sections) | `src/pages/<page>.html` | `public/<page>.html` |
 | Nav links, footer's Explore list, page title/description | `src/pages.config.mjs` | `public/<page>.html` |
-| Header/footer/safeguard-strip, shared `<head>` | `templates/*.html` | `public/<page>.html` |
+| Header/footer (the safeguarding strip is part of the footer), shared `<head>` | `templates/*.html` | `public/<page>.html` |
 | Styling | `public/css/style.css` (this one genuinely lives in `public/` — it isn't generated) | — |
 | The reveal-on-scroll / footer-year script | `public/js/main.js` (also not generated) | — |
 | Calendar events | `public/js/calendar-events.js` (also not generated — see "Adding a calendar event" below) | — |

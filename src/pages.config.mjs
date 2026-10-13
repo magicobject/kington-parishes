@@ -85,14 +85,10 @@ export function helpAdventPage(theme) {
 export const PAGES = [
   {
     slug: 'index',
-    safeguardStrip: false, // The homepage carries its own full safeguarding section (#safeguarding), so the strip would just repeat it.
     title: 'Kington Parishes — Five churches on the Herefordshire/Powys border',
     description: "Kington Parishes: St Mary's Kington, St Peter's Titley, St Stephen's Old Radnor, St Mary's Kinnerton and St Thomas à Becket Huntington. Services, news, and community events.",
     active: 'index.html',
     header: true,
-    // The homepage carries its own full safeguarding section (#safeguarding)
-    // now, which already links to safeguarding.html — the small strip above
-    // the footer would just repeat that on the same page.
     structuredData: {
       '@context': 'https://schema.org',
       '@type': 'Organization',
@@ -389,12 +385,10 @@ export const PAGES = [
   },
   {
     slug: 'safeguarding',
-    safeguardStrip: false, // The safeguarding page doesn't need to link to itself.
     title: 'Safeguarding — Kington Parishes',
     description: 'Safeguarding contacts and national helplines for Kington Parishes.',
     active: null,
     header: true,
-    // The safeguarding page doesn't need to link to itself.
   },
   // The Advent calendar page. Its entry comes from the module: while the theme's
   // publicListing is false it is unlisted (not in the sitemap or search) and noindex,
@@ -406,15 +400,12 @@ export const PAGES = [
     description: 'Internal build changelog for this site — not linked from anywhere on the site.',
     active: null,
     header: true,
-    // Not pastoral content — skip the safeguard-strip banner, same
-    // reasoning as the 404 page.
     robots: 'noindex, nofollow',
   },
   // Hidden how-it-works guide for non-technical members of the website
   // team, explaining (in plain English) how changes reach the live site via
   // Claude/Git/GitHub, and how to set a laptop up to make one. Same pattern
-  // as `updates` above: not in NAV/FOOTER_NAV, not pastoral content (no
-  // safeguard-strip banner), and noindex/nofollow since it's internal
+  // as `updates` above: not in NAV/FOOTER_NAV, and noindex/nofollow since it's internal
   // process documentation, not something a site visitor should search their
   // way into. Three pages, all prefixed `help-` and cross-linked from the
   // `help` hub, since this site's build only supports flat `/slug.html`
@@ -486,7 +477,7 @@ export const PAGES = [
     active: null,
     header: false,
     // Footer stays (build number, mediawright credit, contact details) —
-    // only the header nav and safeguard-strip banner are dropped, since
+    // only the header nav is dropped, since
     // this page isn't a nav destination.
     canonical: false,
     robots: 'noindex, nofollow',

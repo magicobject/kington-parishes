@@ -48,7 +48,6 @@ function escapeHtml(s) {
 const pageTemplate = read('templates/page.html');
 const headerTemplate = read('templates/header.html').trimEnd();
 const footerTemplate = read('templates/footer.html').trimEnd();
-const safeguardStripTemplate = read('templates/safeguard-strip.html').trimEnd();
 // The emergency box, "if you're worried" text and officer/council contact
 // cards are identical on the homepage's own safeguarding section and on
 // safeguarding.html itself — one shared partial via a
@@ -446,8 +445,7 @@ for (const page of PAGES) {
   const header = page.header
     ? replaceTokens(headerTemplate.replace('{{NAV_ITEMS}}', renderNavItems(NAV, page.active)), tokens)
     : '';
-  const safeguardStrip = page.safeguardStrip === false ? '' : safeguardStripTemplate;
-  const pageFooter = page.footer === false ? '' : footer.replace('{{SAFEGUARD_STRIP}}', safeguardStrip);
+  const pageFooter = page.footer === false ? '' : footer;
 
   let html = pageTemplate
     .replace('{{TITLE}}', page.title)
