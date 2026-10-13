@@ -182,7 +182,7 @@ The calendar tells one story: God has been leaning toward the world since the be
 **Story:** Micah was a country prophet who spoke up for ordinary people. He did not name a great city. He named a tiny one: "But thou, Bethlehem Ephratah, though thou be little among the thousands of Judah, yet out of thee shall he come forth" (KJV). Bethlehem was a village. Nobody important lived there. Yet God said a ruler, one whose roots go back to long ago, would come out of it, and he would feed his flock and bring peace. So when we reach the stable, remember: this was foretold. Small places matter to God, and small people too.
 **Wonder:** I wonder what it means that God's big plans often start in small places?
 **Activity:** Make a "map of small things" showing places in your village you love.
-**Prayer:** God of small places, bless our village and town, and show us how much they matter to you. Amen.
+**Prayer:** God of small places, bless our villages and towns, and show us how much they matter to you. Amen.
 **Illustration:** A tiny cluster of houses on a hill, drawn small against a huge sky; the gold thread descends from the sky and pools on the smallest roof. Teal, cream, gold.
 **Alt-text:** A tiny hill village under a huge sky with a golden thread reaching down to one small rooftop.
 **Hidden detail:** A tiny sheep on the highest roof.

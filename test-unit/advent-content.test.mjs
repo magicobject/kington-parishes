@@ -132,3 +132,9 @@ describe('Day 21 closing wording (Greg, 13 Oct 2026) and the bonus door it leads
     assert.ok(content.bonus.paragraphs[0].startsWith('On Day 21 some wise people set out from far away, following a star. Now their long road is nearly over.'));
   });
 });
+
+describe('Day 13 prayer (Greg, 13 Oct 2026)', () => {
+  test('blesses "our villages and towns", with the rest of the prayer unchanged', () => {
+    assert.equal(content.days.find((d) => d.day === 13).prayer, 'God of small places, bless our villages and towns, and show us how much they matter to you. Amen.');
+  });
+});
