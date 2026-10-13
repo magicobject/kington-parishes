@@ -289,7 +289,7 @@ export const content = {
       "title": "Travellers Following a Star",
       "ref": "Matthew 2:1-2; Isaiah 60:1-3",
       "paragraphs": [
-        "Far to the east, in a land beyond the desert, some wise people who studied the stars noticed a new one. They believed it meant a great king had been born. So they packed gifts and set out on a long journey with no certain map. We will meet them properly on 6 January, when they arrive. But their journey starts here, because the old promise had always said that people from far-off nations would come to the light. Isaiah wrote: \"Nations will come to your light\" (WEB). The Christmas story is for everyone, near and far, shepherd and scholar, village and city."
+        "Far to the east, in a land beyond the desert, some wise people who studied the stars noticed a new one. They believed it meant a great king had been born. So they packed gifts and set out on a long journey with no certain map. We will meet them properly at Epiphany, on 6 January. But their journey starts here, because the old promise had always said that people from far-off nations would come to the light. Isaiah wrote: \"Nations will come to your light\" (WEB). The Christmas story is for everyone, near and far, shepherd and scholar, village and city."
       ],
       "wonder": "I wonder what the travellers hoped to find at the end of the road?",
       "prayer": "God of all nations, welcome the stranger and the seeker, and bring all to your light. Amen.",

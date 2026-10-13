@@ -117,3 +117,18 @@ describe('the 6 January bonus door ("Gifts for a King")', () => {
     assert.deepEqual(theme.bonus, { on: { month: 1, day: 6 }, label: 'Epiphany' });
   });
 });
+
+describe('Day 21 closing wording (Greg, 13 Oct 2026) and the bonus door it leads to', () => {
+  const day21 = content.days.find((d) => d.day === 21).paragraphs[0];
+
+  test('Day 21 promises the bonus door by name and date: "at Epiphany, on 6 January"', () => {
+    assert.ok(day21.includes('We will meet them properly at Epiphany, on 6 January. But their journey starts here,'));
+    assert.ok(!day21.includes('when they arrive'));
+    assert.match(day21, /Epiphany/);
+    assert.match(day21, /6 January/);
+  });
+
+  test('the bonus day still opens sensibly after Day 21 ("On Day 21 some wise people set out from far away")', () => {
+    assert.ok(content.bonus.paragraphs[0].startsWith('On Day 21 some wise people set out from far away, following a star. Now their long road is nearly over.'));
+  });
+});
