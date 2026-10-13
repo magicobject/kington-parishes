@@ -41,6 +41,8 @@ The calendar tells one story: God has been leaning toward the world since the be
 
 ## 4. The 25 doors
 
+> Note (13 Oct 2026, Greg): the "Try this together" activity and the "Hidden detail" fields below were DROPPED from the live content (`modules/advent/content.mjs` no longer has `activity` or `hidden`; the pictures keep their hidden objects). Day 3 now says "Hergest Ridge" (not "Radnor hills"); Day 24 and Day 25 were made date-neutral. The plan text below is the historical draft.
+
 ### Day 1: "Let There Be Light"
 **Bible:** Genesis 1:1-5 (KJV quote: "Let there be light")
 **Story:** Before there were hills or rivers or people, there was only dark and quiet. And God spoke. "Let there be light." And light came, soft at first, the way morning creeps over a ridge. God looked at it and saw that it was good. Then God kept going: sky, sea, earth, trees, birds, creatures of every kind, and last of all, people, to share it with. The whole story begins with love making room for others. Every night since then, every dawn has been a small reminder that the dark does not get the last word. This calendar follows one thread of that light, from the very first morning all the way to a baby in a manger.
@@ -66,7 +68,7 @@ The calendar tells one story: God has been leaning toward the world since the be
 
 ### Day 3: "A Bow in the Clouds"
 **Bible:** Genesis 8:20-9:17 (KJV: "I do set my bow in the cloud" Gen 9:13)
-**Story:** The rain had come for so long that the world was nothing but water. Noah and his family, and all the animals, were safe in the big boat. At last the water went down, and the dry land appeared. They stepped out, and God made them a promise: never again. And as a sign God said, "I do set my bow in the cloud" (KJV). A rainbow. Not a soldier's bow, a hanging-up bow, pointed away from us, a reminder that God keeps promises. Next time you see a rainbow after rain, whether over the Radnor hills or a puddle in the road, you can say that this is God's promise, still there.
+**Story:** The rain had come for so long that the world was nothing but water. Noah and his family, and all the animals, were safe in the big boat. At last the water went down, and the dry land appeared. They stepped out, and God made them a promise: never again. And as a sign God said, "I do set my bow in the cloud" (KJV). A rainbow. Not a soldier's bow, a hanging-up bow, pointed away from us, a reminder that God keeps promises. Next time you see a rainbow after rain, whether over Hergest Ridge or a puddle in the road, you can say that this is God's promise, still there.
 **Wonder:** I wonder what Noah thought the first time he saw the rainbow?
 **Activity:** Colour a rainbow, or hang a prism in a window to make one on the wall.
 **Prayer:** Faithful God, you keep your promises. Help us to trust you when the storms come. Amen.

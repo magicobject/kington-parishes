@@ -114,8 +114,8 @@ const ADVENT_STATES: AdventState[] = [
     act: async (page) => { await advDoors(page).nth(6).click(); await expect(page.locator('#advent-dialog-title')).toBeFocused(); await expect(advDialog(page).locator('.advent-story p').first()).toBeVisible(); },
   },
   {
-    name: 'today\'s day open from the primary button, with the reflection open (25 December, the star door)', time: '2026-12-25T12:00:00Z', query: '', ready: readyDoors(25),
-    act: async (page) => { await page.locator('[data-advent-primary]').click(); await expect(page.locator('#advent-dialog-title')).toBeFocused(); await advDialog(page).locator('summary').nth(1).click(); },
+    name: 'today\'s day open from the primary button (25 December, the star door)', time: '2026-12-25T12:00:00Z', query: '', ready: readyDoors(25),
+    act: async (page) => { await page.locator('[data-advent-primary]').click(); await expect(page.locator('#advent-dialog-title')).toBeFocused(); },
   },
   {
     name: 'the gentle "not yet" message (12 December, door 20)', time: '2026-12-12T12:00:00Z', query: '', ready: readyDoors(25),

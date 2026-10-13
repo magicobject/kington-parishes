@@ -24,10 +24,8 @@ export interface DayFile {
   ref: string;
   paragraphs: string[];
   wonder: string;
-  activity: string;
   prayer: string;
   alt: string;
-  hidden?: string;
   translation: string;
   credit: string;
   art?: string;

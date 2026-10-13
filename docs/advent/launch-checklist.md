@@ -77,3 +77,7 @@ header only keeps crawlers away). The calendar is hidden, not secret.
   tests, and `test/advent-svg-render.spec.ts` renders the heaviest accepted pictures in a real browser. Nothing to do
   at launch.
 - New files under `public/js/advent*`, `public/js/advent/` or `public/css/advent*` need their own exact immutable rule in `public/_headers` (a unit test fails until they have one).
+
+## Content decisions made (13 Oct 2026, Greg)
+- The "Try this together" activity and the hidden-detail hint are removed everywhere (the content fields `activity` and `hidden` no longer exist; a day carrying either is refused). The pictures keep their hidden objects.
+- Day 3 says "Hergest Ridge" (the "Radnor hills" confirmation is resolved). Days 24 and 25 are date-neutral, so every day reads correctly whenever it is opened, including 26 December to 6 January.

@@ -150,7 +150,7 @@ describe('slugs', () => {
 
 describe('caps, keys and shapes', () => {
   test('every text field accepts its cap and rejects one more, naming the field', () => {
-    for (const [field, max] of [['title', 120], ['ref', 120], ['wonder', 300], ['activity', 400], ['prayer', 500], ['credit', 200], ['hidden', 300], ['translation', 200], ['alt', 300]]) {
+    for (const [field, max] of [['title', 120], ['ref', 120], ['wonder', 300], ['prayer', 500], ['credit', 200], ['translation', 200], ['alt', 300]]) {
       validateContent(withDay1(field, 'a'.repeat(max)));
       assert.throws(() => validateContent(withDay1(field, 'a'.repeat(max + 1))), new RegExp(`"${field}"`), field);
     }

@@ -70,10 +70,10 @@ describe('validateContent: structure', () => {
     rejects((c) => { delete dayOf(c, 9).prayer; }, /day 9: missing key "prayer"/);
   });
 
-  test('the hidden detail is optional', () => {
+  test('there is no optional day field any more (activity and hidden were removed on 13 Oct 2026)', () => {
     const copy = clone(content);
-    delete dayOf(copy, 3).hidden;
-    validateContent(copy);
+    dayOf(copy, 3).hidden = 'A tiny star.';
+    assert.throws(() => validateContent(copy), /unknown key "hidden"/);
   });
 
   test('a day that is not an object is rejected', () => {
@@ -159,8 +159,7 @@ describe('validateContent: forbidden characters and patterns', () => {
     });
   }
 
-  test('also checks the optional fields', () => {
-    rejects((c) => { dayOf(c, 10).hidden = '<b>'; }, /day 10: "hidden"/);
+  test('also checks the translation field', () => {
     rejects((c) => { dayOf(c, 10).translation = 'see http://x.org'; }, /day 10: "translation"/);
   });
 

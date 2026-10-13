@@ -285,24 +285,21 @@ test.describe('the dialog: backdrop click, scroll lock, hint, wrapping', () => {
     expect(await status(page).evaluate((el) => getComputedStyle(el).overflowWrap)).toBe('anywhere');
   });
 
-  test('the "Can you find ..." hint is only offered when the day has a picture', async ({ page }) => {
-    const file = builtDay(1);
-    expect(file.hidden).toBeTruthy();
+  test('the day panel has no "Try this together" and no hidden-detail hint, with or without a picture', async ({ page }) => {
     await openAt(page, '2026-12-12T12:00:00Z');
     await door(page, 1).click();
     await expect(dialogTitle(page)).toHaveText(TITLES[1]);
-    await expect(dialog(page).locator('.advent-hint')).toBeVisible(); // the real picture exists
-    await expect(dialog(page).locator('.advent-hint p')).toHaveText(file.hidden!);
-    // The same day with its picture taken away (a day file without an art key): no hint.
-    await page.route('**/advent/day-01.json', async (route) => {
-      const { art, ...withoutArt } = await (await route.fetch()).json();
-      await route.fulfill({ contentType: 'application/json', body: JSON.stringify(withoutArt) });
+    await expect(dialog(page).locator('summary')).toHaveText(['Think about it']);
+    await expect(dialog(page).getByText('Try this together')).toHaveCount(0);
+    await expect(dialog(page).getByText(/find something hidden/i)).toHaveCount(0);
+    // Even a (stale or hostile) day file that carries the old keys is refused, not shown.
+    await page.route('**/advent/day-02.json', async (route) => {
+      const file = await (await route.fetch()).json();
+      await route.fulfill({ contentType: 'application/json', body: JSON.stringify({ ...file, activity: 'Do a thing.', hidden: 'A tiny star.' }) });
     });
     await openAt(page, '2026-12-12T12:00:00Z', '?again=1');
-    await door(page, 1).click();
-    await expect(dialogTitle(page)).toHaveText(TITLES[1]);
-    await expect(dialog(page).locator('.advent-hint')).toBeHidden();
-    await expect(dialog(page).locator('.advent-art')).toBeHidden();
+    await door(page, 2).click();
+    await expect(dialog(page).locator('.advent-message-text')).toContainText('Sorry');
   });
 });
 

@@ -12,7 +12,7 @@
 // day rules; the preview date is never put into any link, share address or canonical; no outside requests.
 import { seasonState, doorState, msUntilNextMidnight, BONUS_DAY } from './advent/date.js?v=437781ad7f';
 import { effectiveDate, formatPreviewNotice } from './advent/preview.js?v=0a66911aae';
-import { FRIENDLY_ERROR, artUrl, calendarUrl, dateLabel, doorName, doorNumberText, doorSub, fetchDayFile, neighbours, parseDayHash, readConfig, shareUrl, statusText, todayDoor, visibleSeason } from './advent/logic.js?v=63aeada73f';
+import { FRIENDLY_ERROR, artUrl, calendarUrl, dateLabel, doorName, doorNumberText, doorSub, fetchDayFile, neighbours, parseDayHash, readConfig, shareUrl, statusText, todayDoor, visibleSeason } from './advent/logic.js?v=89613fa558';
 
 function make(tag, className, text) {
   const node = document.createElement(tag);
@@ -140,9 +140,9 @@ class Calendar {
     if (first) this.openFromAddress();
   }
 
-  // A closed <details> does not print, so the reflection and the family activity are opened for the printer.
+  // A closed <details> does not print, so the reflection is opened for the printer.
   openForPrint() {
-    this.printed = [this.wonder.element, this.activity.element].map((element) => [element, element.open]);
+    this.printed = [this.wonder.element].map((element) => [element, element.open]);
     for (const [element] of this.printed) element.open = true;
   }
 
@@ -263,11 +263,9 @@ class Calendar {
     this.credit = make('p', 'advent-translation');
     this.story = make('div', 'advent-story');
     this.wonder = this.detailsBlock('Think about it', 'advent-wonder');
-    this.activity = this.detailsBlock('Try this together', 'advent-activity');
     this.prayer = make('section', 'advent-prayer');
     this.prayerText = make('p');
     this.prayer.append(make('h3', '', 'A prayer'), this.prayerText);
-    this.hint = this.detailsBlock('Can you find something hidden in the picture?', 'advent-hint');
     this.nav = make('div', 'advent-nav');
     this.previous = actionButton('advent-nav-button advent-previous', '', () => this.step('prev'));
     this.next = actionButton('advent-nav-button advent-next', '', () => this.step('next'));
@@ -277,7 +275,7 @@ class Calendar {
     this.printButton = actionButton('advent-action advent-print', 'Print this day', () => window.print());
     this.shareStatus = make('p', 'advent-share-status');
     this.actions.append(this.shareButton, this.printButton);
-    body.append(this.reference, this.credit, this.story, this.wonder.element, this.activity.element, this.prayer, this.hint.element, this.nav, this.actions, this.shareStatus);
+    body.append(this.reference, this.credit, this.story, this.wonder.element, this.prayer, this.nav, this.actions, this.shareStatus);
     return body;
   }
 
@@ -417,13 +415,7 @@ class Calendar {
     this.story.replaceChildren(...file.paragraphs.map((paragraph) => make('p', '', paragraph)));
     this.wonder.text.textContent = file.wonder;
     this.wonder.element.open = window.matchMedia('(min-width: 900px)').matches;
-    this.activity.text.textContent = file.activity;
-    this.activity.element.open = false;
     this.prayerText.textContent = file.prayer;
-    // The hint points at something in the picture, so it is only offered when there is a picture.
-    this.hint.element.hidden = !(file.hidden && file.art);
-    this.hint.text.textContent = file.hidden ?? '';
-    this.hint.element.open = false;
     this.renderNav(day);
     this.shareButton.textContent = typeof navigator.share === 'function' ? 'Share this day' : 'Copy link';
     this.shareStatus.replaceChildren();

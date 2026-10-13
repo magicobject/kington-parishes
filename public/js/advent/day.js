@@ -12,13 +12,13 @@
 //   ref         scripture reference, text, up to 120
 //   paragraphs  1 to 12 paragraphs of text, each up to 1200
 //   wonder      one open question, up to 300
-//   activity    something to do, up to 400
 //   prayer      a short prayer, up to 500
 //   art         file name inside the art folder, like "day-05.svg" (see artPathIsSafe)
 //   alt         description of the picture, 1 to 300, never the same as the title
 //   credit      who made the picture, up to 200, never empty
 //   translation which Bible translation is quoted (or that it is retold), up to 200, REQUIRED
-//   hidden      OPTIONAL "look for this" detail, up to 300
+// (The fields `activity` and `hidden` were removed on 13 Oct 2026
+// by Greg: a day that carries either is refused as an unknown key.)
 //
 // TEXT RULES (every content string, and the theme names): not empty, within its cap, and
 // containing none of: angle brackets, "@", control characters, invisible or direction
@@ -34,8 +34,8 @@
 export const DAY_COUNT = 25;
 export const BONUS_DAY = 26;
 
-const DAY_KEYS_REQUIRED = ['day', 'title', 'ref', 'paragraphs', 'wonder', 'activity', 'prayer', 'art', 'alt', 'credit', 'translation'];
-const DAY_KEYS_OPTIONAL = ['hidden'];
+const DAY_KEYS_REQUIRED = ['day', 'title', 'ref', 'paragraphs', 'wonder', 'prayer', 'art', 'alt', 'credit', 'translation'];
+const DAY_KEYS_OPTIONAL = [];
 
 // Angle brackets, "@", control, format (invisible, joiners, bidi, soft hyphen, BOM),
 // line and paragraph separators, tag characters, annotation marks, and lone surrogates.
@@ -144,14 +144,12 @@ export function validateDay(entry, index, range = { min: 1, max: DAY_COUNT }) {
   }
   for (let i = 0; i < entry.paragraphs.length; i += 1) checkText(entry.paragraphs[i], `paragraphs[${i}]`, label, 1200);
   checkText(entry.wonder, 'wonder', label, 300);
-  checkText(entry.activity, 'activity', label, 400);
   checkText(entry.prayer, 'prayer', label, 500);
   if (!artPathIsSafe(entry.art)) fail(label, '"art" must look like "day-05.svg" (lower case, no folders)');
   checkText(entry.alt, 'alt', label, 300);
   if (entry.alt.trim().toLowerCase() === entry.title.trim().toLowerCase()) fail(label, '"alt" must describe the picture, not repeat the title');
   checkText(entry.credit, 'credit', label, 200);
   checkText(entry.translation, 'translation', label, 200);
-  if ('hidden' in entry) checkText(entry.hidden, 'hidden', label, 300);
 }
 
 /**

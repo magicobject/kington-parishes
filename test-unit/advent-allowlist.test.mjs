@@ -147,7 +147,7 @@ describe('content text allow-list', () => {
     const other = structuredClone(content);
     other.days[2].paragraphs.push(odd);
     assert.throws(() => validateContent(other), /day 3: "paragraphs\[1\]"/);
-    for (const field of ['ref', 'wonder', 'activity', 'alt', 'credit', 'hidden', 'translation']) {
+    for (const field of ['ref', 'wonder', 'alt', 'credit', 'translation']) {
       const c = structuredClone(content);
       c.days[2][field] = odd;
       assert.throws(() => validateContent(c), new RegExp(`day 3: "${field}"`), field);

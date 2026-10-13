@@ -207,15 +207,10 @@ test.describe('the opened-day dialog', () => {
     await expect(dialog(page).locator('.advent-translation')).toHaveText(file.translation);
     await expect(dialog(page).locator('.advent-story p')).toHaveText(file.paragraphs);
     await expect(dialog(page).locator('summary').nth(0)).toHaveText('Think about it');
-    await expect(dialog(page).locator('summary').nth(1)).toHaveText('Try this together');
+    await expect(dialog(page).locator('summary')).toHaveCount(1); // only "Think about it": "Try this together" and the hint were removed
     await expect(dialog(page).locator('.advent-wonder p')).toHaveText(file.wonder);
-    await expect(dialog(page).locator('.advent-activity p')).toHaveText(file.activity);
     await expect(dialog(page).locator('.advent-prayer h3')).toHaveText('A prayer');
     await expect(dialog(page).locator('.advent-prayer p')).toHaveText(file.prayer);
-    if (file.hidden) {
-      await expect(dialog(page).locator('.advent-hint summary')).toHaveText('Can you find something hidden in the picture?');
-      await expect(dialog(page).locator('.advent-hint p')).toHaveText(file.hidden);
-    }
     // The real picture is at the top of the panel, with the day's alt text, 16:9.
     await expect(dialog(page).locator('.advent-art-image')).toBeVisible();
     await expect(dialog(page).locator('.advent-art-image')).toHaveAttribute('src', '/advent/art/day-07.svg');
@@ -495,13 +490,13 @@ test.describe('sharing and printing', () => {
     expect(await page.evaluate(() => (window as unknown as { __prints: number }).__prints)).toBe(1);
   });
 
-  test('print: an opened day prints alone (site name, day, title, reference, story, reflection, activity, prayer, credit); scene, buttons and the site header are gone', async ({ page }) => {
+  test('print: an opened day prints alone (site name, day, title, reference, story, reflection, prayer, credit); scene, buttons and the site header are gone', async ({ page }) => {
     const file = builtDay(5);
     await openAt(page, '2026-12-12T12:00:00Z');
     await door(page, 5).click();
     await expect(dialogTitle(page)).toHaveText(TITLES[5]);
     await page.emulateMedia({ media: 'print' });
-    // A real print fires beforeprint, which opens the reflection and the family activity (a closed <details> does not print).
+    // A real print fires beforeprint, which opens the reflection (a closed <details> does not print).
     await page.evaluate(() => window.dispatchEvent(new Event('beforeprint')));
     await expect(section(page).locator('.advent-scene')).toBeHidden();
     await expect(dialog(page).getByRole('button', { name: 'Close' })).toBeHidden();
@@ -511,13 +506,13 @@ test.describe('sharing and printing', () => {
     await expect(page.locator('footer').first()).toBeHidden();
     await expect(section(page).locator('[data-advent-live]')).toBeHidden();
     await expect(dialog(page).locator('.advent-print-site')).toHaveText('Kington Parishes Advent calendar');
-    for (const text of [file.title, file.ref, file.paragraphs[0], file.wonder, file.activity, file.prayer, file.translation]) {
+    for (const text of [file.title, file.ref, file.paragraphs[0], file.wonder, file.prayer, file.translation]) {
       await expect(dialog(page).getByText(text, { exact: false }).first(), text.slice(0, 30)).toBeVisible();
     }
     const colours = await dialogTitle(page).evaluate((el) => { const s = getComputedStyle(el); return [s.color, getComputedStyle(el.closest('dialog')!).backgroundColor]; });
     expect(colours).toEqual(['rgb(0, 0, 0)', 'rgb(255, 255, 255)']);
     await page.evaluate(() => window.dispatchEvent(new Event('afterprint')));
-    expect(await dialog(page).locator('.advent-activity').evaluate((el: HTMLDetailsElement) => el.open)).toBe(false);
+    expect(await dialog(page).locator('.advent-wonder').evaluate((el: HTMLDetailsElement) => el.open)).toBe(true); // open by default at desktop width, and put back after printing
   });
 
   test('print with no day open: the scene and the buttons are still hidden', async ({ page }) => {

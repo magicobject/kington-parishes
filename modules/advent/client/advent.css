@@ -194,8 +194,8 @@ html:has(.advent-dialog[open]), body:has(.advent-dialog[open]) { overflow: hidde
   .advent .advent-scene-star { background: CanvasText; }
 }
 
-/* Print: an opened day prints as a clean page (site name, day, title, reference, story, reflection, family
-   activity, prayer, translation credit): black on white, serif, no scene, no pictures, no buttons. */
+/* Print: an opened day prints as a clean page (site name, day, title, reference, story, reflection,
+   prayer, translation credit): black on white, serif, no scene, no pictures, no buttons. */
 @media print {
   body:has(.advent-dialog[open]) > :not(main),
   body:has(.advent-dialog[open]) .page-header,
@@ -204,8 +204,7 @@ html:has(.advent-dialog[open]), body:has(.advent-dialog[open]) { overflow: hidde
   .advent .advent-notice,
   .advent button,
   .advent .advent-art,
-  .advent .advent-sr,
-  .advent .advent-hint { display: none !important; }
+  .advent .advent-sr { display: none !important; }
   .advent { background: #fff; color: #000; padding: 0; margin: 0; max-width: none; }
   .advent:has(.advent-dialog[open]) > :not(.advent-dialog) { display: none !important; }
   .advent .advent-dialog[open] { position: static; display: block; width: auto; max-width: none; max-height: none; overflow: visible; box-shadow: none; background: #fff; color: #000; }

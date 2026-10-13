@@ -11,7 +11,7 @@
 //  - share and "exit preview" addresses are origin + path (+ #day-N) and never carry the preview date;
 //  - a fetched day file is size-capped, parsed in try/catch and checked with the same rules as the build.
 import { MONTH_NAMES, BONUS_DAY as DATE_BONUS_DAY, daysUntilStart } from './date.js?v=437781ad7f';
-import { DAY_COUNT, BONUS_DAY, artPathIsSafe, validateDayPayload } from './day.js?v=8e2943aadb';
+import { DAY_COUNT, BONUS_DAY, artPathIsSafe, validateDayPayload } from './day.js?v=c44eedd87b';
 
 export const MAX_DAY_BYTES = 64 * 1024;
 export const DAY_FETCH_TIMEOUT_MS = 10000;

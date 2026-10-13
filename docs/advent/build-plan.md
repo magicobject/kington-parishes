@@ -68,7 +68,7 @@ Phases 0-1 first; phase 2-3 next; phase 4 starts at once and finishes before pha
 - **Missing art must stop a go-live.** The credits say "original illustration" but the SVGs do not exist yet. The build must refuse to publish while any art file named in the content is missing.
 - **S12: `VERSION` and `MANIFEST.sha256`** for the generic module files, checked by a unit test.
 - **Built-JS scan.** The storage and unsafe-API scan currently covers module source only; extend it to the built client JS once phase 3 exists.
-- **Confirm with Greg:** the phrases "over the Radnor hills" (Day 3) and "our village and town" (Day 13 prayer) are local colour that has not been confirmed.
+- **Confirm with Greg:** RESOLVED 13 Oct 2026: Day 3 now says "Hergest Ridge" (Greg's decision). Still open: "our village and town" (Day 13 prayer) is local colour that has not been confirmed.
 - **Archive-mode wording.** Days 24 and 25 say "It's Christmas Eve. Tonight, perhaps..." and similar. From 26 Dec to 6 Jan every door is read in archive mode, so that wording will read oddly; give those lines an archive-safe variant.
 - **HTML-escape the names.** The theme's `siteName` and `translationName` are limited to letters, digits, spaces and `. , ' -`, but the build must still HTML-escape them in every attribute, title and meta tag it writes them into.
 - **Use the validator's returned copy.** `validateContent` and `validateTheme` return a checked copy; callers must use that copy, never the original object they passed in.

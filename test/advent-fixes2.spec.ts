@@ -119,7 +119,7 @@ test.describe('the real bonus door (Epiphany, "Gifts for a King")', () => {
     await expect(dialog(page).locator('.advent-prayer p')).toHaveText(real.prayer);
     await expect(dialog(page).locator('.advent-art-image')).toHaveAttribute('src', '/advent/art/day-26.svg');
     await expect(dialog(page).locator('.advent-art-image')).toHaveAttribute('alt', real.alt);
-    await expect(dialog(page).locator('.advent-hint p')).toHaveText(real.hidden!);
+    await expect(dialog(page).locator('summary')).toHaveText(['Think about it']);
     expect(await dialog(page).innerText()).not.toMatch(/three (wise|travellers|kings)/i);
   });
 
@@ -148,18 +148,17 @@ test.describe('the pictures in the day panel', () => {
       expect((await title.boundingBox())!.y).toBe(before);
       const day = (await import('./support/advent')).builtDay(4);
       await expect(image).toHaveAttribute('alt', day.alt);
-      await expect(dialog(page).locator('.advent-hint summary')).toHaveText('Can you find something hidden in the picture?');
+      await expect(dialog(page).locator('summary')).toHaveCount(1);
       expect(await dialog(page).evaluate((d) => d.scrollWidth - d.clientWidth)).toBeLessThanOrEqual(0);
     });
   }
 
-  test('print is text only: the picture, its credit and the hint are hidden', async ({ page }) => {
+  test('print is text only: the picture and its credit are hidden', async ({ page }) => {
     await openAt(page, '2026-12-12T12:00:00Z');
     await door(page, 4).click();
     await expect(dialog(page).locator('.advent-art-image')).toBeVisible();
     await page.emulateMedia({ media: 'print' });
     await expect(dialog(page).locator('.advent-art')).toBeHidden();
-    await expect(dialog(page).locator('.advent-hint')).toBeHidden();
     await expect(dialog(page).locator('.advent-story')).toBeVisible();
   });
 });

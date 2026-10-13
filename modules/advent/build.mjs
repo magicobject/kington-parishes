@@ -484,7 +484,7 @@ function checkArt(publicDir, days, required, hasBonus) {
 // ---------------------------------------------------------------------------
 // Day files
 
-const DAY_FILE_ORDER = ['day', 'title', 'ref', 'paragraphs', 'wonder', 'activity', 'prayer', 'alt', 'hidden', 'translation', 'credit', 'art'];
+const DAY_FILE_ORDER = ['day', 'title', 'ref', 'paragraphs', 'wonder', 'prayer', 'alt', 'translation', 'credit', 'art'];
 
 function dayFile(entry, hasArt) {
   const file = {};

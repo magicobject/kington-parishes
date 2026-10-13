@@ -91,7 +91,7 @@ describe('buildAdvent: generated day files', () => {
 
   test('exact keys in a stable order, no art key while the picture is missing', () => {
     const day1 = JSON.parse(first['day-01.json']);
-    assert.deepEqual(Object.keys(day1), ['day', 'title', 'ref', 'paragraphs', 'wonder', 'activity', 'prayer', 'alt', 'hidden', 'translation', 'credit']);
+    assert.deepEqual(Object.keys(day1), ['day', 'title', 'ref', 'paragraphs', 'wonder', 'prayer', 'alt', 'translation', 'credit']);
     for (const text of Object.values(first)) {
       const parsed = JSON.parse(text);
       assert.doesNotThrow(() => validateDayFile(parsed, parsed.day));
@@ -108,12 +108,6 @@ describe('buildAdvent: generated day files', () => {
       const { art, ...rest } = source;
       assert.deepEqual(parsed, rest);
     }
-  });
-
-  test('a day without a hidden detail has no hidden key', () => {
-    const noHidden = withContent((c) => { delete c.days[4].hidden; });
-    const { publicDir: dir } = run({ content: noHidden });
-    assert.ok(!('hidden' in JSON.parse(readFileSync(join(dir, 'advent', 'day-05.json'), 'utf8'))));
   });
 
   test('building again gives byte-identical files', () => {

@@ -11,7 +11,7 @@
 // (today's day file, for its title), and the link to the calendar page never carries the preview date.
 import { seasonState } from './advent/date.js?v=437781ad7f';
 import { effectiveDate, formatPreviewNotice } from './advent/preview.js?v=0a66911aae';
-import { calendarUrl, fetchDayFile, readConfig, stylesheetUrl, teaserText, todayDoor, visibleSeason } from './advent/logic.js?v=63aeada73f';
+import { calendarUrl, fetchDayFile, readConfig, stylesheetUrl, teaserText, todayDoor, visibleSeason } from './advent/logic.js?v=89613fa558';
 
 function make(tag, className, text) {
   const node = document.createElement(tag);

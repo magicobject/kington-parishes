@@ -2,6 +2,7 @@
 
 Status: DRAFT for Greg's review. Requirements only. UX design, the 25-day content and the architecture are being produced separately and must be checked against this spec.
 Author: business analyst. Date: 2026-10-13.
+Note (13 Oct 2026): the "Try this together" activity and the hidden-detail hint were removed by Greg; the content fields `activity` and `hidden` no longer exist.
 Numbering: `docs/specs/` did not exist, so this is the first spec. It has no number prefix; if a numbering scheme is wanted, that is an open question (Q20).
 
 Ethics check (`charter/ethics.md`): a church website feature. No excluded sector, no concern. The "permission first" rules apply in full to Bible text and images (section 4).

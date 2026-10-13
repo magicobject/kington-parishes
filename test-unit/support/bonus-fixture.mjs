@@ -10,11 +10,9 @@ export const BONUS_FIXTURE = {
     'A second paragraph, so the tests can see that more than one paragraph is shown.',
   ],
   wonder: 'I wonder which gift you would bring?',
-  activity: 'Wrap a small gift for someone, with a star on the label.',
   prayer: 'God of every journey, thank you for the star that leads us home. Amen.',
   art: 'day-26.svg',
   alt: 'Three travellers with gifts follow a bright star over a quiet hill.',
   credit: 'Test fixture illustration',
   translation: 'Retold in our own words, as a test fixture.',
-  hidden: 'A tiny camel at the edge of the hill.',
 };
