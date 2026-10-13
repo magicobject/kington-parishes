@@ -117,12 +117,49 @@ test.describe('the real bonus door (Epiphany, "Gifts for a King")', () => {
     await expect(dialog(page).locator('.advent-story p')).toHaveText(real.paragraphs);
     await expect(dialog(page).locator('.advent-story')).toContainText('wise people');
     await expect(dialog(page).locator('.advent-prayer p')).toHaveText(real.prayer);
-    await expect(dialog(page).locator('.advent-hint')).toBeHidden(); // no picture file yet
+    await expect(dialog(page).locator('.advent-art-image')).toHaveAttribute('src', '/advent/art/day-26.svg');
+    await expect(dialog(page).locator('.advent-art-image')).toHaveAttribute('alt', real.alt);
+    await expect(dialog(page).locator('.advent-hint p')).toHaveText(real.hidden!);
     expect(await dialog(page).innerText()).not.toMatch(/three (wise|travellers|kings)/i);
   });
 
   test('by default (no bonus markup) there are only the 25 numbered doors, as before', async ({ page }) => {
     await openAt(page, '2026-12-12T12:00:00Z');
     await expect(doors(page)).toHaveCount(25);
+  });
+});
+
+test.describe('the pictures in the day panel', () => {
+  for (const width of [320, 375, 1100]) {
+    test(`at ${width}px the picture is 16:9, shows the day's alt text, and loading it moves nothing`, async ({ page }) => {
+      await page.route('**/advent/art/day-04.svg', async (route) => { await new Promise((r) => setTimeout(r, 600)); await route.continue(); });
+      await page.setViewportSize({ width, height: 900 });
+      await openAt(page, '2026-12-12T12:00:00Z');
+      await expect(door(page, 4)).toHaveAttribute('aria-label', /\. /);
+      await door(page, 4).click();
+      const title = page.locator('#advent-dialog-title');
+      await expect(title).toBeVisible();
+      const image = dialog(page).locator('.advent-art-image');
+      await dialog(page).locator('.advent-panel').evaluate((el) => Promise.all(el.getAnimations().map((a) => a.finished))); // the door-swing distorts boxes while it plays
+      const before = (await title.boundingBox())!.y;
+      const box = (await image.boundingBox())!;
+      expect(Math.abs(box.width / box.height - 16 / 9)).toBeLessThan(0.02); // the box has its shape before the picture arrives
+      await expect.poll(() => image.evaluate((img: HTMLImageElement) => img.complete && img.naturalWidth > 0), { timeout: 5000 }).toBe(true);
+      expect((await title.boundingBox())!.y).toBe(before);
+      const day = (await import('./support/advent')).builtDay(4);
+      await expect(image).toHaveAttribute('alt', day.alt);
+      await expect(dialog(page).locator('.advent-hint summary')).toHaveText('Can you find something hidden in the picture?');
+      expect(await dialog(page).evaluate((d) => d.scrollWidth - d.clientWidth)).toBeLessThanOrEqual(0);
+    });
+  }
+
+  test('print is text only: the picture, its credit and the hint are hidden', async ({ page }) => {
+    await openAt(page, '2026-12-12T12:00:00Z');
+    await door(page, 4).click();
+    await expect(dialog(page).locator('.advent-art-image')).toBeVisible();
+    await page.emulateMedia({ media: 'print' });
+    await expect(dialog(page).locator('.advent-art')).toBeHidden();
+    await expect(dialog(page).locator('.advent-hint')).toBeHidden();
+    await expect(dialog(page).locator('.advent-story')).toBeVisible();
   });
 });

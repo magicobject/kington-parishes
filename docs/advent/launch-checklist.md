@@ -10,15 +10,18 @@ guard tests keep it that way. Tick each step in the launch commit message.
    Phase 5). The placeholder note is gone.
 2. **Look at the real thing** in preview on every date (docs/advent/ux-design.md), on a phone and a desktop,
    including the home page with `/?advent-preview=2026-12-07`.
-3. **The pictures exist.** All 25 `public/advent/art/day-01.svg` to `day-25.svg` are in place (nothing else may be
-   in that folder), Greg has looked at each one. `npm test` renders EVERY real picture (and the scene) in Chromium and
+3. **The pictures.** DONE for the files: all 26 pictures (`public/advent/art/day-01.svg` to `day-26.svg`, nothing else in
+   that folder) are in the site and show in the preview; `public/advent/day-NN.json` carry their `art` key; a unit test
+   (`test-unit/advent-art.test.mjs`) builds in the strict launch mode (`artRequired` true) against them and checks each
+   picture's own label and title equal the day's alt text. STILL TO DO: Greg looks at each one (`artRequired` itself flips
+   with the other two flags in step 5). `npm test` renders EVERY real picture (and the scene) in Chromium and
    fails if any takes 300 ms or more at 400px or 800px wide (`test/advent-svg-render.spec.ts`): run it with the real art
    in place before launch. The build refuses a picture that is unsafe OR too costly to draw
    (the lint bounds draw cost with a weighted budget, not only the `<use>` count: see the README, "Adding a
    picture").
 4. **The bonus door.** DONE for the words: the approved "Gifts for a King" text is `bonus` (day 26) in
-   `modules/advent/content.mjs` and the door shows (26 doors). STILL TO DO: draw `day-26.svg` and put it in
-   `public/advent/art/` with the other 25 (the art step above then covers 26 pictures, `day-01.svg` to `day-26.svg`).
+   `modules/advent/content.mjs` and the door shows (26 doors). Its picture `day-26.svg` is in
+   `public/advent/art/` with the other 25.
 5. **Flip the three launch flags together** in `modules/advent/theme.mjs`:
    - `goLive: true`: the real date now drives the calendar page and the home-page banner (until then it never does);
    - `publicListing: true`: the calendar page joins the sitemap and the site search and loses its noindex, and the

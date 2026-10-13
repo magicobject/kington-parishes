@@ -216,8 +216,10 @@ test.describe('the opened-day dialog', () => {
       await expect(dialog(page).locator('.advent-hint summary')).toHaveText('Can you find something hidden in the picture?');
       await expect(dialog(page).locator('.advent-hint p')).toHaveText(file.hidden);
     }
-    // No picture file exists yet, so none is shown.
-    await expect(dialog(page).locator('.advent-art')).toBeHidden();
+    // The real picture is at the top of the panel, with the day's alt text, 16:9.
+    await expect(dialog(page).locator('.advent-art-image')).toBeVisible();
+    await expect(dialog(page).locator('.advent-art-image')).toHaveAttribute('src', '/advent/art/day-07.svg');
+    await expect(dialog(page).locator('.advent-art-image')).toHaveAttribute('alt', file.alt);
   });
 
   test('Escape closes it and focus goes back to the door that opened it', async ({ page }) => {

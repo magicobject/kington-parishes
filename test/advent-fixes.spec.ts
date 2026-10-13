@@ -291,16 +291,18 @@ test.describe('the dialog: backdrop click, scroll lock, hint, wrapping', () => {
     await openAt(page, '2026-12-12T12:00:00Z');
     await door(page, 1).click();
     await expect(dialogTitle(page)).toHaveText(TITLES[1]);
-    await expect(dialog(page).locator('.advent-hint')).toBeHidden(); // no picture file exists yet
+    await expect(dialog(page).locator('.advent-hint')).toBeVisible(); // the real picture exists
+    await expect(dialog(page).locator('.advent-hint p')).toHaveText(file.hidden!);
+    // The same day with its picture taken away (a day file without an art key): no hint.
     await page.route('**/advent/day-01.json', async (route) => {
-      const response = await route.fetch();
-      await route.fulfill({ contentType: 'application/json', body: JSON.stringify({ ...(await response.json()), art: 'day-01.svg' }) });
+      const { art, ...withoutArt } = await (await route.fetch()).json();
+      await route.fulfill({ contentType: 'application/json', body: JSON.stringify(withoutArt) });
     });
-    await page.route('**/advent/art/day-01.svg', (route) => route.fulfill({ contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 3"><rect width="4" height="3"/></svg>' }));
     await openAt(page, '2026-12-12T12:00:00Z', '?again=1');
     await door(page, 1).click();
-    await expect(dialog(page).locator('.advent-hint')).toBeVisible();
-    await expect(dialog(page).locator('.advent-hint p')).toHaveText(file.hidden!);
+    await expect(dialogTitle(page)).toHaveText(TITLES[1]);
+    await expect(dialog(page).locator('.advent-hint')).toBeHidden();
+    await expect(dialog(page).locator('.advent-art')).toBeHidden();
   });
 });
 
