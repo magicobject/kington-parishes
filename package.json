@@ -14,7 +14,8 @@
     "serve": "tsx test/support/static-server.ts",
     "typecheck": "tsc",
     "audit": "npm audit --audit-level=high",
-    "advent:manifest": "node modules/advent/make-manifest.mjs"
+    "advent:manifest": "node modules/advent/make-manifest.mjs",
+    "advent:rehearse": "node scripts/advent-rehearse.mjs"
   },
   "repository": {
     "type": "git",

@@ -138,3 +138,22 @@ describe('Day 13 prayer (Greg, 13 Oct 2026)', () => {
     assert.equal(content.days.find((d) => d.day === 13).prayer, 'God of small places, bless our villages and towns, and show us how much they matter to you. Amen.');
   });
 });
+
+describe('wording fixes of 13 Oct 2026 (Greg): Day 1, Day 2 and Day 4', () => {
+  const text = (n) => content.days.find((d) => d.day === n).paragraphs[0];
+
+  test('Day 1: "Every dawn since then has been a small reminder that the dark does not get the last word."', () => {
+    assert.ok(text(1).includes('Every dawn since then has been a small reminder that the dark does not get the last word.'));
+    assert.ok(!text(1).includes('Every night since then'));
+  });
+
+  test('Day 2: the narrator says "He came looking." and the quotation keeps its words: "Where are you?" he asked.', () => {
+    assert.ok(text(2).includes('He came looking. "Where are you?" he asked.'));
+    assert.ok(!text(2).includes('He came looking, "'));
+  });
+
+  test('Day 4: "Many centuries later"', () => {
+    assert.ok(text(4).includes('Many centuries later a child would be born'));
+    assert.ok(!text(4).includes('hundreds of years'));
+  });
+});
