@@ -9,6 +9,8 @@ import { londonDateParts } from './date.js?v=2d72c76b9a';
 
 export const PREVIEW_PARAM = 'advent-preview';
 const DEFAULT_SLUG = 'advent';
+// The home page (for the banner), as the host serves it: clean address or the file name.
+const HOME_PATHS = ['/', '/index.html'];
 const SLUG_PATTERN = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const LAST_NOTICE_YEAR = 2100;
 const FIRST_PREVIEW_YEAR = 2026;
@@ -49,12 +51,12 @@ export function parsePreviewDate(search, realParts) {
 /**
  * The date the calendar should act on. Preview applies only when it is switched on,
  * the page is the calendar ("/<slug>" or "/<slug>.html", slug defaults to "advent") or the
- * home page ("/"), and the value is valid. A slug that is not a plain slug is ignored.
+ * home page ("/" or "/index.html"), and the value is valid. A slug that is not a plain slug is ignored.
  * Returns {parts, preview}; parts is null if even the real date could not be worked out.
  */
 export function effectiveDate({ realNow, search, pathname, previewEnabled, timeZone = 'Europe/London', slug = DEFAULT_SLUG } = {}) {
   const realParts = londonDateParts(realNow, timeZone);
-  const pagePaths = typeof slug === 'string' && SLUG_PATTERN.test(slug) ? [`/${slug}`, `/${slug}.html`, '/'] : ['/'];
+  const pagePaths = typeof slug === 'string' && SLUG_PATTERN.test(slug) ? [`/${slug}`, `/${slug}.html`, ...HOME_PATHS] : HOME_PATHS;
   if (previewEnabled === true && pagePaths.includes(pathname)) {
     const previewParts = parsePreviewDate(search, realParts);
     if (previewParts) return { parts: previewParts, preview: true };

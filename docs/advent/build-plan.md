@@ -1,6 +1,6 @@
 # Advent Calendar: phased build plan (DRAFT)
 
-Status: planning. Nothing built. Inputs: `docs/specs/advent-calendar.md` (requirements, decisions, security review), `docs/advent/content-plan.md` (25 days), `docs/advent/mockups/advent-mockup.html` (look and feel only; its code is throwaway).
+Status (13 Oct 2026): phases 0 to 3 are built (logic, build integration, the real calendar UI, the bonus door and the home-page banner), all still hidden. Still to do: phase 4 content and art (the 21 pictures, the bonus text), phase 5 release gates (tester and security-engineer reviews), phase 6 transferability. Originally: planning. Inputs: `docs/specs/advent-calendar.md` (requirements, decisions, security review), `docs/advent/content-plan.md` (25 days), `docs/advent/mockups/advent-mockup.html` (look and feel only; its code is throwaway).
 
 Target: live for the public on 1 Dec 2026, with a **demo available earlier** via the preview parameter. Content approval and artwork are the long poles, not code.
 

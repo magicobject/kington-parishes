@@ -12,6 +12,9 @@ export const theme = Object.freeze({
   // The 6 January bonus door (Epiphany, "Gifts for a King"). It only appears once content.mjs has a `bonus` day
   // (the text is being written separately); until then the calendar shows its 25 doors.
   bonus: Object.freeze({ on: Object.freeze({ month: 1, day: 6 }), label: 'Epiphany' }),
+  // This site's own scene picture (the five church silhouettes on the ridge): a hand-made file in public/advent/.
+  // Set to null to use the module's plain hills scene instead.
+  scene: 'scene.svg',
   slug: 'advent',
   // This site's own page names, which the calendar page may not take (checked against src/pages.config.mjs by a test).
   reservedSlugs: Object.freeze([
@@ -71,6 +74,7 @@ export const theme = Object.freeze({
     accent: '#E8C27A',
     accentInk: '#1F1A0B',
     door: '#22323f',
+    doorLocked: '#18232d',
     doorEdge: '#A8813C',
     paper: '#F8F5EE',
     text: '#262521',

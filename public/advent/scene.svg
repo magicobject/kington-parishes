@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 130" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="church-tower" viewBox="0 0 30 40"><path d="M2 40V24h10v-6l3-9 3 9v6h10v16z" fill="#F2E6C4"/></symbol>
+    <symbol id="church-spire" viewBox="0 0 30 44"><path d="M4 44V26h8V18l3-14 3 14v8h8v18z" fill="#F2E6C4"/></symbol>
+    <symbol id="church-square" viewBox="0 0 30 36"><path d="M3 36V22h7V10h10v12h7v14z" fill="#F2E6C4"/></symbol>
+  </defs>
+  <path d="M0 95C60 70 110 60 170 78S270 100 330 66 440 40 500 70 570 80 600 62V130H0z" fill="#0d161e"/>
+  <path d="M0 95C60 70 110 60 170 78S270 100 330 66 440 40 500 70 570 80 600 62" fill="none" stroke="#F2E6C4" stroke-width="2" stroke-linecap="round" opacity=".85"/>
+  <g opacity=".95">
+    <use href="#church-tower" x="40" y="66" width="22" height="30"/>
+    <use href="#church-spire" x="150" y="52" width="24" height="34"/>
+    <use href="#church-square" x="272" y="72" width="22" height="26"/>
+    <use href="#church-tower" x="395" y="38" width="22" height="30"/>
+    <use href="#church-spire" x="515" y="50" width="24" height="34"/>
+  </g>
+</svg>

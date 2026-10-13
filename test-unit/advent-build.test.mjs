@@ -10,7 +10,10 @@ import {
   buildAdvent, renderAdventToken, lintSvg, artFilePath, validateDayFile, adventPageEntry, rewriteImports,
 } from '../modules/advent/build.mjs';
 import { validateTheme } from '../modules/advent/schema.mjs';
-import { theme } from '../modules/advent/theme.mjs';
+import { theme as realTheme } from '../modules/advent/theme.mjs';
+// These tests build into empty temporary folders, so they use the real theme without its own scene file
+// (the scene is tested in advent-ui-build.test.mjs).
+const theme = { ...realTheme, scene: null };
 import { content } from '../modules/advent/content.mjs';
 import { isIndexable, isSearchablePage } from '../scripts/build-search-index.mjs';
 import { cases as REVIEW_SAMPLES } from './support/hostile-svgs.mjs';

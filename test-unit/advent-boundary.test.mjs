@@ -87,17 +87,26 @@ describe('modules/advent folder', () => {
     assert.ok(relativeImports > 0, 'expected at least one relative import to be checked');
   });
 
-  test('the browser files (client/) import no Node module and only the two date modules', () => {
+  test('the browser scripts (client/*.js) import no Node module and only the date, preview and logic modules', () => {
     const client = codeFiles.filter((file) => file.name.startsWith('client/'));
-    assert.ok(client.length >= 1);
+    assert.deepEqual(client.map((file) => file.name).sort(), ['client/advent-teaser.js', 'client/advent.js']);
     for (const file of client) {
       const imports = [...file.text.matchAll(specifier)].map((match) => match[2]);
-      assert.deepEqual(imports.sort(), ['../date.mjs', '../preview.mjs'], file.name);
+      assert.deepEqual(imports.sort(), ['../date.mjs', '../logic.mjs', '../preview.mjs'], file.name);
     }
   });
 
-  test('the browser files contain no web address and no use of the full page address', () => {
-    for (const file of files.filter((f) => f.name.startsWith('client/'))) {
+  test('the pure modules the browser runs (date, preview, day, logic) import only each other', () => {
+    const allowed = { 'date.mjs': [], 'day.mjs': [], 'preview.mjs': ['./date.mjs'], 'logic.mjs': ['./date.mjs', './day.mjs'] };
+    for (const [name, expected] of Object.entries(allowed)) {
+      const file = files.find((f) => f.name === name);
+      const imports = [...file.text.matchAll(specifier)].map((match) => match[2]);
+      assert.deepEqual(imports.sort(), expected, name);
+    }
+  });
+
+  test('the browser scripts and stylesheets contain no web address and no use of the full page address', () => {
+    for (const file of files.filter((f) => f.name.startsWith('client/') && /[.](?:js|css)$/.test(f.name))) {
       assert.ok(!/https?:\/\//i.test(file.text), `${file.name} contains a web address`);
       assert.ok(!/location\s*\.\s*href/.test(file.text), `${file.name} uses location.href`);
     }

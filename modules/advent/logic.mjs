@@ -7,12 +7,11 @@
 //  - a request address is built ONLY from a validated whole number (dayFileUrl) or a plain file name (artUrl);
 //  - share and "exit preview" addresses are origin + path (+ #day-N) and never carry the preview date;
 //  - a fetched day file is size-capped, parsed in try/catch and checked with the same rules as the build.
-import { MONTH_NAMES, BONUS_DAY as DATE_BONUS_DAY } from './date.mjs';
+import { MONTH_NAMES, BONUS_DAY as DATE_BONUS_DAY, daysUntilStart } from './date.mjs';
 import { DAY_COUNT, BONUS_DAY, artPathIsSafe, validateDayPayload } from './day.mjs';
 
 export const MAX_DAY_BYTES = 64 * 1024;
 export const FRIENDLY_ERROR = 'Sorry, this door will not open right now. Please try again in a moment.';
-export const NOT_YET_TITLE = 'Not yet';
 
 // The module's two copies of "the bonus door is number 26" (date.mjs has no imports, so it keeps its own).
 if (BONUS_DAY !== DATE_BONUS_DAY) throw new Error('the bonus door number differs between date.mjs and day.mjs');
@@ -183,4 +182,43 @@ export function readDayFile(text, day) {
   }
   validateDayPayload(file, checkDayNumber(day));
   return file;
+}
+
+// ---------------------------------------------------------------------------
+// The home-page banner
+
+/** A stylesheet address the banner script may add: only the module's two hashed files. Anything else gives null. */
+export function stylesheetUrl(value) {
+  return typeof value === 'string' && /^\/css\/advent-[a-z]+\.css\?v=[0-9a-f]{10}$/.test(value) ? value : null;
+}
+
+/** The door that is "today" during the live season (1 on the start date). Only meaningful when the season is live. */
+export function todayDoor(parts, season) {
+  return 1 - daysUntilStart(parts, season);
+}
+
+/** The words on the home-page banner. `title` is only known once today's day file has been fetched. */
+export function teaserText({ season, today, title }, config) {
+  const heading = `Advent at ${config.siteName}`;
+  if (season === 'archive') {
+    return { heading, line: `The Christmas story, in ${config.dayCount} short pieces`, button: 'Open the calendar' };
+  }
+  return { heading, line: title ? `Day ${today} \u00B7 ${title}` : `Day ${today}`, button: "Open today's door" };
+}
+
+// ---------------------------------------------------------------------------
+// Fetching
+
+/**
+ * Fetches, checks and returns one day's file. `fetchFn` is passed in (the page passes its own fetch; tests pass
+ * a fake). The address is built only from the validated day number. Rejects on a bad status, a type that is not
+ * JSON, a body over 64 KB, malformed JSON, the wrong day, or any field the shared day rules refuse.
+ */
+export async function fetchDayFile(day, fetchFn) {
+  const response = await fetchFn(dayFileUrl(day), { credentials: 'omit' });
+  if (!response || !response.ok) throw new Error('day file: the request failed');
+  if (!/^application\/json\b/i.test(response.headers.get('content-type') ?? '')) throw new Error('day file: not JSON');
+  const length = Number(response.headers.get('content-length'));
+  if (Number.isFinite(length) && length > MAX_DAY_BYTES) throw new Error('day file: too large');
+  return readDayFile(await response.text(), day);
 }

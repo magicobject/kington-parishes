@@ -11,6 +11,10 @@
 /advent/art/*
   Content-Security-Policy: default-src 'none'; style-src 'unsafe-inline'; sandbox
 
+# The Advent calendar's scene picture (/advent/scene.svg, or scene-default.svg): the same tightening as the day pictures.
+/advent/scene*.svg
+  Content-Security-Policy: default-src 'none'; style-src 'unsafe-inline'; sandbox
+
 # Keeps crawlers away from the Advent day files. It does not hide them: anyone who knows an address can still fetch it.
 /advent/day-*.json
   X-Robots-Tag: noindex

@@ -40,7 +40,10 @@ describe('the built calendar page', () => {
     }
     const calendar = page.slice(page.indexOf('<section class="advent"'), page.indexOf('</section>', page.indexOf('<section class="advent"')));
     assert.ok(calendar.length > 100);
-    assert.ok(!/<button|<li/.test(calendar));
+    // The only button is the "Open today's door" one, and it starts hidden. The doors, dialog and every text come from the script.
+    assert.equal((calendar.match(/<button/g) ?? []).length, 1);
+    assert.match(calendar, /<button type="button" class="advent-pill" data-advent-primary hidden>/);
+    assert.ok(!/<li|<dialog|<img/.test(calendar));
   });
 
   test('has no inline script or style attributes of its own, and loads its three files with content hashes', () => {
@@ -141,5 +144,72 @@ describe('public/_headers for the Advent files', () => {
       assert.match(line, /^ {2}[A-Za-z][A-Za-z-]*: \S.*$/, line);
     }
     assert.ok(headers.endsWith('\n'));
+  });
+});
+
+describe('the scene picture and its header', () => {
+  const headers = read('_headers');
+  const lines = headers.split('\n');
+
+  test('/advent/scene*.svg gets exactly the same locked-down Content-Security-Policy as the day pictures (tighten only)', () => {
+    const at = lines.indexOf('/advent/scene*.svg');
+    assert.ok(at > 0, 'the rule should exist');
+    assert.equal(lines[at + 1], "  Content-Security-Policy: default-src 'none'; style-src 'unsafe-inline'; sandbox");
+    assert.ok(lines[at + 2] === undefined || lines[at + 2] === '', 'nothing else in the rule');
+    assert.ok(lines[at - 1].startsWith('#'), 'a comment line comes first');
+  });
+
+  test('the site scene named by the theme exists in public/advent/, and the only svg files there are that scene (pictures live in art/)', () => {
+    if (!theme.scene) return;
+    const names = readdirSync(join(PUBLIC, 'advent')).filter((name) => name.endsWith('.svg'));
+    assert.deepEqual(names, [theme.scene]);
+  });
+});
+
+// Greg accepted a source-only mention of the calendar in the home page while the calendar is hidden (the banner
+// has to exist in the page for the preview demo). This test documents EXACTLY what the home page may contain, so
+// nothing else can creep in: one empty hidden container and one script tag, nothing visible, nothing searchable.
+describe('the home page and the (hidden) Advent banner', () => {
+  const home = read('index.html');
+  const container = /<div class="advent-teaser" data-advent-teaser [^>]*hidden><\/div>/;
+  const script = /<script type="module" src="\/js\/advent-teaser\.js\?v=[0-9a-f]{10}"><\/script>/;
+
+  test('contains exactly one empty hidden container and exactly one banner script tag', () => {
+    assert.equal(home.match(new RegExp(container.source, 'g')).length, 1);
+    assert.equal(home.match(new RegExp(script.source, 'g')).length, 1);
+  });
+
+  test('the container has no text, no child element and no link; it carries only data attributes', () => {
+    const tag = container.exec(home)[0];
+    assert.ok(!/>[^<]/.test(tag.slice(0, -'</div>'.length).replace(/^<div[^>]*>/, '')), 'nothing between the tags');
+    assert.ok(!/href=|src=|<a\s|<img/.test(tag));
+    const names = [...tag.matchAll(/\s(data-[a-z-]+|class|hidden)(?==|\s|>)/g)].map((m) => m[1]);
+    assert.ok(names.every((name) => name === 'class' || name === 'hidden' || name.startsWith('data-')), names.join());
+  });
+
+  test('apart from those two pieces the home page does not mention the calendar at all', () => {
+    const rest = home.replace(container, '').replace(script, '');
+    assert.ok(!/advent/i.test(rest.replace(/Advent Sunday/g, '')), 'the home page mentions the calendar somewhere else');
+    assert.ok(!rest.includes('advent-preview'));
+  });
+
+  test('the banner container and script never appear as visible text, in the search index or in the sitemap', () => {
+    const entries = JSON.parse(read('search-index.json'));
+    for (const entry of entries.filter((e) => e.page === 'index.html')) {
+      assert.ok(!/advent/i.test(JSON.stringify(entry).replace(/Advent Sunday/g, '')), JSON.stringify(entry).slice(0, 80));
+    }
+    if (!theme.publicListing) assert.ok(!/advent/i.test(read('sitemap.xml')));
+    assert.ok(!/<noscript>[^<]*advent/i.test(home));
+  });
+
+  test('the container carries the two stylesheet addresses (hashed) but the page itself loads no calendar stylesheet', () => {
+    assert.match(container.exec(home)[0], /data-theme-css="\/css\/advent-theme\.css\?v=[0-9a-f]{10}"/);
+    assert.ok(!/<link[^>]*advent/i.test(home));
+  });
+
+  test('no other built page except the calendar, the help guide and the changelog carries the banner token output', () => {
+    for (const name of htmlFiles.filter((n) => n !== 'index.html' && !mayMention(n))) {
+      assert.ok(!read(name).includes('data-advent-teaser'), name);
+    }
   });
 });

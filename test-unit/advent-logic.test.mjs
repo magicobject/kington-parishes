@@ -4,10 +4,11 @@ import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   MAX_DAY_BYTES, FRIENDLY_ERROR, dayFileUrl, artUrl, shareUrl, parseDayHash, readConfig, dateLabel, shortDateLabel,
-  doorName, doorSub, doorNumberText, readDayFile, statusText, neighbours, calendarUrl, bonusConfig,
+  doorName, doorSub, doorNumberText, readDayFile, statusText, neighbours, calendarUrl, bonusConfig, stylesheetUrl, todayDoor, teaserText, fetchDayFile,
 } from '../modules/advent/logic.mjs';
 import { validateDayPayload, BONUS_DAY as DAY_BONUS_DAY, DAY_COUNT } from '../modules/advent/day.mjs';
 import { BONUS_DAY as DATE_BONUS_DAY } from '../modules/advent/date.mjs';
+import { londonDateParts } from '../modules/advent/date.mjs';
 import { content } from '../modules/advent/content.mjs';
 import { BONUS_FIXTURE } from './support/bonus-fixture.mjs';
 
@@ -296,6 +297,94 @@ describe('validateDayPayload is the same rule the build uses', () => {
       const { art, ...file } = day;
       assert.doesNotThrow(() => validateDayPayload(file, day.day), `day ${day.day}`);
       assert.doesNotThrow(() => validateDayPayload({ ...file, art }, day.day), `day ${day.day} with art`);
+    }
+  });
+});
+
+describe('stylesheetUrl: the only stylesheet addresses the banner script will load', () => {
+  test('accepts the two hashed module stylesheets, nothing else', () => {
+    assert.equal(stylesheetUrl('/css/advent-theme.css?v=0123456789'), '/css/advent-theme.css?v=0123456789');
+    assert.equal(stylesheetUrl('/css/advent-teaser.css?v=abcdef0123'), '/css/advent-teaser.css?v=abcdef0123');
+    for (const bad of ['https://evil.example/x.css', '//evil.example/x.css', '/css/style.css?v=0123456789', '/css/advent-theme.css', '/css/advent-theme.css?v=XYZ',
+      '/css/advent-theme.css?v=0123456789&x=1', '/css/../x.css?v=0123456789', 'javascript:1', '', null, undefined, 5]) {
+      assert.equal(stylesheetUrl(bad), null, String(bad));
+    }
+  });
+});
+
+describe('todayDoor and teaserText', () => {
+  const config = readConfig(BONUS_DATA);
+  const at = (iso) => londonDateParts(new Date(iso));
+
+  test('the live door is the day of December; archive and calm states have none', () => {
+    assert.equal(todayDoor(at('2026-12-01T12:00:00Z'), config.season), 1);
+    assert.equal(todayDoor(at('2026-12-12T12:00:00Z'), config.season), 12);
+    assert.equal(todayDoor(at('2026-12-25T23:59:00Z'), config.season), 25);
+  });
+
+  test('live banner: heading, "Day N" plus title once known, and a button for today\'s door', () => {
+    assert.deepEqual(teaserText({ season: 'live', today: 12, title: 'The Title' }, config), {
+      heading: 'Advent at Test Parish', line: 'Day 12 \u00B7 The Title', button: "Open today's door",
+    });
+    assert.equal(teaserText({ season: 'live', today: 12 }, config).line, 'Day 12');
+  });
+
+  test('archive banner: the Christmas story in 25 short pieces', () => {
+    assert.deepEqual(teaserText({ season: 'archive' }, config), {
+      heading: 'Advent at Test Parish', line: 'The Christmas story, in 25 short pieces', button: 'Open the calendar',
+    });
+  });
+});
+
+describe('fetchDayFile: one place that fetches, checks and caps a day file', () => {
+  const goodText = JSON.stringify(asFile(7));
+  const reply = (body, { ok = true, type = 'application/json', length } = {}) => ({
+    ok,
+    headers: { get: (name) => ({ 'content-type': type, 'content-length': length }[name.toLowerCase()] ?? null) },
+    text: async () => body,
+  });
+  const fetchWith = (response) => {
+    const calls = [];
+    const fn = async (url, init) => { calls.push({ url, init }); if (response instanceof Error) throw response; return response; };
+    fn.calls = calls;
+    return fn;
+  };
+
+  test('asks for exactly the day file, with no cookies, and returns the checked file', async () => {
+    const fn = fetchWith(reply(goodText));
+    const file = await fetchDayFile(7, fn);
+    assert.equal(file.day, 7);
+    assert.equal(fn.calls.length, 1);
+    assert.equal(fn.calls[0].url, '/advent/day-07.json');
+    assert.equal(fn.calls[0].init.credentials, 'omit');
+  });
+
+  test('accepts a content type with a charset', async () => {
+    assert.equal((await fetchDayFile(7, fetchWith(reply(goodText, { type: 'application/json; charset=utf-8' })))).day, 7);
+  });
+
+  test('never makes a request for a day that is not a whole number 1 to 26', async () => {
+    const fn = fetchWith(reply(goodText));
+    for (const bad of [0, 27, '7', 1.5, null, '../x']) await assert.rejects(() => fetchDayFile(bad, fn), RangeError, String(bad));
+    assert.equal(fn.calls.length, 0);
+  });
+
+  test('rejects on every kind of failure: bad status, wrong type, too big, malformed, wrong day, network error', async () => {
+    const cases = {
+      'not ok': reply(goodText, { ok: false }),
+      'html': reply(goodText, { type: 'text/html' }),
+      'no content type': reply(goodText, { type: '' }),
+      'plain text': reply(goodText, { type: 'text/plain' }),
+      'big header': reply(goodText, { length: String(MAX_DAY_BYTES + 1) }),
+      'big body': reply(`${goodText}${' '.repeat(MAX_DAY_BYTES)}`),
+      'malformed': reply('{"day":7,'),
+      'wrong day': reply(JSON.stringify(asFile(8))),
+      'bad field': reply(JSON.stringify({ ...asFile(7), title: '<b>x</b>' })),
+      'network': new TypeError('Failed to fetch'),
+      'nothing': null,
+    };
+    for (const [name, response] of Object.entries(cases)) {
+      await assert.rejects(() => fetchDayFile(7, fetchWith(response)), Error, name);
     }
   });
 });

@@ -11,10 +11,10 @@ Generic code (the same for every church, never mentions a particular church):
 
 - `date.mjs` works out the calendar day in the church's time zone and which doors are open.
 - `preview.mjs` handles the demo switch that lets staff pretend it is another date.
-- `schema.mjs` checks the settings and the 25 days of content and refuses anything unsafe.
+- `schema.mjs` checks the settings and the 25 days of content (plus the optional bonus day) and refuses anything unsafe; `day.mjs` holds the rules for one day (no imports, so the browser runs them too); `logic.mjs` holds the pure helpers the page scripts use.
 - `VERSION` and `MANIFEST.sha256` (made by `make-manifest.mjs`, `npm run advent:manifest`) pin the generic code.
 - `build.mjs` is the build step: it checks everything, writes the generated files, and supplies the page markup and the page's entry for the host's page list.
-- `client/advent.js` and `client/advent.css` are the browser files, written by hand and copied by the build.
+- `client/` holds the browser files, written by hand and copied by the build: `advent.js` and `advent.css` (the calendar page), `advent-teaser.js` and `advent-teaser.css` (the home-page banner) and `scene.svg` (the plain default scene).
 
 Site-owned files (each church writes its own):
 
@@ -36,52 +36,68 @@ It stores nothing in the visitor's browser: no cookies and no saved settings.
 Progress is simply today's date, so no memory is needed. It uses no outside
 services and has no dependencies. The date logic runs in Node, a browser or a Worker.
 
-## What exists now (phase 2 of docs/advent/build-plan.md)
+## What exists now (phases 0 to 3 of docs/advent/build-plan.md)
 
-The page is built into the site but **hidden**. With today's real date it shows only a calm
-message, the one sentence "The Advent calendar opens on 1 December." (built from the theme, with a
-non-breaking space in the date), both before the season and after it. With `?advent-preview=2026-12-07` on the page's address it pretends to be that date, shows a
-notice and an "Exit preview" link, and from 1 December to 6 January shows 25 plain placeholder doors
-marked today, not yet or available, so the date logic can be checked. The real doors, day panel,
-pictures, reading text, sharing, read-aloud and the home-page banner are phase 3 and are not built.
+The calendar is built into the site but **hidden** (`publicListing` false). With today's real date the page shows only
+the calm sentence "The Advent calendar opens on 1 December." With `?advent-preview=2026-12-07` on the page's address (or
+on the home page's, for the banner) it pretends to be that date, shows a notice (a polite live region) and an "Exit
+preview" link, and works exactly as it will on the day. The design is `docs/advent/ux-design.md`.
+
+What a visitor gets, by season (all computed in the browser from the London date):
+- **Before and after:** the calm sentence only. No day file is even requested.
+- **1 to 25 December (live):** a night-sky scene with the doors as real buttons in a grid, states "not yet" (dashed, dated), "today" (gold, the word Today) and open; a status line ("Today is Day 12: <title>"), an "Open today's door" button, and the star over the ridge from 25 December.
+- **26 December to 6 January (archive):** "The Christmas Story", every door open, none "today", the star, and the bonus door opening on its date.
+- **Opening a door:** a native `<dialog>` (full-screen sheet on phones) with picture (when its file exists), reference, translation credit, story, "Think about it", "Try this together", prayer, hidden-detail hint, previous and next buttons named with the target day, Share (`navigator.share`, else Copy link, else a read-only box) and "Print this day". Focus moves to the title, Escape or Close returns focus to the door, and a polite live region says "Day 7 opened". A future door shows the gentle message ("Not yet. This door opens on 12 December." with "Open it anyway" and "Not yet"). `#day-7` opens a day directly.
+- **Home-page banner:** `{{ADVENT_TEASER}}` (see below).
 
 ### How it is wired into the site
 
-- `scripts/build.mjs` calls `buildAdvent({theme, content, publicDir, siteUrl, pageNames})` once. It checks the theme and content with the validators and uses the copies they return, checks the pictures, and only then writes:
-  - `public/advent/day-01.json` to `day-25.json` (plain text, fixed key order, checked again);
+- `scripts/build.mjs` calls `buildAdvent({theme, content, publicDir, siteUrl, pageNames})` once. It checks the theme and content with the validators and uses the copies they return, checks the pictures and the scene, and only then writes:
+  - `public/advent/day-01.json` to `day-25.json` (and `day-26.json` when the bonus has content), plain text, fixed key order, checked again;
   - `public/css/advent-theme.css` (the colours as `--advent-*` variables);
-  - `public/css/advent.css` and `public/js/advent.js` (copies of `client/`);
-  - `public/js/advent/date.js` and `preview.js` (copies of `date.mjs` and `preview.mjs`). One source of truth: the browser runs the same files the tests do. The build rewrites the client's import lines to point at the copies and adds a content hash, so a changed copy is never served stale.
+  - `public/css/advent.css`, `public/css/advent-teaser.css`, `public/js/advent.js`, `public/js/advent-teaser.js` (copies of `client/`);
+  - `public/js/advent/date.js`, `preview.js`, `day.js`, `logic.js` (copies of the pure modules). One source of truth: the browser runs the same files the tests do. The build rewrites each client import line to point at the copies and adds a content hash, so a changed copy is never served stale;
+  - `public/advent/scene-default.svg` only when the theme names no scene of its own.
 
-  Every generated file carries an AUTO-GENERATED banner (JSON cannot) and is written the same way every time, so a file only changes when its source changes.
-- `renderAdventToken` replaces `{{ADVENT}}` in the page source with markup only: a section carrying its settings in `data-*` attributes, a calm message, a hidden region for the doors and a no-JavaScript note. It never contains day text, inline script, inline style or event handlers, and everything it writes is escaped (braces too, so a later token pass cannot expand anything). It runs before heading ids are added.
-- `adventPageEntry(theme)` gives `src/pages.config.mjs` the page's entry; `src/pages/advent.html` is the host's own page source (its h1 and the token).
-- `public/_headers` has two extra rules, for `/advent/art/*` and `/advent/day-*.json` (see below).
-- The placeholder note above the doors is tied to the list with `aria-describedby`, so a screen reader hears that the doors are placeholders. It goes at launch (checklist step 2).
+  Every generated file carries an AUTO-GENERATED banner (JSON cannot) and is written the same way every time.
+- The pure, browser-safe code: `date.mjs` (dates, season and door states, the bonus door), `preview.mjs`, `day.mjs` (the rules for one day, no imports, so the browser checks every fetched day with the build's own rules) and `logic.mjs` (settings, addresses, labels, share links, the size-capped `fetchDayFile`). The two page scripts only wire these to the page.
+- `renderAdventToken` replaces `{{ADVENT}}` with markup only (settings as `data-*`, the status line, the primary button, an empty door list, the scene holder, a no-JavaScript note). `renderAdventTeaserToken` replaces `{{ADVENT_TEASER}}` (below). `adventPageEntry(theme)` gives `src/pages.config.mjs` the page's entry.
+- `public/_headers` has extra tightening rules for `/advent/art/*`, `/advent/scene*.svg` and `/advent/day-*.json` (see below).
+
+### The scene
+The backdrop is a picture used as `<img alt="" aria-hidden>`. A site names its own with `scene: 'scene.svg'` in the theme (a hand-made file in `public/advent/`, linted like any picture, name must be `scene.svg` or `scene-<words>.svg` so the header rule covers it). Without one the build writes the module's plain hills scene (`client/scene.svg`) to `public/advent/scene-default.svg`. The star is CSS, not part of the picture.
+
+### The home-page banner
+`{{ADVENT_TEASER}}` expands to ONE empty, hidden `<div data-advent-teaser ...>` (settings as data attributes) plus the tag for `js/advent-teaser.js`. The script (which never loads the calendar script) reveals a banner only when the effective date is live or archive: the real date, or `?advent-preview=` on the home page. It fetches only today's day file for the title, adds the two stylesheets itself, and links to the calendar page with no query. Outside the season it does nothing, so the page is exactly as it was. The home page source mentions the calendar only in that container and script tag; a test (`advent-built.test.mjs`, "the home page and the (hidden) Advent banner") lists exactly what may be there.
+
+### Theme tokens
+Colours (generated from the theme into `--advent-*`): `night`, `sky2`, `ridge`, `cream`, `accent`, `accent-ink`, `door`, `door-locked`, `door-edge`, `paper`, `text`, `text-soft`, `link`, `focus`. Every pairing used is computed in `test-unit/advent-contrast.test.mjs` with the ratios in comments; a test refuses a literal colour in the stylesheets (except black and white for print). Non-colour tokens with defaults in `advent.css`: `--advent-door-size` (4.5rem), `--advent-gap` (0.75rem), `--advent-open-ms` (450ms), `--advent-story-size` (1.125rem), `--advent-line-height` (1.6). Fonts are the host site's: the module sets none and loads none.
+
+### Adding a picture
+Put `day-NN.svg` (NN = 01 to 25, or 26 for the bonus) in `public/advent/art/`; nothing else may be in that folder. `lintSvg` allows only: `svg g defs path circle ellipse rect line polyline polygon linearGradient radialGradient stop clipPath mask use title desc symbol`, a short list of plain attributes, and style settings `fill stroke stroke-width opacity stop-color stop-opacity color`. No text outside `title`/`desc`, scripts, links, entities, comments with markup. At most 100 KB, 20 levels, 2000 elements, **50 `<use>`**, and a `<use>` may not point at an element that contains another `<use>` (this stops "billion laughs" pictures). Once the file exists the day file gets an `art` key and the panel shows it.
 
 ### Safety rules the build enforces
 
-- **Pictures** (`public/advent/art/day-NN.svg`) are read by a small parser that accepts only an allow-list of shapes, gradients, symbols and `use` of an internal `#id`, with a short list of plain attributes and style settings. Anything else (text, scripts, links that leave the file, entities, comments with markup, namespace prefixes, more than 100 KB, 20 levels or 2000 elements) stops the build. The art folder may be absent, but if it exists it must be a real folder (not a link) holding only `day-01.svg` to `day-25.svg`, each a real file.
-- **Client imports** are checked line by line: the browser files may import only the two date modules; any other import (bare, dynamic, in a comment, a re-export) stops the build.
+- **Pictures** as above. The art folder may be absent, but if it exists it must be a real folder holding only the day pictures.
+- **Client imports** are checked line by line: each browser file may import only the known pure modules; any other import (bare, dynamic, in a comment, a re-export) stops the build.
 - **Page flags:** a page's `unlisted` setting must be exactly true or false, or the build stops.
 - **Safety scans** (`test-unit/advent-safety.test.mjs`) check the source and everything built from it for unsafe browser APIs, storage, dynamic code, inline script and style.
-- **Versioning:** `VERSION` and `MANIFEST.sha256` pin the generic code files (not `theme.mjs` or `content.mjs`). After changing generic code, bump `VERSION` and run `npm run advent:manifest`; a unit test fails until you do.
+- **Versioning:** `VERSION` and `MANIFEST.sha256` pin the generic files. After changing them, bump `VERSION` and run `npm run advent:manifest`; a unit test fails until you do.
 
 ### What the headers do
 
-- `/advent/art/*` gets an extra, stricter Content-Security-Policy (it can only tighten the site's).
+- `/advent/art/*` and `/advent/scene*.svg` get an extra, stricter Content-Security-Policy (it can only tighten the site's).
 - `/advent/day-*.json` gets `X-Robots-Tag: noindex`, which asks crawlers to stay away. It does **not** hide the files: anyone who knows or guesses an address can fetch one. The repository is public too, so `content.mjs` is readable on GitHub whatever the switches say. The calendar is hidden, not secret.
 
 ### Moving or renaming the page
 
-If you change the theme's `slug`, rename `src/pages/<slug>.html` to match, rebuild, and delete the old `public/<old-slug>.html` by hand. The build does not remove stale pages (it only writes), so the old page would stay on the live site otherwise.
+If you change the theme's `slug`, rename `src/pages/<slug>.html` to match, rebuild, and delete the old `public/<old-slug>.html` by hand. The build does not remove stale pages.
 
 ## Going live (for the person in charge)
 
-Follow `docs/advent/launch-checklist.md`, in order. In short: Phase 3 must be built and reviewed first (the live page still shows placeholder doors), the pictures must exist with `artRequired: true`, then `publicListing: true`, then delete the two pre-launch guard tests, run everything, and check production. The hidden help guide `/help-advent` has a plain-English summary.
+Follow `docs/advent/launch-checklist.md`, in order. In short: the reviews, the pictures with `artRequired: true`, the bonus text (or accept 25 doors), then `publicListing: true`, then delete the two pre-launch guard tests, run everything, and check production. The hidden help guide `/help-advent` has a plain-English summary.
 
 ## Status
 
-Phases 0, 1 and 2 are done. The door grid, day panel, pictures, reading text and the rest of
-phase 3 onwards are not built, and nothing about the calendar is visible to the public.
+Phases 0 to 3 are done. Pictures (phase 4), the release reviews (phase 5) and transferability work (phase 6) are not. Nothing about the calendar is visible to the public.
 Run the tests with `npm run test:unit` (and `npm test` for the browser tests).

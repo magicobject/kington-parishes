@@ -9,7 +9,9 @@ import { join } from 'node:path';
 import { londonDateParts, seasonState, doorState, isDayUnlocked, BONUS_DAY } from '../modules/advent/date.mjs';
 import { validateContent, validateTheme, validateDay, DAY_COUNT } from '../modules/advent/schema.mjs';
 import { buildAdvent, renderAdventToken, validateDayFile } from '../modules/advent/build.mjs';
-import { theme } from '../modules/advent/theme.mjs';
+import { theme as realTheme } from '../modules/advent/theme.mjs';
+// Builds into empty temporary folders, so use the real theme without its own scene file.
+const theme = { ...realTheme, scene: null };
 import { content } from '../modules/advent/content.mjs';
 import { BONUS_FIXTURE } from './support/bonus-fixture.mjs';
 

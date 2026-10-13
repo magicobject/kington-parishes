@@ -18,7 +18,7 @@ import { NEWSLETTER_ISSUES } from '../src/newsletter.config.mjs';
 import { ONE_OFF_EVENTS, expandEvents, placeFor, formatEventTime, formatEventDate } from '../src/events.config.mjs';
 import { ensureSectionIds, extractSearchEntries, isSearchablePage, isIndexable, isHelpPage } from './build-search-index.mjs';
 import { splitNewsletterIssues, formatIssueMonth } from './newsletter-issues.mjs';
-import { buildAdvent, renderAdventToken } from '../modules/advent/build.mjs';
+import { buildAdvent, renderAdventToken, renderAdventTeaserToken } from '../modules/advent/build.mjs';
 import { theme as adventTheme } from '../modules/advent/theme.mjs';
 import { content as adventContent } from '../modules/advent/content.mjs';
 
@@ -394,7 +394,8 @@ for (const page of PAGES) {
   // before anything else touches this page's content — search results and
   // the page itself can never disagree about where a section actually is.
   // {{ADVENT}} expands first of all, for the same reason (its h2s must exist before ids are injected).
-  const content = ensureSectionIds(renderJourneyNavToken(renderChurchMapTokens(renderEventsToken(renderNewsletterTokens(renderPeopleTokens(renderSafeguardingEssentials(renderAdventToken(read(`src/pages/${page.slug}.html`).trimEnd(), advent.tokenContext))))))));
+  // {{ADVENT_TEASER}} (the home-page banner) expands to one empty hidden container and a script tag: no text at all.
+  const content = ensureSectionIds(renderJourneyNavToken(renderChurchMapTokens(renderEventsToken(renderNewsletterTokens(renderPeopleTokens(renderSafeguardingEssentials(renderAdventTeaserToken(renderAdventToken(read(`src/pages/${page.slug}.html`).trimEnd(), advent.tokenContext), advent.tokenContext))))))));
 
   if (isIndexable(page)) {
     const resolvedForSearch = replaceTokens(content, tokens);

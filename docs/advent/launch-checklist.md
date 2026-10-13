@@ -3,18 +3,13 @@
 Everything here must be done, in this order, before the calendar is shown to the public. Until then the
 calendar is hidden and two guard tests keep it that way. Tick each step in the launch commit message.
 
-1. **Phase 3 must be built and reviewed first.** The live page currently shows plain placeholder doors, a
-   visible "Placeholder doors" note and nothing else. Build the real doors, day panel, pictures, reading
-   text, share and read-aloud (docs/advent/build-plan.md, Phase 3), and have the tester and the
-   security-engineer review it. Do not go live on the placeholder page.
-2. **Remove the placeholder note.** Delete the placeholder note and the `aria-describedby` that ties it to
-   the door list in `modules/advent/client/advent.js` (the note is created in `showDoors`), plus the
-   `.advent-placeholder-note` rule in `modules/advent/client/advent.css`. Then `npm run advent:manifest`
-   and bump `modules/advent/VERSION`.
+1. **Phase 3 is built; it still needs its reviews.** The real calendar (doors, day panel, gentle message, share, print, archive, banner) is in. Before launch the tester and the security-engineer must review it (docs/advent/build-plan.md, Phase 5). The placeholder note is gone.
+2. **Look at the real thing** in preview on every date (docs/advent/ux-design.md), on a phone and a desktop.
 3. **The pictures exist and are required.** All 25 `public/advent/art/day-01.svg` to `day-25.svg` are in
    place (nothing else may be in that folder), Greg has looked at each one, and `artRequired` in
    `modules/advent/theme.mjs` is `true`. The build now refuses to continue if any picture is missing or
    fails the safety check.
+3a. **The home-page banner.** `src/pages/index.html` carries `{{ADVENT_TEASER}}`, which is one empty hidden container and a script tag in the home page source (Greg accepted this source-only mention while the calendar is hidden). It shows nothing to visitors. `test-unit/advent-built.test.mjs` ("the home page and the (hidden) Advent banner") lists exactly what the page may contain. At launch the banner follows the dates by itself (live and archive); remove nothing, and decide whether the home-page mention test needs wording changes.
 4. **Flip the listing switch.** Set `publicListing: true` in `modules/advent/theme.mjs`. The calendar page
    joins the sitemap and the site search and loses its noindex; the Advent help guide rejoins the (help
    scope) search. This does not add a menu, footer or home-page link: add those as a separate, reviewed

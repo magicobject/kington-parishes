@@ -1,33 +1,197 @@
-/* Advent calendar page styles (phase 2: calm message, preview notice, placeholder doors).
-   Colours come only from the --advent-* variables in advent-theme.css (generated from the theme).
-   Every rule starts with .advent so it beats the site stylesheet, which loads after this one.
-   Contrast (WCAG 2, from the theme's own table in theme.mjs): text on paper 14.09, textSoft on paper 8.52,
-   cream on door about 10, accentInk on accent 10.26, doorEdge on paper 3.0 or more (UI edge). */
+/* Advent calendar page styles: the calm message, the preview notice, the door grid, the scene, the opened-day
+   dialog, the gentle "not yet" message, motion, forced colours and print.
+   Colours come ONLY from the --advent-* variables in advent-theme.css (generated from the theme); the only literal
+   colours below are black and white in the print block (a unit test checks this). Every pairing used here is
+   computed in test-unit/advent-contrast.test.mjs, with the ratios recorded there:
+     cream on the dark door/sky colours 9.1 to 13.3, accentInk on accent 10.26 (today door, pills, notice),
+     text on paper 14.09, textSoft on paper 8.52, link on paper 5.53, doorEdge as a UI edge 3.16 to 4.62,
+     focus ring on the sky 10 to 14.9 (on the gold "today" door the ring sits 3px OUTSIDE the door, on the sky).
+   Tokens that are not colours (override them after this file if a site needs to):
+     --advent-door-size (4.5rem)  --advent-gap (0.75rem)  --advent-open-ms (450ms)
+     --advent-story-size (1.125rem)  --advent-line-height (1.6)
+   Fonts are the host site's: this file sets none. Every rule starts with .advent so it beats the site stylesheet. */
 
-.advent { background: var(--advent-paper); color: var(--advent-text); border-radius: 8px; padding: 28px; margin: 0 auto 40px; max-width: 720px; }
+.advent {
+  --advent-door-size: 4.5rem;
+  --advent-gap: 0.75rem;
+  --advent-open-ms: 450ms;
+  --advent-story-size: 1.125rem;
+  --advent-line-height: 1.6;
+  --advent-live-pad: 1rem;
+  background: var(--advent-paper); color: var(--advent-text); border-radius: 8px; padding: 1.75rem; margin: 0 auto 40px; max-width: 720px;
+}
 .advent [hidden] { display: none !important; }
 .advent h2 { color: var(--advent-text); }
 .advent p { color: var(--advent-text-soft); }
 .advent-calm p { font-size: 1.15rem; }
 
+/* ---- the preview notice ---- */
 .advent .advent-notice { background: var(--advent-accent); border-radius: 6px; padding: 12px 16px; margin-bottom: 24px; }
 .advent .advent-notice p { color: var(--advent-accent-ink); margin: 0; }
 .advent .advent-notice p + p { margin-top: 6px; }
 .advent .advent-notice a { color: var(--advent-accent-ink); font-weight: 600; }
 
-.advent .advent-placeholder-note { font-size: 0.95rem; font-style: italic; }
-
-.advent .advent-doors { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: 12px; }
-.advent .advent-door {
-  width: 100%; min-height: 64px; border-radius: 6px; font: inherit; font-size: 1.3rem; font-weight: 600;
-  background: var(--advent-door); color: var(--advent-cream); border: 2px solid var(--advent-door-edge); cursor: pointer;
+/* ---- buttons that look like pills ---- */
+.advent .advent-pill,
+.advent .advent-action {
+  display: inline-block; min-height: 48px; padding: 0.6em 1.4em; border-radius: 999px; font: inherit; font-weight: 600; line-height: 1.3;
+  background: var(--advent-accent); color: var(--advent-accent-ink); border: 2px solid var(--advent-accent-ink); cursor: pointer; text-decoration: none;
 }
-.advent .advent-door-future { border-style: dashed; font-weight: 400; }
-.advent .advent-door-available { border-style: solid; }
-.advent .advent-door-today { background: var(--advent-accent); color: var(--advent-accent-ink); border-color: var(--advent-accent-ink); border-width: 3px; }
-.advent .advent-door:focus-visible,
+.advent .advent-pill-quiet,
+.advent .advent-action { background: transparent; color: var(--advent-link); border-color: var(--advent-link); }
+
+/* ---- the live calendar: a night sky with the doors on it and the scene at the bottom ---- */
+.advent .advent-live {
+  background: linear-gradient(var(--advent-night), var(--advent-sky2) 90%); color: var(--advent-cream);
+  border-radius: 8px; padding: 1.25rem var(--advent-live-pad) 0; overflow: hidden; position: relative;
+}
+.advent .advent-live h2 { color: var(--advent-cream); margin-top: 0; }
+.advent .advent-live p { color: var(--advent-cream); }
+.advent .advent-status { margin: 0 0 1rem; font-size: 1.1rem; }
+.advent .advent-primary { margin: 0 0 1.25rem; }
+.advent .advent-live .advent-pill:focus-visible,
+.advent .advent-door:focus-visible { outline: 3px solid var(--advent-focus); outline-offset: 3px; }
+
+.advent .advent-doors {
+  list-style: none; margin: 0 auto; padding: 0; position: relative; z-index: 2;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(3.75rem, 1fr)); gap: 0.5rem;
+}
+.advent .advent-door {
+  width: 100%; min-height: 3.75rem; aspect-ratio: 1 / 1.12; padding: 0.25rem 0.125rem; gap: 0.125rem;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  border: 2px solid var(--advent-door-edge); border-radius: 50% 50% 0.375rem 0.375rem / 38% 38% 0.375rem 0.375rem;
+  background: var(--advent-door); color: var(--advent-cream); font: inherit; cursor: pointer; line-height: 1.1;
+  transition: transform var(--advent-open-ms) ease;
+}
+.advent .advent-door-number { font-size: 1.45rem; font-weight: 600; line-height: 1; }
+.advent .advent-door-sub { font-size: 0.75rem; letter-spacing: 0.02em; }
+.advent .advent-door-bonus .advent-door-number { font-size: 0.85rem; }
+.advent .advent-door-star .advent-door-number { font-size: 1.7rem; }
+/* Not yet: dimmer, dashed, with its date written on it. */
+.advent .advent-door-future { background: var(--advent-door-locked); border-style: dashed; }
+/* Today: gold, a pale ring and a soft glow, and the WORD "Today", so nothing rests on colour or border width alone. */
+.advent .advent-door-today {
+  background: var(--advent-accent); color: var(--advent-accent-ink); border: 3px solid var(--advent-focus);
+  box-shadow: 0 0 1.1rem 0.2rem var(--advent-accent);
+}
+.advent .advent-door-today .advent-door-sub { font-weight: 700; }
+@media (hover: hover) {
+  .advent .advent-door:hover { transform: translateY(-2px); }
+}
+
+/* ---- the scene: the site's ridge picture and, from Christmas Day on, the star ---- */
+.advent .advent-scene { position: relative; margin: 1rem calc(var(--advent-live-pad) * -1) 0; line-height: 0; }
+.advent .advent-scene-image { display: block; width: 100%; height: auto; }
+.advent .advent-scene-star {
+  position: absolute; top: 3%; right: 5%; width: 4.5%; min-width: 1.25rem; aspect-ratio: 1; background: var(--advent-focus);
+  clip-path: polygon(50% 0, 58% 42%, 100% 50%, 58% 58%, 50% 100%, 42% 58%, 0 50%, 42% 42%);
+}
+
+/* ---- the opened day (a native dialog) and the gentle message ---- */
+.advent .advent-dialog {
+  background: var(--advent-paper); color: var(--advent-text); border: 0; border-radius: 8px; padding: 0;
+  width: min(40rem, calc(100% - 2rem)); max-width: none; max-height: calc(100dvh - 2rem); overflow-x: hidden; overflow-y: auto;
+  box-shadow: 0 0.5rem 2rem var(--advent-ridge);
+}
+.advent .advent-dialog::backdrop { background: var(--advent-ridge); opacity: 0.8; }
+.advent .advent-panel { padding: 1rem 1.25rem 1.5rem; transform-origin: left center; animation: advent-swing var(--advent-open-ms) ease-out; }
+@keyframes advent-swing {
+  from { opacity: 0; transform: perspective(60rem) rotateY(-55deg); }
+  to { opacity: 1; transform: none; }
+}
+.advent .advent-panel-top { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+.advent .advent-count { margin: 0; font-size: 0.9rem; }
+.advent .advent-close {
+  min-width: 44px; min-height: 44px; padding: 0.4em 1.1em; border-radius: 999px; font: inherit; font-weight: 600; cursor: pointer;
+  background: transparent; color: var(--advent-text-soft); border: 2px solid var(--advent-text-soft);
+}
+.advent .advent-art { margin: 0.75rem 0 1rem; }
+.advent .advent-art-image { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; border-radius: 6px; background: var(--advent-night); }
+.advent .advent-art-credit { margin: 0.25rem 0 0; font-size: 0.85rem; color: var(--advent-text-soft); }
+.advent .advent-eyebrow { margin: 0.5rem 0 0.25rem; font-size: 0.85rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: var(--advent-link); }
+.advent .advent-title { margin: 0 0 0.25rem; font-size: 1.75rem; line-height: 1.2; color: var(--advent-text); }
+.advent .advent-title:focus { outline: none; }
+.advent .advent-reference { margin: 0; font-weight: 600; color: var(--advent-text-soft); }
+.advent .advent-translation { margin: 0 0 1rem; font-size: 0.9rem; }
+.advent .advent-story { font-size: var(--advent-story-size); line-height: var(--advent-line-height); max-width: 60ch; }
+.advent .advent-story p { margin: 0 0 0.8em; color: var(--advent-text); }
+.advent .advent-details { border-top: 1px solid var(--advent-door-edge); padding: 0.25rem 0; }
+.advent .advent-details summary { display: flex; align-items: center; min-height: 44px; cursor: pointer; font-weight: 600; font-size: 1.05rem; color: var(--advent-text); }
+.advent .advent-details p { margin: 0 0 0.75rem; color: var(--advent-text); line-height: var(--advent-line-height); max-width: 60ch; }
+.advent .advent-prayer { border-top: 1px solid var(--advent-door-edge); padding: 0.75rem 0 0.25rem; }
+.advent .advent-prayer h3 { margin: 0 0 0.25rem; font-size: 1.05rem; color: var(--advent-text); }
+.advent .advent-prayer p { margin: 0 0 0.75rem; font-style: italic; color: var(--advent-text); line-height: var(--advent-line-height); max-width: 60ch; }
+.advent .advent-nav { display: flex; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem; }
+.advent .advent-next { margin-left: auto; }
+.advent .advent-nav-button {
+  min-height: 48px; padding: 0.5em 1.1em; border-radius: 999px; font: inherit; font-weight: 600; cursor: pointer;
+  background: transparent; color: var(--advent-link); border: 2px solid var(--advent-link);
+}
+.advent .advent-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; }
+.advent .advent-share-status { margin: 0.5rem 0 0; font-size: 0.95rem; }
+.advent .advent-link-field {
+  width: 100%; min-height: 44px; margin-top: 0.25rem; padding: 0.5rem; font: inherit; color: var(--advent-text); background: var(--advent-paper);
+  border: 2px solid var(--advent-text-soft); border-radius: 6px; box-sizing: border-box;
+}
+.advent .advent-message { padding: 0.5rem 0 0.25rem; }
+.advent .advent-message-text { margin: 0 0 1rem; font-size: 1.15rem; color: var(--advent-text); }
+.advent .advent-message-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+.advent .advent-print-site { display: none; }
+.advent .advent-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; margin: 0; }
+.advent .advent-dialog .advent-pill:focus-visible,
+.advent .advent-dialog button:focus-visible,
+.advent .advent-dialog summary:focus-visible,
+.advent .advent-dialog input:focus-visible,
 .advent .advent-notice a:focus-visible { outline: 3px solid var(--advent-night); outline-offset: 3px; }
 
+/* A phone: the day fills the screen like a sheet. */
+@media (max-width: 600px) {
+  .advent .advent-dialog { width: 100%; height: 100%; max-height: 100%; border-radius: 0; }
+}
 @media (max-width: 480px) {
-  .advent { padding: 20px 16px; }
+  .advent { padding: 0.75rem; --advent-live-pad: 0.75rem; }
+}
+@media (min-width: 560px) {
+  .advent .advent-doors { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--advent-gap); max-width: 32rem; }
+  .advent .advent-door { min-height: var(--advent-door-size); }
+}
+
+/* People who ask for less motion get no swing and no slide: the day just appears. */
+@media (prefers-reduced-motion: reduce) {
+  .advent .advent-panel { animation: none; }
+  .advent .advent-door { transition: none; }
+  .advent .advent-door:hover { transform: none; }
+}
+
+/* Forced colours (Windows high contrast): every door keeps a visible edge, and "today" is told apart by its word. */
+@media (forced-colors: active) {
+  .advent .advent-door { border: 2px solid CanvasText; }
+  .advent .advent-door-future { border-style: dashed; }
+  .advent .advent-door-today { border-width: 4px; }
+  .advent .advent-live { border: 1px solid CanvasText; }
+  .advent .advent-pill, .advent .advent-action, .advent .advent-nav-button, .advent .advent-close { border: 2px solid ButtonText; }
+  .advent .advent-scene-star { background: CanvasText; }
+}
+
+/* Print: an opened day prints as a clean page (site name, day, title, reference, story, reflection, family
+   activity, prayer, translation credit): black on white, serif, no scene, no pictures, no buttons. */
+@media print {
+  body:has(.advent-dialog[open]) > :not(main),
+  body:has(.advent-dialog[open]) .page-header,
+  .advent .advent-scene,
+  .advent .advent-primary,
+  .advent .advent-notice,
+  .advent button,
+  .advent .advent-art,
+  .advent .advent-sr,
+  .advent .advent-hint { display: none !important; }
+  .advent { background: #fff; color: #000; padding: 0; margin: 0; max-width: none; }
+  .advent:has(.advent-dialog[open]) > :not(.advent-dialog) { display: none !important; }
+  .advent .advent-dialog[open] { position: static; display: block; width: auto; max-width: none; max-height: none; overflow: visible; box-shadow: none; background: #fff; color: #000; }
+  .advent .advent-panel { animation: none; padding: 0; font-family: Georgia, 'Times New Roman', serif; font-size: 12pt; }
+  .advent .advent-panel *, .advent .advent-live, .advent .advent-live * { color: #000 !important; background: none !important; }
+  .advent .advent-print-site { display: block; margin: 0 0 0.5rem; font-weight: 700; }
+  .advent .advent-nav, .advent .advent-actions, .advent .advent-share-status, .advent .advent-count { display: none !important; }
+  .advent .advent-details { border-top: 1px solid #000; }
+  .advent .advent-details summary { display: block; min-height: 0; font-weight: 700; }
 }

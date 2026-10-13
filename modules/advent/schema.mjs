@@ -35,7 +35,7 @@ import {
 export { DAY_COUNT, BONUS_DAY, artPathIsSafe, validateDay };
 export const COLOUR_NAMES = [
   'night', 'sky2', 'ridge', 'cream', 'accent', 'accentInk', 'door',
-  'doorEdge', 'paper', 'text', 'textSoft', 'link', 'focus',
+  'doorLocked', 'doorEdge', 'paper', 'text', 'textSoft', 'link', 'focus',
 ];
 
 // Names a calendar page must never take, on any site: files and routes that always exist.
@@ -105,9 +105,12 @@ function validateBonus(bonus, season) {
   }
 }
 
-/** True only for a plain file name like "scene.svg" that cannot be mistaken for a day picture. */
+/**
+ * True only for a plain file name "scene.svg" or "scene-<words>.svg". The prefix matters: the host's headers give
+ * every /advent/scene*.svg the same locked-down Content-Security-Policy as the day pictures.
+ */
 export function sceneNameIsSafe(name) {
-  return artPathIsSafe(name) && !/^day-d+.svg$/.test(name);
+  return artPathIsSafe(name) && /^scene(?:-[a-z0-9-]*[a-z0-9])?\.svg$/.test(name);
 }
 
 /** Throws unless the theme is complete and safe. Returns a checked copy. */
@@ -138,7 +141,7 @@ export function validateTheme(theme) {
 
   if (copy.bonus !== undefined && copy.bonus !== null) validateBonus(copy.bonus, season);
   if (copy.scene !== undefined && copy.scene !== null && !sceneNameIsSafe(copy.scene)) {
-    fail('theme', '"scene" must be null or a plain file name like "scene.svg" (lower case, not day-NN.svg, no folders)');
+    fail('theme', '"scene" must be null or a plain file name like "scene.svg" or "scene-night.svg" (lower case, no folders)');
   }
 
   if (typeof copy.slug !== 'string' || copy.slug.length > 32 || !/^[a-z0-9]+(-[a-z0-9]+)*$/.test(copy.slug)) {

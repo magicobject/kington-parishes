@@ -85,7 +85,7 @@ describe('effectiveDate', () => {
   const base = { realNow: REAL_NOW, search: '?advent-preview=2026-12-07', pathname: '/advent', previewEnabled: true };
 
   test('preview applies on the allowed pages when enabled', () => {
-    for (const pathname of ['/advent', '/advent.html', '/']) {
+    for (const pathname of ['/advent', '/advent.html', '/', '/index.html']) {
       const result = effectiveDate({ ...base, pathname });
       assert.equal(result.preview, true, pathname);
       assert.deepEqual(result.parts, { year: 2026, month: 12, day: 7 });

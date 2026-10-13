@@ -16,9 +16,9 @@ const rel = (full) => relative(ROOT, full).split(sep).join('/');
 const load = (full) => ({ name: rel(full), text: readFileSync(full, 'utf8') });
 
 const sourceCode = walk(join(ROOT, 'modules', 'advent')).filter((f) => /\.(mjs|js)$/.test(f)).map(load);
-const builtJs = ['public/js/advent.js', ...readdirSync(join(ROOT, 'public/js/advent')).map((n) => `public/js/advent/${n}`)]
+const builtJs = ['public/js/advent.js', 'public/js/advent-teaser.js', ...readdirSync(join(ROOT, 'public/js/advent')).map((n) => `public/js/advent/${n}`)]
   .map((path) => load(join(ROOT, path)));
-const builtCss = ['public/css/advent.css', 'public/css/advent-theme.css'].map((path) => load(join(ROOT, path)));
+const builtCss = ['public/css/advent.css', 'public/css/advent-theme.css', 'public/css/advent-teaser.css'].map((path) => load(join(ROOT, path)));
 const page = load(join(ROOT, 'public/advent.html'));
 
 const FORBIDDEN_CODE = {
@@ -59,7 +59,7 @@ describe('source files in modules/advent', () => {
 });
 
 describe('the built browser scripts', () => {
-  test('there are three of them', () => assert.equal(builtJs.length, 3));
+  test('there are six of them: the two page scripts and the four pure modules they import', () => assert.equal(builtJs.length, 6));
   for (const [name, pattern] of Object.entries(FORBIDDEN_CODE)) {
     test(`none uses ${name}`, () => {
       for (const file of builtJs) assert.ok(!pattern.test(file.text), `${file.name} uses ${name}`);
@@ -70,11 +70,17 @@ describe('the built browser scripts', () => {
     const imports = (file) => [...file.text.matchAll(/^import\s*\{[^}]*\}\s*from\s*'([^']+)';$/gm)].map((m) => m[1]);
     const byName = Object.fromEntries(builtJs.map((file) => [file.name, file]));
     const every = (file) => (file.text.match(/\bimport\b/g) ?? []).length;
-    assert.equal(every(byName['public/js/advent.js']), 2);
+    const hashed = (file) => imports(file).map((p) => p.replace(/[0-9a-f]{10}$/, 'HASH'));
+    for (const page of ['public/js/advent.js', 'public/js/advent-teaser.js']) {
+      assert.equal(every(byName[page]), 3, page);
+      assert.deepEqual(hashed(byName[page]), ['./advent/date.js?v=HASH', './advent/preview.js?v=HASH', './advent/logic.js?v=HASH'], page);
+    }
     assert.equal(every(byName['public/js/advent/preview.js']), 1);
+    assert.equal(every(byName['public/js/advent/logic.js']), 2);
     assert.equal(every(byName['public/js/advent/date.js']), 0);
-    assert.ok(imports(byName['public/js/advent.js']).every((p) => /^\.\/advent\/(?:date|preview)\.js\?v=[0-9a-f]{10}$/.test(p)));
-    assert.deepEqual(imports(byName['public/js/advent/preview.js']).map((p) => p.replace(/[0-9a-f]{10}$/, 'HASH')), ['./date.js?v=HASH']);
+    assert.equal(every(byName['public/js/advent/day.js']), 0);
+    assert.deepEqual(hashed(byName['public/js/advent/preview.js']), ['./date.js?v=HASH']);
+    assert.deepEqual(hashed(byName['public/js/advent/logic.js']), ['./date.js?v=HASH', './day.js?v=HASH']);
   });
 
   test('they contain no web address', () => {
