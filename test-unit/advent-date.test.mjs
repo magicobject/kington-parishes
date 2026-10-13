@@ -193,3 +193,46 @@ describe('isDayUnlocked', () => {
     assert.equal(isDayUnlocked(25, london('2027-01-02T12:00:00Z'), CFG), true);
   });
 });
+
+describe('review fixes: other start dates, odd inputs, fail closed', () => {
+  test('door N is start + N - 1 days, not tied to 1 December', () => {
+    const cfg = { start: { month: 11, day: 20 }, end: { month: 12, day: 14 }, archiveUntil: null };
+    const parts = { year: 2026, month: 12, day: 3 };
+    assert.equal(doorState(14, parts, cfg), 'today');
+    assert.equal(doorState(13, parts, cfg), 'available');
+    assert.equal(doorState(15, parts, cfg), 'future');
+  });
+
+  test('a season starting early in January is "before" in late December (the year rolls over)', () => {
+    const cfg = { start: { month: 1, day: 5 }, end: { month: 1, day: 20 }, archiveUntil: null };
+    assert.equal(seasonState({ year: 2026, month: 12, day: 20 }, cfg), 'before');
+    assert.equal(seasonState({ year: 2026, month: 12, day: 6 }, cfg), 'before'); // 30 days to go
+    assert.equal(seasonState({ year: 2026, month: 12, day: 5 }, cfg), 'after'); // 31 days to go
+    assert.equal(seasonState({ year: 2027, month: 1, day: 5 }, cfg), 'live');
+  });
+
+  test('londonDateParts accepts only a finite number or a valid Date', () => {
+    for (const bad of [null, true, false, undefined, Number.NaN, Infinity, '2026-12-01', '1700000000000', {}, [], new Date(Number.NaN)]) {
+      assert.equal(londonDateParts(bad), null, String(bad));
+    }
+    assert.notEqual(londonDateParts(0), null);
+    assert.notEqual(londonDateParts(new Date(0)), null);
+  });
+
+  test('a missing or broken date or config fails closed instead of throwing', () => {
+    for (const badParts of [null, undefined, {}, { year: 2026 }, 'x']) {
+      assert.equal(seasonState(badParts, CFG), 'after');
+      assert.equal(doorState(5, badParts, CFG), 'future');
+    }
+    const parts = { year: 2026, month: 12, day: 7 };
+    for (const badCfg of [undefined, null, {}, { start: null }, { start: { month: 12, day: 1 } }, 'x']) {
+      assert.equal(seasonState(parts, badCfg), 'after');
+      assert.equal(doorState(5, parts, badCfg), 'future');
+      assert.equal(isDayUnlocked(5, parts, badCfg), false);
+    }
+  });
+
+  test('a bad day number still throws even with no date', () => {
+    assert.throws(() => doorState(0, null, CFG), RangeError);
+  });
+});

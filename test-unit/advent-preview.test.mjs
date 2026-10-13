@@ -131,20 +131,73 @@ describe('effectiveDate', () => {
 
 describe('formatPreviewNotice', () => {
   test('is built from the numbers with a month name', () => {
-    assert.equal(formatPreviewNotice({ year: 2026, month: 12, day: 7 }), 'Preview mode: pretending it is 7 December 2026');
-    assert.equal(formatPreviewNotice({ year: 2027, month: 1, day: 31 }), 'Preview mode: pretending it is 31 January 2027');
+    assert.equal(formatPreviewNotice({ year: 2026, month: 12, day: 7 }), "Preview mode: not today's date. Showing 7 December 2026.");
+    assert.equal(formatPreviewNotice({ year: 2027, month: 1, day: 31 }), "Preview mode: not today's date. Showing 31 January 2027.");
   });
 
   test('never echoes anything that is not a number', () => {
     const hostile = { year: '<script>', month: 12, day: 7 };
-    assert.equal(formatPreviewNotice(hostile), 'Preview mode');
-    assert.equal(formatPreviewNotice({ year: 2026, month: '12', day: 7 }), 'Preview mode');
-    assert.equal(formatPreviewNotice({ year: 2026, month: 13, day: 7 }), 'Preview mode');
-    assert.equal(formatPreviewNotice(null), 'Preview mode');
+    assert.equal(formatPreviewNotice(hostile), "Preview mode: not today's date.");
+    assert.equal(formatPreviewNotice({ year: 2026, month: '12', day: 7 }), "Preview mode: not today's date.");
+    assert.equal(formatPreviewNotice({ year: 2026, month: 13, day: 7 }), "Preview mode: not today's date.");
+    assert.equal(formatPreviewNotice(null), "Preview mode: not today's date.");
   });
 
   test('the notice for a parsed hostile query contains nothing from the query', () => {
     const parsed = parsePreviewDate('?advent-preview=<script>', REAL);
-    assert.equal(formatPreviewNotice(parsed), 'Preview mode');
+    assert.equal(formatPreviewNotice(parsed), "Preview mode: not today's date.");
+  });
+});
+
+describe('review fixes', () => {
+  const NOW = new Date('2026-10-13T12:00:00Z');
+  const base = { realNow: NOW, search: '?advent-preview=2026-12-07', previewEnabled: true };
+
+  test('single-digit months and days are not accepted', () => {
+    for (const value of ['2026-12-7', '2026-1-31']) assert.equal(parse(value), null, value);
+  });
+
+  test('impossible days that would roll into range are rejected', () => {
+    for (const value of ['2026-11-31', '2026-12-32', '2026-12-00', '2026-00-15', '2027-01-32']) assert.equal(parse(value), null, value);
+  });
+
+  test('the season year changes between 31 Jan and 1 Feb', () => {
+    const jan31 = londonDateParts(new Date('2027-01-31T12:00:00Z'));
+    const feb1 = londonDateParts(new Date('2027-02-01T12:00:00Z'));
+    assert.deepEqual(parsePreviewDate('?advent-preview=2026-12-07', jan31), { year: 2026, month: 12, day: 7 });
+    assert.equal(parsePreviewDate('?advent-preview=2026-12-07', feb1), null);
+    assert.deepEqual(parsePreviewDate('?advent-preview=2027-12-07', feb1), { year: 2027, month: 12, day: 7 });
+  });
+
+  test('the page paths follow the configured slug; the parameter name stays advent-preview', () => {
+    const slug = 'christmas-calendar';
+    for (const pathname of ['/christmas-calendar', '/christmas-calendar.html', '/']) {
+      assert.equal(effectiveDate({ ...base, pathname, slug }).preview, true, pathname);
+    }
+    assert.equal(effectiveDate({ ...base, pathname: '/advent', slug }).preview, false);
+    assert.equal(effectiveDate({ ...base, pathname: '/christmas-calendar', slug }).preview, true);
+    assert.equal(effectiveDate({ ...base, pathname: '/advent' }).preview, true); // default slug is advent
+  });
+
+  test('a slug that is not a plain slug is ignored, leaving only the home page', () => {
+    for (const slug of ['', '../x', 'a/b', 5, null]) {
+      assert.equal(effectiveDate({ ...base, pathname: '/', slug }).preview, true);
+      assert.equal(effectiveDate({ ...base, pathname: '/x', slug }).preview, false);
+    }
+  });
+
+  test('effectiveDate with no arguments or an empty object fails closed without throwing', () => {
+    assert.deepEqual(effectiveDate(), { parts: null, preview: false });
+    assert.deepEqual(effectiveDate({}), { parts: null, preview: false });
+  });
+
+  test('the notice wording is the new calm text, and bad numbers use the plain fallback', () => {
+    assert.equal(formatPreviewNotice({ year: 2026, month: 12, day: 7 }), "Preview mode: not today's date. Showing 7 December 2026.");
+    const fallback = "Preview mode: not today's date.";
+    for (const bad of [null, {}, { year: 2025, month: 12, day: 7 }, { year: 2101, month: 12, day: 7 }, { year: 2026, month: 2, day: 30 }, { year: 2026, month: 4, day: 31 }, { year: 2026, month: 0, day: 1 }, { year: 2026.5, month: 12, day: 7 }]) {
+      assert.equal(formatPreviewNotice(bad), fallback, JSON.stringify(bad));
+    }
+    assert.equal(formatPreviewNotice({ year: 2100, month: 1, day: 31 }), "Preview mode: not today's date. Showing 31 January 2100.");
+    assert.equal(formatPreviewNotice({ year: 2028, month: 2, day: 29 }), "Preview mode: not today's date. Showing 29 February 2028.");
   });
 });

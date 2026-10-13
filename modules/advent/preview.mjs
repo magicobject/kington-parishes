@@ -1,10 +1,13 @@
 // The demo "preview" switch: ?advent-preview=YYYY-MM-DD pretends it is that date.
+// The parameter is always called advent-preview, whatever the calendar page is named.
 // Pure functions. This module has no storage of any kind, so preview mode cannot
 // remember anything. Anything invalid is silently ignored and never echoed back.
 import { londonDateParts } from './date.mjs';
 
 export const PREVIEW_PARAM = 'advent-preview';
-const PREVIEW_PATHS = ['/advent', '/advent.html', '/'];
+const DEFAULT_SLUG = 'advent';
+const SLUG_PATTERN = /^[a-z0-9]+(-[a-z0-9]+)*$/;
+const LAST_NOTICE_YEAR = 2100;
 const FIRST_PREVIEW_YEAR = 2026;
 const MONTH_NAMES = [
   'January', 'February', 'March', 'April', 'May', 'June',
@@ -42,22 +45,26 @@ export function parsePreviewDate(search, realParts) {
 
 /**
  * The date the calendar should act on. Preview applies only when it is switched on,
- * the page is the calendar or the home page, and the value is valid.
+ * the page is the calendar ("/<slug>" or "/<slug>.html", slug defaults to "advent") or the
+ * home page ("/"), and the value is valid. A slug that is not a plain slug is ignored.
  * Returns {parts, preview}; parts is null if even the real date could not be worked out.
  */
-export function effectiveDate({ realNow, search, pathname, previewEnabled, timeZone = 'Europe/London' }) {
+export function effectiveDate({ realNow, search, pathname, previewEnabled, timeZone = 'Europe/London', slug = DEFAULT_SLUG } = {}) {
   const realParts = londonDateParts(realNow, timeZone);
-  if (previewEnabled === true && PREVIEW_PATHS.includes(pathname)) {
+  const pagePaths = typeof slug === 'string' && SLUG_PATTERN.test(slug) ? [`/${slug}`, `/${slug}.html`, '/'] : ['/'];
+  if (previewEnabled === true && pagePaths.includes(pathname)) {
     const previewParts = parsePreviewDate(search, realParts);
     if (previewParts) return { parts: previewParts, preview: true };
   }
   return { parts: realParts, preview: false };
 }
 
-/** "Preview mode: pretending it is 7 December 2026", built from numbers only. */
+/** "Preview mode: not today's date. Showing 7 December 2026.", built from numbers only. */
 export function formatPreviewNotice(parts) {
-  const ok = parts && Number.isInteger(parts.year) && Number.isInteger(parts.month) && Number.isInteger(parts.day) &&
-    parts.month >= 1 && parts.month <= 12 && parts.day >= 1 && parts.day <= 31;
-  if (!ok) return 'Preview mode';
-  return `Preview mode: pretending it is ${parts.day} ${MONTH_NAMES[parts.month - 1]} ${parts.year}`;
+  const fallback = "Preview mode: not today's date.";
+  const numbers = Boolean(parts) && [parts.year, parts.month, parts.day].every(Number.isInteger);
+  if (!numbers || parts.year < FIRST_PREVIEW_YEAR || parts.year > LAST_NOTICE_YEAR || parts.month < 1 || parts.month > 12) return fallback;
+  const daysInMonth = new Date(Date.UTC(parts.year, parts.month, 0)).getUTCDate();
+  if (parts.day < 1 || parts.day > daysInMonth) return fallback;
+  return `${fallback} Showing ${parts.day} ${MONTH_NAMES[parts.month - 1]} ${parts.year}.`;
 }

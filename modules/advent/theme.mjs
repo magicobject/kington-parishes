@@ -10,11 +10,52 @@ export const theme = Object.freeze({
     archiveUntil: Object.freeze({ month: 1, day: 6 }),
   }),
   slug: 'advent',
+  // This site's own page names, which the calendar page may not take (checked against src/pages.config.mjs by a test).
+  reservedSlugs: Object.freeze([
+    'our-churches',
+    'church-kington',
+    'church-kington-history',
+    'church-titley',
+    'church-old-radnor',
+    'church-kinnerton',
+    'church-huntington',
+    'our-people',
+    'walkers',
+    'services',
+    'parish-news',
+    'parish-news-archive',
+    'newsletter',
+    'newsletter-2026-09',
+    'newsletter-archive',
+    'privacy-policy',
+    'blog',
+    'treasurer-job-description',
+    'life-events',
+    'what-we-believe',
+    'get-involved',
+    'vacancies',
+    'resources',
+    'donate',
+    'parish-hall',
+    'calendar',
+    'contact',
+    'safeguarding',
+    'help-getting-set-up',
+    'help-making-a-change',
+    'help-technical-details',
+    'help-dns-setup',
+    'help-when-it-goes-wrong',
+  ]),
   previewEnabled: true,
   adventEnabled: true,
   // false = not in the sitemap or search, and noindex, until Greg switches it on (on or before 1 December).
   publicListing: false,
   translationName: 'World English Bible',
+  // Contrast (WCAG 2, computed by test-unit/advent-contrast.test.mjs):
+  //   text on paper 14.09   textSoft on paper 8.52   link on paper 5.53   (need 4.5)
+  //   cream on night 13.29  accentInk on accent 10.26  accent on night 9.78 (need 4.5)
+  //   doorEdge on door 3.68 (need 3, UI edge)   focus on night 14.87 (need 3, focus ring)
+  // AVOID: focus on paper (about 1.0) and link on night (about 2.7). They fail.
   colours: Object.freeze({
     night: '#14202b',
     sky2: '#2E3C48',

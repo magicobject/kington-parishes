@@ -21,11 +21,14 @@ const MAX_DOOR = 25;
 /**
  * The calendar date (and time) of an instant in the given time zone, as numbers.
  * Built from Intl.DateTimeFormat#formatToParts, never by parsing locale text.
- * Fails closed: returns null if the input is not a valid date or Intl misbehaves.
+ * Accepts only a valid Date or a finite number of milliseconds. Fails closed: returns null
+ * for anything else, or if Intl misbehaves.
  */
 export function londonDateParts(dateOrMs, timeZone = 'Europe/London') {
   try {
-    const date = dateOrMs instanceof Date ? dateOrMs : new Date(dateOrMs);
+    const isNumber = typeof dateOrMs === 'number' && Number.isFinite(dateOrMs);
+    if (!isNumber && !(dateOrMs instanceof Date)) return null;
+    const date = isNumber ? new Date(dateOrMs) : dateOrMs;
     if (Number.isNaN(date.getTime())) return null;
     const formatter = new Intl.DateTimeFormat('en-GB-u-ca-gregory-nu-latn', {
       timeZone,
@@ -70,6 +73,13 @@ function utcDay(year, month, day) {
   return Date.UTC(year, month - 1, day);
 }
 
+const isDateParts = (parts) =>
+  Boolean(parts) && [parts.year, parts.month, parts.day].every(Number.isInteger) &&
+  parts.month >= 1 && parts.month <= 12 && parts.day >= 1 && parts.day <= 31;
+const isMonthDay = (value) => Boolean(value) && Number.isInteger(value.month) && Number.isInteger(value.day);
+const isSeasonConfig = (cfg) =>
+  Boolean(cfg) && isMonthDay(cfg.start) && isMonthDay(cfg.end) && (cfg.archiveUntil == null || isMonthDay(cfg.archiveUntil));
+
 /** Whole days from the given date to the season start (this year); negative once it has started. */
 export function daysUntilStart(parts, cfg) {
   return Math.round((utcDay(parts.year, cfg.start.month, cfg.start.day) - utcDay(parts.year, parts.month, parts.day)) / DAY_MS);
@@ -77,7 +87,7 @@ export function daysUntilStart(parts, cfg) {
 
 /** 'before' | 'live' | 'archive' | 'after'. A null date fails closed to 'after'. */
 export function seasonState(parts, cfg) {
-  if (!parts) return 'after';
+  if (!isDateParts(parts) || !isSeasonConfig(cfg)) return 'after';
   const today = monthDay(parts.month, parts.day);
   const start = monthDay(cfg.start.month, cfg.start.day);
   const end = monthDay(cfg.end.month, cfg.end.day);
@@ -91,7 +101,11 @@ export function seasonState(parts, cfg) {
     if (inArchive) return 'archive';
   }
 
-  const daysAway = daysUntilStart(parts, cfg);
+  // Days until the NEXT start: this year's if it is still ahead, otherwise next year's
+  // (so a season starting in early January is 'before' in late December).
+  const thisYear = daysUntilStart(parts, cfg);
+  const nextYear = Math.round((utcDay(parts.year + 1, cfg.start.month, cfg.start.day) - utcDay(parts.year, parts.month, parts.day)) / DAY_MS);
+  const daysAway = thisYear > 0 ? thisYear : nextYear;
   return daysAway > 0 && daysAway <= BEFORE_WINDOW_DAYS ? 'before' : 'after';
 }
 

@@ -9,7 +9,7 @@ export const content = {
       "title": "Let There Be Light",
       "ref": "Genesis 1:1-5",
       "paragraphs": [
-        "Before there were hills or rivers or people, there was only dark and quiet. And God spoke. \"Let there be light.\" And light came, soft at first, the way morning creeps over a ridge. God looked at it and said, \"That is good.\" Then God kept going: sky, sea, earth, trees, birds, creatures of every kind, and last of all, people, to share it with. The whole story begins with love making room for others. Every night since then, every dawn has been a small reminder that the dark does not get the last word. This calendar follows one thread of that light, from the very first morning all the way to a baby in a manger."
+        "Before there were hills or rivers or people, there was only dark and quiet. And God spoke. \"Let there be light.\" And light came, soft at first, the way morning creeps over a ridge. God looked at it and saw that it was good. Then God kept going: sky, sea, earth, trees, birds, creatures of every kind, and last of all, people, to share it with. The whole story begins with love making room for others. Every night since then, every dawn has been a small reminder that the dark does not get the last word. This calendar follows one thread of that light, from the very first morning all the way to a baby in a manger."
       ],
       "wonder": "I wonder what the very first light looked like?",
       "activity": "Sit in a dark room, light one candle, and notice how much a tiny flame changes.",
@@ -18,7 +18,7 @@ export const content = {
       "alt": "A golden spark of light begins to unroll against a deep blue night, with hills and birds just appearing.",
       "credit": "Original illustration for Kington Parishes",
       "hidden": "The tiny star (introduced here), plus a very small owl.",
-      "translation": "Short quotations from the King James Version."
+      "translation": "Retold in our own words, with a short quotation from the King James Version."
     },
     {
       "day": 2,
@@ -34,14 +34,14 @@ export const content = {
       "alt": "Two small figures half-hidden by a garden tree at dusk while a golden thread leads to a distant light.",
       "credit": "Original illustration for Kington Parishes",
       "hidden": "A tiny snake pattern shaped like the letter S hiding in the bark.",
-      "translation": "Retold in our own words, following the World English Bible."
+      "translation": "Retold in our own words, with short quotations from the World English Bible."
     },
     {
       "day": 3,
       "title": "A Bow in the Clouds",
       "ref": "Genesis 8:20-9:17",
       "paragraphs": [
-        "The rain had come for so long that the world was nothing but water. Noah and his family, and all the animals, were safe in the big boat. At last the water went down, and the dry land appeared. They stepped out, and God made them a promise: never again. And as a sign God set a bow in the clouds. A rainbow. Not a soldier's bow, a hanging-up bow, pointed away from us, a reminder that God keeps promises. Next time you see a rainbow after rain, whether over the Radnor hills or a puddle in the road, you can say, \"That is God's promise, still there.\""
+        "The rain had come for so long that the world was nothing but water. Noah and his family, and all the animals, were safe in the big boat. At last the water went down, and the dry land appeared. They stepped out, and God made them a promise: never again. And as a sign God said, \"I do set my bow in the cloud\" (KJV). A rainbow. Not a soldier's bow, a hanging-up bow, pointed away from us, a reminder that God keeps promises. Next time you see a rainbow after rain, whether over the Radnor hills or a puddle in the road, you can say that this is God's promise, still there."
       ],
       "wonder": "I wonder what Noah thought the first time he saw the rainbow?",
       "activity": "Colour a rainbow, or hang a prism in a window to make one on the wall.",
@@ -50,14 +50,14 @@ export const content = {
       "alt": "A small boat on calm water beneath a soft rainbow edged with a thread of gold.",
       "credit": "Original illustration for Kington Parishes",
       "hidden": "A dove carrying a leaf (very small).",
-      "translation": "Quoted from the World English Bible."
+      "translation": "Retold in our own words, with a short quotation from the King James Version."
     },
     {
       "day": 4,
       "title": "Count the Stars",
       "ref": "Genesis 12:1-3; 15:1-6",
       "paragraphs": [
-        "Abram was an old man with no children when God said, \"Go. I'll show you a new country. I'll make you a blessing to every family on earth.\" So Abram packed up, left his home, and went, without a map. One night God took him outside. \"Look up. Count the stars if you can. That is how many your family will be.\" Abram looked at the huge, glittering sky and believed. He couldn't see how it would happen. But he trusted the one who promised. Many hundreds of years later a child would be born from that long line, and the blessing was meant for everyone, not just one family."
+        "Abram was an old man with no children when God told him to leave his country and go to a land that God would show him, and promised that all the families of the earth would be blessed through him. So Abram packed up, left his home, and went, without a map. One night God took him outside and said, \"Look now toward the sky, and count the stars, if you are able to count them.\" And God said, \"So will your offspring be.\" Abram looked at the huge, glittering sky and believed. He couldn't see how it would happen. But he trusted the one who promised. Many hundreds of years later a child would be born from that long line, and the blessing was meant for everyone, not just one family."
       ],
       "wonder": "I wonder what it's like to trust someone when you can't see the road?",
       "activity": "Go out on a clear night (or look at a star map) and try to count. Or cut paper stars.",
@@ -66,14 +66,14 @@ export const content = {
       "alt": "A traveller with a staff gazes at a sky full of stars joined by a golden thread.",
       "credit": "Original illustration for Kington Parishes",
       "hidden": "One star is larger than the rest.",
-      "translation": "Quoted from the World English Bible."
+      "translation": "Retold in our own words, with short quotations from the World English Bible."
     },
     {
       "day": 5,
       "title": "A Ladder to Heaven",
       "ref": "Genesis 28:10-17",
       "paragraphs": [
-        "Jacob was running away, tired, lonely and in trouble of his own making. With a stone for a pillow he fell asleep in the open. And he dreamed: a stairway reaching from earth up to heaven, with angels going up and down. And God spoke: \"I am with you. I will not leave you.\" Jacob woke up amazed. \"God was here and I didn't know it!\" He had thought he was alone in the middle of nowhere. It turned out to be the very spot where heaven touched earth. Nobody is so far from home that God cannot find them. And one day heaven would come right down the ladder."
+        "Jacob was running away, tired, lonely and in trouble of his own making. With a stone for a pillow he fell asleep in the open. And he dreamed: a stairway reaching from earth up to heaven, with angels going up and down. And God spoke, promising to be with him and never to leave him. Jacob woke up amazed. \"Surely Yahweh is in this place, and I didn't know it.\" He had thought he was alone in the middle of nowhere. It turned out to be the very spot where heaven touched earth. Nobody is so far from home that God cannot find them. And one day heaven would come right down the ladder."
       ],
       "wonder": "I wonder where you have felt close to God without expecting to?",
       "activity": "Build a ladder from paper strips; on each rung write something you are thankful for.",
@@ -82,14 +82,14 @@ export const content = {
       "alt": "A sleeping traveller on a hillside dreams of a golden ladder reaching to the sky.",
       "credit": "Original illustration for Kington Parishes",
       "hidden": "A tiny bird on the stone.",
-      "translation": "Quoted from the World English Bible."
+      "translation": "Retold in our own words, with short quotations from the World English Bible."
     },
     {
       "day": 6,
       "title": "A Bush That Would Not Burn Up",
       "ref": "Exodus 3:1-14",
       "paragraphs": [
-        "Moses was minding sheep in the desert, a long way from the palace he grew up in. Then he saw something odd: a bush on fire that wasn't burning away. He went closer, and a voice said, \"Take off your shoes. This is holy ground.\" God said, \"I have seen how my people suffer in Egypt. I have heard them cry. I'm sending you.\" Moses made excuses: \"Who am I?\" God said, \"I will be with you.\" That was the whole answer. God does not stay up in the sky; God hears, comes close, and sends people to help."
+        "Moses was minding sheep in the desert, a long way from the palace he grew up in. Then he saw something odd: a bush on fire that wasn't burning away. He went closer, and a voice said, \"Take off your sandals, for the place you are standing on is holy ground.\" God said that he had seen how his people suffered in Egypt, had heard their cry, and was sending Moses. Moses made excuses, asking who he was to go to Pharaoh. God said, \"Certainly I will be with you.\" That was the whole answer. God does not stay up in the sky; God hears, comes close, and sends people to help."
       ],
       "wonder": "I wonder why God chose a plain bush and a shepherd?",
       "activity": "Take off your shoes for a minute and stand still in the grass or on the carpet, noticing the ground.",
@@ -98,7 +98,7 @@ export const content = {
       "alt": "A green bush glows with golden flames that do not burn it, with a pair of sandals in the foreground.",
       "credit": "Original illustration for Kington Parishes",
       "hidden": "A tiny sandal-print in the sand.",
-      "translation": "Quoted from the King James Version and the World English Bible."
+      "translation": "Retold in our own words, with short quotations from the World English Bible."
     },
     {
       "day": 7,
@@ -113,7 +113,8 @@ export const content = {
       "art": "day-07.svg",
       "alt": "A doorframe marked in red opens onto a path of dry ground between two walls of blue water.",
       "credit": "Original illustration for Kington Parishes",
-      "hidden": "A tiny lamb in the lower corner."
+      "hidden": "A tiny lamb in the lower corner.",
+      "translation": "Retold in our own words, following the World English Bible."
     },
     {
       "day": 8,
@@ -128,14 +129,15 @@ export const content = {
       "art": "day-08.svg",
       "alt": "A row of tents in the desert beneath a tall cloud lit with a golden thread that guides the way.",
       "credit": "Original illustration for Kington Parishes",
-      "hidden": "A tiny tent with a lit lamp inside."
+      "hidden": "A tiny tent with a lit lamp inside.",
+      "translation": "Retold in our own words, following the World English Bible."
     },
     {
       "day": 9,
       "title": "Ruth Stays",
       "ref": "Ruth 1:1-18; 4:13-17",
       "paragraphs": [
-        "Ruth was a young woman from a foreign land who lost her husband. Her mother-in-law Naomi, also a widow, decided to go home to Bethlehem. \"Go back to your own family,\" Naomi said. But Ruth held on: \"Wherever you go, I will go. Your people will be my people, and your God my God.\" Together they came to Bethlehem at harvest time. Ruth gathered leftover grain in the fields, kindness found her through a generous farmer called Boaz, and in time they married. Their great-grandson was David, the shepherd king. So the family of Jesus holds a foreigner who chose loyalty. God's story is wider than we think."
+        "Ruth was a young woman from a foreign land who lost her husband. Her mother-in-law Naomi, also a widow, decided to go home to Bethlehem. Naomi told her to go back to her own family. But Ruth held on: \"where you go, I will go; and where you stay, I will stay. Your people will be my people, and your God my God.\" Together they came to Bethlehem at harvest time. Ruth gathered leftover grain in the fields, kindness found her through a generous farmer called Boaz, and in time they married. Their great-grandson was David, the shepherd king. So the family of Jesus holds a foreigner who chose loyalty. God's story is wider than we think."
       ],
       "wonder": "I wonder what made Ruth so brave and so loyal?",
       "activity": "Do one loyal act for someone, such as a card or a visit to someone on their own.",
@@ -143,14 +145,15 @@ export const content = {
       "art": "day-09.svg",
       "alt": "Two women walk through golden wheat fields towards the small hill town of Bethlehem.",
       "credit": "Original illustration for Kington Parishes",
-      "hidden": "A single sheaf tied with thread."
+      "hidden": "A single sheaf tied with thread.",
+      "translation": "Retold in our own words, with short quotations from the World English Bible."
     },
     {
       "day": 10,
       "title": "The Shepherd Boy Chosen",
       "ref": "1 Samuel 16:1-13; 2 Samuel 7:8-16",
       "paragraphs": [
-        "The prophet Samuel was sent to Bethlehem to choose a new king. Jesse paraded seven fine, tall sons. None was the one. \"Are these all?\" Samuel asked. \"Well, there's the youngest. He's out with the sheep.\" They sent for David. God said, \"That's him.\" God doesn't choose by height or looks; God looks at the heart. Later God made David a great promise: one of his family would reign for ever. Bethlehem again, sheep again. Hold on to those two words. They will come back on Christmas night."
+        "The prophet Samuel was sent to Bethlehem to choose a new king. Jesse paraded seven fine, tall sons. None was the one. \"Are all your children here?\" Samuel asked. \"There remains yet the youngest. Behold, he is keeping the sheep.\" They sent for David. God said, \"Arise! Anoint him, for this is he.\" God doesn't choose by height or looks; God looks at the heart. Later God made David a great promise: one of his family would reign for ever. Bethlehem again, sheep again. Hold on to those two words. They will come back on Christmas night."
       ],
       "wonder": "I wonder why God picks the one nobody expected?",
       "activity": "Draw someone in your life who is \"overlooked\" and say thank you to them.",
@@ -158,7 +161,8 @@ export const content = {
       "art": "day-10.svg",
       "alt": "A shepherd boy with a staff and sheep on a hill, with a golden crown-shaped thread rising above.",
       "credit": "Original illustration for Kington Parishes",
-      "hidden": "A tiny harp leaning on a rock."
+      "hidden": "A tiny harp leaning on a rock.",
+      "translation": "Retold in our own words, with short quotations from the World English Bible."
     },
     {
       "day": 11,
@@ -174,14 +178,14 @@ export const content = {
       "alt": "A crowd of silhouettes in darkness looks up at a great golden light shining down.",
       "credit": "Original illustration for Kington Parishes",
       "hidden": "A candle held by a child.",
-      "translation": "Short quotations from the King James Version."
+      "translation": "Retold in our own words, with a short quotation from the King James Version."
     },
     {
       "day": 12,
       "title": "A Shoot from the Stump",
       "ref": "Isaiah 7:14; 11:1-9",
       "paragraphs": [
-        "Isaiah also saw something sad: the royal family tree cut down to a stump, like a tree after a storm. Yet he promised that from the stump a new green shoot would grow. A child of Jesse's family, wise and fair, who would care for the poor. And a peace so deep that wolves would lie down with lambs and a little child would lead them. He also spoke of a baby with a name that means \"God with us\": Immanuel. Look at an old tree stump in the woods: sometimes a green shoot does appear. God's hope often arrives small and green, in the places we thought were finished."
+        "Isaiah also saw something sad: the royal family tree cut down to a stump, like a tree after a storm. Yet he promised that from the stump a new green shoot would grow. A child of Jesse's family, wise and fair, who would care for the poor. And a peace so deep that wolves would lie down with lambs and a little child would lead them. He also spoke of a baby with a name that means God with us: Immanuel. Look at an old tree stump in the woods: sometimes a green shoot does appear. God's hope often arrives small and green, in the places we thought were finished."
       ],
       "wonder": "I wonder what a world where wolves and lambs are friends would be like?",
       "activity": "Plant a seed or a bulb (or draw a stump with a green shoot) and watch for growth.",
@@ -190,14 +194,14 @@ export const content = {
       "alt": "A green shoot grows from a tree stump, with a wolf and a lamb resting peacefully beside it.",
       "credit": "Original illustration for Kington Parishes",
       "hidden": "A tiny bird nesting in the shoot.",
-      "translation": "Quoted from the King James Version and the World English Bible."
+      "translation": "Retold in our own words, following the World English Bible."
     },
     {
       "day": 13,
       "title": "Small Town, Big Promise",
       "ref": "Micah 5:2-5",
       "paragraphs": [
-        "Micah was a country prophet who spoke up for ordinary people. He did not name a great city. He named a tiny one: \"But thou, Bethlehem Ephratah, though thou be little among the thousands of Judah, out of thee shall he come forth\" (KJV). Bethlehem was a village. Nobody important lived there. Yet God said a ruler, one whose roots go back to long ago, would come out of it, and he would feed his flock and bring peace. So when we reach the stable, remember: this was foretold. Small places matter to God, and small people too."
+        "Micah was a country prophet who spoke up for ordinary people. He did not name a great city. He named a tiny one: \"But thou, Bethlehem Ephratah, though thou be little among the thousands of Judah, yet out of thee shall he come forth\" (KJV). Bethlehem was a village. Nobody important lived there. Yet God said a ruler, one whose roots go back to long ago, would come out of it, and he would feed his flock and bring peace. So when we reach the stable, remember: this was foretold. Small places matter to God, and small people too."
       ],
       "wonder": "I wonder what it means that God's big plans often start in small places?",
       "activity": "Make a \"map of small things\" showing places in your village you love.",
@@ -206,14 +210,14 @@ export const content = {
       "alt": "A tiny hill village under a huge sky with a golden thread reaching down to one small rooftop.",
       "credit": "Original illustration for Kington Parishes",
       "hidden": "A tiny sheep on the highest roof.",
-      "translation": "Short quotations from the King James Version."
+      "translation": "Retold in our own words, with a short quotation from the King James Version."
     },
     {
       "day": 14,
       "title": "Songs by the River",
       "ref": "Psalm 137:1-4; Jeremiah 29:4-14; Jeremiah 31:31-34",
       "paragraphs": [
-        "Then came the worst thing of all. Enemy armies took the city, and many people were marched far away to Babylon. They sat by a river and could hardly sing. \"How shall we sing the Lord's song in a strange land?\" they asked. They missed their home, their temple, their friends. But God sent a message through Jeremiah: \"Settle down. Plant gardens. Pray for the place you live in. I have not forgotten you. I'll bring you back and give you a hope and a future.\" And a new promise: a time when God's law would be written not on stone but on their hearts. Even in exile, God was planning a way home."
+        "Then came the worst thing of all. Enemy armies took the city, and many people were marched far away to Babylon. They sat by a river and could hardly sing. \"How can we sing Yahweh's song in a foreign land?\" they asked. They missed their home, their temple, their friends. But God sent a message through Jeremiah: settle down, plant gardens, and pray for the place you live in. God had not forgotten them. He would bring them back and give them hope and a future. And a new promise: a time when God's law would be written not on stone but on their hearts. Even in exile, God was planning a way home."
       ],
       "wonder": "I wonder what keeps hope alive when you are far from home?",
       "activity": "Write a short letter or card to someone who is far away or lonely.",
@@ -221,14 +225,15 @@ export const content = {
       "art": "day-14.svg",
       "alt": "Harps hang from willow trees beside a river at dusk, with a golden thread crossing to the far bank.",
       "credit": "Original illustration for Kington Parishes",
-      "hidden": "A tiny house on the far shore with a light on."
+      "hidden": "A tiny house on the far shore with a light on.",
+      "translation": "Retold in our own words, with short quotations from the World English Bible."
     },
     {
       "day": 15,
       "title": "Comfort, and a Long Quiet",
       "ref": "Isaiah 40:1-5; Malachi 3:1; 4:2",
       "paragraphs": [
-        "At last some of the people came home. The temple was rebuilt, though it wasn't as grand. Then came a long quiet. The prophets stopped speaking for a very long time, and the people waited. \"Comfort, comfort my people,\" Isaiah had said, and spoke of a voice in the wilderness calling, \"Prepare the way!\" Malachi said a messenger would come, and that the sun of righteousness would rise \"with healing in its wings\" (WEB). Waiting is hard. Perhaps you are waiting for something now. But in the quiet, God was still at work, getting the world ready. The silence was not an ending. It was a held breath."
+        "At last some of the people came home. The temple was rebuilt, though it wasn't as grand. Then came a long quiet. The prophets stopped speaking for a very long time, and the people waited. \"Comfort, comfort my people,\" Isaiah had said, and spoke of a voice calling, \"Prepare the way of Yahweh in the wilderness!\" Malachi said a messenger would come, and that the sun of righteousness would rise \"with healing in its wings\" (WEB). Waiting is hard. Perhaps you are waiting for something now. But in the quiet, God was still at work, getting the world ready. The silence was not an ending. It was a held breath."
       ],
       "wonder": "I wonder what is easier to hear in a long quiet?",
       "activity": "Sit in total silence for one minute, together, and then say what you noticed.",
@@ -237,14 +242,14 @@ export const content = {
       "alt": "An empty road crosses quiet hills towards a faint golden glow on the horizon.",
       "credit": "Original illustration for Kington Parishes",
       "hidden": "An hourglass (very small) beside the road.",
-      "translation": "Quoted from the World English Bible."
+      "translation": "Retold in our own words, with short quotations from the World English Bible."
     },
     {
       "day": 16,
       "title": "An Old Man at the Altar",
       "ref": "Luke 1:5-25, 57-64",
       "paragraphs": [
-        "Zechariah was a priest, and he and his wife Elizabeth were both old, kind and faithful. They had always wished for a child, but it never happened. One day, as Zechariah served in the temple, an angel appeared. \"Don't be afraid. Your prayer has been heard. Elizabeth will have a son, and you will call him John. He will get people ready for the Lord.\" Zechariah could hardly believe it. \"How can I know this?\" The angel said, \"I am Gabriel.\" And because Zechariah doubted, he could not speak until the baby was born. Months later, when asked the baby's name, Zechariah wrote, \"His name is John.\" Suddenly his voice came back, in praise."
+        "Zechariah was a priest, and he and his wife Elizabeth were both old, kind and faithful. They had always wished for a child, but it never happened. One day, as Zechariah served in the temple, an angel appeared. The angel told him not to be afraid: his prayer had been heard, Elizabeth would have a son, and he was to call him John, who would get people ready for the Lord. Zechariah could hardly believe it. \"How can I be sure of this?\" The angel said, \"I am Gabriel, who stands in the presence of God.\" And because Zechariah doubted, he could not speak until the baby was born. Months later, when asked the baby's name, Zechariah wrote, \"His name is John.\" Suddenly his voice came back, in praise."
       ],
       "wonder": "I wonder what Zechariah thought about in all those quiet months?",
       "activity": "Try a \"silent hour\" or a no-talking game, then talk about how it felt.",
@@ -252,14 +257,15 @@ export const content = {
       "art": "day-16.svg",
       "alt": "An old priest at a temple altar sees a tall golden angel appearing in the rising incense smoke.",
       "credit": "Original illustration for Kington Parishes",
-      "hidden": "A tiny scroll with the name \"John\" (or just a scribbled line)."
+      "hidden": "A tiny scroll with the name \"John\" (or just a scribbled line).",
+      "translation": "Retold in our own words, with short quotations from the World English Bible."
     },
     {
       "day": 17,
       "title": "Yes, Mary",
       "ref": "Luke 1:26-38",
       "paragraphs": [
-        "Mary was a young woman in Nazareth, an ordinary village. One day the angel Gabriel visited her. \"Greetings! God is with you.\" Mary was puzzled and afraid. \"Don't be afraid,\" Gabriel said. \"You will have a son, and you will name him Jesus. He will be great, and his kingdom will never end.\" Mary asked a sensible question: \"How can this be?\" Gabriel explained that this was God's own doing, and added that her cousin Elizabeth was also expecting. Then Mary said, \"Behold the handmaid of the Lord; be it unto me according to thy word\" (KJV). She said yes. In that quiet yes the whole world turned."
+        "Mary was a young woman in Nazareth, an ordinary village. One day the angel Gabriel visited her. Gabriel greeted her and said that God was with her. Mary was puzzled and afraid. Gabriel told her not to be afraid: she would have a son, she was to name him Jesus, he would be great, and his kingdom would never end. Mary asked a sensible question: how could this be? Gabriel explained that this was God's own doing, and added that her cousin Elizabeth was also expecting. Then Mary said, \"Behold the handmaid of the Lord; be it unto me according to thy word\" (KJV). She said yes. In that quiet yes the whole world turned."
       ],
       "wonder": "I wonder what it took for Mary to say yes?",
       "activity": "Pick one small \"yes\" you'll offer someone today: a helping hand or an open ear.",
@@ -268,14 +274,14 @@ export const content = {
       "alt": "A young woman in a plain room listens to a tall winged angel whose wings are made of golden thread.",
       "credit": "Original illustration for Kington Parishes",
       "hidden": "A white lily in a jug.",
-      "translation": "Short quotations from the King James Version."
+      "translation": "Retold in our own words, with a short quotation from the King James Version."
     },
     {
       "day": 18,
       "title": "Joseph's Dream",
       "ref": "Matthew 1:18-25",
       "paragraphs": [
-        "Joseph was a carpenter engaged to Mary. When he learned she was expecting a baby, he was heartbroken and puzzled. He was a gentle, good man, and he planned to quietly end the engagement so she would not be shamed. But in the night, in a dream, an angel said: \"Joseph, don't be afraid to take Mary as your wife. The child is from God. Call him Jesus, because he will save his people.\" Joseph woke up and did exactly that. He never says a word in the Gospels, but what he does speaks loudly. He stays, he protects, he trusts. The prophet's old word comes true: Immanuel, \"God with us.\""
+        "Joseph was a carpenter engaged to Mary. When he learned she was expecting a baby, he was heartbroken and puzzled. He was a gentle, good man, and he planned to quietly end the engagement so she would not be shamed. But in the night, in a dream, an angel told him not to be afraid to take Mary as his wife, because the child was from God. He was to call him Jesus, because he would save his people. Joseph woke up and did exactly that. He never says a word in the Gospels, but what he does speaks loudly. He stays, he protects, he trusts. The prophet's old word comes true: Immanuel, \"God with us.\""
       ],
       "wonder": "I wonder what Joseph felt when he woke up from that dream?",
       "activity": "Do a quiet act of kindness today without telling anyone.",
@@ -283,14 +289,15 @@ export const content = {
       "art": "day-18.svg",
       "alt": "A sleeping carpenter dreams of a small golden star and cradle drawn in a thread of light.",
       "credit": "Original illustration for Kington Parishes",
-      "hidden": "A tiny saw or hammer in a corner."
+      "hidden": "A tiny saw or hammer in a corner.",
+      "translation": "Retold in our own words, with short quotations from the World English Bible."
     },
     {
       "day": 19,
       "title": "Two Cousins and a Song",
       "ref": "Luke 1:39-56",
       "paragraphs": [
-        "Mary set off at once to visit Elizabeth, a long walk into the hill country. When Mary called out a greeting, the baby inside Elizabeth leapt for joy, and Elizabeth cried, \"Blessed are you among women, and blessed is the child you carry!\" Two women, one old and one young, both with astonishing news, held each other. Then Mary sang. \"My soul doth magnify the Lord, and my spirit hath rejoiced in God my Saviour\" (KJV). Her song is about a God who lifts up the humble, feeds the hungry, and turns the world the right way up. It's been sung in churches ever since, as the Magnificat."
+        "Mary set off at once to visit Elizabeth, a long walk into the hill country. When Mary called out a greeting, the baby inside Elizabeth leapt for joy, and Elizabeth cried out that Mary was blessed among women, and so was the child she carried. Two women, one old and one young, both with astonishing news, held each other. Then Mary sang. \"My soul doth magnify the Lord, and my spirit hath rejoiced in God my Saviour\" (KJV). Her song is about a God who lifts up the humble, feeds the hungry, and turns the world the right way up. It's been sung in churches ever since, as the Magnificat."
       ],
       "wonder": "I wonder who you would run to if you had big news?",
       "activity": "Ring or visit a friend or relative and share something good.",
@@ -299,7 +306,7 @@ export const content = {
       "alt": "Two women embrace at a doorway on a hilltop path, surrounded by a loop of golden thread and music notes.",
       "credit": "Original illustration for Kington Parishes",
       "hidden": "A tiny bird singing on the roof.",
-      "translation": "Short quotations from the King James Version."
+      "translation": "Retold in our own words, with a short quotation from the King James Version."
     },
     {
       "day": 20,
@@ -314,7 +321,8 @@ export const content = {
       "art": "day-20.svg",
       "alt": "A couple and a donkey climb a hill road towards a small town under a star, the road shining like gold thread.",
       "credit": "Original illustration for Kington Parishes",
-      "hidden": "A tiny milestone with a \"B\"."
+      "hidden": "A tiny milestone with a \"B\".",
+      "translation": "Retold in our own words, following the World English Bible."
     },
     {
       "day": 21,
@@ -330,14 +338,14 @@ export const content = {
       "alt": "Three distant travellers cross desert dunes beneath one bright star, its golden tail leading them on.",
       "credit": "Original illustration for Kington Parishes",
       "hidden": "A tiny crown and a tiny gift box on a camel.",
-      "translation": "Quoted from the World English Bible."
+      "translation": "Retold in our own words, with short quotations from the World English Bible."
     },
     {
       "day": 22,
       "title": "Nowhere to Stay",
       "ref": "Luke 2:4-7",
       "paragraphs": [
-        "At last, Mary and Joseph reached Bethlehem. The little town was packed with visitors, all there to be counted. Joseph knocked on doors and found every place full. Mary was tired, and her baby was about to come. Luke tells us there was no room for them in the guest-place (the \"inn\"). Many scholars think it may have been the upper guest room of a family house, with animals sheltered on the ground floor, so the family may have ended up among the animals and their feed troughs. Wherever it was, it wasn't a palace. The King of kings came to the world with no place booked. That means he understands what it's like to be turned away."
+        "At last, Mary and Joseph reached Bethlehem. The little town was packed with visitors, all there to be counted. Joseph knocked on doors and found every place full. Mary was tired, and her baby was about to come. Luke tells us there was no room for them in the guest-place (the inn). Many scholars think it may have been the upper guest room of a family house, with animals sheltered on the ground floor, so the family may have ended up among the animals and their feed troughs. Wherever it was, it wasn't a palace. The King of kings came to the world with no place booked. That means he understands what it's like to be turned away."
       ],
       "wonder": "I wonder how it feels to knock and find no room?",
       "activity": "Set an extra place at a meal or leave a candle in the window for someone who needs welcome.",
@@ -345,14 +353,15 @@ export const content = {
       "art": "day-22.svg",
       "alt": "A couple stand at a row of closed doors at night, with a low stable glowing at the end of the street.",
       "credit": "Original illustration for Kington Parishes",
-      "hidden": "A tiny cat on a doorstep."
+      "hidden": "A tiny cat on a doorstep.",
+      "translation": "Retold in our own words, following the World English Bible."
     },
     {
       "day": 23,
       "title": "Shepherds in the Dark Fields",
       "ref": "Luke 2:8-12",
       "paragraphs": [
-        "Outside the town, on the cold hillsides, shepherds were watching their sheep through the night. They were ordinary working people, up in the dark, doing a job that smelled of wool and wet grass. Suddenly the sky lit up and an angel stood before them. They were terrified. \"Fear not,\" said the angel (KJV). \"I bring good news of great joy for everyone. Today in David's town a Saviour has been born. You will find the baby wrapped in cloths and lying in a manger.\" The first people to hear were not kings or priests. They were the ones nobody asked. And God sent the news to them first."
+        "Outside the town, on the cold hillsides, shepherds were watching their sheep through the night. They were ordinary working people, up in the dark, doing a job that smelled of wool and wet grass. Suddenly the sky lit up and an angel stood before them. They were terrified. \"Fear not,\" said the angel (KJV). He brought good news of great joy for everyone: that today in David's town a Saviour had been born, and they would find the baby wrapped in cloths and lying in a manger. The first people to hear were not kings or priests. They were the ones nobody asked. And God sent the news to them first."
       ],
       "wonder": "I wonder why God chose to tell the shepherds first?",
       "activity": "Make a sheep from cotton wool, and add a small gold thread collar.",
@@ -361,14 +370,14 @@ export const content = {
       "alt": "Shepherds and sheep on a dark hillside look up at a burst of golden light in the night sky.",
       "credit": "Original illustration for Kington Parishes",
       "hidden": "A small lamb lifting its head to look at the light.",
-      "translation": "Short quotations from the King James Version."
+      "translation": "Retold in our own words, with a short quotation from the King James Version."
     },
     {
       "day": 24,
       "title": "Glory in the Sky",
       "ref": "Luke 2:13-16",
       "paragraphs": [
-        "And then it was not just one angel. The whole sky filled with them, a great choir praising God: \"Glory to God in the highest, and on earth peace, good will toward men\" (WEB). The shepherds stood open-mouthed. When the angels had gone and the sky was dark again, they looked at each other. \"Let's go to Bethlehem and see what has happened.\" They did not wait until morning or sort out the sheep. They hurried down the hill in the dark, towards the town, to find a baby in a manger. It's Christmas Eve. Tonight, perhaps, the hurry is in us too."
+        "And then it was not just one angel. The whole sky filled with them, a great choir praising God: \"Glory to God in the highest, on earth peace, good will toward men\" (WEB). The shepherds stood open-mouthed. When the angels had gone and the sky was dark again, they looked at each other. They said to one another that they should go to Bethlehem and see what had happened. They did not wait until morning or sort out the sheep. They hurried down the hill in the dark, towards the town, to find a baby in a manger. It's Christmas Eve. Tonight, perhaps, the hurry is in us too."
       ],
       "wonder": "I wonder what the angels' song sounded like?",
       "activity": "Sing or hum a favourite carol together, as the shepherds might have, running down the hill.",
@@ -377,14 +386,14 @@ export const content = {
       "alt": "A sky full of angels drawn in golden thread above shepherds running down a hill to a glowing stable.",
       "credit": "Original illustration for Kington Parishes",
       "hidden": "A shepherd's lost sandal on the path.",
-      "translation": "Quoted from the World English Bible."
+      "translation": "Retold in our own words, with short quotations from the World English Bible."
     },
     {
       "day": 25,
       "title": "Christmas Day: The Word Made Flesh",
       "ref": "Luke 2:6-7, 15-20; John 1:1-5, 14",
       "paragraphs": [
-        "And there, in Bethlehem, Mary's baby was born. She wrapped him in cloths and laid him in a manger, a feeding trough, because there was no other bed. The shepherds arrived, breathless, and found everything just as they had been told. They knelt, and then they went out singing, telling everyone what they had seen. Mary quietly treasured it all in her heart. John's Gospel tells it in the biggest words: in the beginning was the Word, and the light shines in the darkness, and the darkness has not put it out. \"The Word was made flesh, and dwelt among us\" (KJV). The first light, the thread, the promise: here, a baby, God with us. Happy Christmas."
+        "And there, in Bethlehem, Mary's baby was born. She wrapped him in cloths and laid him in a manger, a feeding trough, because there was no other bed. The shepherds arrived, breathless, and found everything just as they had been told. They knelt, and then they went out singing, telling everyone what they had seen. Mary quietly treasured it all in her heart. John's Gospel tells it in the biggest words: in the beginning was the Word, and the light shines in the darkness, and the darkness has not put it out. \"And the Word was made flesh, and dwelt among us\" (KJV). The first light, the thread, the promise: here, a baby, God with us. Happy Christmas."
       ],
       "wonder": "I wonder what it means that the light of the world came as a baby?",
       "activity": "Gather around a crib or a candle, light it, and tell the whole thread of the story back from Day 1 in your own words.",
@@ -393,7 +402,7 @@ export const content = {
       "alt": "A manger glows at the centre of a stable, wrapped in a golden thread, with a star above and watchers kneeling.",
       "credit": "Original illustration for Kington Parishes",
       "hidden": "Look for every hidden detail from the 24 earlier days gathered in this picture (owl, dove, lamb, harp, etc.). A \"find them all\" challenge.",
-      "translation": "Short quotations from the King James Version."
+      "translation": "Retold in our own words, with a short quotation from the King James Version."
     }
   ]
 };

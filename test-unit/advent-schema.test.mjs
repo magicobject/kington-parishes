@@ -15,12 +15,12 @@ const dayOf = (c, n) => c.days.find((d) => d.day === n);
 
 describe('the real files', () => {
   test('content.mjs is valid and has 25 days', () => {
-    assert.equal(validateContent(content), content);
+    assert.deepEqual(validateContent(content), content);
     assert.equal(content.days.length, DAY_COUNT);
   });
 
   test('theme.mjs is valid and the site is not publicly listed yet', () => {
-    assert.equal(validateTheme(theme), theme);
+    assert.deepEqual(validateTheme(theme), theme);
     assert.equal(theme.publicListing, false);
     assert.equal(theme.timeZone, 'Europe/London');
     assert.equal(theme.slug, 'advent');
@@ -46,7 +46,7 @@ describe('validateContent: structure', () => {
   });
 
   test('rejects a missing day, naming it', () => {
-    rejects((c) => { c.days = c.days.filter((d) => d.day !== 13); }, /day 13: is missing/);
+    rejects((c) => { c.days = c.days.filter((d) => d.day !== 13); }, /exactly 25 days/);
   });
 
   test('rejects a duplicate day', () => {
@@ -54,7 +54,8 @@ describe('validateContent: structure', () => {
   });
 
   test('rejects a 26th day and day numbers outside 1 to 25', () => {
-    rejects((c) => { c.days.push({ ...clone(dayOf(c, 1)), day: 26 }); }, /day 26: "day" must be a whole number from 1 to 25/);
+    rejects((c) => { c.days.push({ ...clone(dayOf(c, 1)), day: 26 }); }, /exactly 25 days/);
+    rejects((c) => { dayOf(c, 25).day = 26; }, /day 26: "day" must be a whole number from 1 to 25/);
     rejects((c) => { dayOf(c, 2).day = 0; }, /"day" must be a whole number/);
     rejects((c) => { dayOf(c, 2).day = 2.5; }, /"day" must be a whole number/);
     rejects((c) => { dayOf(c, 2).day = '2'; }, /"day" must be a whole number/);
@@ -68,10 +69,9 @@ describe('validateContent: structure', () => {
     rejects((c) => { delete dayOf(c, 9).prayer; }, /day 9: missing key "prayer"/);
   });
 
-  test('optional keys may be left out', () => {
+  test('the hidden detail is optional', () => {
     const copy = clone(content);
     delete dayOf(copy, 3).hidden;
-    delete dayOf(copy, 3).translation;
     validateContent(copy);
   });
 
@@ -144,10 +144,10 @@ describe('validateContent: forbidden characters and patterns', () => {
     'a newline': 'line\nbreak',
     'a NUL': 'nul\u0000here',
     'a delete character': 'del\u007Fhere',
-    'a bidi override (U+202E)': 'abc‮def',
-    'a bidi embedding (U+202A)': 'abc‪def',
-    'a bidi isolate (U+2066)': 'abc⁦def',
-    'a bidi isolate end (U+2069)': 'abc⁩def',
+    'a bidi override (U+202E)': 'abc\u202Edef',
+    'a bidi embedding (U+202A)': 'abc\u202Adef',
+    'a bidi isolate (U+2066)': 'abc\u2066def',
+    'a bidi isolate end (U+2069)': 'abc\u2069def',
   };
 
   for (const [name, value] of Object.entries(badValues)) {
@@ -197,7 +197,7 @@ describe('validateTheme', () => {
     other.siteName = 'Another Church';
     other.timeZone = 'Pacific/Auckland';
     other.season = { start: { month: 12, day: 1 }, end: { month: 12, day: 25 }, archiveUntil: null };
-    other.slug = '/advent-2';
+    other.slug = 'advent-2';
     other.colours.night = '#000000';
     validateTheme(other);
   });
@@ -223,12 +223,9 @@ describe('validateTheme', () => {
   });
 
   test('rejects bad slugs', () => {
-    for (const slug of ['', 'Advent', 'a/b', '../x', 'api', '/api', 'a b', 'x'.repeat(33), '//advent', 'advent.html', 5]) {
+    for (const slug of ['', 'Advent', 'a/b', '../x', 'api', '/api', '/advent', 'a b', 'x'.repeat(33), '//advent', 'advent.html', 5]) {
       bad((t) => { t.slug = slug; }, /"slug"/);
     }
-    const ok = clone(theme);
-    ok.slug = '/advent';
-    validateTheme(ok);
   });
 
   test('rejects flags that are not true or false', () => {

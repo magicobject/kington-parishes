@@ -26,18 +26,27 @@ const codeFiles = files.filter((file) => /\.(mjs|js|cjs)$/.test(file.name));
 
 // Patterns are assembled from pieces so this test file never matches itself
 // (and it lives outside modules/advent/ anyway, which is all that gets scanned).
-const FORBIDDEN_APIS = [
-  ['inner', 'HTML'],
-  ['outer', 'HTML'],
-  ['insertAdjacent', 'HTML'],
-  ['document', '.write'],
-  ['ev', 'al('],
-  ['new Func', 'tion'],
-  ['local', 'Storage'],
-  ['session', 'Storage'],
-  ['indexed', 'DB'],
-  ['document', '.cookie'],
-].map((pieces) => pieces.join(''));
+// fetch is deliberately NOT forbidden: the client will fetch same-origin day files.
+const piece = (...parts) => parts.join('');
+const FORBIDDEN = [
+  ['inner' + 'HTML', new RegExp(piece('inner', 'HTML'))],
+  ['outer' + 'HTML', new RegExp(piece('outer', 'HTML'))],
+  ['insertAdjacent' + 'HTML', new RegExp(piece('insertAdjacent', 'HTML'))],
+  ['document.' + 'write', new RegExp(piece(String.raw`document\s*\.\s*wri`, 'te'))],
+  ['ev' + 'al(', new RegExp(piece(String.raw`\bev`, String.raw`al\s*\(`))],
+  ['(0,ev' + 'al)', new RegExp(piece(String.raw`\(\s*0\s*,\s*ev`, String.raw`al\s*\)`))],
+  ['new Func' + 'tion', new RegExp(piece(String.raw`new\s+Func`, 'tion'))],
+  ['Func' + 'tion(', new RegExp(piece(String.raw`(?<![\w$.])Func`, String.raw`tion\s*\(`))],
+  ['local' + 'Storage', new RegExp(piece('local', 'Storage'))],
+  ['session' + 'Storage', new RegExp(piece('session', 'Storage'))],
+  ['indexed' + 'DB', new RegExp(piece('indexed', 'DB'))],
+  ['document.' + 'cookie', new RegExp(piece(String.raw`document\s*\.\s*coo`, 'kie'))],
+  ['globalThis' + '[', new RegExp(piece('global', String.raw`This\s*\[`))],
+  ['XMLHttp' + 'Request', new RegExp(piece('XMLHttp', 'Request'))],
+  ['send' + 'Beacon', new RegExp(piece('send', 'Beacon'))],
+  ['Web' + 'Socket', new RegExp(piece('Web', 'Socket'))],
+  ['import' + 'Scripts', new RegExp(piece('import', 'Scripts'))],
+];
 
 describe('modules/advent folder', () => {
   test('the folder has the expected generic and site-owned files', () => {
@@ -75,13 +84,24 @@ describe('modules/advent folder', () => {
     }
   });
 
-  for (const api of FORBIDDEN_APIS) {
-    test(`no source file uses ${api}`, () => {
+  for (const [name, pattern] of FORBIDDEN) {
+    test(`no source file uses ${name}`, () => {
       for (const file of codeFiles) {
-        assert.ok(!file.text.includes(api), `${file.name} contains ${api}`);
+        assert.ok(!pattern.test(file.text), `${file.name} contains ${name}`);
       }
     });
   }
+
+  test('the patterns catch what they should and leave ordinary words alone', () => {
+    const hits = (name, text) => FORBIDDEN.find(([n]) => n === name)[1].test(text);
+    assert.ok(hits('ev' + 'al(', 'x = ev' + 'al ("1")'));
+    assert.ok(!hits('ev' + 'al(', 'retriev' + 'al(x)'));
+    assert.ok(hits('Func' + 'tion(', 'Func' + 'tion("return 1")()'));
+    assert.ok(!hits('Func' + 'tion(', 'myFunc' + 'tion(1)'));
+    assert.ok(!hits('Func' + 'tion(', 'obj.Func' + 'tion(1)'));
+    assert.ok(hits('(0,ev' + 'al)', '(0, ev' + 'al)("1")'));
+    assert.ok(hits('globalThis' + '[', 'global' + 'This["ev" + "al"]'));
+  });
 
   test('the scan sees the code it is meant to scan', () => {
     assert.ok(codeFiles.length >= 5);
