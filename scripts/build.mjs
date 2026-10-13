@@ -426,7 +426,7 @@ for (const page of PAGES) {
     ? replaceTokens(headerTemplate.replace('{{NAV_ITEMS}}', renderNavItems(NAV, page.active)), tokens)
     : '';
   const safeguardStrip = page.safeguardStrip === false ? '' : safeguardStripTemplate;
-  const pageFooter = page.footer === false ? '' : footer;
+  const pageFooter = page.footer === false ? '' : footer.replace('{{SAFEGUARD_STRIP}}', safeguardStrip);
 
   let html = pageTemplate
     .replace('{{TITLE}}', page.title)
@@ -434,7 +434,6 @@ for (const page of PAGES) {
     .replace('{{EXTRA_HEAD}}', extraHead)
     .replace('{{HEADER}}', header)
     .replace('{{CONTENT}}', content)
-    .replace('{{SAFEGUARD_STRIP}}', safeguardStrip)
     .replace('{{FOOTER}}', pageFooter);
 
   html = replaceTokens(html, tokens);

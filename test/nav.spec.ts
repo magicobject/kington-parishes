@@ -66,11 +66,11 @@ test('the Live Stream button appears on the homepage and every nav page, and ope
   }
 });
 
-test('safeguarding is reachable from the footer\'s Explore list, but not highlighted in the primary nav', async ({
+test("safeguarding is highlighted in the footer's top row, but not in the primary nav", async ({
   page,
 }) => {
-  await page.goto('/index.html');
-  await page.locator('footer.site').getByRole('link', { name: SAFEGUARDING_PAGE.navLabel }).click();
+  await page.goto('/contact.html');
+  await page.locator('footer.site .safeguard-strip').getByRole('link', { name: /Safeguarding information/ }).click();
 
   await expect(page).toHaveURL(new RegExp(`${SAFEGUARDING_PAGE.path}$`));
   await expect(page).toHaveTitle(new RegExp(SAFEGUARDING_PAGE.titleContains));

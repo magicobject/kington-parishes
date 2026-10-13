@@ -543,14 +543,13 @@ button.btn[disabled] { opacity: 0.6; cursor: not-allowed; }
 }
 
 /* ---------- Safeguarding banner (footer link, not full text everywhere) ---------- */
+/* Top row of the footer: a highlighted panel (inside footer.site's .wrap). */
 .safeguard-strip {
-  background: var(--heather-dark);
-  color: #F3EEEF;
-  padding: 18px 0;
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;
+  background: var(--heather-dark); color: #F3EEEF; border-radius: var(--radius);
+  padding: 16px 20px; margin-bottom: 40px;
 }
-.safeguard-strip .wrap { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; justify-content: space-between; }
 .safeguard-strip p { margin: 0; font-size: 0.95rem; }
-.safeguard-strip a { color: #fff; font-weight: 700; text-decoration: underline; }
 
 /* ---------- Footer ---------- */
 footer.site {
