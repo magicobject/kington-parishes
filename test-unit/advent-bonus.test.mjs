@@ -12,7 +12,9 @@ import { buildAdvent, renderAdventToken, validateDayFile } from '../modules/adve
 import { theme as realTheme } from '../modules/advent/theme.mjs';
 // Builds into empty temporary folders, so use the real theme without its own scene file.
 const theme = { ...realTheme, scene: null };
-import { content } from '../modules/advent/content.mjs';
+import { content as realContent } from '../modules/advent/content.mjs';
+// The 25 days only: these tests build with and without a bonus day on purpose (the real bonus is tested in advent-built).
+const content = { days: realContent.days };
 import { BONUS_FIXTURE } from './support/bonus-fixture.mjs';
 
 const SEASON = { start: { month: 12, day: 1 }, end: { month: 12, day: 25 }, archiveUntil: { month: 1, day: 6 } };

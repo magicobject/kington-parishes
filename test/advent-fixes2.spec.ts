@@ -92,3 +92,37 @@ test.describe('large text', () => {
     });
   }
 });
+
+test.describe('the real bonus door (Epiphany, "Gifts for a King")', () => {
+  test('before 6 January it is a not-yet door on its own full-width row; on 6 January it is today and opens the real text', async ({ page }) => {
+    await withBonusDoor(page);
+    await openAt(page, '2027-01-05T12:00:00Z');
+    await expect(doors(page)).toHaveCount(26);
+    await expect(door(page, 26)).toHaveClass(/advent-door-future/);
+    await expect(door(page, 26)).toHaveAttribute('aria-label', 'Epiphany door, 6 January, not yet');
+    const style = await door(page, 26).evaluate((el) => { const s = getComputedStyle(el); return { borderStyle: s.borderTopStyle, width: el.getBoundingClientRect().width, list: el.closest('ul')!.getBoundingClientRect().width }; });
+    expect(style.borderStyle).toBe('dashed');
+    expect(style.width).toBeGreaterThanOrEqual(style.list - 2);
+
+    await page.clock.setFixedTime(new Date('2027-01-06T10:00:00Z'));
+    await page.reload();
+    await expect(door(page, 26)).toHaveClass(/advent-door-today/);
+    await expect(door(page, 26)).toContainText('Today');
+    await door(page, 26).click();
+    const real = (await import('./support/advent')).BONUS_FILE;
+    await expect(page.locator('#advent-dialog-title')).toHaveText('Gifts for a King');
+    await expect(dialog(page).locator('.advent-reference')).toHaveText('Matthew 2:1-12');
+    await expect(dialog(page).locator('.advent-translation')).toHaveText('Retold in our own words, with short quotations from the World English Bible.');
+    await expect(dialog(page).locator('.advent-story p')).toHaveCount(5);
+    await expect(dialog(page).locator('.advent-story p')).toHaveText(real.paragraphs);
+    await expect(dialog(page).locator('.advent-story')).toContainText('wise people');
+    await expect(dialog(page).locator('.advent-prayer p')).toHaveText(real.prayer);
+    await expect(dialog(page).locator('.advent-hint')).toBeHidden(); // no picture file yet
+    expect(await dialog(page).innerText()).not.toMatch(/three (wise|travellers|kings)/i);
+  });
+
+  test('by default (no bonus markup) there are only the 25 numbered doors, as before', async ({ page }) => {
+    await openAt(page, '2026-12-12T12:00:00Z');
+    await expect(doors(page)).toHaveCount(25);
+  });
+});

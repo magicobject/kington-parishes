@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
 import { theme } from '../modules/advent/theme.mjs';
 import { content } from '../modules/advent/content.mjs';
+const realBonus = content.bonus;
 
 const PUBLIC = fileURLToPath(new URL('../public/', import.meta.url));
 const read = (path) => readFileSync(join(PUBLIC, path), 'utf8');
@@ -96,6 +97,20 @@ describe('nothing else on the public site points at the calendar', () => {
 });
 
 describe('generated files', () => {
+  test('the bonus day file exists, carries the real bonus text, and has no art key until day-26.svg exists', () => {
+    assert.ok(realBonus, 'content.mjs has a bonus day');
+    const day = JSON.parse(read('advent/day-26.json'));
+    assert.equal(day.day, 26);
+    assert.equal(day.title, realBonus.title);
+    assert.deepEqual(day.paragraphs, realBonus.paragraphs);
+    assert.equal('art' in day, existsSync(join(PUBLIC, 'advent', 'art', 'day-26.svg')));
+  });
+
+  test('the calendar page markup carries the bonus door settings (6 January, Epiphany)', () => {
+    const page = read(calendarFile);
+    assert.match(page, /data-bonus-month="1" data-bonus-day="6" data-bonus-label="Epiphany"/);
+  });
+
   test('25 day files exist and no picture folder entry is claimed that does not exist', () => {
     for (let n = 1; n <= 25; n += 1) {
       const name = `day-${String(n).padStart(2, '0')}`;

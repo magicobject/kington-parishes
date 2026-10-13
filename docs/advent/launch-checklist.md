@@ -16,9 +16,9 @@ guard tests keep it that way. Tick each step in the launch commit message.
    in place before launch. The build refuses a picture that is unsafe OR too costly to draw
    (the lint bounds draw cost with a weighted budget, not only the `<use>` count: see the README, "Adding a
    picture").
-4. **The bonus door content.** The door is built and configured (`bonus` in `theme.mjs`) but `content.mjs` has no
-   `bonus` day yet, so the calendar shows 25 doors. Add the approved "Gifts for a King" text as
-   `bonus: {day: 26, ...}` (and `day-26.svg`) before launch, or accept 25 doors and change what Day 21 promises.
+4. **The bonus door.** DONE for the words: the approved "Gifts for a King" text is `bonus` (day 26) in
+   `modules/advent/content.mjs` and the door shows (26 doors). STILL TO DO: draw `day-26.svg` and put it in
+   `public/advent/art/` with the other 25 (the art step above then covers 26 pictures, `day-01.svg` to `day-26.svg`).
 5. **Flip the three launch flags together** in `modules/advent/theme.mjs`:
    - `goLive: true`: the real date now drives the calendar page and the home-page banner (until then it never does);
    - `publicListing: true`: the calendar page joins the sitemap and the site search and loses its noindex, and the

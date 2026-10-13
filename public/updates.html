@@ -87,13 +87,17 @@
       <div class="kicker">Build history</div>
       <h1 id="site-updates">Site updates</h1>
       <p class="lede">An internal changelog: every build number and what changed. This page isn't linked from anywhere else on the site, and refreshes itself every minute.</p>
-      <p class="build-number">Current build: 2026.10.13.016</p>
+      <p class="build-number">Current build: 2026.10.13.017</p>
     </div>
   </div>
 
   <section>
     <div class="wrap">
       <ul class="changelog">
+        <li>
+          <div class="changelog-meta"><span class="changelog-build">2026.10.13.017</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">13 October 2026</span></div>
+          <p>Advent calendar (still hidden): the real text for the 6 January bonus door, "Gifts for a King" (Epiphany), is in, so the <a href="advent.html">Advent page</a> now has a 26th door. Its picture still has to be drawn. See the <a href="help-advent.html">Advent calendar help guide</a>.</p>
+        </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.13.016</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">13 October 2026</span></div>
           <p>Stopped GitHub's automatic "pages build and deployment" job failing on every push: added an empty <code>.nojekyll</code> file so GitHub no longer tries to treat our planning documents as Jekyll templates (it choked on the double curly braces in the Advent spec). The live site is built and served by Cloudflare and is unaffected. See the <a href="help.html">help hub</a>.</p>

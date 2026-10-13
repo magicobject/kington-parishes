@@ -344,7 +344,20 @@ The calendar tells one story: God has been leaning toward the world since the be
 
 ## 6. Bonus and alternative doors
 
-- **Bonus A, "Gifts for a King" (6 January, Epiphany):** Matthew 2:1-12. The Magi arrive, gold, frankincense and myrrh. The gold thread becomes a gift. Hidden detail: a tiny crown.
+- **Bonus A, "Gifts for a King" (6 January, Epiphany): FINAL TEXT, approved by Greg and now in `modules/advent/content.mjs` (`bonus`, day 26).** Matthew 2:1-12 (World English Bible, quotations verified). The wise travellers (never "three": the Bible does not say) arrive, and the gold, frankincense and myrrh. Wording: "the wise travellers".
+  - **Title:** Gifts for a King. **Reference:** Matthew 2:1-12.
+  - **Paragraph 1:** On Day 21 some wise people set out from far away, following a star. Now their long road is nearly over. They reach Jerusalem, the great city, and ask everyone they meet, "Where is he who is born King of the Jews? For we saw his star in the east, and have come to worship him."
+  - **Paragraph 2:** King Herod was frightened when he heard this, because he thought of himself as the only king. His advisers told him the old prophets had named the place: Bethlehem, the small town from Day 13. Herod sent the travellers on their way. "Go and search diligently for the young child. When you have found him, bring me word, so that I also may come and worship him." The travellers could not know what was in his heart.
+  - **Paragraph 3:** They set off again, and there was the star, going ahead of them until it stopped over the place where the child was. "When they saw the star, they rejoiced with exceedingly great joy." They went into the house and found the child with Mary his mother, and they knelt down before him. "Opening their treasures, they offered to him gifts: gold, frankincense, and myrrh."
+  - **Paragraph 4:** Down the years, people have found meaning in the gifts: gold for a king, sweet-smelling frankincense burned in worship, and myrrh, a precious perfume. The Bible does not say how many travellers there were, or that they were kings. It tells us only that wise people from a far country came to honour a child, just as the old promise said: the light would reach the nations.
+  - **Paragraph 5:** Warned in a dream not to return to Herod, they "went back to their own country another way." Each year on 6 January the church keeps this story as Epiphany, when the light is shown to the whole world. The golden thread that began as a spark on the first morning has been God's gift to everyone all along. Happy Epiphany.
+  - **Wonder:** I wonder what you would bring, if you could give the child a gift that was truly yours?
+  - **Try this:** Choose or make a small gift for someone, and as you give it, tell them why you chose it.
+  - **Prayer:** Wise and generous God, you lead people from far and near to the light. Receive our gifts, large and small, and guide us home by a new way. Amen.
+  - **Alt-text:** The wise travellers kneel with gifts at a doorway beneath a bright star, a golden thread flowing from star to door.
+  - **Hidden detail:** A tiny crown resting on the camel's blanket, plus the tiny star near the left horizon.
+  - **Credit / translation:** Original illustration for Kington Parishes; Retold in our own words, with short quotations from the World English Bible.
+  - **Picture:** `day-26.svg` is still to be drawn and added to `public/advent/art/` with the other 25.
 - **Bonus B, "An Old Man and an Old Woman" (2 February, Candlemas):** Luke 2:22-38. Simeon and Anna see the child; "a light to lighten the Gentiles" (KJV, Luke 2:32). Ties perfectly to Day 15's waiting.
 - **Bonus C, "The Voice in the Wilderness":** John the Baptist, Isaiah 40:3 and Luke 3:1-6. Good for Advent Sunday 2.
 - **Alternative OT doors (swap-ins):** Hannah's prayer (1 Samuel 1-2, a mother's song that echoes the Magnificat); Joseph in Egypt (Genesis 37-45, a rejected brother who saves a family); Daniel and the lions (hope under pressure); Isaiah's "Servant" songs (use sparingly; handle with care).

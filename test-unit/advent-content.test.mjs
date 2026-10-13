@@ -37,18 +37,30 @@ const VERIFIED = {
   23: [KJV, 'Fear not'],
   24: [WEB, 'Glory to God in the highest, on earth peace, good will toward men'],
   25: [KJV, 'And the Word was made flesh, and dwelt among us'],
+  // The 6 January bonus door (Matthew 2, World English Bible, checked against bible-api.com): verses 2, 8, 10, 11 and a
+  // fragment of 12 (the full verse is "Being warned in a dream that they shouldn't return to Herod, they went back to
+  // their own country another way.").
+  26: [WEB,
+    'Where is he who is born King of the Jews? For we saw his star in the east, and have come to worship him',
+    'Go and search diligently for the young child. When you have found him, bring me word, so that I also may come and worship him',
+    'When they saw the star, they rejoiced with exceedingly great joy',
+    'Opening their treasures, they offered to him gifts: gold, frankincense, and myrrh',
+    'went back to their own country another way'],
 };
+
+// The 25 days and the bonus day, when there is one.
+const allDays = [...content.days, ...(content.bonus ? [content.bonus] : [])];
 
 const quotedPassages = (day) =>
   day.paragraphs.flatMap((paragraph) => [...paragraph.matchAll(/"([^"]+)"/g)].map((match) => match[1].replace(/[.,?!]+$/, '')));
 
 describe('content honesty', () => {
   test('every day has a translation label, and it is the label the verified table expects', () => {
-    for (const day of content.days) assert.equal(day.translation, VERIFIED[day.day][0], `day ${day.day}`);
+    for (const day of allDays) assert.equal(day.translation, VERIFIED[day.day][0], `day ${day.day}`);
   });
 
   test('every quoted passage is on the verified list for that day', () => {
-    for (const day of content.days) {
+    for (const day of allDays) {
       const allowed = VERIFIED[day.day].slice(1);
       for (const passage of quotedPassages(day)) {
         assert.ok(allowed.includes(passage), `day ${day.day} quotes "${passage}", which is not verified`);
@@ -57,7 +69,7 @@ describe('content honesty', () => {
   });
 
   test('every verified quotation is actually used, so the table cannot drift', () => {
-    for (const day of content.days) {
+    for (const day of allDays) {
       const used = quotedPassages(day);
       for (const passage of VERIFIED[day.day].slice(1)) {
         assert.ok(used.includes(passage), `day ${day.day} no longer contains "${passage}"`);
@@ -66,16 +78,42 @@ describe('content honesty', () => {
   });
 
   test('days with no quotation are labelled as retold', () => {
-    for (const day of content.days) {
+    for (const day of allDays) {
       if (VERIFIED[day.day].length === 1) assert.equal(quotedPassages(day).length, 0, `day ${day.day}`);
     }
   });
 
   test('a day quoting the King James Version says so, and one quoting the World English Bible says so', () => {
-    for (const day of content.days) {
+    for (const day of allDays) {
       const label = VERIFIED[day.day][0];
       if (label === KJV) assert.match(day.translation, /King James/);
       if (label === WEB) assert.match(day.translation, /World English Bible/);
     }
+  });
+});
+
+describe('the 6 January bonus door ("Gifts for a King")', () => {
+  const bonus = content.bonus;
+
+  test('exists as day 26 with the approved title and reference, and a picture file name (the picture itself is added later)', () => {
+    assert.ok(bonus, 'content.mjs has a bonus day');
+    assert.equal(bonus.day, 26);
+    assert.equal(bonus.title, 'Gifts for a King');
+    assert.equal(bonus.ref, 'Matthew 2:1-12');
+    assert.equal(bonus.art, 'day-26.svg');
+    assert.equal(bonus.paragraphs.length, 5);
+  });
+
+  test('says "the wise travellers" and never claims a number of travellers or that they were kings', () => {
+    const text = JSON.stringify(bonus);
+    assert.match(text, /wise travellers/);
+    assert.ok(!/three (?:wise|travellers|kings|men|magi)/i.test(text));
+    assert.ok(!/we three/i.test(text));
+    assert.match(bonus.paragraphs[3], /does not say how many travellers/);
+  });
+
+  test('the theme names the bonus door, so the door appears', async () => {
+    const { theme } = await import('../modules/advent/theme.mjs');
+    assert.deepEqual(theme.bonus, { on: { month: 1, day: 6 }, label: 'Epiphany' });
   });
 });

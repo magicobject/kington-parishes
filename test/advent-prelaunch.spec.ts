@@ -27,7 +27,7 @@ test('PRE-LAUNCH: on 12 December the real date still shows only the calm sentenc
 test('PRE-LAUNCH: a preview is still the only way in (calendar page and home page)', async ({ page }) => {
   await page.clock.install({ time: new Date('2026-12-12T12:00:00Z') });
   await page.goto('/advent.html?advent-preview=2026-12-07');
-  await expect(page.locator('.advent-doors button')).toHaveCount(25);
+  await expect(page.locator('.advent-doors button')).toHaveCount(26);
   await page.goto('/?advent-preview=2026-12-07');
   await expect(page.locator('.advent-teaser')).toBeVisible();
 });

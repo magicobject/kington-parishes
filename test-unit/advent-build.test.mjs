@@ -14,7 +14,9 @@ import { theme as realTheme } from '../modules/advent/theme.mjs';
 // These tests build into empty temporary folders, so they use the real theme without its own scene file
 // (the scene is tested in advent-ui-build.test.mjs).
 const theme = { ...realTheme, scene: null };
-import { content } from '../modules/advent/content.mjs';
+import { content as realContent } from '../modules/advent/content.mjs';
+// The 25 days only: these tests build with and without a bonus day on purpose (the real bonus is tested in advent-built).
+const content = { days: realContent.days };
 import { isIndexable, isSearchablePage } from '../scripts/build-search-index.mjs';
 import { cases as REVIEW_SAMPLES } from './support/hostile-svgs.mjs';
 
