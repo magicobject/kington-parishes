@@ -10,9 +10,9 @@
 // history); text from the day files is only ever set as plain text, never as markup; a day file is fetched from
 // an address built only from a checked whole number, size-capped, parsed in try/catch and checked with the shared
 // day rules; the preview date is never put into any link, share address or canonical; no outside requests.
-import { seasonState, doorState, BONUS_DAY } from './advent/date.js?v=2d72c76b9a';
-import { effectiveDate, formatPreviewNotice } from './advent/preview.js?v=2032b288b5';
-import { FRIENDLY_ERROR, artUrl, calendarUrl, dateLabel, doorName, doorNumberText, doorSub, fetchDayFile, neighbours, parseDayHash, readConfig, shareUrl, statusText, todayDoor, visibleSeason } from './advent/logic.js?v=7cd04250d2';
+import { seasonState, doorState, msUntilNextMidnight, BONUS_DAY } from './advent/date.js?v=437781ad7f';
+import { effectiveDate, formatPreviewNotice } from './advent/preview.js?v=0a66911aae';
+import { FRIENDLY_ERROR, artUrl, calendarUrl, dateLabel, doorName, doorNumberText, doorSub, fetchDayFile, neighbours, parseDayHash, readConfig, shareUrl, statusText, todayDoor, visibleSeason } from './advent/logic.js?v=63aeada73f';
 
 function make(tag, className, text) {
   const node = document.createElement(tag);
@@ -66,21 +66,26 @@ function showPreviewNotice(root, parts) {
 // The calendar
 
 class Calendar {
-  constructor(root, config, parts, season) {
+  constructor(root, config) {
     this.root = root;
     this.config = config;
-    this.parts = parts;
-    this.season = season;
     this.hasBonus = Boolean(config.bonus);
     this.days = Array.from({ length: config.dayCount + (this.hasBonus ? 1 : 0) }, (_, index) => index + 1);
-    this.states = new Map(this.days.map((day) => [day, doorState(day, parts, config.season, config.bonus)]));
+    this.heading = part(root, 'heading');
+    this.defaultHeading = this.heading.textContent;
+    this.parts = null;
+    this.season = null;
+    this.states = new Map();
     this.doors = new Map();
+    this.currentToday = 0; // the door that is "today" right now, or 0
     this.files = new Map(); // in memory only: day number -> a promise for the checked day file
     this.titles = new Map(); // in memory only: day number -> title, once its file has loaded
     this.shown = 0; // the day on show in the dialog, or 0
     this.ticket = 0; // lets a slow fetch notice that the visitor has moved on
     this.origin = null; // the door (or button) that opened the dialog, so focus can go back to it
     this.returnTo = 0; // when a "not yet" message was opened from a day, the day to go back to
+    this.pressedBackdrop = false; // did the current click start on the backdrop?
+    this.onClosed = null; // told when the dialog closes, so a refresh held back by an open dialog can run
   }
 
   isUnlocked(day) {
@@ -93,43 +98,46 @@ class Calendar {
     if (!this.files.has(day)) {
       const request = fetchDayFile(day, (url, init) => fetch(url, init));
       this.files.set(day, request);
-      request.then((file) => this.titles.set(day, file.title), () => this.files.delete(day)); // a failure is not remembered, so a later try can work
+      // A failure (including a timeout) is not remembered, so a later try asks again.
+      request.then((file) => this.titles.set(day, file.title), () => this.files.delete(day));
     }
     return this.files.get(day);
   }
 
   // ---- the page ----
 
+  // Done once: the dialog and the page-wide listeners.
   build() {
-    const { root, config } = this;
-    const live = part(root, 'live');
-    const archive = this.season === 'archive';
-
-    if (archive) part(root, 'heading').textContent = 'The Christmas Story';
-    this.status = part(root, 'status');
-    this.status.textContent = statusText({ season: this.season, today: this.todayNumber(), bonusToday: this.bonusToday() }, config);
-
-    const list = part(root, 'doors');
-    list.replaceChildren(...this.days.map((day) => this.doorItem(day)));
-
-    this.primary = part(root, 'primary');
-    const today = this.days.find((day) => this.states.get(day) === 'today');
-    if (today) {
-      this.primary.hidden = false;
-      this.primary.addEventListener('click', () => this.openDay(today, this.primary));
-    }
-
-    this.buildScene(part(root, 'scene'), archive || this.todayNumber() === config.dayCount);
+    this.primary = part(this.root, 'primary');
+    this.primary.addEventListener('click', () => { if (this.currentToday) this.openDay(this.currentToday, this.primary); });
+    this.status = part(this.root, 'status');
     this.dialog = this.buildDialog();
-    root.append(this.dialog);
-    part(root, 'calm').hidden = true;
-    live.hidden = false;
-
-    this.loadTitles();
-    this.openFromAddress();
+    this.root.append(this.dialog);
     window.addEventListener('hashchange', () => this.openFromAddress());
     window.addEventListener('beforeprint', () => this.openForPrint());
     window.addEventListener('afterprint', () => this.restoreAfterPrint());
+  }
+
+  // Shows the calendar for this date and season: the doors, the status line, the primary button and the scene. Can be
+  // called again (at midnight) with a new date; an open dialog is never changed by it.
+  apply(parts, season) {
+    const first = this.parts === null;
+    this.parts = parts;
+    this.season = season;
+    this.states = new Map(this.days.map((day) => [day, doorState(day, parts, this.config.season, this.config.bonus)]));
+    this.currentToday = this.days.find((day) => this.states.get(day) === 'today') ?? 0;
+
+    this.heading.textContent = season === 'archive' ? 'The Christmas Story' : this.defaultHeading;
+    this.status.textContent = statusText({ season, today: this.todayNumber(), title: this.titles.get(this.todayNumber()), bonusToday: this.bonusToday() }, this.config);
+    this.doors = new Map();
+    part(this.root, 'doors').replaceChildren(...this.days.map((day) => this.doorItem(day)));
+    this.primary.hidden = !this.currentToday;
+    this.buildScene(part(this.root, 'scene'), season === 'archive' || this.todayNumber() === this.config.dayCount);
+    part(this.root, 'calm').hidden = true;
+    part(this.root, 'live').hidden = false;
+
+    this.loadTitles();
+    if (first) this.openFromAddress();
   }
 
   // A closed <details> does not print, so the reflection and the family activity are opened for the printer.
@@ -153,11 +161,12 @@ class Calendar {
 
   doorItem(day) {
     const state = this.states.get(day);
-    const item = make('li');
+    const item = make('li', day === this.config.dayCount || day === BONUS_DAY ? 'advent-door-wide' : '');
     const door = make('button', `advent-door advent-door-${state}${day === this.config.dayCount ? ' advent-door-star' : ''}${day === BONUS_DAY ? ' advent-door-bonus' : ''}`);
     door.type = 'button';
     door.append(make('span', 'advent-door-number', doorNumberText(day, this.config)), make('span', 'advent-door-sub', doorSub({ day, state }, this.config)));
-    door.setAttribute('aria-label', doorName({ day, state }, this.config));
+    if (day === this.config.dayCount) door.append(make('span', 'advent-door-note', 'Christmas Day'));
+    door.setAttribute('aria-label', doorName({ day, state, title: state === 'future' ? undefined : this.titles.get(day) }, this.config));
     door.addEventListener('click', () => this.openDay(day, door));
     this.doors.set(day, door);
     item.append(door);
@@ -165,6 +174,7 @@ class Calendar {
   }
 
   buildScene(scene, showStar) {
+    scene.replaceChildren();
     if (this.config.scene) {
       const picture = make('img', 'advent-scene-image');
       picture.alt = '';
@@ -176,13 +186,15 @@ class Calendar {
 
   // Only doors that are open to read are asked for their titles, so a future title is never fetched here.
   loadTitles() {
-    const today = this.todayNumber();
     for (const day of this.days) {
-      const state = this.states.get(day);
-      if (state === 'future') continue;
+      if (this.states.get(day) === 'future') continue;
       this.load(day).then((file) => {
-        this.doors.get(day).setAttribute('aria-label', doorName({ day, state, title: file.title }, this.config));
-        if (day === today) this.status.textContent = statusText({ season: this.season, today, title: file.title }, this.config);
+        // The date may have moved on while the file was loading: use the state as it is now.
+        const state = this.states.get(day);
+        const door = this.doors.get(day);
+        if (!door || state === 'future') return;
+        door.setAttribute('aria-label', doorName({ day, state, title: file.title }, this.config));
+        if (this.season === 'live' && day === this.todayNumber()) this.status.textContent = statusText({ season: this.season, today: day, title: file.title }, this.config);
         if (this.shown) this.renderNav(this.shown); // a neighbour's title may have just arrived
       }, () => {});
     }
@@ -233,7 +245,14 @@ class Calendar {
     dialog.append(panel);
 
     // A click on the backdrop (the dialog itself, outside the panel) closes it; Escape is built in.
-    dialog.addEventListener('click', (event) => { if (event.target === dialog) dialog.close(); });
+    // It closes only when the press AND the click both landed on the backdrop, so dragging a text selection out of
+    // the panel and letting go on the backdrop does not close it.
+    dialog.addEventListener('pointerdown', (event) => { this.pressedBackdrop = event.target === dialog; });
+    dialog.addEventListener('click', (event) => {
+      const onBackdrop = event.target === dialog && this.pressedBackdrop;
+      this.pressedBackdrop = false;
+      if (onBackdrop) dialog.close();
+    });
     dialog.addEventListener('close', () => this.afterClose());
     return dialog;
   }
@@ -285,6 +304,7 @@ class Calendar {
     const origin = this.origin;
     this.origin = null;
     if (origin && origin.isConnected) origin.focus();
+    if (this.onClosed) this.onClosed();
   }
 
   openDay(day, origin) {
@@ -337,8 +357,9 @@ class Calendar {
     this.eyebrow.textContent = this.eyebrowText(day);
     this.title.textContent = day === BONUS_DAY ? this.config.bonus.label : `Day ${day}`;
     this.messageText.textContent = FRIENDLY_ERROR;
-    this.messageActions.replaceChildren();
+    this.messageActions.replaceChildren(actionButton('advent-pill', 'Try again', () => this.showDay(day)));
     this.title.focus();
+    this.say(FRIENDLY_ERROR);
   }
 
   async showDay(day) {
@@ -353,6 +374,7 @@ class Calendar {
     this.title.textContent = day === BONUS_DAY ? this.config.bonus.label : `Day ${day}`;
     this.messageText.textContent = 'Opening the door...';
     this.messageActions.replaceChildren();
+    this.say('Opening the door');
     let file;
     try {
       file = await this.load(day);
@@ -388,7 +410,8 @@ class Calendar {
     this.activity.text.textContent = file.activity;
     this.activity.element.open = false;
     this.prayerText.textContent = file.prayer;
-    this.hint.element.hidden = !file.hidden;
+    // The hint points at something in the picture, so it is only offered when there is a picture.
+    this.hint.element.hidden = !(file.hidden && file.art);
     this.hint.text.textContent = file.hidden ?? '';
     this.hint.element.open = false;
     this.renderNav(day);
@@ -455,34 +478,96 @@ class Calendar {
 }
 
 // ---------------------------------------------------------------------------
+// The page: works out the date, shows the right state, and refreshes it when the date changes.
 
-function start(root) {
-  const config = readConfig(root.dataset);
-  if (!config || !config.enabled) return;
+const LONGEST_WAIT_MS = 26 * 60 * 60 * 1000; // never wait longer than this for a refresh, whatever the clock says
 
-  const { parts, preview } = effectiveDate({
-    realNow: Date.now(),
-    search: location.search,
-    pathname: location.pathname,
-    previewEnabled: config.previewEnabled,
-    timeZone: config.timeZone,
-    slug: config.slug,
-  });
-  // If the date could not be worked out, parts is null and the season state is 'after'.
-  const season = visibleSeason(seasonState(parts, config.season), preview, config);
+class CalendarPage {
+  constructor(root, config) {
+    this.root = root;
+    this.config = config;
+    this.calendar = null;
+    this.signature = '';
+    this.timer = 0;
+    this.previewing = false;
+  }
 
-  if (preview) showPreviewNotice(root, parts);
-  if (season === 'live' || season === 'archive') {
-    new Calendar(root, config, parts, season).build();
-  } else {
-    showCalm(root, config.opensText);
+  // The date the page should act on, and the season it makes visible (calm until launch unless previewing).
+  evaluate() {
+    const { parts, preview } = effectiveDate({
+      realNow: Date.now(),
+      search: location.search,
+      pathname: location.pathname,
+      previewEnabled: this.config.previewEnabled,
+      timeZone: this.config.timeZone,
+      slug: this.config.slug,
+    });
+    // If the date could not be worked out, parts is null and the season state is 'after'.
+    const season = visibleSeason(seasonState(parts, this.config.season), preview, this.config);
+    return { parts, preview, season };
+  }
+
+  start() {
+    const state = this.evaluate();
+    this.previewing = state.preview;
+    if (state.preview) showPreviewNotice(this.root, state.parts);
+    this.show(state);
+    // A day or two later the page may be showing the wrong door. Check when the page comes back into view, and
+    // once at the next midnight (a single timer, never a poll). A preview date is fixed, so it needs neither.
+    if (!this.previewing) {
+      document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') this.refresh(); });
+      this.schedule();
+    }
+  }
+
+  inSeason(season) {
+    return season === 'live' || season === 'archive';
+  }
+
+  // What would change what the visitor sees: the season, and (while the calendar shows) the day of the month.
+  signatureOf({ parts, season }) {
+    return this.inSeason(season) ? `${season}|${parts.month}-${parts.day}` : 'calm';
+  }
+
+  show(state) {
+    this.signature = this.signatureOf(state);
+    if (this.inSeason(state.season)) {
+      if (!this.calendar) {
+        this.calendar = new Calendar(this.root, this.config);
+        this.calendar.build();
+        this.calendar.onClosed = () => this.refresh();
+      }
+      this.calendar.apply(state.parts, state.season);
+    } else {
+      showCalm(this.root, this.config.opensText);
+    }
+  }
+
+  // Brings the page up to date. An open dialog is never disturbed: the refresh waits for it to close.
+  refresh() {
+    try {
+      if (this.calendar?.dialog.open) return;
+      const state = this.evaluate();
+      if (this.signatureOf(state) !== this.signature) this.show(state);
+    } catch {
+      // Anything unexpected leaves the page as it is.
+    }
+    if (!this.previewing) this.schedule();
+  }
+
+  schedule() {
+    clearTimeout(this.timer);
+    const wait = msUntilNextMidnight(Date.now(), this.config.timeZone);
+    if (wait === null) return;
+    this.timer = setTimeout(() => this.refresh(), Math.min(wait + 1000, LONGEST_WAIT_MS));
   }
 }
 
 const root = document.querySelector('[data-advent]');
 if (root) {
   try {
-    start(root);
+    const config = readConfig(root.dataset);
+    if (config && config.enabled) new CalendarPage(root, config).start();
   } catch {
     // Anything unexpected leaves the calm message the page already shows.
   }

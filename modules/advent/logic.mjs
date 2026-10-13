@@ -11,6 +11,7 @@ import { MONTH_NAMES, BONUS_DAY as DATE_BONUS_DAY, daysUntilStart } from './date
 import { DAY_COUNT, BONUS_DAY, artPathIsSafe, validateDayPayload } from './day.mjs';
 
 export const MAX_DAY_BYTES = 64 * 1024;
+export const DAY_FETCH_TIMEOUT_MS = 10000;
 export const FRIENDLY_ERROR = 'Sorry, this door will not open right now. Please try again in a moment.';
 
 // The module's two copies of "the bonus door is number 26" (date.mjs has no imports, so it keeps its own).
@@ -220,11 +221,29 @@ export function teaserText({ season, today, title }, config) {
 
 /**
  * Fetches, checks and returns one day's file. `fetchFn` is passed in (the page passes its own fetch; tests pass
- * a fake). The address is built only from the validated day number. Rejects on a bad status, a type that is not
+ * a fake). A request that has not finished after timeoutMs (10 seconds) is aborted. The address is built only from the validated day number. Rejects on a bad status, a type that is not
  * JSON, a body over 64 KB, malformed JSON, the wrong day, or any field the shared day rules refuse.
  */
-export async function fetchDayFile(day, fetchFn) {
-  const response = await fetchFn(dayFileUrl(day), { credentials: 'omit' });
+export async function fetchDayFile(day, fetchFn, { timeoutMs = DAY_FETCH_TIMEOUT_MS } = {}) {
+  const { signal, done } = timeoutSignal(timeoutMs);
+  try {
+    return await fetchChecked(day, fetchFn, signal);
+  } finally {
+    done();
+  }
+}
+
+// An abort signal that fires after timeoutMs: AbortSignal.timeout where it exists, otherwise a manual timer.
+// done() stops the manual timer once the request has finished.
+function timeoutSignal(timeoutMs) {
+  if (typeof AbortSignal.timeout === 'function') return { signal: AbortSignal.timeout(timeoutMs), done() {} };
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  return { signal: controller.signal, done: () => clearTimeout(timer) };
+}
+
+async function fetchChecked(day, fetchFn, signal) {
+  const response = await fetchFn(dayFileUrl(day), { credentials: 'omit', signal });
   if (!response || !response.ok) throw new Error('day file: the request failed');
   if (!/^application\/json\b/i.test(response.headers.get('content-type') ?? '')) throw new Error('day file: not JSON');
   const length = Number(response.headers.get('content-length'));

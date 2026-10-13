@@ -158,3 +158,26 @@ export function doorState(day, parts, cfg, bonus = null) {
 export function isDayUnlocked(day, parts, cfg, bonus = null) {
   return doorState(day, parts, cfg, bonus) !== 'future';
 }
+
+const sinceMidnight = (parts) => ((parts.hour * 60 + parts.minute) * 60 + parts.second) * 1000;
+
+/**
+ * Milliseconds from now to the next midnight in the given time zone (between 1 ms and 25 hours), worked out from
+ * the zone's own rules so a 23-hour or 25-hour day (the clocks changing) is right. Used to schedule ONE timer that
+ * refreshes the page when the date changes. Null if the date or zone is unusable (then no timer is set).
+ */
+export function msUntilNextMidnight(dateOrMs, timeZone = 'Europe/London') {
+  const now = dateOrMs instanceof Date ? dateOrMs.getTime() : dateOrMs;
+  const here = londonDateParts(now, timeZone);
+  if (!here) return null;
+  let wait = DAY_MS - sinceMidnight(here) - (((now % 1000) + 1000) % 1000);
+  for (let attempt = 0; attempt < 4; attempt += 1) {
+    const there = londonDateParts(now + wait, timeZone);
+    if (!there) return null;
+    const sameDay = there.year === here.year && there.month === here.month && there.day === here.day;
+    if (sameDay) wait += DAY_MS - sinceMidnight(there); // a 25-hour day: still today, go on to the next midnight
+    else if (sinceMidnight(there) > 0) wait -= sinceMidnight(there); // a 23-hour day: overshot, come back to midnight
+    else break;
+  }
+  return wait > 0 && wait <= 25 * 3600000 ? wait : null;
+}

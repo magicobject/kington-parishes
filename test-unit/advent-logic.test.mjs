@@ -4,7 +4,7 @@ import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   MAX_DAY_BYTES, FRIENDLY_ERROR, dayFileUrl, artUrl, shareUrl, parseDayHash, readConfig, dateLabel, shortDateLabel,
-  doorName, doorSub, doorNumberText, readDayFile, statusText, neighbours, calendarUrl, bonusConfig, stylesheetUrl, todayDoor, teaserText, fetchDayFile, visibleSeason,
+  doorName, doorSub, doorNumberText, readDayFile, statusText, neighbours, calendarUrl, bonusConfig, stylesheetUrl, todayDoor, teaserText, fetchDayFile, visibleSeason, DAY_FETCH_TIMEOUT_MS,
 } from '../modules/advent/logic.mjs';
 import { validateDayPayload, BONUS_DAY as DAY_BONUS_DAY, DAY_COUNT } from '../modules/advent/day.mjs';
 import { BONUS_DAY as DATE_BONUS_DAY } from '../modules/advent/date.mjs';
@@ -406,6 +406,42 @@ describe('goLive: the real date only drives the calendar once the site has gone 
       assert.equal(visibleSeason(season, false, on), season, season);
       assert.equal(visibleSeason(season, true, off), season, season);
       assert.equal(visibleSeason(season, true, on), season, season);
+    }
+  });
+});
+
+describe('fetchDayFile: a request that never answers is cut off', () => {
+  const goodText = JSON.stringify(asFile(7));
+  const ok = { ok: true, headers: { get: (n) => (n.toLowerCase() === 'content-type' ? 'application/json' : null) }, text: async () => goodText };
+
+  test('passes an abort signal, and a fetch that never answers rejects after the timeout', async () => {
+    let signal = null;
+    const never = (url, init) => new Promise((resolve, reject) => {
+      signal = init.signal;
+      init.signal.addEventListener('abort', () => reject(init.signal.reason ?? new Error('aborted')));
+    });
+    const started = Date.now();
+    await assert.rejects(() => fetchDayFile(7, never, { timeoutMs: 30 }));
+    assert.ok(signal instanceof AbortSignal);
+    assert.ok(Date.now() - started < 2000);
+  });
+
+  test('the default timeout is 10 seconds', async () => {
+    assert.equal(DAY_FETCH_TIMEOUT_MS, 10000);
+    let signal = null;
+    await fetchDayFile(7, async (url, init) => { signal = init.signal; return ok; });
+    assert.equal(signal.aborted, false);
+  });
+
+  test('works without AbortSignal.timeout (older browsers): a manual timer aborts the request', async () => {
+    const original = AbortSignal.timeout;
+    AbortSignal.timeout = undefined;
+    try {
+      const never = (url, init) => new Promise((resolve, reject) => init.signal.addEventListener('abort', () => reject(new Error('aborted'))));
+      await assert.rejects(() => fetchDayFile(7, never, { timeoutMs: 30 }), /aborted/);
+      assert.equal((await fetchDayFile(7, async () => ok, { timeoutMs: 30 })).day, 7);
+    } finally {
+      AbortSignal.timeout = original;
     }
   });
 });

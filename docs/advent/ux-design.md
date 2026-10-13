@@ -11,7 +11,7 @@ Source: UX designer review (13 Oct 2026), revised for decisions made since: gent
 ## Scene and layout (concept A: night-sky ridge, chosen by Greg)
 - Dark slate-to-ink sky; the site's hillside ridge in cream with the five church silhouettes along the bottom (this scene is SITE-OWNED art: the generic module ships a plain hills scene; a site supplies its own); a four-point star appears over the ridge on 25 Dec (and through the archive).
 - Doors are arched buttons on a strict grid in source order 1..25. Phone (390px): status line, a single primary "Open today's door" button first, then a 5-column grid (4 columns if doors would drop below 60px); desktop: grid left, opened-day panel inline on the right at >= 900px, dialog below that.
-- Door 25 is the "star door".
+- Door 25 is the "star door": it spans the whole last row at every width (a deliberate wide "Christmas Day" finale, at least 72px tall, same accessible name), so it is never an orphan on a row of one or two. A bonus door gets its own full-width row after it.
 - 6 January bonus door ("Gifts for a King", Epiphany): a 26th door, locked until 6 Jan, same style, labelled "Epiphany".
 
 ## Door states (no read/unread state: nothing is remembered)
@@ -31,7 +31,7 @@ Door swings open on a hinge (CSS rotateY, about 450ms ease-out), light fades up,
 
 ## Opened-day panel
 Native `<dialog>` via `showModal()` (full-screen sheet on phones; centred max 640px; side panel inline at >= 900px if feasible, else dialog everywhere). Focus moves to the Close button (or the title with `tabindex="-1"`); Escape closes; focus returns to the originating door; `aria-labelledby` on the title.
-Order: Close and "n of 25" at top; artwork (`<img>` of the day SVG, 16:9, `alt` from content); eyebrow "Day 7 · 7 December"; h2 title; reference + translation credit; story paragraphs (1.125rem, line-height 1.6, max 60ch); `<details>` "Think about it" (open by default on desktop) and "Try this together"; prayer; hidden-detail hint ("Can you find ...?") inside its own details; prev/next buttons named with the target day number and (if the target is available) title: prev/next toward a future day is "not yet" via the gentle message, not hidden; Share (navigator.share or copy link) and "Print this day". Heading levels: page h1, calendar h2, dialog h2, blocks h3.
+Order: Close and "n of 25" at top; artwork (`<img>` of the day SVG, 16:9, `alt` from content); eyebrow "Day 7 · 7 December"; h2 title; reference + translation credit; story paragraphs (1.125rem, line-height 1.6, max 60ch); `<details>` "Think about it" (open by default on desktop) and "Try this together"; prayer; hidden-detail hint ("Can you find ...?") inside its own details, offered only when the day has a picture; prev/next buttons named with the target day number and (if the target is available) title: prev/next toward a future day is "not yet" via the gentle message, not hidden; Share (navigator.share or copy link) and "Print this day". Heading levels: page h1, calendar h2, dialog h2, blocks h3.
 Share/copy URLs are built from `location.origin + location.pathname + '#day-N'` and never include the preview parameter. A `#day-N` deep link opens that day if available, else shows the gentle message or calm state. No read-aloud in v1.
 
 ## Status line
@@ -42,9 +42,10 @@ Live: "Today is Day 12: <title of today's door>" (only today's title is fetched)
 - before / after: calm sentence only.
 - 1-25 Dec live: grid as above, "Open today's door" primary button.
 - 26 Dec - 6 Jan archive: "The Christmas Story", all doors available, none "today", star over the ridge; bonus door opens on 6 Jan.
-- Home-page banner (`{{ADVENT_TEASER}}`): full-width band under the hero: scene thumbnail (a small art image), "Advent at <siteName>", today's day and title, pill button "Open today's door" linking to the calendar page WITHOUT the preview parameter. Shown only when live or archive (archive: "The Christmas story, in 25 short pieces"). While publicListing is false it is only revealed in preview mode on the home page.
+- Home-page banner (`{{ADVENT_TEASER}}`, placed inside the hero section so the page is unchanged outside the season): full-width band under the hero: scene thumbnail (a small art image), "Advent at <siteName>", today's day and title, pill button "Open today's door" linking to the calendar page WITHOUT the preview parameter. Shown only when live or archive (archive: "The Christmas story, in 25 short pieces"). While publicListing is false it is only revealed in preview mode on the home page.
 
 ## Preview mode
+On the home page a preview shows the same notice (role="status", Exit link to the home page with no parameter) and marks the page noindex, even when the preview date has no banner.
 Notice "Preview mode: not today's date. Showing 7 December 2026." with an Exit preview link, in a polite live region (`role="status"`). Nothing stored. Parameter never propagates into links, share URLs or the canonical.
 
 ## Accessibility checklist (feature-specific)

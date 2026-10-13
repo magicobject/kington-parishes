@@ -130,7 +130,7 @@ describe('public/_headers for the Advent files', () => {
     assert.equal(lines[at + 1], '  X-Robots-Tag: noindex');
     assert.ok(lines[at + 2] === undefined || lines[at + 2] === '', 'nothing else in the rule');
     assert.ok(lines[at - 1].startsWith('#'), 'a comment line comes first');
-    assert.ok(!/cache-control/i.test(headers));
+    // (The only Cache-Control rules are the immutable ones for hashed scripts and stylesheets, tested below.)
   });
 
   test('every rule in the file is well formed: a path at the left edge, then two-space-indented Name: value lines, no tabs', () => {
@@ -211,5 +211,66 @@ describe('the home page and the (hidden) Advent banner', () => {
     for (const name of htmlFiles.filter((n) => n !== 'index.html' && !mayMention(n))) {
       assert.ok(!read(name).includes('data-advent-teaser'), name);
     }
+  });
+});
+
+// Long-lived caching (public/_headers) is only safe for files that are ALWAYS fetched under a content-hash address.
+describe('the hashed Advent assets and their immutable cache rule', () => {
+  const HASHED = /[?]v=[0-9a-f]{10}$/;
+  const IMMUTABLE_PATHS = ['/js/advent*.js', '/css/advent*.css']; // the first also matches /js/advent/date.js and the other copies
+  const adventAsset = /^\/(?:js\/advent|css\/advent)/;
+
+  test('every reference to an Advent script or stylesheet, in every built page, carries ?v=<hash>', () => {
+    let found = 0;
+    for (const name of htmlFiles) {
+      const html = read(name);
+      for (const match of html.matchAll(/(?:src|href)="([^"]+)"/g)) {
+        if (!adventAsset.test(match[1].split('?')[0])) continue;
+        found += 1;
+        assert.match(match[1], HASHED, `${name}: ${match[1]}`);
+      }
+      for (const match of html.matchAll(/data-(?:theme|teaser)-css="([^"]+)"/g)) {
+        found += 1;
+        assert.match(match[1], HASHED, `${name}: ${match[1]}`);
+      }
+    }
+    assert.ok(found >= 6, 'expected to check the calendar page and the home page references');
+  });
+
+  test('every import in the built Advent scripts carries ?v=<hash>', () => {
+    const scripts = ['js/advent.js', 'js/advent-teaser.js', ...readdirSync(join(PUBLIC, 'js', 'advent')).map((n) => `js/advent/${n}`)];
+    let imports = 0;
+    for (const path of scripts) {
+      for (const match of read(path).matchAll(/^import\s*\{[^}]*\}\s*from\s*'([^']+)';$/gm)) {
+        imports += 1;
+        assert.match(match[1], HASHED, `${path}: ${match[1]}`);
+      }
+    }
+    assert.ok(imports >= 8);
+  });
+
+  test('the cache rules cover exactly the hashed script and stylesheet paths, and nothing else (not the day files, the scene or the pictures)', () => {
+    const lines = read('_headers').split('\n');
+    const cacheLines = lines.map((line, index) => [line, index]).filter(([line]) => /^\s+cache-control:/i.test(line));
+    assert.equal(cacheLines.length, IMMUTABLE_PATHS.length);
+    const paths = [];
+    for (const [line, index] of cacheLines) {
+      assert.equal(line, '  Cache-Control: public, max-age=31536000, immutable');
+      paths.push(lines[index - 1]);
+      assert.ok(lines[index + 1] === undefined || lines[index + 1] === '', 'nothing else in the rule');
+    }
+    assert.deepEqual(paths.sort(), [...IMMUTABLE_PATHS].sort());
+    for (const risky of ['/advent/day-*.json', '/advent/scene*.svg', '/advent/art/*', '/*']) {
+      const at = lines.indexOf(risky);
+      assert.ok(at >= 0);
+      assert.ok(!/cache-control/i.test(lines[at + 1] ?? ''), `${risky} must keep revalidating`);
+    }
+  });
+
+  test('every file those paths match is a generated, hashed one (nothing hand-made or unhashed can be cached for a year)', () => {
+    const matched = ['js/advent.js', 'js/advent-teaser.js', ...readdirSync(join(PUBLIC, 'js', 'advent')).map((n) => `js/advent/${n}`), 'css/advent.css', 'css/advent-teaser.css', 'css/advent-theme.css'];
+    for (const path of matched) assert.match(read(path).slice(0, 60), /AUTO-GENERATED/, path);
+    assert.deepEqual(readdirSync(join(PUBLIC, 'css')).filter((n) => /^advent/.test(n)).sort(), ['advent-teaser.css', 'advent-theme.css', 'advent.css']);
+    assert.deepEqual(readdirSync(join(PUBLIC, 'js')).filter((n) => /^advent/.test(n) && n.endsWith('.js')).sort(), ['advent-teaser.js', 'advent.js']);
   });
 });

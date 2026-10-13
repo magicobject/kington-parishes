@@ -9,9 +9,9 @@
 //
 // Same rules as the calendar script: nothing stored, text only ever set as plain text, one same-origin request
 // (today's day file, for its title), and the link to the calendar page never carries the preview date.
-import { seasonState } from './advent/date.js?v=2d72c76b9a';
-import { effectiveDate } from './advent/preview.js?v=2032b288b5';
-import { calendarUrl, fetchDayFile, readConfig, stylesheetUrl, teaserText, todayDoor, visibleSeason } from './advent/logic.js?v=7cd04250d2';
+import { seasonState } from './advent/date.js?v=437781ad7f';
+import { effectiveDate, formatPreviewNotice } from './advent/preview.js?v=0a66911aae';
+import { calendarUrl, fetchDayFile, readConfig, stylesheetUrl, teaserText, todayDoor, visibleSeason } from './advent/logic.js?v=63aeada73f';
 
 function make(tag, className, text) {
   const node = document.createElement(tag);
@@ -32,32 +32,66 @@ function addStylesheet(address) {
   });
 }
 
-async function show(root, config, season, parts) {
+// Previews must never be indexed, so the page says so whatever its normal setting is.
+function markNoindex() {
+  let meta = document.querySelector('meta[name="robots"]');
+  if (!meta) {
+    meta = document.createElement('meta');
+    meta.name = 'robots';
+    document.head.append(meta);
+  }
+  if (!/noindex/i.test(meta.content)) meta.content = 'noindex';
+}
+
+// While previewing, say so (a polite live region) and offer a way out. The exit address is the home page with no
+// query, so the preview date never travels on.
+function previewNotice(parts) {
+  const notice = make('div', 'advent-teaser-notice');
+  notice.setAttribute('role', 'status');
+  const exit = make('a', '', 'Exit preview');
+  exit.href = calendarUrl(location.origin, '/');
+  const paragraph = make('p', '', `${formatPreviewNotice(parts)} `);
+  paragraph.append(exit);
+  notice.append(paragraph);
+  return notice;
+}
+
+// `season` is null when the preview date is outside the season: then only the notice is shown.
+async function show(root, config, season, parts, preview) {
   const sheets = [stylesheetUrl(root.dataset.themeCss), stylesheetUrl(root.dataset.teaserCss)].filter(Boolean);
   const today = season === 'live' ? todayDoor(parts, config.season) : 0;
-  const words = teaserText({ season, today }, config);
-
   const inner = make('div', 'wrap advent-teaser-inner');
-  if (config.scene) {
+  if (preview) {
+    inner.append(previewNotice(parts));
+    markNoindex();
+  }
+  const banner = season ? make('div', 'advent-teaser-banner') : null;
+  if (banner) inner.append(banner);
+  const words = season ? teaserText({ season, today }, config) : null;
+  if (banner && config.scene) {
     const picture = make('img', 'advent-teaser-scene');
     picture.alt = '';
     picture.src = config.scene;
-    inner.append(picture);
+    banner.append(picture);
   }
   const text = make('div', 'advent-teaser-text');
-  const heading = make('h2', 'advent-teaser-heading', words.heading);
-  const line = make('p', 'advent-teaser-line', words.line);
+  const heading = make('h2', 'advent-teaser-heading', words?.heading ?? '');
+  const line = make('p', 'advent-teaser-line', words?.line ?? '');
   // The calendar page, with no query: the preview date is never passed on.
-  const open = make('a', 'advent-pill', words.button);
+  const open = make('a', 'advent-pill', words?.button ?? '');
   open.href = calendarUrl(location.origin, `/${config.slug}.html`);
   text.append(heading, line, open);
-  inner.append(text);
+  if (banner) banner.append(text);
   root.replaceChildren(inner);
 
   await Promise.all(sheets.map(addStylesheet));
+  // The placeholder sits inside the hero so that, outside the season, the page is laid out exactly as it was (no
+  // element between the hero and the next section). To show the banner it moves to just after the hero.
+  const host = root.closest('section');
+  if (host) host.after(root);
   root.hidden = false;
 
-  if (season === 'live') {
+  if (banner && season === 'live') {
     try {
       const file = await fetchDayFile(today, (url, init) => fetch(url, init));
       line.textContent = teaserText({ season, today, title: file.title }, config).line;
@@ -79,7 +113,8 @@ function start(root) {
     slug: config.slug,
   });
   const season = visibleSeason(seasonState(parts, config.season), preview, config);
-  if (season === 'live' || season === 'archive') show(root, config, season, parts).catch(() => {});
+  const inSeason = season === 'live' || season === 'archive';
+  if (inSeason || preview) show(root, config, inSeason ? season : null, parts, preview).catch(() => {});
 }
 
 const root = document.querySelector('[data-advent-teaser]');

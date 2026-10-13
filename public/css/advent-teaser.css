@@ -9,7 +9,12 @@
 
 .advent-teaser { background: linear-gradient(135deg, var(--advent-night), var(--advent-sky2)); color: var(--advent-cream); border-block: 1px solid var(--advent-door-edge); }
 .advent-teaser[hidden] { display: none !important; }
-.advent-teaser .advent-teaser-inner { display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap; padding-block: 1.25rem; }
+.advent-teaser .advent-teaser-inner { padding-block: 1.25rem; }
+.advent-teaser .advent-teaser-notice { background: var(--advent-accent); color: var(--advent-accent-ink); border-radius: 6px; padding: 0.75rem 1rem; margin-bottom: 1rem; }
+.advent-teaser .advent-teaser-notice p { margin: 0; color: var(--advent-accent-ink); }
+.advent-teaser .advent-teaser-notice a { color: var(--advent-accent-ink); font-weight: 600; }
+.advent-teaser .advent-teaser-notice a:focus-visible { outline: 3px solid var(--advent-night); outline-offset: 3px; }
+.advent-teaser .advent-teaser-banner { display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap; }
 .advent-teaser .advent-teaser-scene { display: block; width: 10rem; max-width: 100%; height: auto; flex: none; }
 .advent-teaser .advent-teaser-text { flex: 1 1 16rem; }
 .advent-teaser .advent-teaser-heading { margin: 0 0 0.25rem; font-size: 1.4rem; color: var(--advent-accent); }

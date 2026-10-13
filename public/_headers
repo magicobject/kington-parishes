@@ -18,3 +18,13 @@
 # Keeps crawlers away from the Advent day files. It does not hide them: anyone who knows an address can still fetch it.
 /advent/day-*.json
   X-Robots-Tag: noindex
+
+# The Advent calendar's scripts and stylesheets are always fetched under a content-hash address (?v=<hash>, in the
+# page, in the banner's data attributes and in every import: a unit test checks all of them), so a year-long
+# immutable cache is safe: a changed file gets a new address. The day files and pictures keep revalidating.
+# (/js/advent*.js also matches /js/advent/date.js etc: a second rule for them would send the header twice.)
+/js/advent*.js
+  Cache-Control: public, max-age=31536000, immutable
+
+/css/advent*.css
+  Cache-Control: public, max-age=31536000, immutable

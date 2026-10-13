@@ -47,7 +47,7 @@
 }
 .advent .advent-live h2 { color: var(--advent-cream); margin-top: 0; }
 .advent .advent-live p { color: var(--advent-cream); }
-.advent .advent-status { margin: 0 0 1rem; font-size: 1.1rem; }
+.advent .advent-status { margin: 0 0 1rem; font-size: 1.1rem; overflow-wrap: anywhere; }
 .advent .advent-primary { margin: 0 0 1.25rem; }
 .advent .advent-live .advent-pill:focus-visible,
 .advent .advent-door:focus-visible { outline: 3px solid var(--advent-focus); outline-offset: 3px; }
@@ -67,6 +67,14 @@
 .advent .advent-door-sub { font-size: 0.75rem; letter-spacing: 0.02em; }
 .advent .advent-door-bonus .advent-door-number { font-size: 0.85rem; }
 .advent .advent-door-star .advent-door-number { font-size: 1.7rem; }
+/* The last door (the star door, Christmas Day) and the bonus door each take a whole row, however many columns there are:
+   a deliberate wide finale, never one orphan door on a row of its own. */
+.advent .advent-doors .advent-door-wide { grid-column: 1 / -1; }
+.advent .advent-door-wide .advent-door {
+  aspect-ratio: auto; min-height: var(--advent-door-size); flex-direction: row; gap: 0.75rem; padding: 0.5rem 1rem;
+  border-radius: 2.25rem 2.25rem 0.375rem 0.375rem;
+}
+.advent .advent-door-note { font-size: 1rem; font-weight: 600; }
 /* Not yet: dimmer, dashed, with its date written on it. */
 .advent .advent-door-future { background: var(--advent-door-locked); border-style: dashed; }
 /* Today: gold, a pale ring and a soft glow, and the WORD "Today", so nothing rests on colour or border width alone. */
@@ -109,7 +117,7 @@
 .advent .advent-art-image { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; border-radius: 6px; background: var(--advent-night); }
 .advent .advent-art-credit { margin: 0.25rem 0 0; font-size: 0.85rem; color: var(--advent-text-soft); }
 .advent .advent-eyebrow { margin: 0.5rem 0 0.25rem; font-size: 0.85rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: var(--advent-link); }
-.advent .advent-title { margin: 0 0 0.25rem; font-size: 1.75rem; line-height: 1.2; color: var(--advent-text); }
+.advent .advent-title { margin: 0 0 0.25rem; font-size: 1.75rem; line-height: 1.2; color: var(--advent-text); overflow-wrap: anywhere; }
 .advent .advent-title:focus { outline: none; }
 .advent .advent-reference { margin: 0; font-weight: 600; color: var(--advent-text-soft); }
 .advent .advent-translation { margin: 0 0 1rem; font-size: 0.9rem; }
@@ -143,6 +151,9 @@
 .advent .advent-dialog summary:focus-visible,
 .advent .advent-dialog input:focus-visible,
 .advent .advent-notice a:focus-visible { outline: 3px solid var(--advent-night); outline-offset: 3px; }
+
+/* While a day is open the page behind it does not scroll. */
+html:has(.advent-dialog[open]), body:has(.advent-dialog[open]) { overflow: hidden; }
 
 /* A phone: the day fills the screen like a sheet. */
 @media (max-width: 600px) {

@@ -2,7 +2,7 @@
 // and door states. Pure functions, no browser.
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
-import { londonDateParts, seasonState, doorState, isDayUnlocked, daysUntilStart } from '../modules/advent/date.mjs';
+import { londonDateParts, seasonState, doorState, isDayUnlocked, daysUntilStart, msUntilNextMidnight } from '../modules/advent/date.mjs';
 
 const CFG = {
   start: { month: 12, day: 1 },
@@ -250,5 +250,58 @@ describe('review gaps: malformed parts and config fail closed', () => {
     const parts = { year: 2026, month: 12, day: 5 };
     assert.equal(seasonState(parts, { ...cfg, start: { month: '12', day: 1 } }), 'after');
     assert.equal(seasonState(parts, { ...cfg, archiveUntil: { month: 'x', day: 1 } }), 'after');
+  });
+});
+
+describe('msUntilNextMidnight: the one timer that refreshes the page at midnight (London)', () => {
+  const left = (iso) => msUntilNextMidnight(new Date(iso));
+  const HOUR = 3600000;
+
+  test('half an hour before midnight in winter (GMT)', () => {
+    assert.equal(left('2026-12-12T23:30:00Z'), 30 * 60000);
+    assert.equal(left('2026-11-30T23:59:30Z'), 30000);
+  });
+
+  test('exactly at midnight it is a whole day to the next one', () => {
+    assert.equal(left('2026-12-13T00:00:00Z'), 24 * HOUR);
+  });
+
+  test('in summer (BST) midnight is an hour earlier in UTC', () => {
+    assert.equal(left('2026-07-01T22:30:00Z'), 30 * 60000); // 23:30 BST
+    assert.equal(left('2026-07-01T23:30:00Z'), 24 * HOUR - 30 * 60000); // 00:30 BST on the 2nd: 23.5 hours to go
+  });
+
+  test('on the day the clocks go forward (29 March 2026, a 23-hour day) the count is shorter', () => {
+    assert.equal(left('2026-03-28T23:30:00Z'), 30 * 60000);
+    // 00:30 GMT on the 29th; the next midnight is 00:00 BST on the 30th = 23:00 UTC on the 29th: 22.5 hours.
+    assert.equal(left('2026-03-29T00:30:00Z'), 22.5 * HOUR);
+    // 03:30 BST (02:30 UTC): 20.5 hours to 23:00 UTC.
+    assert.equal(left('2026-03-29T02:30:00Z'), 20.5 * HOUR);
+  });
+
+  test('on the day the clocks go back (25 October 2026, a 25-hour day) the count is longer', () => {
+    assert.equal(left('2026-10-24T22:30:00Z'), 30 * 60000); // 23:30 BST
+    // 00:30 UTC on the 25th is 01:30 BST; the next midnight is 00:00 GMT on the 26th = 00:00 UTC: 23.5 hours.
+    assert.equal(left('2026-10-25T00:30:00Z'), 23.5 * HOUR);
+    // 01:30 UTC is 01:30 GMT (after the change): 22.5 hours.
+    assert.equal(left('2026-10-25T01:30:00Z'), 22.5 * HOUR);
+  });
+
+  test('other time zones are respected', () => {
+    assert.equal(msUntilNextMidnight(new Date('2026-12-12T10:30:00Z'), 'Pacific/Auckland'), 30 * 60000); // 23:30 NZDT on the 12th
+    assert.equal(msUntilNextMidnight(new Date('2026-12-12T11:30:00Z'), 'Pacific/Auckland'), 23.5 * HOUR); // 00:30 NZDT on the 13th
+  });
+
+  test('a bad date or zone gives null (no timer is set)', () => {
+    assert.equal(msUntilNextMidnight(new Date('nope')), null);
+    assert.equal(msUntilNextMidnight(undefined), null);
+    assert.equal(msUntilNextMidnight(new Date('2026-12-12T12:00:00Z'), 'Not/AZone'), null);
+  });
+
+  test('the answer is always between 1 ms and 25 hours', () => {
+    for (let hour = 0; hour < 24 * 14; hour += 7) {
+      const wait = msUntilNextMidnight(new Date(Date.UTC(2026, 9, 20) + hour * HOUR));
+      assert.ok(wait > 0 && wait <= 25 * HOUR, String(wait));
+    }
   });
 });

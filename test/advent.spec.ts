@@ -718,7 +718,7 @@ test.describe('the home-page banner', () => {
   test('a preview on the home page shows that day\'s banner, and the link still carries no parameter', async ({ page }) => {
     await openAt(page, REAL_TODAY, '?advent-preview=2026-12-07', '/');
     await expect(banner(page).locator('.advent-teaser-line')).toHaveText(`Day 7 \u00B7 ${TITLES[7]}`);
-    const href = await banner(page).getByRole('link').getAttribute('href');
+    const href = await banner(page).getByRole('link', { name: "Open today's door" }).getAttribute('href');
     expect(href).not.toContain('preview');
     expect(href).not.toContain('?');
     expect(await page.evaluate(() => [...document.querySelectorAll('a[href]')].filter((a) => (a.getAttribute('href') ?? '').includes('preview')).length)).toBe(0);
@@ -748,7 +748,7 @@ test.describe('the home-page banner', () => {
 
   test('the link goes to the calendar page, which (with the real date) is calm: the preview did not travel', async ({ page }) => {
     await openAt(page, REAL_TODAY, '?advent-preview=2026-12-07', '/');
-    await banner(page).getByRole('link').click();
+    await banner(page).getByRole('link', { name: "Open today's door" }).click();
     await expect(page).toHaveURL(new RegExp(`${PATH}$`));
     await expectCalm(page, 'The Advent calendar opens on 1 December.');
   });
