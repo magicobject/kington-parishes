@@ -59,16 +59,16 @@ describe('the weighted draw budget', () => {
   });
 
   test(`the cap is ${MAX_DRAW_WEIGHT}: a picture at the cap passes, one over is refused`, () => {
-    assert.equal(MAX_DRAW_WEIGHT, 1500);
+    assert.equal(MAX_DRAW_WEIGHT, 900); // about 3x the heaviest real picture (weight 311)
     const plain = (count) => `<svg>${'<rect/>'.repeat(count)}</svg>`;
     assert.deepEqual(lintSvg(plain(MAX_DRAW_WEIGHT - 1)), []);
     assert.match(lintSvg(plain(MAX_DRAW_WEIGHT))[0], /too costly to draw/);
   });
 
-  test('"heavy50": 1500 masked rects in a group, used 50 times, is refused (about 800,000 weight)', () => {
-    const rects = '<rect width="1" height="1" mask="url(#m)"/>'.repeat(1500);
+  test('"heavy50": 600 masked rects in a group, used 50 times, is refused (the original had 1500, which now also trips the 40 KB file cap)', () => {
+    const rects = '<rect width="1" height="1" mask="url(#m)"/>'.repeat(600);
     const sample = R(`<defs><mask id="m"><rect width="9" height="9" fill="#fff"/></mask><g id="heavy">${rects}</g></defs>${'<use href="#heavy"/>'.repeat(50)}`);
-    assert.ok(sample.length < 100 * 1024, 'small enough that the size rule is not what refuses it');
+    assert.ok(sample.length < 40 * 1024, 'small enough that the size rule is not what refuses it');
     const stats = {};
     assert.match(lintSvg(sample, stats)[0], /too costly to draw|at most 20/);
   });
@@ -88,15 +88,26 @@ describe('the weighted draw budget', () => {
     const text = readFileSync(new URL('../test/support/heaviest-accepted.svg', import.meta.url), 'utf8');
     assert.deepEqual(lintSvg(text), []);
     const weight = svgDrawWeight(text);
-    assert.ok(weight > 0.75 * MAX_DRAW_WEIGHT && weight <= MAX_DRAW_WEIGHT, `weight ${weight}`);
+    assert.ok(weight > 0.9 * MAX_DRAW_WEIGHT && weight <= MAX_DRAW_WEIGHT, `weight ${weight}`);
+  });
+
+  test('the heaviest accepted PATH fixture (49 uses of a 160-arc stroked path) passes and sits near the cap', () => {
+    const text = readFileSync(new URL('../test/support/heaviest-path-accepted.svg', import.meta.url), 'utf8');
+    assert.deepEqual(lintSvg(text), []);
+    const weight = svgDrawWeight(text);
+    assert.ok(weight > 0.9 * MAX_DRAW_WEIGHT && weight <= MAX_DRAW_WEIGHT, `weight ${weight}`);
+    assert.equal((text.match(/<use /g) ?? []).length, 49);
   });
 });
 
 describe('dash patterns and enormous numbers', () => {
   const dash = (value) => R(`<path d="M0 0L9 9" stroke="#fff" stroke-dasharray="${value}"/>`);
-  test('a dash between 0 and 0.5 is refused; 0.5, 0, and ordinary patterns pass', () => {
-    for (const bad of ['0.1', '0.4999', '.2 3', '5, 0.01', '3 3 0.3']) assert.match(lintSvg(dash(bad))[0], /dash/, bad);
-    for (const good of ['0.5', '0', '5 3', '1,2', '10']) assert.deepEqual(lintSvg(dash(good)), [], good);
+  test('dashed lines are not allowed at all: the number of dashes is the path length over the dash length, which no weight can bound', () => {
+    for (const value of ['0.1', '0.5', '5 3', '1,2', '10', '0']) assert.match(lintSvg(dash(value))[0], /stroke-dasharray/, value);
+    assert.match(lintSvg(R('<circle r="9" stroke="#000" stroke-dashoffset="3"/>'))[0], /stroke-dashoffset/);
+    // The security review's cases: a 100000-radius circle and a long line, dashed finely and used 40 times.
+    assert.ok(lintSvg(R('<circle cx="200" cy="112" r="100000" fill="none" stroke="#000" stroke-dasharray="0.5"/>')).length > 0);
+    assert.ok(lintSvg(R('<defs><line id="l" x1="0" y1="0" x2="100000" y2="100000" stroke="#000" stroke-dasharray="0.5 0.5"/></defs>' + '<use href="#l"/>'.repeat(40))).length > 0);
   });
 
   test('a number over 100000 in a size, position, path or transform is refused', () => {
@@ -130,7 +141,7 @@ describe('masks and clip paths are charged per reference', () => {
     const tag = element === 'mask' ? 'mask' : 'clipPath';
     return R(`<defs><${tag} id="m">${inside}</${tag}></defs>${`<rect width="400" height="225" ${attribute}="url(#m)"/>`.repeat(references)}`);
   };
-  const costly = /too costly to draw|at most (?:20|50)/;
+  const costly = /too costly to draw|at most (?:20|50)|larger than 40 KB/;
 
   test('the security engineer\'s reproducer (1800 circles in one mask, 136 references) is refused', () => {
     assert.match(lintSvg(maskPicture(circles(1800), 136))[0], costly);
@@ -174,7 +185,134 @@ describe('masks and clip paths are charged per reference', () => {
     const text = readFileSync(new URL('../test/support/heaviest-mask-accepted.svg', import.meta.url), 'utf8');
     assert.deepEqual(lintSvg(text), []);
     const weight = svgDrawWeight(text);
-    assert.ok(weight > 0.6 * MAX_DRAW_WEIGHT && weight <= MAX_DRAW_WEIGHT, `weight ${weight}`);
-    assert.ok((text.match(/mask="url/g) ?? []).length >= 15, 'it uses most of the 20 references');
+    assert.ok(weight > 0.9 * MAX_DRAW_WEIGHT && weight <= MAX_DRAW_WEIGHT, `weight ${weight}`);
+    assert.equal((text.match(/mask="url/g) ?? []).length, 20, 'it uses all of the 20 references');
+  });
+});
+
+// Round 4: geometry is weighted by its COMPLEXITY (a 4,000-arc path is not "one draw"), and size and data caps sit far
+// above real art but far below hostile files. Hostile pictures are generated here.
+describe('path and polygon complexity is part of the weight', () => {
+  const arcs = (count) => {
+    let d = 'M0 0';
+    for (let i = 0; i < count; i += 1) d += `A${50 + (i % 50)} ${60 + (i % 40)} ${i % 90} ${i % 2} ${(i + 1) % 2} ${(i * 13) % 400} ${(i * 7) % 225}`;
+    return d;
+  };
+  const weigh = (body) => svgDrawWeight(R(body));
+
+  test('a path weighs 1 + floor(segments / 10); every command, and every repeated implicit coordinate set, is a segment', () => {
+    assert.equal(weigh('<path d="M0 0L1 1"/>'), 1 + 1);
+    assert.equal(weigh('<path d="M0 0L1 1L2 2L3 3L4 4L5 5L6 6L7 7L8 8L9 9"/>'), 1 + (1 + 1)); // 10 segments
+    assert.equal(weigh(`<path d="${arcs(25)}"/>`), 1 + (1 + 2)); // 1 move + 25 arcs = 26 segments
+    assert.equal(weigh('<path d="M0 0L1 1 2 2 3 3 4 4 5 5 6 6 7 7 8 8 9 9"/>'), 1 + (1 + 1)); // implicit repeats count: 10 segments
+    assert.equal(weigh('<path d="M0 0C1 1 2 2 3 3 4 4 5 5 6 6"/>'), 1 + 1); // 1 move + 2 curves
+    assert.equal(weigh('<path d="M0 0h1v1h-1z"/>'), 1 + 1);
+    assert.equal(weigh('<path d="M0 0L1 1" opacity=".5"/>'), 1 + (1 + 5));
+  });
+
+  test('compact numbers are still counted (1-2.5.3 is three numbers)', () => {
+    assert.equal(weigh('<path d="M0 0L1-2.5.3-4L5 6L7 8L9 1L2 3L4 5L6 7L8 9L1 2"/>'), 1 + (1 + 1));
+  });
+
+  test('polygon and polyline weigh 1 + floor(points / 5); line, rect, circle and ellipse stay 1', () => {
+    const points = (n) => Array.from({ length: n }, (_, i) => `${i},${i}`).join(' ');
+    assert.equal(weigh(`<polygon points="${points(4)}"/>`), 1 + 1);
+    assert.equal(weigh(`<polygon points="${points(12)}"/>`), 1 + (1 + 2));
+    assert.equal(weigh(`<polyline points="${points(50)}"/>`), 1 + (1 + 10));
+    assert.equal(weigh('<line x1="0" y1="0" x2="9" y2="9"/><rect width="9" height="9"/><circle r="9"/><ellipse rx="9" ry="3"/>'), 1 + 4);
+  });
+
+  test('a use charges the full weight of its target EACH time, so complexity multiplies', () => {
+    const heavy = `<defs><path id="h" d="${arcs(100)}"/></defs>`; // 101 segments: weight 1 + 10 = 11
+    assert.equal(weigh(`${heavy}<use href="#h"/>`), 1 + (1 + 11));
+    assert.equal(weigh(`${heavy}${'<use href="#h"/>'.repeat(10)}`), 1 + 10 * 12);
+  });
+
+  test('a mask holding a complex path is charged per reference (the path complexity is in the mask weight)', () => {
+    const body = `<defs><mask id="m"><path d="${arcs(100)}" fill="#fff"/></mask></defs>${'<rect width="400" height="225" mask="url(#m)"/>'.repeat(5)}`;
+    // svg 1, five masked rects 11 each, and the mask (itself 1 + path 11) x 5
+    assert.equal(weigh(body), 1 + 55 + 12 * 5);
+  });
+});
+
+describe('size and data caps', () => {
+  const bigPath = (arcsCount) => {
+    let d = 'M0 0';
+    for (let i = 0; i < arcsCount; i += 1) d += `A${50 + (i % 50)} ${60 + (i % 40)} ${i % 90} ${i % 2} ${(i + 1) % 2} ${(i * 13) % 400} ${(i * 7) % 225}`;
+    return d;
+  };
+
+  test('a file over 40 KB is refused, one just under it is fine', () => {
+    assert.match(lintSvg(`<svg><desc>${'a'.repeat(40 * 1024 + 10)}</desc></svg>`)[0], /40 KB/);
+    assert.deepEqual(lintSvg(`<svg><desc>${'a'.repeat(40 * 1024 - 40)}</desc></svg>`), []);
+  });
+
+  test('a single path longer than 4 KB is refused; one under it is fine', () => {
+    assert.match(lintSvg(R(`<path d="M0 0${'L1 1'.repeat(1100)}"/>`))[0], /4 KB/);
+    assert.deepEqual(lintSvg(R(`<path d="M0 0${'L1 1'.repeat(900)}"/>`)), []);
+  });
+
+  test('all the path data in a picture together may not exceed 24 KB', () => {
+    const path = `<path d="M0 0${'L1 1'.repeat(900)}"/>`; // about 3.6 KB each
+    assert.deepEqual(lintSvg(R(path.repeat(6))), []); // about 21.6 KB
+    assert.match(lintSvg(R(path.repeat(7)))[0], /24 KB/);
+  });
+
+  test('a polygon or polyline with a points list longer than 1 KB is refused', () => {
+    const points = (n) => Array.from({ length: n }, (_, i) => `${i % 400},${i % 225}`).join(' ');
+    assert.deepEqual(lintSvg(R(`<polygon points="${points(100)}"/>`)), []);
+    assert.match(lintSvg(R(`<polygon points="${points(6000)}"/>`))[0], /1 KB|40 KB/);
+    assert.match(lintSvg(R(`<polyline points="${points(200)}"/>`))[0], /1 KB/);
+  });
+
+  test('the hostile class from the security review is refused: use50heavyPath, its small version, heavy masks and clips', () => {
+    const useHeavy = (arcsCount) => R(`<defs><path id="h" d="${bigPath(arcsCount)}" fill="#fa0" stroke="#000" stroke-width="5"/></defs>${'<use href="#h"/>'.repeat(50)}`);
+    assert.ok(lintSvg(useHeavy(4300)).length > 0);
+    assert.ok(lintSvg(useHeavy(1200)).length > 0);
+    assert.ok(lintSvg(useHeavy(230)).length > 0, '50 uses of the biggest allowed path are over the budget');
+    const heavyMask = (tag, attribute) => R(`<defs><${tag} id="m"><path d="${bigPath(4000)}" fill="#fff"/></${tag}></defs>${`<rect width="400" height="225" ${attribute}="url(#m)"/>`.repeat(20)}`);
+    assert.ok(lintSvg(heavyMask('mask', 'mask')).length > 0);
+    assert.ok(lintSvg(heavyMask('clipPath', 'clip-path')).length > 0);
+    assert.ok(lintSvg(heavyMask('mask', 'mask').replace(bigPath(4000), bigPath(230))).length > 0, '20 references to a mask holding the biggest allowed path');
+  });
+
+  test('more variants: 6000-point polygons used 50 times, one 100 KB path, 500 medium paths, a stroked path of tiny segments', () => {
+    const points = Array.from({ length: 6000 }, (_, i) => `${i % 400},${(i * 7) % 225}`).join(' ');
+    assert.ok(lintSvg(R(`<defs><polygon id="p" points="${points}" fill="#fa0"/></defs>${'<use href="#p"/>'.repeat(50)}`)).length > 0);
+    assert.match(lintSvg(R(`<path d="M0 0${'l1 1'.repeat(30000)}" stroke="#000"/>`))[0], /40 KB/);
+    const medium = `<path d="M0 0${'L3 4'.repeat(100)}" stroke="#000" fill="none"/>`;
+    assert.ok(lintSvg(R(medium.repeat(500))).length > 0, '500 paths x 100 segments = 50,000 segments');
+    assert.ok(lintSvg(R(`<path d="M0 0${'l0.01 0.01'.repeat(400)}" stroke="#000" stroke-width="3" fill="none"/>`.repeat(30))).length > 0);
+  });
+
+  test('legitimate pictures stay accepted: the mock-up crowd scene and a drawing of a few hundred segments', () => {
+    const picture = R(`<path d="${bigPath(60)}" fill="#E8C27A" stroke="#fff" stroke-width="2"/><polygon points="0,0 100,0 50,80 20,40" fill="#fff"/>`);
+    assert.deepEqual(lintSvg(picture), []);
+  });
+});
+
+describe('gradients are charged for their stops, per shape that uses them', () => {
+  const stops = (n) => Array.from({ length: n }, (_, i) => `<stop offset="${(i / n).toFixed(3)}" stop-color="#8000ff"/>`).join('');
+  const gradient = (n, shapes) => R(`<defs><radialGradient id="g">${stops(n)}</radialGradient></defs>${'<rect width="400" height="225" fill="url(#g)"/>'.repeat(shapes)}`);
+
+  test('a gradient with more than 16 stops is refused', () => {
+    assert.deepEqual(lintSvg(gradient(16, 1)), []);
+    assert.match(lintSvg(gradient(17, 1))[0], /16 stops/);
+  });
+
+  test('each shape that fills or strokes with a gradient pays floor(stops / 5) more', () => {
+    assert.equal(svgDrawWeight(gradient(4, 10)), 1 + 10); // 4 stops: free (real art has up to 4)
+    assert.equal(svgDrawWeight(gradient(10, 10)), 1 + 10 * (1 + 2));
+    assert.equal(svgDrawWeight(R(`<defs><linearGradient id="g">${stops(15)}</linearGradient></defs><circle r="9" stroke="url(#g)" fill="url(#g)"/>`)), 1 + (1 + 3 + 3));
+  });
+
+  test('450 stops on 300 full-size rectangles (607 ms in a browser) and 16 stops on 300 shapes (over the budget) are refused', () => {
+    assert.ok(lintSvg(gradient(450, 300)).length > 0);
+    assert.match(lintSvg(gradient(16, 300))[0], /too costly/);
+  });
+
+  test('a use of a shape with a gradient charges it again each time', () => {
+    const body = `<defs><radialGradient id="g">${stops(15)}</radialGradient><rect id="r" width="400" height="225" fill="url(#g)"/></defs>`;
+    assert.equal(svgDrawWeight(R(`${body}${'<use href="#r"/>'.repeat(10)}`)), 1 + 10 * (1 + 1 + 3));
   });
 });

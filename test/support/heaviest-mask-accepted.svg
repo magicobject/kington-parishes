@@ -33,24 +33,6 @@
     <circle cx="216" cy="112" r="271" fill-opacity=".5"/>
     <circle cx="180" cy="112" r="270" fill-opacity=".5"/>
     <circle cx="184" cy="112" r="269" fill-opacity=".5"/>
-    <circle cx="188" cy="112" r="268" fill-opacity=".5"/>
-    <circle cx="192" cy="112" r="267" fill-opacity=".5"/>
-    <circle cx="196" cy="112" r="266" fill-opacity=".5"/>
-    <circle cx="200" cy="112" r="265" fill-opacity=".5"/>
-    <circle cx="204" cy="112" r="264" fill-opacity=".5"/>
-    <circle cx="208" cy="112" r="263" fill-opacity=".5"/>
-    <circle cx="212" cy="112" r="262" fill-opacity=".5"/>
-    <circle cx="216" cy="112" r="261" fill-opacity=".5"/>
-    <circle cx="180" cy="112" r="260" fill-opacity=".5"/>
-    <circle cx="184" cy="112" r="259" fill-opacity=".5"/>
-    <circle cx="188" cy="112" r="258" fill-opacity=".5"/>
-    <circle cx="192" cy="112" r="257" fill-opacity=".5"/>
-    <circle cx="196" cy="112" r="256" fill-opacity=".5"/>
-    <circle cx="200" cy="112" r="255" fill-opacity=".5"/>
-    <circle cx="204" cy="112" r="254" fill-opacity=".5"/>
-    <circle cx="208" cy="112" r="253" fill-opacity=".5"/>
-    <circle cx="212" cy="112" r="252" fill-opacity=".5"/>
-    <circle cx="216" cy="112" r="251" fill-opacity=".5"/>
     </mask>
   </defs>
   <rect width="400" height="225" fill="#14202b"/>
@@ -74,44 +56,4 @@
   <rect width="400" height="225" mask="url(#m)"/>
   <rect width="400" height="225" mask="url(#m)"/>
   <rect width="400" height="225" mask="url(#m)"/>
-  <rect x="0" y="0" width="12" height="12" opacity=".5" fill="#E8C27A"/>
-  <rect x="5" y="7" width="12" height="12" opacity=".5" fill="#E8C27A"/>
-  <rect x="10" y="14" width="12" height="12" opacity=".5" fill="#E8C27A"/>
-  <rect x="15" y="21" width="12" height="12" opacity=".5" fill="#E8C27A"/>
-  <rect x="20" y="28" width="12" height="12" opacity=".5" fill="#E8C27A"/>
-  <rect x="25" y="35" width="12" height="12" opacity=".5" fill="#E8C27A"/>
-  <rect x="30" y="42" width="12" height="12" opacity=".5" fill="#E8C27A"/>
-  <rect x="35" y="49" width="12" height="12" opacity=".5" fill="#E8C27A"/>
-  <rect x="40" y="56" width="12" height="12" opacity=".5" fill="#E8C27A"/>
-  <rect x="45" y="63" width="12" height="12" opacity=".5" fill="#E8C27A"/>
-  <rect x="50" y="70" width="12" height="12" opacity=".5" fill="#E8C27A"/>
-  <rect x="55" y="77" width="12" height="12" opacity=".5" fill="#E8C27A"/>
-  <rect x="60" y="84" width="12" height="12" opacity=".5" fill="#E8C27A"/>
-  <rect x="65" y="91" width="12" height="12" opacity=".5" fill="#E8C27A"/>
-  <rect x="70" y="98" width="12" height="12" opacity=".5" fill="#E8C27A"/>
-  <rect x="75" y="105" width="12" height="12" opacity=".5" fill="#E8C27A"/>
-  <rect x="80" y="112" width="12" height="12" opacity=".5" fill="#E8C27A"/>
-  <rect x="85" y="119" width="12" height="12" opacity=".5" fill="#E8C27A"/>
-  <rect x="90" y="126" width="12" height="12" opacity=".5" fill="#E8C27A"/>
-  <rect x="95" y="133" width="12" height="12" opacity=".5" fill="#E8C27A"/>
-  <rect x="100" y="140" width="12" height="12" opacity=".5" fill="#E8C27A"/>
-  <rect x="105" y="147" width="12" height="12" opacity=".5" fill="#E8C27A"/>
-  <rect x="110" y="154" width="12" height="12" opacity=".5" fill="#E8C27A"/>
-  <rect x="115" y="161" width="12" height="12" opacity=".5" fill="#E8C27A"/>
-  <rect x="120" y="168" width="12" height="12" opacity=".5" fill="#E8C27A"/>
-  <rect x="125" y="175" width="12" height="12" opacity=".5" fill="#E8C27A"/>
-  <rect x="130" y="182" width="12" height="12" opacity=".5" fill="#E8C27A"/>
-  <rect x="135" y="189" width="12" height="12" opacity=".5" fill="#E8C27A"/>
-  <rect x="140" y="196" width="12" height="12" opacity=".5" fill="#E8C27A"/>
-  <rect x="145" y="3" width="12" height="12" opacity=".5" fill="#E8C27A"/>
-  <rect x="150" y="10" width="12" height="12" opacity=".5" fill="#E8C27A"/>
-  <rect x="155" y="17" width="12" height="12" opacity=".5" fill="#E8C27A"/>
-  <rect x="160" y="24" width="12" height="12" opacity=".5" fill="#E8C27A"/>
-  <rect x="165" y="31" width="12" height="12" opacity=".5" fill="#E8C27A"/>
-  <rect x="170" y="38" width="12" height="12" opacity=".5" fill="#E8C27A"/>
-  <rect x="175" y="45" width="12" height="12" opacity=".5" fill="#E8C27A"/>
-  <rect x="180" y="52" width="12" height="12" opacity=".5" fill="#E8C27A"/>
-  <rect x="185" y="59" width="12" height="12" opacity=".5" fill="#E8C27A"/>
-  <rect x="190" y="66" width="12" height="12" opacity=".5" fill="#E8C27A"/>
-  <rect x="195" y="73" width="12" height="12" opacity=".5" fill="#E8C27A"/>
 </svg>

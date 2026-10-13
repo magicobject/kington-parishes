@@ -321,7 +321,7 @@ describe('lintSvg: a parse-based allow-list', () => {
   });
 
   test('allows a picture just under the size cap', () => {
-    const body = 'a'.repeat(100 * 1024 - 40);
+    const body = 'a'.repeat(40 * 1024 - 40);
     assert.deepEqual(lintSvg(`<svg><desc>${body}</desc></svg>`), []);
     assert.ok(lintSvg(`<svg><desc>${body}${'a'.repeat(100)}</desc></svg>`).length > 0);
   });

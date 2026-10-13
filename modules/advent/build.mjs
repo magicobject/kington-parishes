@@ -32,7 +32,7 @@ const MONTH_NAMES = [
   'January', 'February', 'March', 'April', 'May', 'June',
   'July', 'August', 'September', 'October', 'November', 'December',
 ];
-const MAX_SVG_BYTES = 100 * 1024;
+const MAX_SVG_BYTES = 40 * 1024;
 const TOKEN = '{{ADVENT}}';
 const TEASER_TOKEN = '{{ADVENT_TEASER}}';
 
@@ -88,7 +88,7 @@ const SVG_ELEMENTS = new Set([
 const SVG_ATTRIBUTES = new Set([
   'id', 'd', 'x', 'y', 'cx', 'cy', 'r', 'rx', 'ry', 'x1', 'y1', 'x2', 'y2', 'fx', 'fy', 'width', 'height', 'points',
   'viewBox', 'preserveAspectRatio', 'transform', 'fill', 'fill-opacity', 'fill-rule', 'clip-rule', 'stroke',
-  'stroke-width', 'stroke-linecap', 'stroke-linejoin', 'stroke-miterlimit', 'stroke-dasharray', 'stroke-dashoffset',
+  'stroke-width', 'stroke-linecap', 'stroke-linejoin', 'stroke-miterlimit',
   'stroke-opacity', 'opacity', 'offset', 'stop-color', 'stop-opacity', 'gradientUnits', 'gradientTransform',
   'spreadMethod', 'clipPathUnits', 'maskUnits', 'maskContentUnits', 'clip-path', 'mask', 'color', 'role', 'aria-label',
   'aria-hidden', 'focusable', 'style', 'href', 'xmlns',
@@ -105,6 +105,57 @@ const MAX_DEPTH = 20;
 const MAX_ELEMENTS = 2000;
 const MAX_USES = 50;
 
+// ---- geometry complexity ----
+// A path is as costly as the number of segments it has, not "one draw": 4,300 arcs used 50 times took a browser 12.8
+// seconds. So a path weighs 1 + floor(segments / 10), a polygon or polyline 1 + floor(points / 5), and the other
+// shapes 1. A "segment" is one command's worth of coordinates (a line, a curve, an arc, a close), counting every
+// repeated implicit set of coordinates after a command letter. Caps well above real art: a file of at most 40 KB,
+// 24 KB of path data in all, one path of at most 4 KB and one points list of at most 1 KB.
+const MAX_PATH_DATA = 24 * 1024;
+const MAX_ONE_PATH = 4 * 1024;
+const MAX_POINTS_TEXT = 1024;
+const SEGMENT_ARITY = { M: 2, L: 2, T: 2, H: 1, V: 1, C: 6, S: 4, Q: 4 };
+const NUMBER_AT = /^[\s,]*(-?(?:\d+\.?\d*|\.\d+)(?:[eE][-+]?\d+)?)/;
+
+// Arc arguments are rx ry rotation flag flag x y, and the two flags may be written without separators ("a1 1 0 011 1"),
+// so they are read one character at a time.
+function arcSegments(args) {
+  let rest = args;
+  let count = 0;
+  const take = (pattern) => {
+    const match = pattern.exec(rest);
+    if (!match) return false;
+    rest = rest.slice(match[0].length);
+    return true;
+  };
+  for (;;) {
+    let ok = true;
+    for (let i = 0; i < 3 && ok; i += 1) ok = take(NUMBER_AT);
+    for (let i = 0; i < 2 && ok; i += 1) ok = take(/^[\s,]*[01]/);
+    for (let i = 0; i < 2 && ok; i += 1) ok = take(NUMBER_AT);
+    if (!ok) return Math.max(count, args.trim() === '' ? 0 : 1);
+    count += 1;
+  }
+}
+
+/** The number of segments in path data (see above). At least 1 for any non-empty data. */
+export function pathSegments(d) {
+  let segments = 0;
+  for (const [, command, args] of d.matchAll(/([MmLlHhVvCcSsQqTtAaZz])([^MmLlHhVvCcSsQqTtAaZz]*)/g)) {
+    const upper = command.toUpperCase();
+    if (upper === 'Z') segments += 1;
+    else if (upper === 'A') segments += arcSegments(args);
+    else segments += Math.max(1, Math.floor((args.match(NUMBER) ?? []).length / SEGMENT_ARITY[upper]));
+  }
+  return Math.max(segments, d.trim() === '' ? 0 : 1);
+}
+
+function geometryWeight(record) {
+  if (record.name === 'path') return 1 + Math.floor(pathSegments(record.attrs.d ?? '') / 10);
+  if (record.name === 'polygon' || record.name === 'polyline') return 1 + Math.floor(Math.floor(((record.attrs.points ?? '').match(NUMBER) ?? []).length / 2) / 5);
+  return 1;
+}
+
 // ---- draw cost ----
 // A picture is loaded as an image by every visitor, so it must be cheap to DRAW, not only small to read. The
 // lint therefore also bounds the work a browser does:
@@ -115,11 +166,12 @@ const MAX_USES = 50;
 //     reference; and a <mask> or <clipPath> weighs (its subtree) x (its references), because a browser redraws it
 //     for every element that uses it. The total may not exceed MAX_DRAW_WEIGHT; there are at most 20 references
 //     and at most 50 elements inside any mask or clipPath;
-//   - a dash pattern may not contain a number between 0 and 0.5 (thousands of tiny dashes), and no number in a
-//     size, position, path or transform attribute may be larger than 100000.
-export const MAX_DRAW_WEIGHT = 1500;
+//   - there are no dashed lines (stroke-dasharray is not an allowed attribute: the dash count is the path length over
+//     the dash length, which no weight can bound), and no number in a size, position, path or transform attribute may
+//     be larger than 100000;
+//   - a gradient has at most 16 stops, and every shape that fills or strokes with one pays floor(stops / 5) more.
+export const MAX_DRAW_WEIGHT = 900;
 const MAX_NUMBER = 100000;
-const MIN_DASH = 0.5;
 const NOT_DRAWN_DIRECTLY = new Set(['defs', 'symbol', 'mask', 'clipPath', 'linearGradient', 'radialGradient', 'title', 'desc']);
 const RESOURCE_ELEMENTS = new Set(['mask', 'clipPath']);
 const RESOURCE_ATTRIBUTES = ['mask', 'clip-path'];
@@ -132,7 +184,7 @@ function hasOpacity(attrs) {
 
 function ownWeight(record) {
   const references = RESOURCE_ATTRIBUTES.filter((name) => name in record.attrs).length;
-  return 1 + (references > 0 || hasOpacity(record.attrs) ? 5 : 0) + 5 * references;
+  return geometryWeight(record) + (references > 0 || hasOpacity(record.attrs) ? 5 : 0) + 5 * references;
 }
 
 function subtreeWeight(record) {
@@ -150,6 +202,9 @@ const MAX_RESOURCE_REFERENCES = 20;
 const MAX_RESOURCE_CHILDREN = 50;
 const RESOURCE_REFERENCE = /^url\(#([A-Za-z][A-Za-z0-9_-]*)\)$/;
 
+const MAX_STOPS = 16;
+const stopCount = (record) => record.children.filter((child) => child.name === 'stop').length;
+
 function descendantCount(record) {
   return record.children.reduce((sum, child) => sum + 1 + descendantCount(child), 0);
 }
@@ -164,6 +219,9 @@ function drawCost(records) {
     if (inside && (RESOURCE_ATTRIBUTES.some((name) => name in record.attrs) || record.name === 'use')) {
       return { problem: 'has a mask, clip-path or use inside a mask or clipPath (resource references may not nest)', weight: 0 };
     }
+    if ((record.name === 'linearGradient' || record.name === 'radialGradient') && stopCount(record) > MAX_STOPS) {
+      return { problem: `has a gradient with more than ${MAX_STOPS} stops`, weight: 0 };
+    }
     if (RESOURCE_ELEMENTS.has(record.name) && descendantCount(record) > MAX_RESOURCE_CHILDREN) {
       return { problem: `has a mask or clipPath with more than ${MAX_RESOURCE_CHILDREN} elements inside (at most ${MAX_RESOURCE_CHILDREN} are allowed)`, weight: 0 };
     }
@@ -174,6 +232,11 @@ function drawCost(records) {
   const referenceCounts = new Map(); // id of a mask or clipPath -> how many drawn elements reference it
   const draw = (record) => {
     weight += ownWeight(record);
+    for (const name of ['fill', 'stroke']) {
+      const paint = RESOURCE_REFERENCE.exec(record.attrs[name] ?? '');
+      const gradient = paint ? byId.get(paint[1]) : null;
+      if (gradient && (gradient.name === 'linearGradient' || gradient.name === 'radialGradient')) weight += Math.floor(stopCount(gradient) / 5);
+    }
     for (const name of RESOURCE_ATTRIBUTES) {
       const match = RESOURCE_REFERENCE.exec(record.attrs[name] ?? '');
       if (!(name in record.attrs)) continue;
@@ -213,9 +276,8 @@ function drawCost(records) {
 
 // A problem with the numbers in one attribute, or null.
 function numberProblem(name, value) {
-  if (name === 'stroke-dasharray' && (value.match(NUMBER) ?? []).some((n) => Number(n) > 0 && Number(n) < MIN_DASH)) {
-    return 'a dash pattern has a dash shorter than 0.5';
-  }
+  if (name === 'd' && value.length > MAX_ONE_PATH) return 'a path is longer than 4 KB';
+  if (name === 'points' && value.length > MAX_POINTS_TEXT) return 'a points list is longer than 1 KB';
   if (!NOT_NUMERIC.has(name) && (value.match(NUMBER) ?? []).some((n) => Math.abs(Number(n)) > MAX_NUMBER)) {
     return 'a number is larger than 100000';
   }
@@ -250,14 +312,14 @@ function attributeProblem(element, name, value) {
  * Problems found in a picture, as a list of plain sentences (empty list = clean). Only the elements
  * and attributes allowed above are accepted. No text (except in title and desc), no comments with
  * anything but plain words, no declarations, entities, CDATA, processing instructions, namespace
- * prefixes, links that leave the file, events, styles beyond a few plain settings. At most 100 KB,
+ * prefixes, links that leave the file, events, styles beyond a few plain settings. At most 40 KB,
  * 20 levels deep and 2000 elements. At most 50 <use> elements, and a <use> may not point at an element that
  * contains (or is) another <use>, which also rules out cycles and self-reference: references can only go one
  * level deep, so a picture cannot multiply itself into billions of draws (the "billion laughs" attack).
  */
 export function lintSvg(text, stats = {}) {
   if (typeof text !== 'string') return ['the picture is not text'];
-  if (Buffer.byteLength(text, 'utf8') > MAX_SVG_BYTES) return ['larger than 100 KB'];
+  if (Buffer.byteLength(text, 'utf8') > MAX_SVG_BYTES) return ['larger than 40 KB'];
   if (!/^[\t\n\r -~]*$/.test(text)) return ['contains a character that is not plain ASCII (including a byte order mark or NUL)'];
   if (text.includes('&')) return ['contains an entity (&)'];
 
@@ -268,6 +330,7 @@ export function lintSvg(text, stats = {}) {
   let position = 0;
   let elements = 0;
   let uses = 0;
+  let pathData = 0;
   let sawRoot = false;
   const fail = (message) => [message];
 
@@ -327,6 +390,10 @@ export function lintSvg(text, stats = {}) {
       if (problem) return fail(problem);
       if (attributeName === 'xmlns' && stack.length > 0) return fail('xmlns is only allowed on the root');
       attrs[attributeName] = value;
+      if (attributeName === 'd') {
+        pathData += value.length;
+        if (pathData > MAX_PATH_DATA) return fail('has more than 24 KB of path data in all');
+      }
       if (attributeName === 'id') id = value;
       if (attributeName === 'href') target = value.slice(1);
       position += whole.length;

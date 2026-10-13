@@ -11,7 +11,9 @@ guard tests keep it that way. Tick each step in the launch commit message.
 2. **Look at the real thing** in preview on every date (docs/advent/ux-design.md), on a phone and a desktop,
    including the home page with `/?advent-preview=2026-12-07`.
 3. **The pictures exist.** All 25 `public/advent/art/day-01.svg` to `day-25.svg` are in place (nothing else may be
-   in that folder), Greg has looked at each one. The build refuses a picture that is unsafe OR too costly to draw
+   in that folder), Greg has looked at each one. `npm test` renders EVERY real picture (and the scene) in Chromium and
+   fails if any takes 300 ms or more at 400px or 800px wide (`test/advent-svg-render.spec.ts`): run it with the real art
+   in place before launch. The build refuses a picture that is unsafe OR too costly to draw
    (the lint bounds draw cost with a weighted budget, not only the `<use>` count: see the README, "Adding a
    picture").
 4. **The bonus door content.** The door is built and configured (`bonus` in `theme.mjs`) but `content.mjs` has no
@@ -65,8 +67,10 @@ header only keeps crawlers away). The calendar is hidden, not secret.
 - DONE: `lintSvg` caps `<use>` elements at 50 and refuses a `<use>` of an element that contains (or is) another
   `<use>` (no cycles, no self-reference): the "billion laughs" fix.
 - DONE: `lintSvg` also bounds DRAW COST: resource references (mask, clip-path) may not nest or sit inside a mask or
-  clipPath, a weighted draw budget caps the total work, with masks and clip paths charged per reference (see the README for the weights and the limits), dash
-  patterns finer than 0.5 and numbers over 100000 are refused. The hostile samples (mask and clipPath towers, a
-  50-times-used group of 1500 masked rects) are must-reject tests, and a browser test times the heaviest accepted
-  picture. Nothing to do at launch.
+  clipPath, and a weighted draw budget (cap 900) caps the total work: paths and polygons weigh by their segment count,
+  masks and clip paths are charged per reference, gradients per stop. Dashed lines are not allowed, and there are caps
+  on file size (40 KB), path data and numbers (see the README for every weight and limit). The hostile samples (mask
+  and clipPath towers, heavy paths used 50 times, heavy masks, 6,000-point polygons, 100 KB paths) are must-reject
+  tests, and `test/advent-svg-render.spec.ts` renders the heaviest accepted pictures in a real browser. Nothing to do
+  at launch.
 - New files under `public/js/advent*`, `public/js/advent/` or `public/css/advent*` need their own exact immutable rule in `public/_headers` (a unit test fails until they have one).
