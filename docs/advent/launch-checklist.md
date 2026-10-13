@@ -44,3 +44,6 @@ calendar is hidden and two guard tests keep it that way. Tick each step in the l
 Notes: the repository is public, so `modules/advent/content.mjs` is readable on GitHub whatever the switches
 say, and `public/advent/day-NN.json` can be fetched by anyone who guesses the address (the `X-Robots-Tag`
 header only keeps crawlers away). The calendar is hidden, not secret.
+
+## Must be done BEFORE the first SVG is committed (security review, 13 Oct 2026)
+- `lintSvg` accepts a "billion laughs" picture (10 nested groups, each holding 10 `<use>` of the previous): about 100 elements, 1.8 KB, passes the caps, but hangs the browser when loaded as an image. Fix: cap the number of `<use>` elements (for example 50) and refuse a `<use>` that references an element containing another `<use>`, or resolve the reference graph and cap the total expansion. Add the sample from the review scratch (laugh.mjs) to `test-unit/support/hostile-svgs.mjs` as a must-reject case.
