@@ -12,6 +12,8 @@
 
 import { SITE } from './site.config.mjs';
 import { CHURCHES } from './churches.config.mjs';
+import { theme as adventTheme } from '../modules/advent/theme.mjs';
+import { adventPageEntry } from '../modules/advent/build.mjs';
 
 // One schema.org Church per entry in src/churches.config.mjs, for the
 // our-churches page's structured data. `geo` and `hasMap` come from each
@@ -379,6 +381,10 @@ export const PAGES = [
     // The safeguarding page doesn't need to link to itself.
     safeguardStrip: false,
   },
+  // The Advent calendar page. Its entry comes from the module: while the theme's
+  // publicListing is false it is unlisted (not in the sitemap or search) and noindex,
+  // and it is in no nav, footer or page link either. See modules/advent/README.md.
+  adventPageEntry(adventTheme),
   {
     slug: 'updates',
     title: 'Site Updates — Kington Parishes',
@@ -459,6 +465,15 @@ export const PAGES = [
     slug: 'help-when-it-goes-wrong',
     title: 'When It Goes Wrong — Help — Kington Parishes',
     description: 'What to do if a change looks wrong: ask Claude, revert it, or fail forward — plus why nothing is ever permanently broken.',
+    active: null,
+    header: true,
+    safeguardStrip: false,
+    robots: 'noindex, nofollow',
+  },
+  {
+    slug: 'help-advent',
+    title: 'Advent Calendar — Help — Kington Parishes',
+    description: "How to preview the Advent calendar on any date, what to expect each day, how to change a day's words or picture, and how to switch it on for everyone.",
     active: null,
     header: true,
     safeguardStrip: false,

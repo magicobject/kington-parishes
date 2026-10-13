@@ -78,3 +78,47 @@ test.describe('mobile nav toggle', () => {
     expect(results.violations, formatViolations(results.violations)).toEqual([]);
   });
 });
+
+// The Advent calendar page changes completely with the date, so scan it in EACH state, not just the
+// default one the loop above sees: calm "before", doors with a preview notice, the archive, and calm
+// "after". The site has no dark mode, so there is no dark scan to add. The clock is fixed so the
+// result never depends on today's date.
+const ADVENT_STATES: { name: string; time: string; query: string; doors: boolean }[] = [
+  { name: 'before (30 November)', time: '2026-11-30T12:00:00Z', query: '', doors: false },
+  { name: 'live, with preview notice (7 December)', time: '2026-10-13T12:00:00Z', query: '?advent-preview=2026-12-07', doors: true },
+  { name: 'live, real date (12 December)', time: '2026-12-12T12:00:00Z', query: '', doors: true },
+  { name: 'archive (28 December)', time: '2026-12-28T12:00:00Z', query: '', doors: true },
+  { name: 'after (13 January)', time: '2027-01-13T12:00:00Z', query: '', doors: false },
+];
+
+for (const state of ADVENT_STATES) {
+  test(`axe: Advent calendar, ${state.name}`, async ({ page }) => {
+    await page.clock.install({ time: new Date(state.time) });
+    await page.goto(`/advent.html${state.query}`);
+    await expect(page.locator('.advent .advent-door')).toHaveCount(state.doors ? 25 : 0);
+    await page.evaluate(() => {
+      document.querySelectorAll('.reveal').forEach((el) => {
+        el.classList.add('in');
+        (el as HTMLElement).style.transition = 'none';
+        (el as HTMLElement).style.opacity = '1';
+        (el as HTMLElement).style.transform = 'none';
+      });
+    });
+    const results = await new AxeBuilder({ page }).analyze();
+    expect(results.violations, formatViolations(results.violations)).toEqual([]);
+  });
+
+  test(`heading outline: Advent calendar, ${state.name}, has no skipped levels`, async ({ page }) => {
+    await page.clock.install({ time: new Date(state.time) });
+    await page.goto(`/advent.html${state.query}`);
+    // Only visible headings count: the calendar keeps its other state's heading hidden.
+    const levels = await page.$$eval('h1, h2, h3, h4, h5, h6', (els) =>
+      els.filter((el) => (el as HTMLElement).offsetParent !== null).map((el) => Number(el.tagName[1])));
+    expect(levels[0]).toBe(1);
+    let maxSeen = 0;
+    for (const level of levels) {
+      expect(level, `heading order was [${levels.join(', ')}]`).toBeLessThanOrEqual(maxSeen + 1);
+      maxSeen = Math.max(maxSeen, level);
+    }
+  });
+}

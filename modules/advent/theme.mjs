@@ -45,11 +45,15 @@ export const theme = Object.freeze({
     'help-technical-details',
     'help-dns-setup',
     'help-when-it-goes-wrong',
+    'help-advent',
   ]),
   previewEnabled: true,
   adventEnabled: true,
   // false = not in the sitemap or search, and noindex, until Greg switches it on (on or before 1 December).
   publicListing: false,
+  // false = the build allows missing pictures (they are still checked when present).
+  // Flip to true at launch; the build then refuses to continue if any art file is missing.
+  artRequired: false,
   translationName: 'World English Bible',
   // Contrast (WCAG 2, computed by test-unit/advent-contrast.test.mjs):
   //   text on paper 14.09   textSoft on paper 8.52   link on paper 5.53   (need 4.5)

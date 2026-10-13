@@ -1,0 +1,33 @@
+/* Advent calendar page styles (phase 2: calm message, preview notice, placeholder doors).
+   Colours come only from the --advent-* variables in advent-theme.css (generated from the theme).
+   Every rule starts with .advent so it beats the site stylesheet, which loads after this one.
+   Contrast (WCAG 2, from the theme's own table in theme.mjs): text on paper 14.09, textSoft on paper 8.52,
+   cream on door about 10, accentInk on accent 10.26, doorEdge on paper 3.0 or more (UI edge). */
+
+.advent { background: var(--advent-paper); color: var(--advent-text); border-radius: 8px; padding: 28px; margin: 0 auto 40px; max-width: 720px; }
+.advent [hidden] { display: none !important; }
+.advent h2 { color: var(--advent-text); }
+.advent p { color: var(--advent-text-soft); }
+.advent-calm p { font-size: 1.15rem; }
+
+.advent .advent-notice { background: var(--advent-accent); border-radius: 6px; padding: 12px 16px; margin-bottom: 24px; }
+.advent .advent-notice p { color: var(--advent-accent-ink); margin: 0; }
+.advent .advent-notice p + p { margin-top: 6px; }
+.advent .advent-notice a { color: var(--advent-accent-ink); font-weight: 600; }
+
+.advent .advent-placeholder-note { font-size: 0.95rem; font-style: italic; }
+
+.advent .advent-doors { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: 12px; }
+.advent .advent-door {
+  width: 100%; min-height: 64px; border-radius: 6px; font: inherit; font-size: 1.3rem; font-weight: 600;
+  background: var(--advent-door); color: var(--advent-cream); border: 2px solid var(--advent-door-edge); cursor: pointer;
+}
+.advent .advent-door-future { border-style: dashed; font-weight: 400; }
+.advent .advent-door-available { border-style: solid; }
+.advent .advent-door-today { background: var(--advent-accent); color: var(--advent-accent-ink); border-color: var(--advent-accent-ink); border-width: 3px; }
+.advent .advent-door:focus-visible,
+.advent .advent-notice a:focus-visible { outline: 3px solid var(--advent-night); outline-offset: 3px; }
+
+@media (max-width: 480px) {
+  .advent { padding: 20px 16px; }
+}

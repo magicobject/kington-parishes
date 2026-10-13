@@ -121,7 +121,8 @@ describe('slugs', () => {
   });
 
   test('every page name in src/pages.config.mjs is reserved (generic list plus the theme list), and each is rejected', () => {
-    for (const page of PAGES) {
+    // The calendar's own page is the one page that takes the slug, so it is not in the reserved list.
+    for (const page of PAGES.filter((p) => p.slug !== theme.slug)) {
       assert.ok(RESERVED_SLUGS.includes(page.slug) || theme.reservedSlugs.includes(page.slug), `${page.slug} should be reserved`);
       assert.throws(() => validateTheme(slugged(page.slug)), /"slug"/, page.slug);
     }

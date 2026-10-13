@@ -1,0 +1,141 @@
+// Advent calendar page script (phase 2: date logic and placeholder doors only).
+// Loaded as a module from /js/advent.js. The build copies it, date.mjs and preview.mjs
+// to public/js/ and points the two imports below at those copies, so this is the very
+// same date logic the unit tests run. It keeps nothing in the browser: no cookies and
+// no saved settings. Text is only ever set as plain text, never as markup.
+import { seasonState, doorState } from '../date.mjs';
+import { effectiveDate, formatPreviewNotice } from '../preview.mjs';
+
+function toInt(text) {
+  if (typeof text !== 'string' || !/^\d+$/.test(text)) return null;
+  return Number(text);
+}
+
+function monthDay(data, monthKey, dayKey) {
+  const month = toInt(data[monthKey]);
+  const day = toInt(data[dayKey]);
+  return month === null || day === null ? null : { month, day };
+}
+
+// Everything the page's data-* attributes say, or null if any of it is unusable.
+function readConfig(root) {
+  const data = root.dataset;
+  const start = monthDay(data, 'startMonth', 'startDay');
+  const end = monthDay(data, 'endMonth', 'endDay');
+  const archiveUntil = monthDay(data, 'archiveMonth', 'archiveDay');
+  const dayCount = toInt(data.dayCount);
+  if (!start || !end || dayCount === null || !data.timeZone || !data.slug) return null;
+  return {
+    season: { start, end, archiveUntil },
+    timeZone: data.timeZone,
+    slug: data.slug,
+    previewEnabled: data.preview === 'true',
+    enabled: data.enabled === 'true',
+    dayCount,
+    monthName: data.monthName || '',
+    opensText: data.opensText || '',
+    againText: data.againText || '',
+  };
+}
+
+function part(root, name) {
+  return root.querySelector(`[data-advent-${name}]`);
+}
+
+function showCalm(root, text) {
+  const calm = part(root, 'calm');
+  const live = part(root, 'live');
+  if (text) part(root, 'calm-text').textContent = text;
+  live.hidden = true;
+  calm.hidden = false;
+}
+
+const STATE_WORDS = { today: 'today', future: 'not yet', available: 'available' };
+
+function doorButton(day, state, config) {
+  const item = document.createElement('li');
+  const button = document.createElement('button');
+  const date = config.season.start.day + day - 1;
+  button.type = 'button';
+  button.className = `advent-door advent-door-${state}`;
+  button.textContent = String(day);
+  button.setAttribute('aria-label', `Day ${day}, ${date} ${config.monthName}, ${STATE_WORDS[state]}`);
+  item.append(button);
+  return item;
+}
+
+// Placeholder doors so the date logic can be checked. The real calendar comes later.
+function showDoors(root, parts, config) {
+  const calm = part(root, 'calm');
+  const live = part(root, 'live');
+  const list = part(root, 'doors');
+  const note = document.createElement('p');
+  note.className = 'advent-placeholder-note';
+  note.textContent = 'Placeholder doors: the full calendar is still being built. These only show which days would be open.';
+  const doors = [];
+  for (let day = 1; day <= config.dayCount; day += 1) {
+    doors.push(doorButton(day, doorState(day, parts, config.season), config));
+  }
+  list.replaceChildren(...doors);
+  live.querySelector('.advent-placeholder-note')?.remove();
+  list.before(note);
+  calm.hidden = true;
+  live.hidden = false;
+}
+
+// Previews must never be indexed, so the page says so whatever its normal setting is.
+function markNoindex() {
+  let meta = document.querySelector('meta[name="robots"]');
+  if (!meta) {
+    meta = document.createElement('meta');
+    meta.name = 'robots';
+    document.head.append(meta);
+  }
+  if (!/noindex/i.test(meta.content)) meta.content = 'noindex';
+}
+
+function showPreviewNotice(root, parts) {
+  const notice = part(root, 'notice');
+  part(root, 'notice-text').textContent = formatPreviewNotice(parts);
+  // The exit address is built from the origin and path only, so the preview date never travels on.
+  const exit = document.createElement('a');
+  exit.href = location.origin + location.pathname;
+  exit.textContent = 'Exit preview';
+  const paragraph = document.createElement('p');
+  paragraph.append(exit);
+  notice.append(paragraph);
+  notice.hidden = false;
+  markNoindex();
+}
+
+function start(root) {
+  const config = readConfig(root);
+  if (!config || !config.enabled) return;
+
+  const { parts, preview } = effectiveDate({
+    realNow: Date.now(),
+    search: location.search,
+    pathname: location.pathname,
+    previewEnabled: config.previewEnabled,
+    timeZone: config.timeZone,
+    slug: config.slug,
+  });
+  // If the date could not be worked out, parts is null and the season state is 'after'.
+  const state = seasonState(parts, config.season);
+
+  if (preview) showPreviewNotice(root, parts);
+  if (state === 'live' || state === 'archive') {
+    showDoors(root, parts, config);
+  } else {
+    showCalm(root, state === 'after' ? config.againText : config.opensText);
+  }
+}
+
+const root = document.querySelector('[data-advent]');
+if (root) {
+  try {
+    start(root);
+  } catch {
+    // Anything unexpected leaves the calm message the page already shows.
+  }
+}

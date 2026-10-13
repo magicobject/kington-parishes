@@ -3,7 +3,7 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import { readdirSync, readFileSync, statSync } from 'node:fs';
-import { join, relative, sep } from 'node:path';
+import { join, relative, resolve, dirname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const MODULE_DIR = fileURLToPath(new URL('../modules/advent/', import.meta.url));
@@ -51,7 +51,7 @@ const FORBIDDEN = [
 describe('modules/advent folder', () => {
   test('the folder has the expected generic and site-owned files', () => {
     const names = files.map((file) => file.name);
-    for (const expected of ['date.mjs', 'preview.mjs', 'schema.mjs', 'theme.mjs', 'content.mjs', 'README.md']) {
+    for (const expected of ['date.mjs', 'preview.mjs', 'schema.mjs', 'theme.mjs', 'content.mjs', 'README.md', 'build.mjs', 'client/advent.js', 'client/advent.css']) {
       assert.ok(names.includes(expected), `${expected} should exist`);
     }
   });
@@ -64,23 +64,42 @@ describe('modules/advent folder', () => {
     }
   });
 
-  test('no file imports from outside the folder (only ./ paths, no .. and no packages)', () => {
-    const specifier = /(?:\bfrom\s*|\bimport\s*\(?\s*|\brequire\s*\(\s*)(['"])([^'"]+)\1/g;
-    let found = 0;
+  // Only build.mjs may use Node itself, and only these built-in modules. Nothing else may import a package.
+  const NODE_ALLOWED = ['node:crypto', 'node:fs', 'node:path', 'node:url'];
+  const specifier = /(?:\bfrom\s*|\bimport\s*\(?\s*|\brequire\s*\(\s*)(['"])([^'"]+)\1/g;
+
+  test('every import is a file inside this folder, or (build.mjs only) a Node built-in from the allowed few', () => {
+    let relativeImports = 0;
     for (const file of codeFiles) {
       for (const match of file.text.matchAll(specifier)) {
-        found += 1;
         const path = match[2];
-        assert.ok(path.startsWith('./'), `${file.name} imports "${path}"`);
-        assert.ok(!path.includes('..'), `${file.name} imports "${path}"`);
+        if (path.startsWith('node:')) {
+          assert.equal(file.name, 'build.mjs', `${file.name} imports "${path}"`);
+          assert.ok(NODE_ALLOWED.includes(path), `${file.name} imports "${path}"`);
+          continue;
+        }
+        relativeImports += 1;
+        assert.ok(path.startsWith('./') || path.startsWith('../'), `${file.name} imports "${path}"`);
+        const target = resolve(dirname(file.full), path);
+        assert.ok(files.some((other) => other.full === target), `${file.name} imports "${path}", which is not a file in this folder`);
       }
     }
-    assert.ok(found > 0, 'expected at least one relative import to be checked');
+    assert.ok(relativeImports > 0, 'expected at least one relative import to be checked');
   });
 
-  test('no runtime dependency: no node: or package imports in the module', () => {
-    for (const file of codeFiles) {
-      assert.ok(!/from\s*['"](?!\.\/)/.test(file.text), `${file.name} imports a non-relative path`);
+  test('the browser files (client/) import no Node module and only the two date modules', () => {
+    const client = codeFiles.filter((file) => file.name.startsWith('client/'));
+    assert.ok(client.length >= 1);
+    for (const file of client) {
+      const imports = [...file.text.matchAll(specifier)].map((match) => match[2]);
+      assert.deepEqual(imports.sort(), ['../date.mjs', '../preview.mjs'], file.name);
+    }
+  });
+
+  test('the browser files contain no web address and no use of the full page address', () => {
+    for (const file of files.filter((f) => f.name.startsWith('client/'))) {
+      assert.ok(!/https?:\/\//i.test(file.text), `${file.name} contains a web address`);
+      assert.ok(!/location\s*\.\s*href/.test(file.text), `${file.name} uses location.href`);
     }
   });
 

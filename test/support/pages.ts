@@ -156,6 +156,15 @@ export const CHURCH_KINGTON_HISTORY_PAGE: SitePage = {
   heading: /history & architecture/i,
 };
 
+// The Advent calendar page: in no nav, no footer and no other page's links. Whether it is in the
+// sitemap and carries noindex follows the theme's publicListing switch (see test/support/advent.ts).
+export const ADVENT_PAGE: SitePage = {
+  path: '/advent.html',
+  navLabel: 'Advent',
+  titleContains: 'Advent',
+  heading: /^advent$/i,
+};
+
 // Every generated page, including the ones without primary nav — used by
 // specs that should run against literally everything (footer, tokens).
-export const ALL_PAGES: SitePage[] = [HOME_PAGE, ...NAV_PAGES, SAFEGUARDING_PAGE, PARISH_NEWS_ARCHIVE_PAGE, ...NEWSLETTER_ISSUE_PAGES, NEWSLETTER_ARCHIVE_PAGE, PRIVACY_POLICY_PAGE, DONATE_PAGE, WHAT_WE_BELIEVE_PAGE, TREASURER_JOB_DESCRIPTION_PAGE, ...CHURCH_PORTAL_PAGES, CHURCH_KINGTON_HISTORY_PAGE, UPDATES_PAGE, ...HELP_PAGES];
+export const ALL_PAGES: SitePage[] = [HOME_PAGE, ...NAV_PAGES, SAFEGUARDING_PAGE, PARISH_NEWS_ARCHIVE_PAGE, ...NEWSLETTER_ISSUE_PAGES, NEWSLETTER_ARCHIVE_PAGE, PRIVACY_POLICY_PAGE, DONATE_PAGE, WHAT_WE_BELIEVE_PAGE, TREASURER_JOB_DESCRIPTION_PAGE, ...CHURCH_PORTAL_PAGES, CHURCH_KINGTON_HISTORY_PAGE, UPDATES_PAGE, ADVENT_PAGE, ...HELP_PAGES];

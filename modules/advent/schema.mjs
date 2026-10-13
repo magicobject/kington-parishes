@@ -38,7 +38,8 @@
 //   reservedSlugs               the site's own page names (a list of slugs, up to 200); the slug may not be one
 //   slug                        page name without slashes, like "advent" or "christmas-calendar";
 //                               lower case words joined by single hyphens, up to 32, not a reserved name
-//   previewEnabled, adventEnabled, publicListing   true or false
+//   previewEnabled, adventEnabled, publicListing, artRequired   true or false
+//                               (artRequired: the build refuses to continue while any picture is missing)
 //   colours                     name -> "#rrggbb" (every colour the stylesheet needs, see COLOUR_NAMES)
 
 export const DAY_COUNT = 25;
@@ -57,7 +58,7 @@ export const RESERVED_SLUGS = Object.freeze([
 
 const DAY_KEYS_REQUIRED = ['day', 'title', 'ref', 'paragraphs', 'wonder', 'activity', 'prayer', 'art', 'alt', 'credit', 'translation'];
 const DAY_KEYS_OPTIONAL = ['hidden'];
-const THEME_KEYS = ['siteName', 'timeZone', 'season', 'slug', 'previewEnabled', 'adventEnabled', 'publicListing', 'translationName', 'colours', 'reservedSlugs'];
+const THEME_KEYS = ['siteName', 'timeZone', 'season', 'slug', 'previewEnabled', 'adventEnabled', 'publicListing', 'artRequired', 'translationName', 'colours', 'reservedSlugs'];
 const DAYS_IN_MONTH = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
 // Angle brackets, "@", control, format (invisible, joiners, bidi, soft hyphen, BOM),
@@ -154,7 +155,8 @@ function checkText(value, field, where, maxLength, { content = true } = {}) {
   }
 }
 
-function validateDay(entry, index) {
+/** Throws unless one day is well-formed. `index` is only used to name it in messages. */
+export function validateDay(entry, index) {
   const label = isPlainObject(entry) && Number.isInteger(entry.day) ? `day ${entry.day}` : `days[${index}]`;
   if (!isPlainObject(entry)) fail(label, 'must be an object');
   checkKeys(entry, DAY_KEYS_REQUIRED, DAY_KEYS_OPTIONAL, label);
@@ -238,7 +240,7 @@ export function validateTheme(theme) {
     fail('theme', '"reservedSlugs" must be a list of up to 200 page names');
   }
   if (RESERVED_SLUGS.includes(copy.slug) || copy.reservedSlugs.includes(copy.slug)) fail('theme', '"slug" clashes with a reserved page name');
-  for (const flag of ['previewEnabled', 'adventEnabled', 'publicListing']) {
+  for (const flag of ['previewEnabled', 'adventEnabled', 'publicListing', 'artRequired']) {
     if (typeof copy[flag] !== 'boolean') fail('theme', `"${flag}" must be true or false`);
   }
 

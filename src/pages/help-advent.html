@@ -1,0 +1,121 @@
+<main id="main">
+
+  <div class="page-header">
+    <div class="wrap">
+      <div class="kicker"><a href="help.html" style="color:#F8F5EE; text-decoration:underline;">Help</a> / Advent calendar</div>
+      <h1>The Advent calendar</h1>
+      <p class="lede">A calendar of 25 doors for December, with one short Bible story behind each. It is being built in stages and is <strong>not public yet</strong>: nobody can find it from this website or from a search engine. This page explains how to look at it early, what you will see, how to change a day's words or picture, and how to switch it on for everyone.</p>
+      <nav class="jump-row" aria-label="Jump to a section">
+        <a href="#preview">Look at it early</a>
+        <a href="#what-you-see">What you will see</a>
+        <a href="#changing-a-day">Changing a day</a>
+        <a href="#going-live">Going live</a>
+      </nav>
+    </div>
+  </div>
+
+  <section id="preview">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">Try it before December</div>
+        <h2>How to look at it on any date</h2>
+        <p>The calendar opens a new door each day, so before December there is nothing to see. To get round that, add a pretend date to the end of the web address.</p>
+      </div>
+      <div class="card-grid">
+        <div class="card reveal">
+          <h3>1. Open the calendar page</h3>
+          <p>Go to the website address followed by <strong>/advent</strong>. The page is not linked from anywhere, so type it in or bookmark it.</p>
+        </div>
+        <div class="card reveal">
+          <h3>2. Add a pretend date</h3>
+          <p>Put <strong>?advent-preview=2026-12-07</strong> straight after it, so the whole address ends <strong>/advent?advent-preview=2026-12-07</strong>. The date is year, month, day. That example pretends it is 7 December 2026.</p>
+        </div>
+        <div class="card reveal">
+          <h3>3. Look for the yellow notice</h3>
+          <p>A notice at the top says "Preview mode: not today's date" and shows the date being pretended. Click <strong>Exit preview</strong> in the notice to go back to the real date.</p>
+        </div>
+        <div class="card reveal">
+          <h3>Good to know</h3>
+          <p>Only dates from 1 November to the end of the following January work, and only on the calendar page. A date that does not work is quietly ignored. Nothing is saved on your device and nobody else sees the pretend date.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt" id="what-you-see">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">What to expect</div>
+        <h2>What you will see on each date</h2>
+        <p>Dates are always worked out in UK time, wherever the visitor is. At the moment the page shows plain placeholder doors, so you can check the dates are right; the real doors, pictures and stories come in a later stage.</p>
+      </div>
+      <div class="card-grid">
+        <div class="card reveal">
+          <h3>Before 1 December</h3>
+          <p>A calm message saying when Advent opens, and no doors.</p>
+        </div>
+        <div class="card reveal">
+          <h3>1 to 25 December</h3>
+          <p>Doors 1 to 25. Today's door is highlighted, earlier doors are marked "available" and later ones "not yet". For example, on 12 December doors 1 to 11 are available, door 12 is today and door 13 onwards are not yet.</p>
+        </div>
+        <div class="card reveal">
+          <h3>26 December to 6 January</h3>
+          <p>Every door is available and none is "today".</p>
+        </div>
+        <div class="card reveal">
+          <h3>After 6 January</h3>
+          <p>The calm message again, saying that Advent comes round again on 1 December.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="changing-a-day">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">Words and pictures</div>
+        <h2>How to change a day's text or picture</h2>
+        <p>As with any change to this website, just ask Claude in plain English. For example: "Change the prayer on day 12 to say this" or "Add the picture for day 5".</p>
+      </div>
+      <div class="card-grid">
+        <div class="card reveal">
+          <h3>The words</h3>
+          <p>All 25 days live in one file. Each has a title, a Bible reference, the story, a question to wonder about, something to do, a short prayer, a description of the picture and the name of the Bible translation. Claude checks every change against strict rules (no web addresses, no odd characters, sensible lengths) and the site will not build if a day breaks them.</p>
+        </div>
+        <div class="card reveal">
+          <h3>The pictures</h3>
+          <p>Each day has one picture, a simple SVG drawing named <strong>day-01.svg</strong> to <strong>day-25.svg</strong>. Claude checks each one is safe (no scripts, no links to anywhere else) before it is used. Until a picture exists, that day simply has none.</p>
+        </div>
+        <div class="card reveal">
+          <h3>Nothing is automatic about the text</h3>
+          <p>The words only change when you ask. The generated copies of each day are made by the website build and should never be edited by hand.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt" id="going-live">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">Switching it on</div>
+        <h2>How to go live</h2>
+        <p>Going live is a decision for the person in charge of the website. When you are ready, ask Claude to switch the calendar on. Two settings change.</p>
+      </div>
+      <div class="card-grid">
+        <div class="card reveal">
+          <h3>1. Require all the pictures</h3>
+          <p>Claude turns on the "pictures required" setting. From then on the website refuses to build if any of the 25 pictures is missing, so a half-finished calendar cannot go out by accident.</p>
+        </div>
+        <div class="card reveal">
+          <h3>2. List it publicly</h3>
+          <p>Claude turns on the "public listing" setting. The calendar page then joins the site map and search, and stops asking search engines to ignore it. Adding a link from the menu, the footer or the home page is a separate request: ask for it at the same time.</p>
+        </div>
+        <div class="card reveal">
+          <h3>Before you do</h3>
+          <p>Look at every date using the preview trick above, read every day's words, and look at every picture. After the change goes live, check the page on the real website.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>

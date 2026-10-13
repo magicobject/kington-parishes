@@ -5,3 +5,8 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: geolocation=(), camera=(), microphone=(), payment=()
   Strict-Transport-Security: max-age=31536000; includeSubDomains
+
+# Advent calendar pictures: tighten only. Cloudflare applies this on top of the /* rule above and a
+# browser enforces both policies, so the strictest wins. A picture may use inline styles and nothing else.
+/advent/art/*
+  Content-Security-Policy: default-src 'none'; style-src 'unsafe-inline'; sandbox

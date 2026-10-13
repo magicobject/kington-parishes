@@ -18,6 +18,9 @@ import { NEWSLETTER_ISSUES } from '../src/newsletter.config.mjs';
 import { ONE_OFF_EVENTS, expandEvents, placeFor, formatEventTime, formatEventDate } from '../src/events.config.mjs';
 import { ensureSectionIds, extractSearchEntries, isSearchablePage, isIndexable, isHelpPage } from './build-search-index.mjs';
 import { splitNewsletterIssues, formatIssueMonth } from './newsletter-issues.mjs';
+import { buildAdvent, renderAdventToken } from '../modules/advent/build.mjs';
+import { theme as adventTheme } from '../modules/advent/theme.mjs';
+import { content as adventContent } from '../modules/advent/content.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (path) => readFileSync(join(root, path), 'utf8');
@@ -367,6 +370,20 @@ window.CALENDAR_EVENTS = ${JSON.stringify(expandEvents())};
 writeFileSync(join(root, 'public', 'js', 'calendar-events.js'), calendarEventsJs);
 console.log('built public/js/calendar-events.js');
 
+// The Advent calendar (modules/advent/): validates its theme and content, checks its
+// pictures, and writes public/advent/day-NN.json, public/css/advent*.css and
+// public/js/advent* — all generated, same "edit the source" rule as everything else
+// here. Runs before the pages so versionAssetUrls hashes this build's copies.
+// Throws (failing the build) on anything invalid. pageNames is every OTHER page.
+const advent = buildAdvent({
+  theme: adventTheme,
+  content: adventContent,
+  publicDir: join(root, 'public'),
+  siteUrl: SITE_URL,
+  pageNames: PAGES.map((p) => p.slug).filter((slug) => slug !== adventTheme.slug),
+});
+console.log(`built public/advent/ (${advent.files.length} files)`);
+
 const searchEntries = [];
 const sitemapUrls = [];
 
@@ -376,7 +393,8 @@ for (const page of PAGES) {
   // not unexpanded tokens. Every heading then gets a real, working anchor
   // before anything else touches this page's content — search results and
   // the page itself can never disagree about where a section actually is.
-  const content = ensureSectionIds(renderJourneyNavToken(renderChurchMapTokens(renderEventsToken(renderNewsletterTokens(renderPeopleTokens(renderSafeguardingEssentials(read(`src/pages/${page.slug}.html`).trimEnd())))))));
+  // {{ADVENT}} expands first of all, for the same reason (its h2s must exist before ids are injected).
+  const content = ensureSectionIds(renderJourneyNavToken(renderChurchMapTokens(renderEventsToken(renderNewsletterTokens(renderPeopleTokens(renderSafeguardingEssentials(renderAdventToken(read(`src/pages/${page.slug}.html`).trimEnd(), advent.tokenContext))))))));
 
   if (isIndexable(page)) {
     const resolvedForSearch = replaceTokens(content, tokens);
@@ -403,6 +421,8 @@ for (const page of PAGES) {
 
   let extraHead = '';
   if (page.robots) extraHead += `<meta name="robots" content="${page.robots}">\n`;
+  // Extra stylesheets/scripts for one page (the Advent calendar's); versionAssetUrls adds their ?v= hashes.
+  if (page.headHtml) extraHead += `${page.headHtml}\n`;
   if (page.canonical !== false) {
     extraHead += `<link rel="canonical" href="${pageUrl}">\n`;
   }
