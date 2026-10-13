@@ -25,7 +25,9 @@ guard tests keep it that way. Tick each step in the launch commit message.
    - `artRequired: true`: the build refuses to continue if any picture is missing or fails the check.
 
    They flip together on purpose: `test-unit/advent-launch-flags.test.mjs` and the theme validator refuse
-   `goLive: true` without the other two.
+   `goLive: true` without the other two. The reverse is allowed: `publicListing: true` without `goLive: true` lists
+   the page in the sitemap and search while a real visitor still sees only the calm sentence (useful if Greg wants
+   to list it early).
 6. **Delete the three pre-launch guards**, which would otherwise fail (that is their job):
    - `test-unit/advent-prelaunch.test.mjs` (delete the file);
    - `test/advent-prelaunch.spec.ts` (delete the file: it fakes 12 December with the real flags and asserts the

@@ -275,7 +275,7 @@ The calendar tells one story: God has been leaning toward the world since the be
 **Activity:** Cut out a star and put it in a window that faces east, as a signal to travellers.
 **Prayer:** God of all nations, welcome the stranger and the seeker, and bring all to your light. Amen.
 **Illustration:** Three small figures on camels (or simply walking) far in the background, crossing dunes beneath a very bright large star; the gold thread is the star's tail running ahead of them. Deep purple, indigo, gold.
-**Alt-text:** Three distant travellers cross desert dunes beneath one bright star, its golden tail leading them on.
+**Alt-text:** Distant travellers cross desert dunes beneath one bright star, its golden tail leading them on.
 **Hidden detail:** A tiny crown and a tiny gift box on a camel.
 **Local link:** None needed.
 **Review note:** The Bible does not say there were three, or that they were kings; Matthew mentions three gifts. This door says "some wise people" and says plainly that they arrive later.

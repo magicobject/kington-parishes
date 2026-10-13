@@ -298,14 +298,24 @@ class Calendar {
     this.shown = 0;
     this.returnTo = 0;
     this.announcer.textContent = ''; // so the same announcement is made again if the same day is reopened
-    const origin = this.origin;
+    const [origin, originDay] = [this.origin, this.originDay];
     this.origin = null;
-    if (origin && origin.isConnected) origin.focus();
+    // Bring the page up to date FIRST (a refresh may have waited for this dialog), then put focus back: on the
+    // equivalent rebuilt door, or on the calm sentence if the doors have gone, never on the page body.
     if (this.onClosed) this.onClosed();
+    const target = origin && origin.isConnected ? origin : this.doors.get(originDay);
+    if (target && target.getClientRects().length > 0) {
+      target.focus();
+    } else if (originDay) {
+      const calm = part(this.root, 'calm-text');
+      calm.tabIndex = -1;
+      calm.focus();
+    }
   }
 
   openDay(day, origin) {
     if (!this.days.includes(day)) return;
+    if (!this.dialog.open) this.originDay = origin === this.primary ? 0 : day;
     this.ensureOpen(origin);
     this.returnTo = 0;
     if (this.isUnlocked(day)) this.showDay(day);

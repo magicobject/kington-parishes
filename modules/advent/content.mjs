@@ -335,7 +335,7 @@ export const content = {
       "activity": "Cut out a star and put it in a window that faces east, as a signal to travellers.",
       "prayer": "God of all nations, welcome the stranger and the seeker, and bring all to your light. Amen.",
       "art": "day-21.svg",
-      "alt": "Three distant travellers cross desert dunes beneath one bright star, its golden tail leading them on.",
+      "alt": "Distant travellers cross desert dunes beneath one bright star, its golden tail leading them on.",
       "credit": "Original illustration for Kington Parishes",
       "hidden": "A tiny crown and a tiny gift box on a camel.",
       "translation": "Retold in our own words, with short quotations from the World English Bible."
