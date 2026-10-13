@@ -81,4 +81,15 @@ export const cases = {
  srcSet: W('<rect style="x:src(&quot;http://e&quot;)"/>'),
  cssSrcFn: W('<style>rect{fill:src("http://e/x")}</style>'),
 };
+// "Billion laughs": 10 nested groups, each holding 10 <use> of the previous one (about 1.8 KB, ~100 elements, 10^10 draws).
+// Must be refused: more than 50 <use> AND a <use> of an element that itself contains a <use>.
+const laughLevels = ['<g id="g0"><rect width="1" height="1"/></g>'];
+for (let level = 1; level < 10; level += 1) laughLevels.push(`<g id="g${level}">${`<use href="#g${level - 1}"/>`.repeat(10)}</g>`);
+cases.billionLaughs = W(`<defs>${laughLevels.join('')}</defs><use href="#g9"/>`);
+// The same attack kept under the cap of 50 uses (reference to an element that contains a use).
+cases.nestedUseUnderCap = W('<defs><g id="a"><rect width="1" height="1"/></g><g id="b"><use href="#a"/><use href="#a"/></g><g id="c"><use href="#b"/><use href="#b"/></g></defs><use href="#c"/>');
+cases.selfReference = W('<defs><symbol id="s"><use href="#s"/></symbol></defs><use href="#s"/>');
+cases.referenceCycle = W('<defs><symbol id="a"><use href="#b"/></symbol><symbol id="b"><use href="#a"/></symbol></defs><use href="#a"/>');
+cases.useOfAUse = W('<defs><rect id="r" width="1" height="1"/><use id="u" href="#r"/></defs><use href="#u"/>');
+cases.useInsideItsOwnTarget = W('<g id="a"><use href="#a"/></g>');
 const B=String.fromCharCode(92); cases.cssEscUrl=W("<style>rect{fill:"+B+"75rl(http://e/x)}</style>"); cases.cssEscImport=W("<style>@"+B+"69mport \"http://e/x.css\";</style>");

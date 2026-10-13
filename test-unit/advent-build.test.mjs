@@ -174,6 +174,7 @@ describe('buildAdvent: generated and copied site files', () => {
 const LEGIT = {
   'sky, thread and star': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 225" role="img" aria-label="A golden thread across a night sky."><defs><linearGradient id="g4" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0d1530"/><stop offset=".7" stop-color="#1b2a55"/></linearGradient><radialGradient id="s1"><stop offset="0" stop-color="#fffbe8"/><stop offset="1" stop-color="#fffbe8" stop-opacity="0"/></radialGradient><symbol id="star4" viewBox="-10 -10 20 20"><path d="M0-10C1.2-3 3-1.2 10 0 3 1.2 1.2 3 0 10-1.2 3-3 1.2-10 0-3-1.2-1.2-3 0-10z" fill="#fff3c8"/></symbol></defs><rect width="400" height="225" fill="url(#g4)"/><path d="M0 190C80 160 150 175 220 190S340 178 400 184V225H0z" fill="#10182f"/><path d="M125 142C160 108 205 138 226 96" fill="none" stroke="#E8C27A" stroke-width="3" stroke-linecap="round"/><circle cx="200" cy="118" r="22" fill="url(#s1)"/><use href="#star4" x="288" y="38" width="38" height="38"/></svg>',
   'shepherd and sheep': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 225"><title>A shepherd with a sheep</title><desc>Two simple figures on a hill.</desc><defs><symbol id="sheep" viewBox="0 0 60 40"><g fill="#2b303b"><rect x="19" y="28" width="3.2" height="10" rx="1.4"/></g><g fill="#F2E6C4"><circle cx="16" cy="19" r="9"/></g><g fill="#2b303b"><ellipse cx="53" cy="20" rx="6" ry="5.2" transform="rotate(14 53 20)"/></g></symbol><symbol id="shepherd" viewBox="0 0 40 90"><path d="M33 89V12c0-7-7-9-10-4" fill="none" stroke="#8a6a3c" stroke-width="2.6" stroke-linecap="round"/><path d="M12 52q8 5 16 0" fill="none" stroke="#000" stroke-opacity=".25" stroke-width="2"/><ellipse cx="20" cy="13" rx="5" ry="6" fill="#d8b48d"/></symbol></defs><!-- a hill --><path d="M0 195C70 160 130 170 200 190V225H0z" fill="#0b141c"/><use href="#shepherd" x="102" y="140" width="28" height="63" style="color:#6a4a3a"/><use href="#sheep" x="200" y="170" width="40" height="27"/></svg>',
+  'a crowd of shepherds, sheep and kneelers (three symbols, ten uses)': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 225" aria-hidden="true" focusable="false"><defs><symbol id="sheep" viewBox="0 0 60 40"><g fill="#F2E6C4"><circle cx="16" cy="19" r="9"/><circle cx="26" cy="13" r="10.5"/></g></symbol><symbol id="shepherd" viewBox="0 0 40 90"><g><path d="M33 89V12c0-7-7-9-10-4" fill="none" stroke="#8a6a3c" stroke-width="2.6"/><ellipse cx="20" cy="13" rx="5" ry="6" fill="#d8b48d"/></g></symbol><symbol id="kneeler" viewBox="0 0 60 60"><path d="M4 58C4 38 14 26 29 26c9 0 15 5 17 14l6 18z" fill="currentColor"/></symbol></defs><rect width="400" height="225" fill="#0b141c"/><use href="#shepherd" x="98" y="122" width="37" height="83" style="color:#6b4f3a"/><use href="#shepherd" x="142" y="134" width="33" height="74" style="color:#3f5a6e"/><use href="#kneeler" x="42" y="150" width="56" height="56" style="color:#7a5a3a"/><use href="#kneeler" x="104" y="146" width="58" height="58" style="color:#2a4a85"/><use href="#sheep" x="226" y="172" width="42" height="28"/><use href="#sheep" x="274" y="182" width="36" height="24"/><use href="#sheep" x="316" y="170" width="42" height="28"/><use href="#sheep" x="352" y="186" width="34" height="23"/><use href="#sheep" x="176" y="190" width="24" height="16"/><use href="#kneeler" x="0" y="0" width="58" height="58" transform="translate(292 146) scale(-1 1) translate(-58 0)" style="color:#6b4f2f"/></svg>',
   'kneeler and clipped light': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 225" aria-hidden="true" focusable="false"><defs><clipPath id="c"><rect width="400" height="225"/></clipPath><symbol id="kneeler" viewBox="0 0 60 60"><path d="M4 58C4 38 14 26 29 26c9 0 15 5 17 14l6 18z" fill="currentColor"/><circle cx="56" cy="37" r="3" fill="#d8b48d"/></symbol></defs><g clip-path="url(#c)" opacity=".9"><polygon points="0,0 400,0 200,120" fill="#E8C27A" fill-opacity=".3"/><line x1="0" y1="200" x2="400" y2="200" stroke="#fff" stroke-width="1"/><polyline points="10,10 20,30 30,10" fill="none" stroke="#fff"/></g><use href="#kneeler" x="150" y="120" width="60" height="60" style="color:#6a4a3a;opacity:.8"/></svg>',
 };
 
@@ -273,6 +274,39 @@ describe('lintSvg: a parse-based allow-list', () => {
     assert.ok(rejected >= 75, `only ${rejected} samples were checked`);
   });
 
+  // The "use" amplification attacks (security review, 13 Oct 2026). The review samples carry the old xlink header, which
+  // is refused for its own reason, so these tests strip it and prove the refusal comes from the <use> rules.
+  const withoutXlink = (sample) => sample.replace(/ xmlns:xlink="[^"]*"/, '');
+  for (const name of ['billionLaughs', 'nestedUseUnderCap', 'selfReference', 'referenceCycle', 'useOfAUse', 'useInsideItsOwnTarget']) {
+    test(`refuses the use-amplification sample ${name}, for a reason about use`, () => {
+      const problems = lintSvg(withoutXlink(REVIEW_SAMPLES[name]));
+      assert.ok(problems.length > 0, name);
+      assert.match(problems[0], /use/i, problems[0]);
+    });
+  }
+
+  test('the billion-laughs sample is the small one from the review (about 1.8 KB, 10 levels of 10 uses)', () => {
+    const size = Buffer.byteLength(REVIEW_SAMPLES.billionLaughs);
+    assert.ok(size > 1500 && size < 2300, `size ${size}`);
+    assert.equal((REVIEW_SAMPLES.billionLaughs.match(/<use /g) ?? []).length, 91);
+  });
+
+  test('caps the number of use elements at 50: 50 is fine, 51 is refused', () => {
+    const uses = (n) => `<svg><defs><rect id="r" width="1" height="1"/></defs>${'<use href="#r"/>'.repeat(n)}</svg>`;
+    assert.deepEqual(lintSvg(uses(50)), []);
+    assert.match(lintSvg(uses(51))[0], /more than 50/);
+  });
+
+  test('refuses a use that points at a group containing a use, wherever in the file the group is', () => {
+    const later = '<svg><use href="#g"/><g id="g"><rect id="r" width="1" height="1"/><g><use href="#r"/></g></g></svg>';
+    assert.match(lintSvg(later)[0], /use/i);
+  });
+
+  test('still accepts a use of something that does not exist, and uses of shapes, gradients and symbols without uses inside', () => {
+    assert.deepEqual(lintSvg('<svg><use href="#missing"/></svg>'), []);
+    assert.deepEqual(lintSvg('<svg><defs><symbol id="a"><rect width="1" height="1"/></symbol><g id="b"><circle r="1"/></g></defs><use href="#a"/><use href="#b"/><use href="#a"/></svg>'), []);
+  });
+
   test('refuses more than 2000 elements and accepts 20 levels of nesting', () => {
     assert.ok(lintSvg(`<svg>${'<rect/>'.repeat(2001)}</svg>`).length > 0);
     assert.deepEqual(lintSvg(`<svg>${'<g>'.repeat(19)}${'</g>'.repeat(19)}</svg>`), []);
@@ -323,7 +357,7 @@ describe('art checks', () => {
     const dir = tempPublic();
     mkdirSync(join(dir, 'advent', 'art'), { recursive: true });
     Object.values(LEGIT).forEach((svg, i) => writeFileSync(join(dir, 'advent', 'art', dayName(i + 1)), svg));
-    assert.equal(run({ publicDir: dir }).result.artPresent.length, 3);
+    assert.equal(run({ publicDir: dir }).result.artPresent.length, Object.keys(LEGIT).length);
   });
 
   test('a hostile picture is refused whether art is required or not', () => {

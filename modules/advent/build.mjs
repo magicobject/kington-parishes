@@ -98,6 +98,7 @@ const COMMENT_TEXT = /^[A-Za-z0-9 .,'\-]*$/;
 const ID_PATTERN = /^[A-Za-z][A-Za-z0-9_-]*$/;
 const MAX_DEPTH = 20;
 const MAX_ELEMENTS = 2000;
+const MAX_USES = 50;
 
 // Why a single attribute value is not acceptable, or null if it is fine.
 function attributeProblem(element, name, value) {
@@ -126,7 +127,9 @@ function attributeProblem(element, name, value) {
  * and attributes allowed above are accepted. No text (except in title and desc), no comments with
  * anything but plain words, no declarations, entities, CDATA, processing instructions, namespace
  * prefixes, links that leave the file, events, styles beyond a few plain settings. At most 100 KB,
- * 20 levels deep and 2000 elements.
+ * 20 levels deep and 2000 elements. At most 50 <use> elements, and a <use> may not point at an element that
+ * contains (or is) another <use>, which also rules out cycles and self-reference: references can only go one
+ * level deep, so a picture cannot multiply itself into billions of draws (the "billion laughs" attack).
  */
 export function lintSvg(text) {
   if (typeof text !== 'string') return ['the picture is not text'];
@@ -134,9 +137,12 @@ export function lintSvg(text) {
   if (!/^[\t\n\r -~]*$/.test(text)) return ['contains a character that is not plain ASCII (including a byte order mark or NUL)'];
   if (text.includes('&')) return ['contains an entity (&)'];
 
-  const stack = [];
+  const stack = []; // { name, id } for each open element
+  const idsWithUse = new Set(); // ids of elements that contain a <use> (or are one)
+  const useTargets = [];
   let position = 0;
   let elements = 0;
+  let uses = 0;
   let sawRoot = false;
   const fail = (message) => [message];
 
@@ -144,7 +150,7 @@ export function lintSvg(text) {
     if (text[position] !== '<') {
       const end = text.indexOf('<', position);
       const chunk = text.slice(position, end === -1 ? text.length : end);
-      const inTitle = stack.length > 0 && ['title', 'desc'].includes(stack[stack.length - 1]);
+      const inTitle = stack.length > 0 && ['title', 'desc'].includes(stack[stack.length - 1].name);
       if (!(inTitle ? PLAIN_TEXT : /^\s*$/).test(chunk)) return fail('has text outside title and desc');
       position += chunk.length;
       continue;
@@ -161,7 +167,7 @@ export function lintSvg(text) {
 
     const close = /^<\/([A-Za-z][A-Za-z0-9]*)\s*>/.exec(text.slice(position, position + 80));
     if (close) {
-      if (stack.pop() !== close[1]) return fail('has a closing tag that does not match');
+      if (stack.pop()?.name !== close[1]) return fail('has a closing tag that does not match');
       position += close[0].length;
       continue;
     }
@@ -177,6 +183,8 @@ export function lintSvg(text) {
     position += open[0].length;
 
     const seen = new Set();
+    let id = null;
+    let target = null;
     for (;;) {
       const spaces = /^\s*/.exec(text.slice(position))[0];
       position += spaces.length;
@@ -192,18 +200,28 @@ export function lintSvg(text) {
       const problem = attributeProblem(name, attributeName, value);
       if (problem) return fail(problem);
       if (attributeName === 'xmlns' && stack.length > 0) return fail('xmlns is only allowed on the root');
+      if (attributeName === 'id') id = value;
+      if (attributeName === 'href') target = value.slice(1);
       position += whole.length;
+    }
+    if (name === 'use') {
+      uses += 1;
+      if (uses > MAX_USES) return fail(`has more than ${MAX_USES} use elements`);
+      for (const open of stack) if (open.id) idsWithUse.add(open.id);
+      if (id) idsWithUse.add(id);
+      if (target) useTargets.push(target);
     }
     if (text.startsWith('/>', position)) {
       position += 2;
     } else {
       position += 1;
-      stack.push(name);
+      stack.push({ name, id });
       if (stack.length > MAX_DEPTH) return fail('is nested more than 20 levels deep');
     }
   }
   if (stack.length > 0) return fail('has an element that is never closed');
   if (!sawRoot) return fail('is not an svg picture');
+  if (useTargets.some((target) => idsWithUse.has(target))) return fail('has a use of an element that contains another use');
   return [];
 }
 
