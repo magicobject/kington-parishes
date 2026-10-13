@@ -16,10 +16,19 @@
 //
 // Door states (see doorState): 'future' | 'today' | 'available'.
 // There is deliberately no 'missed': a past door is simply available.
+//
+// The optional BONUS door (door 26) belongs to the archive period. It is 'future' until its own date,
+// 'today' on that date, and 'available' on any later archive day; outside the archive period it is 'future'
+// (the calendar is calm then anyway). Pass the theme's bonus, {on: {month, day}, label}, to use it.
 
 const BEFORE_WINDOW_DAYS = 30;
 const DAY_MS = 86400000;
 const MAX_DOOR = 25;
+export const BONUS_DAY = 26;
+export const MONTH_NAMES = [
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December',
+];
 
 /**
  * The calendar date (and time) of an instant in the given time zone, as numbers.
@@ -118,8 +127,27 @@ function checkDay(day) {
   }
 }
 
-/** 'future' | 'today' | 'available' for one door. Throws if day is not an integer 1 to 25. */
-export function doorState(day, parts, cfg) {
+// Position of a month/day within the archive period, so that January sorts after December when the
+// period runs over New Year.
+function archiveOrder(value, cfg) {
+  const day = monthDay(value.month, value.day);
+  const wraps = monthDay(cfg.archiveUntil.month, cfg.archiveUntil.day) < monthDay(cfg.start.month, cfg.start.day);
+  return wraps && day <= monthDay(cfg.archiveUntil.month, cfg.archiveUntil.day) ? day + 1300 : day;
+}
+
+function bonusState(parts, cfg, bonus) {
+  if (seasonState(parts, cfg) !== 'archive' || !isMonthDay(bonus.on)) return 'future';
+  const [today, opens] = [archiveOrder(parts, cfg), archiveOrder(bonus.on, cfg)];
+  if (today < opens) return 'future';
+  return today === opens ? 'today' : 'available';
+}
+
+/**
+ * 'future' | 'today' | 'available' for one door. Throws if day is not an integer 1 to 25, or 26 when a
+ * bonus is passed (the third door-state argument; a site with no bonus has 25 doors).
+ */
+export function doorState(day, parts, cfg, bonus = null) {
+  if (day === BONUS_DAY && bonus) return bonusState(parts, cfg, bonus);
   checkDay(day);
   const season = seasonState(parts, cfg);
   if (season === 'archive') return 'available';
@@ -130,6 +158,6 @@ export function doorState(day, parts, cfg) {
 }
 
 /** True when a door can be read without the gentle "open it anyway" step. */
-export function isDayUnlocked(day, parts, cfg) {
-  return doorState(day, parts, cfg) !== 'future';
+export function isDayUnlocked(day, parts, cfg, bonus = null) {
+  return doorState(day, parts, cfg, bonus) !== 'future';
 }

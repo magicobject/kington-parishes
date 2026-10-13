@@ -9,6 +9,9 @@ export const theme = Object.freeze({
     end: Object.freeze({ month: 12, day: 25 }),
     archiveUntil: Object.freeze({ month: 1, day: 6 }),
   }),
+  // The 6 January bonus door (Epiphany, "Gifts for a King"). It only appears once content.mjs has a `bonus` day
+  // (the text is being written separately); until then the calendar shows its 25 doors.
+  bonus: Object.freeze({ on: Object.freeze({ month: 1, day: 6 }), label: 'Epiphany' }),
   slug: 'advent',
   // This site's own page names, which the calendar page may not take (checked against src/pages.config.mjs by a test).
   reservedSlugs: Object.freeze([

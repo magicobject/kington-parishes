@@ -21,6 +21,15 @@ Site-owned files (each church writes its own):
 - `theme.mjs` holds the site name, dates, page address, switches and colours.
 - `content.mjs` holds the 25 days of story text, references, picture names and descriptions.
 
+## The bonus door (optional)
+
+A site may add a 26th door that opens on a date inside the archive period (here 6 January, "Epiphany").
+It needs two things: `bonus: {on: {month, day}, label}` in `theme.mjs` and a `bonus` day in `content.mjs`
+(a normal day object numbered exactly 26, checked by the same rules). Until the content exists the calendar
+shows 25 doors, so the theme setting can go in first. The door is "future" until its date and on the date
+itself is "today" (the archive's last day); `day-26.json` is written beside the others and `day-26.svg` is
+allowed in the art folder. The date rules live in `date.mjs` (`doorState(26, parts, season, bonus)`).
+
 ## What it does not do
 
 It stores nothing in the visitor's browser: no cookies and no saved settings.

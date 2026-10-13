@@ -197,6 +197,7 @@ describe('validateTheme', () => {
     const other = clone(theme);
     other.siteName = 'Another Church';
     other.timeZone = 'Pacific/Auckland';
+    other.bonus = null;
     other.season = { start: { month: 12, day: 1 }, end: { month: 12, day: 25 }, archiveUntil: null };
     other.slug = 'advent-2';
     other.colours.night = '#000000';
@@ -250,6 +251,7 @@ describe('validateTheme', () => {
 
   test('allows leap day only as 29 Feb and null for no archive', () => {
     const ok = clone(theme);
+    ok.bonus = null;
     ok.season = { start: { month: 2, day: 28 }, end: { month: 2, day: 29 }, archiveUntil: null };
     validateTheme(ok);
   });

@@ -21,7 +21,8 @@ import { createHash } from 'node:crypto';
 import { existsSync, lstatSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { COLOUR_NAMES, DAY_COUNT, artPathIsSafe, validateContent, validateDay, validateTheme } from './schema.mjs';
+import { COLOUR_NAMES, DAY_COUNT, BONUS_DAY, artPathIsSafe, validateContent, validateTheme } from './schema.mjs';
+import { validateDayPayload } from './day.mjs';
 
 const MODULE_DIR = dirname(fileURLToPath(import.meta.url));
 const MONTH_NAMES = [
@@ -234,12 +235,15 @@ export function artFilePath(artDir, name) {
   return full;
 }
 
-const EXPECTED_ART_NAMES = Array.from({ length: DAY_COUNT }, (_, index) => `day-${String(index + 1).padStart(2, '0')}.svg`);
+const artName = (day) => `day-${String(day).padStart(2, '0')}.svg`;
+const EXPECTED_ART_NAMES = Array.from({ length: DAY_COUNT }, (_, index) => artName(index + 1));
 
 // Looks at every picture. Returns the names that exist; throws one error listing every problem.
 // The art folder may be missing, but if it is there it must be a real folder holding only
-// day-01.svg to day-25.svg, each a real file (not a link) that passes the picture check.
-function checkArt(publicDir, days, required) {
+// day-01.svg to day-25.svg (and day-26.svg when the bonus door has content), each a real file (not a link)
+// that passes the picture check.
+function checkArt(publicDir, days, required, hasBonus) {
+  const expectedNames = hasBonus ? [...EXPECTED_ART_NAMES, artName(BONUS_DAY)] : EXPECTED_ART_NAMES;
   const artDir = join(publicDir, 'advent', 'art');
   const problems = [];
   const present = [];
@@ -258,9 +262,9 @@ function checkArt(publicDir, days, required) {
 
   const found = folder ? readdirSync(artDir) : [];
   for (const name of found) {
-    if (!EXPECTED_ART_NAMES.includes(name)) problems.push(`${name}: not allowed in the art folder (only day-01.svg to day-25.svg)`);
+    if (!expectedNames.includes(name)) problems.push(`${name}: not allowed in the art folder (only ${expectedNames[0]} to ${expectedNames[expectedNames.length - 1]})`);
   }
-  for (const name of EXPECTED_ART_NAMES) {
+  for (const name of expectedNames) {
     if (!found.includes(name)) {
       if (required && named.has(name)) problems.push(`${name}: missing (artRequired is on)`);
       continue;
@@ -294,16 +298,10 @@ function dayFile(entry, hasArt) {
 
 /** Throws unless a generated day file has exactly the right keys, in order, and valid text. */
 export function validateDayFile(file, expectedDay) {
-  if (file === null || typeof file !== 'object' || Array.isArray(file)) throw new Error('day file: must be an object');
+  validateDayPayload(file, expectedDay); // the same check the browser runs on every file it fetches
   const keys = Object.keys(file);
-  for (const key of keys) {
-    if (!DAY_FILE_ORDER.includes(key)) throw new Error(`day file: unknown key "${key.slice(0, 40)}"`);
-  }
   const expectedOrder = DAY_FILE_ORDER.filter((key) => key in file);
   if (keys.join() !== expectedOrder.join()) throw new Error('day file: keys are not in the fixed order');
-  if (file.day !== expectedDay) throw new Error(`day file: "day" should be ${expectedDay}`);
-  // validateDay wants an art name; a file without a picture gets a stand-in just for the check.
-  validateDay({ ...file, art: file.art ?? 'day-01.svg' }, expectedDay - 1);
 }
 
 // ---------------------------------------------------------------------------
@@ -383,10 +381,13 @@ export function buildAdvent({ theme, content, publicDir, siteUrl, pageNames } = 
   }
   if (typeof publicDir !== 'string' || publicDir === '') throw new Error('publicDir is required');
 
-  const artPresent = checkArt(publicDir, checkedContent.days, checkedTheme.artRequired);
+  const bonusEntry = checkedContent.bonus ?? null;
+  if (bonusEntry && !checkedTheme.bonus) throw new Error('the content has a bonus day but the theme has no bonus: add "bonus" to the theme');
+  const allDays = bonusEntry ? [...checkedContent.days, bonusEntry] : checkedContent.days;
+  const artPresent = checkArt(publicDir, allDays, checkedTheme.artRequired, Boolean(bonusEntry));
 
   const outputs = [];
-  for (const entry of checkedContent.days) {
+  for (const entry of allDays) {
     const file = dayFile(entry, artPresent.includes(entry.art));
     validateDayFile(file, entry.day);
     outputs.push([`advent/day-${dayNumber(entry.day)}.json`, `${JSON.stringify(file, null, 2)}\n`]);
@@ -402,7 +403,7 @@ export function buildAdvent({ theme, content, publicDir, siteUrl, pageNames } = 
     pageUrl: `${siteUrl}/${checkedTheme.slug}.html`,
     artPresent,
     files: outputs.map(([path]) => path),
-    tokenContext: { theme: checkedTheme },
+    tokenContext: { theme: checkedTheme, hasBonus: Boolean(bonusEntry) },
   };
 }
 
@@ -423,6 +424,7 @@ export function renderAdventToken(html, ctx) {
   if (!html.includes(TOKEN)) return html;
   const { theme } = ctx;
   const { start, end, archiveUntil } = theme.season;
+  const bonus = ctx.hasBonus && theme.bonus ? theme.bonus : null;
   const startMonth = wholeNumber(start.month, 'start.month');
   const startDay = wholeNumber(start.day, 'start.day');
   // A non-breaking space keeps the day number and the month together on one line.
@@ -443,6 +445,9 @@ export function renderAdventToken(html, ctx) {
     ['data-preview', theme.previewEnabled === true],
     ['data-enabled', theme.adventEnabled === true],
     ['data-day-count', DAY_COUNT],
+    ...(bonus
+      ? [['data-bonus-month', wholeNumber(bonus.on.month, 'bonus.on.month')], ['data-bonus-day', wholeNumber(bonus.on.day, 'bonus.on.day')], ['data-bonus-label', bonus.label]]
+      : []),
     ['data-month-name', MONTH_NAMES[startMonth - 1]],
     ['data-opens-text', opens],
   ].map(([name, value]) => `${name}="${escapeText(value)}"`).join(' ');

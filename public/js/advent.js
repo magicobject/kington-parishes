@@ -6,8 +6,8 @@
 // to public/js/ and points the two imports below at those copies, so this is the very
 // same date logic the unit tests run. It keeps nothing in the browser: no cookies and
 // no saved settings. Text is only ever set as plain text, never as markup.
-import { seasonState, doorState } from './advent/date.js?v=2c570f1486';
-import { effectiveDate, formatPreviewNotice } from './advent/preview.js?v=33b500b0d9';
+import { seasonState, doorState } from './advent/date.js?v=2d72c76b9a';
+import { effectiveDate, formatPreviewNotice } from './advent/preview.js?v=133c42d9eb';
 
 function toInt(text) {
   if (typeof text !== 'string' || !/^\d+$/.test(text)) return null;

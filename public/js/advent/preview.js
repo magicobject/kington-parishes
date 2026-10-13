@@ -5,7 +5,7 @@
 // The parameter is always called advent-preview, whatever the calendar page is named.
 // Pure functions. This module has no storage of any kind, so preview mode cannot
 // remember anything. Anything invalid is silently ignored and never echoed back.
-import { londonDateParts } from './date.js?v=2c570f1486';
+import { londonDateParts } from './date.js?v=2d72c76b9a';
 
 export const PREVIEW_PARAM = 'advent-preview';
 const DEFAULT_SLUG = 'advent';

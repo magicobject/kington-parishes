@@ -175,7 +175,7 @@ describe('caps, keys and shapes', () => {
   test('theme: archiveUntil equal to the start or the end is rejected; start equal to end is fine', () => {
     assert.throws(() => validateTheme(withTheme((t) => { t.season.archiveUntil = { month: 12, day: 1 }; })), /archiveUntil/);
     assert.throws(() => validateTheme(withTheme((t) => { t.season.archiveUntil = { month: 12, day: 25 }; })), /archiveUntil/);
-    validateTheme(withTheme((t) => { t.season = { start: { month: 12, day: 5 }, end: { month: 12, day: 5 }, archiveUntil: null }; }));
+    validateTheme(withTheme((t) => { t.bonus = null; t.season = { start: { month: 12, day: 5 }, end: { month: 12, day: 5 }, archiveUntil: null }; }));
   });
 });
 
