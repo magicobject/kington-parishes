@@ -38,6 +38,7 @@ Share/copy URLs are built from `location.origin + location.pathname + '#day-N'` 
 Live: "Today is Day 12: <title of today's door>" (only today's title is fetched). Archive: heading "The Christmas Story" and "All 25 doors are open. Read at your own pace." Before/after: one sentence "The Advent calendar opens on 1 December." No counters.
 
 ## Season states (all computed client-side from the real or preview date)
+- **Launch gate:** until the site goes live (theme `goLive`), a real-date visitor ALWAYS gets the calm state on the calendar page and no home banner, even in December; a preview date is the only way to see the calendar. Anything but exactly `data-go-live="true"` is treated as off.
 - before / after: calm sentence only.
 - 1-25 Dec live: grid as above, "Open today's door" primary button.
 - 26 Dec - 6 Jan archive: "The Christmas Story", all doors available, none "today", star over the ridge; bonus door opens on 6 Jan.

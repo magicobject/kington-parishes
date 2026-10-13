@@ -11,7 +11,7 @@
 // (today's day file, for its title), and the link to the calendar page never carries the preview date.
 import { seasonState } from './advent/date.js?v=2d72c76b9a';
 import { effectiveDate } from './advent/preview.js?v=2032b288b5';
-import { calendarUrl, fetchDayFile, readConfig, stylesheetUrl, teaserText, todayDoor } from './advent/logic.js?v=3341cf7565';
+import { calendarUrl, fetchDayFile, readConfig, stylesheetUrl, teaserText, todayDoor, visibleSeason } from './advent/logic.js?v=7cd04250d2';
 
 function make(tag, className, text) {
   const node = document.createElement(tag);
@@ -70,7 +70,7 @@ async function show(root, config, season, parts) {
 function start(root) {
   const config = readConfig(root.dataset);
   if (!config || !config.enabled) return;
-  const { parts } = effectiveDate({
+  const { parts, preview } = effectiveDate({
     realNow: Date.now(),
     search: location.search,
     pathname: location.pathname,
@@ -78,7 +78,7 @@ function start(root) {
     timeZone: config.timeZone,
     slug: config.slug,
   });
-  const season = seasonState(parts, config.season);
+  const season = visibleSeason(seasonState(parts, config.season), preview, config);
   if (season === 'live' || season === 'archive') show(root, config, season, parts).catch(() => {});
 }
 

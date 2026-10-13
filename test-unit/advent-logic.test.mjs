@@ -4,7 +4,7 @@ import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   MAX_DAY_BYTES, FRIENDLY_ERROR, dayFileUrl, artUrl, shareUrl, parseDayHash, readConfig, dateLabel, shortDateLabel,
-  doorName, doorSub, doorNumberText, readDayFile, statusText, neighbours, calendarUrl, bonusConfig, stylesheetUrl, todayDoor, teaserText, fetchDayFile,
+  doorName, doorSub, doorNumberText, readDayFile, statusText, neighbours, calendarUrl, bonusConfig, stylesheetUrl, todayDoor, teaserText, fetchDayFile, visibleSeason,
 } from '../modules/advent/logic.mjs';
 import { validateDayPayload, BONUS_DAY as DAY_BONUS_DAY, DAY_COUNT } from '../modules/advent/day.mjs';
 import { BONUS_DAY as DATE_BONUS_DAY } from '../modules/advent/date.mjs';
@@ -385,6 +385,27 @@ describe('fetchDayFile: one place that fetches, checks and caps a day file', () 
     };
     for (const [name, response] of Object.entries(cases)) {
       await assert.rejects(() => fetchDayFile(7, fetchWith(response)), Error, name);
+    }
+  });
+});
+
+describe('goLive: the real date only drives the calendar once the site has gone live', () => {
+  test('readConfig reads data-go-live: only exactly "true" counts (fail closed)', () => {
+    assert.equal(readConfig({ ...DATA, goLive: 'true' }).goLive, true);
+    for (const bad of ['false', 'TRUE', 'True', '1', 'yes', ' true', 'true ', '', undefined, null]) {
+      assert.equal(readConfig({ ...DATA, goLive: bad }).goLive, false, String(bad));
+    }
+    assert.equal(readConfig(DATA).goLive, false);
+  });
+
+  test('visibleSeason: not live and not previewing is always calm ("after"), whatever the date says', () => {
+    const off = readConfig(DATA);
+    const on = readConfig({ ...DATA, goLive: 'true' });
+    for (const season of ['before', 'live', 'archive', 'after']) {
+      assert.equal(visibleSeason(season, false, off), 'after', season);
+      assert.equal(visibleSeason(season, false, on), season, season);
+      assert.equal(visibleSeason(season, true, off), season, season);
+      assert.equal(visibleSeason(season, true, on), season, season);
     }
   });
 });

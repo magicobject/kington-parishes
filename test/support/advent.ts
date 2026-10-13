@@ -59,6 +59,21 @@ export const BONUS_FILE: DayFile = {
   hidden: 'A tiny camel at the edge of the hill.',
 };
 
+const LIVE_PAGE = /^https?:\/\/localhost:\d+\/(?:advent\.html|index\.html)?(?:\?.*)?$/;
+const GO_LIVE_OFF = 'data-go-live="false"';
+
+/**
+ * The real flags keep the calendar hidden from the real date until launch (theme.goLive false). The browser tests
+ * exercise the calendar by date, so this route turns goLive ON in the served page. Only the pre-launch guard
+ * (test/advent-prelaunch.spec.ts) runs without it.
+ */
+export async function forceGoLive(page: Page): Promise<void> {
+  await page.route(LIVE_PAGE, async (route) => {
+    const response = await route.fetch();
+    await route.fulfill({ response, body: (await response.text()).split(GO_LIVE_OFF).join('data-go-live="true"') });
+  });
+}
+
 /**
  * Makes the page behave as if the site had bonus-door content: adds the bonus settings to the calendar markup and
  * answers the day-26 request with the fixture. (The real build has no bonus text yet, so this is route interception.)
@@ -66,7 +81,7 @@ export const BONUS_FILE: DayFile = {
 export async function withBonusDoor(page: Page): Promise<void> {
   await page.route(/\/advent\.html(\?.*)?$/, async (route) => {
     const response = await route.fetch();
-    const body = (await response.text()).replace('<section class="advent" ', '<section class="advent" data-bonus-month="1" data-bonus-day="6" data-bonus-label="Epiphany" ');
+    const body = (await response.text()).split(GO_LIVE_OFF).join('data-go-live="true"').replace('<section class="advent" ', '<section class="advent" data-bonus-month="1" data-bonus-day="6" data-bonus-label="Epiphany" ');
     await route.fulfill({ response, body });
   });
   await page.route('**/advent/day-26.json', (route) => route.fulfill({ contentType: 'application/json', body: JSON.stringify(BONUS_FILE) }));

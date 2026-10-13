@@ -1,6 +1,6 @@
 import { test, expect } from './support/fixtures';
 import type { Page } from '@playwright/test';
-import { withBonusDoor } from './support/advent';
+import { forceGoLive, withBonusDoor } from './support/advent';
 import { AxeBuilder } from '@axe-core/playwright';
 import { ALL_PAGES } from './support/pages';
 
@@ -155,6 +155,7 @@ const ADVENT_STATES: AdventState[] = [
 
 for (const state of ADVENT_STATES) {
   async function load(page: Page) {
+    await forceGoLive(page);
     await state.setup?.(page);
     await page.clock.install({ time: new Date(state.time) });
     await page.goto(`${state.path ?? '/advent.html'}${state.query}`);

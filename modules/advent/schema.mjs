@@ -18,8 +18,11 @@
 //   reservedSlugs               the site's own page names (a list of slugs, up to 200); the slug may not be one
 //   slug                        page name without slashes, like "advent" or "christmas-calendar";
 //                               lower case words joined by single hyphens, up to 32, not a reserved name
-//   previewEnabled, adventEnabled, publicListing, artRequired   true or false
-//                               (artRequired: the build refuses to continue while any picture is missing)
+//   previewEnabled, adventEnabled, publicListing, artRequired, goLive   true or false
+//                               (artRequired: the build refuses to continue while any picture is missing;
+//                               goLive: false = the real date always shows the calm message, only ?advent-preview
+//                               shows the calendar; true = the real date drives the season. goLive true needs
+//                               artRequired and publicListing true: the three launch flags flip together)
 //   colours                     name -> "#rrggbb" (every colour the stylesheet needs, see COLOUR_NAMES)
 // plus OPTIONAL keys:
 //   bonus                       null, or { on: {month, day}, label } for the 26th door. "on" is the date it opens and
@@ -47,7 +50,7 @@ export const RESERVED_SLUGS = Object.freeze([
 ]);
 
 const THEME_OPTIONAL_KEYS = ['bonus', 'scene'];
-const THEME_KEYS = ['siteName', 'timeZone', 'season', 'slug', 'previewEnabled', 'adventEnabled', 'publicListing', 'artRequired', 'translationName', 'colours', 'reservedSlugs'];
+const THEME_KEYS = ['siteName', 'timeZone', 'season', 'slug', 'previewEnabled', 'adventEnabled', 'publicListing', 'artRequired', 'goLive', 'translationName', 'colours', 'reservedSlugs'];
 const DAYS_IN_MONTH = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
 function copyOf(value, where) {
@@ -153,9 +156,11 @@ export function validateTheme(theme) {
     fail('theme', '"reservedSlugs" must be a list of up to 200 page names');
   }
   if (RESERVED_SLUGS.includes(copy.slug) || copy.reservedSlugs.includes(copy.slug)) fail('theme', '"slug" clashes with a reserved page name');
-  for (const flag of ['previewEnabled', 'adventEnabled', 'publicListing', 'artRequired']) {
+  for (const flag of ['previewEnabled', 'adventEnabled', 'publicListing', 'artRequired', 'goLive']) {
     if (typeof copy[flag] !== 'boolean') fail('theme', `"${flag}" must be true or false`);
   }
+  // The three launch flags flip together: the real date may only drive the calendar once every picture is required and the page is listed.
+  if (copy.goLive && !(copy.artRequired && copy.publicListing)) fail('theme', '"goLive" needs "artRequired" and "publicListing" to be true as well (the launch flags flip together)');
 
   if (!isPlainObject(copy.colours)) fail('theme.colours', 'must be an object');
   checkKeys(copy.colours, COLOUR_NAMES, [], 'theme.colours');

@@ -12,7 +12,7 @@
 // day rules; the preview date is never put into any link, share address or canonical; no outside requests.
 import { seasonState, doorState, BONUS_DAY } from './advent/date.js?v=2d72c76b9a';
 import { effectiveDate, formatPreviewNotice } from './advent/preview.js?v=2032b288b5';
-import { FRIENDLY_ERROR, artUrl, calendarUrl, dateLabel, doorName, doorNumberText, doorSub, fetchDayFile, neighbours, parseDayHash, readConfig, shareUrl, statusText, todayDoor } from './advent/logic.js?v=3341cf7565';
+import { FRIENDLY_ERROR, artUrl, calendarUrl, dateLabel, doorName, doorNumberText, doorSub, fetchDayFile, neighbours, parseDayHash, readConfig, shareUrl, statusText, todayDoor, visibleSeason } from './advent/logic.js?v=7cd04250d2';
 
 function make(tag, className, text) {
   const node = document.createElement(tag);
@@ -469,7 +469,7 @@ function start(root) {
     slug: config.slug,
   });
   // If the date could not be worked out, parts is null and the season state is 'after'.
-  const season = seasonState(parts, config.season);
+  const season = visibleSeason(seasonState(parts, config.season), preview, config);
 
   if (preview) showPreviewNotice(root, parts);
   if (season === 'live' || season === 'archive') {

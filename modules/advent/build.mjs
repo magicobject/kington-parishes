@@ -105,8 +105,82 @@ const MAX_DEPTH = 20;
 const MAX_ELEMENTS = 2000;
 const MAX_USES = 50;
 
+// ---- draw cost ----
+// A picture is loaded as an image by every visitor, so it must be cheap to DRAW, not only small to read. The
+// lint therefore also bounds the work a browser does:
+//   - resource references cannot nest: nothing inside a <mask> or <clipPath> (nor the mask or clipPath itself) may
+//     carry a mask or clip-path attribute or contain a <use>;
+//   - a weighted draw budget: every drawn element weighs 1; a <use> weighs the whole subtree of its target;
+//     an element with a mask, clip-path or opacity weighs 5 more, and 5 more again per mask or clip-path
+//     reference. The total may not exceed MAX_DRAW_WEIGHT;
+//   - a dash pattern may not contain a number between 0 and 0.5 (thousands of tiny dashes), and no number in a
+//     size, position, path or transform attribute may be larger than 100000.
+export const MAX_DRAW_WEIGHT = 1500;
+const MAX_NUMBER = 100000;
+const MIN_DASH = 0.5;
+const NOT_DRAWN_DIRECTLY = new Set(['defs', 'symbol', 'mask', 'clipPath', 'linearGradient', 'radialGradient', 'title', 'desc']);
+const RESOURCE_ELEMENTS = new Set(['mask', 'clipPath']);
+const RESOURCE_ATTRIBUTES = ['mask', 'clip-path'];
+const NOT_NUMERIC = new Set(['id', 'aria-label', 'href', 'role', 'style', 'xmlns', 'fill', 'stroke', 'stop-color', 'color', 'preserveAspectRatio', 'clip-path', 'mask', 'aria-hidden', 'focusable']);
+const NUMBER = /-?(?:\d+\.?\d*|\.\d+)(?:[eE][-+]?\d+)?/g;
+
+function hasOpacity(attrs) {
+  return 'opacity' in attrs || /(?:^|;)\s*opacity\s*:/.test(attrs.style ?? '');
+}
+
+function ownWeight(record) {
+  const references = RESOURCE_ATTRIBUTES.filter((name) => name in record.attrs).length;
+  return 1 + (references > 0 || hasOpacity(record.attrs) ? 5 : 0) + 5 * references;
+}
+
+function subtreeWeight(record) {
+  return ownWeight(record) + record.children.reduce((sum, child) => sum + subtreeWeight(child), 0);
+}
+
+// Returns a problem sentence (or null) and the total weight, for the elements the parser collected.
+function drawCost(records) {
+  const byId = new Map();
+  for (const record of records) if (record.id && !byId.has(record.id)) byId.set(record.id, record);
+
+  for (const record of records) {
+    let inside = false;
+    for (let up = record; up; up = up.parent) if (RESOURCE_ELEMENTS.has(up.name)) inside = true;
+    if (inside && (RESOURCE_ATTRIBUTES.some((name) => name in record.attrs) || record.name === 'use')) {
+      return { problem: 'has a mask, clip-path or use inside a mask or clipPath (resource references may not nest)', weight: 0 };
+    }
+  }
+
+  let weight = 0;
+  const walk = (record) => {
+    if (NOT_DRAWN_DIRECTLY.has(record.name)) return;
+    if (record.name === 'use') {
+      const target = record.attrs.href ? byId.get(record.attrs.href.slice(1)) : null;
+      weight += 1 + (target ? subtreeWeight(target) : 1);
+      return;
+    }
+    weight += ownWeight(record);
+    record.children.forEach(walk);
+  };
+  records.filter((record) => !record.parent).forEach(walk);
+  if (weight > MAX_DRAW_WEIGHT) return { problem: `would be too costly to draw (weight ${weight}, the limit is ${MAX_DRAW_WEIGHT})`, weight };
+  return { problem: null, weight };
+}
+
+// A problem with the numbers in one attribute, or null.
+function numberProblem(name, value) {
+  if (name === 'stroke-dasharray' && (value.match(NUMBER) ?? []).some((n) => Number(n) > 0 && Number(n) < MIN_DASH)) {
+    return 'a dash pattern has a dash shorter than 0.5';
+  }
+  if (!NOT_NUMERIC.has(name) && (value.match(NUMBER) ?? []).some((n) => Math.abs(Number(n)) > MAX_NUMBER)) {
+    return 'a number is larger than 100000';
+  }
+  return null;
+}
+
 // Why a single attribute value is not acceptable, or null if it is fine.
 function attributeProblem(element, name, value) {
+  const numbers = numberProblem(name, value);
+  if (numbers) return numbers;
   if (name === 'xmlns') return element === 'svg' && value === SVG_NAMESPACE ? null : 'xmlns is only allowed on the root and must be the SVG namespace';
   if (name === 'href') return element === 'use' && /^#[A-Za-z][A-Za-z0-9_-]*$/.test(value) ? null : 'a link must be a use of an internal #id';
   if (name === 'id') return ID_PATTERN.test(value) ? null : 'an id has odd characters';
@@ -136,13 +210,14 @@ function attributeProblem(element, name, value) {
  * contains (or is) another <use>, which also rules out cycles and self-reference: references can only go one
  * level deep, so a picture cannot multiply itself into billions of draws (the "billion laughs" attack).
  */
-export function lintSvg(text) {
+export function lintSvg(text, stats = {}) {
   if (typeof text !== 'string') return ['the picture is not text'];
   if (Buffer.byteLength(text, 'utf8') > MAX_SVG_BYTES) return ['larger than 100 KB'];
   if (!/^[\t\n\r -~]*$/.test(text)) return ['contains a character that is not plain ASCII (including a byte order mark or NUL)'];
   if (text.includes('&')) return ['contains an entity (&)'];
 
-  const stack = []; // { name, id } for each open element
+  const stack = []; // { name, id, record } for each open element
+  const records = []; // every element, with its attributes, parent and children, for the draw-cost check
   const idsWithUse = new Set(); // ids of elements that contain a <use> (or are one)
   const useTargets = [];
   let position = 0;
@@ -188,6 +263,7 @@ export function lintSvg(text) {
     position += open[0].length;
 
     const seen = new Set();
+    const attrs = {};
     let id = null;
     let target = null;
     for (;;) {
@@ -205,10 +281,14 @@ export function lintSvg(text) {
       const problem = attributeProblem(name, attributeName, value);
       if (problem) return fail(problem);
       if (attributeName === 'xmlns' && stack.length > 0) return fail('xmlns is only allowed on the root');
+      attrs[attributeName] = value;
       if (attributeName === 'id') id = value;
       if (attributeName === 'href') target = value.slice(1);
       position += whole.length;
     }
+    const record = { name, id, attrs, parent: stack.length > 0 ? stack[stack.length - 1].record : null, children: [] };
+    if (record.parent) record.parent.children.push(record);
+    records.push(record);
     if (name === 'use') {
       uses += 1;
       if (uses > MAX_USES) return fail(`has more than ${MAX_USES} use elements`);
@@ -220,13 +300,16 @@ export function lintSvg(text) {
       position += 2;
     } else {
       position += 1;
-      stack.push({ name, id });
+      stack.push({ name, id, record });
       if (stack.length > MAX_DEPTH) return fail('is nested more than 20 levels deep');
     }
   }
   if (stack.length > 0) return fail('has an element that is never closed');
   if (!sawRoot) return fail('is not an svg picture');
   if (useTargets.some((target) => idsWithUse.has(target))) return fail('has a use of an element that contains another use');
+  const cost = drawCost(records);
+  stats.weight = cost.weight;
+  if (cost.problem) return fail(cost.problem);
   return [];
 }
 
@@ -490,6 +573,7 @@ function settingsAttributes(ctx) {
         : []),
       ['data-preview', theme.previewEnabled === true],
       ['data-enabled', theme.adventEnabled === true],
+      ['data-go-live', theme.goLive === true],
       ['data-day-count', DAY_COUNT],
       ...(bonus
         ? [['data-bonus-month', wholeNumber(bonus.on.month, 'bonus.on.month')], ['data-bonus-day', wholeNumber(bonus.on.day, 'bonus.on.day')], ['data-bonus-label', bonus.label]]
@@ -574,4 +658,11 @@ export function adventPageEntry(theme) {
   };
   if (!checked.publicListing) entry.robots = 'noindex, nofollow';
   return entry;
+}
+
+/** The draw weight of a picture (see drawCost), or null if the picture is refused for another reason first. */
+export function svgDrawWeight(text) {
+  const stats = {};
+  const problems = lintSvg(text, stats);
+  return problems.length > 0 && stats.weight === undefined ? null : stats.weight;
 }

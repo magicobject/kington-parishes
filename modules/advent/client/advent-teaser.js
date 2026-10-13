@@ -8,7 +8,7 @@
 // (today's day file, for its title), and the link to the calendar page never carries the preview date.
 import { seasonState } from '../date.mjs';
 import { effectiveDate } from '../preview.mjs';
-import { calendarUrl, fetchDayFile, readConfig, stylesheetUrl, teaserText, todayDoor } from '../logic.mjs';
+import { calendarUrl, fetchDayFile, readConfig, stylesheetUrl, teaserText, todayDoor, visibleSeason } from '../logic.mjs';
 
 function make(tag, className, text) {
   const node = document.createElement(tag);
@@ -67,7 +67,7 @@ async function show(root, config, season, parts) {
 function start(root) {
   const config = readConfig(root.dataset);
   if (!config || !config.enabled) return;
-  const { parts } = effectiveDate({
+  const { parts, preview } = effectiveDate({
     realNow: Date.now(),
     search: location.search,
     pathname: location.pathname,
@@ -75,7 +75,7 @@ function start(root) {
     timeZone: config.timeZone,
     slug: config.slug,
   });
-  const season = seasonState(parts, config.season);
+  const season = visibleSeason(seasonState(parts, config.season), preview, config);
   if (season === 'live' || season === 'archive') show(root, config, season, parts).catch(() => {});
 }
 

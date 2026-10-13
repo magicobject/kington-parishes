@@ -9,7 +9,7 @@
 // day rules; the preview date is never put into any link, share address or canonical; no outside requests.
 import { seasonState, doorState, BONUS_DAY } from '../date.mjs';
 import { effectiveDate, formatPreviewNotice } from '../preview.mjs';
-import { FRIENDLY_ERROR, artUrl, calendarUrl, dateLabel, doorName, doorNumberText, doorSub, fetchDayFile, neighbours, parseDayHash, readConfig, shareUrl, statusText, todayDoor } from '../logic.mjs';
+import { FRIENDLY_ERROR, artUrl, calendarUrl, dateLabel, doorName, doorNumberText, doorSub, fetchDayFile, neighbours, parseDayHash, readConfig, shareUrl, statusText, todayDoor, visibleSeason } from '../logic.mjs';
 
 function make(tag, className, text) {
   const node = document.createElement(tag);
@@ -466,7 +466,7 @@ function start(root) {
     slug: config.slug,
   });
   // If the date could not be worked out, parts is null and the season state is 'after'.
-  const season = seasonState(parts, config.season);
+  const season = visibleSeason(seasonState(parts, config.season), preview, config);
 
   if (preview) showPreviewNotice(root, parts);
   if (season === 'live' || season === 'archive') {

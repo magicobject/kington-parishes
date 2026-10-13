@@ -60,6 +60,10 @@ export const theme = Object.freeze({
   // false = the build allows missing pictures (they are still checked when present).
   // Flip to true at launch; the build then refuses to continue if any art file is missing.
   artRequired: false,
+  // THE LAUNCH SWITCH. false = a real visitor ALWAYS sees the calm message (calendar page and home banner), even in
+  // December; ?advent-preview still works. Flip goLive, publicListing and artRequired together (launch-checklist.md);
+  // the schema refuses goLive without the other two.
+  goLive: false,
   translationName: 'World English Bible',
   // Contrast (WCAG 2, computed by test-unit/advent-contrast.test.mjs):
   //   text on paper 14.09   textSoft on paper 8.52   link on paper 5.53   (need 4.5)

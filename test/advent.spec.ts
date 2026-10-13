@@ -1,6 +1,6 @@
 import { test, expect, type Page, type Locator } from '@playwright/test';
 import { ADVENT_PAGE } from './support/pages';
-import { BONUS_FILE, TEST_ART, TITLES, builtDay, withBonusDoor } from './support/advent';
+import { BONUS_FILE, TEST_ART, TITLES, builtDay, forceGoLive, withBonusDoor } from './support/advent';
 
 // The Advent calendar page (phase 3): the real doors, the opened-day dialog, the gentle "not yet" message,
 // sharing, printing, the archive, the bonus door, preview mode and the home-page banner. Every test fixes the
@@ -16,6 +16,7 @@ const FRIENDLY = 'Sorry, this door will not open right now. Please try again in 
 test.beforeEach(async ({ page }) => {
   // Only the template's own Google Fonts requests leave the site; refuse them so the suite stays offline.
   await page.route(/^https?:\/\/(?!localhost)/, (route) => route.abort());
+  await forceGoLive(page); // the real flags keep the calendar calm until launch; see test/advent-prelaunch.spec.ts
 });
 
 async function openAt(page: Page, isoTime: string, query = '', path = PATH) {

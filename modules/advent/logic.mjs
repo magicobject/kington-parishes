@@ -95,6 +95,7 @@ export function readConfig(data) {
     slug: data.slug,
     previewEnabled: data.preview === 'true',
     enabled: data.enabled === 'true',
+    goLive: data.goLive === 'true',
     dayCount,
     monthName: data.monthName || '',
     opensText: data.opensText || '',
@@ -156,6 +157,14 @@ export function statusText({ season, today, title, bonusToday }, config) {
     return `All ${config.dayCount} doors are open.${bonus} Read at your own pace.`;
   }
   return title ? `Today is Day ${today}: ${title}` : `Today is Day ${today}.`;
+}
+
+/**
+ * The season the page may act on. Until the site goes live (config.goLive, exactly "true" in the markup) only a
+ * preview date shows the calendar; a real visitor always gets the calm state, whatever the real date is.
+ */
+export function visibleSeason(season, preview, config) {
+  return preview || config.goLive ? season : 'after';
 }
 
 /** The days before and after a day (null at the ends). The bonus door follows the last regular door. */
