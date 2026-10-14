@@ -51,6 +51,38 @@ describe('contrast', () => {
   }
 });
 
+// The two buttons of the "Not quite yet" card (Greg, 14 Oct 2026: "Maybe later" is the filled gold primary, "Open it anyway" the
+// quieter outline). Read from the stylesheet's custom properties so the test follows the swap, then computed.
+describe('the gentle card buttons', () => {
+  const css = readFileSync(new URL('../modules/advent/client/advent.css', import.meta.url), 'utf8');
+  const property = (name) => new RegExp(`--advent-gentle-${name}:\\s*([^;]+);`).exec(css)?.[1].trim();
+  const colourOf = (token) => (token === 'transparent' ? 'paper' : /var\(--advent-([a-z-]+)\)/.exec(token)[1].replace(/-(\w)/g, (_, l) => l.toUpperCase()));
+
+  test('"Maybe later" is the filled gold primary: accent ink on accent, 10.26:1', () => {
+    assert.equal(property('later-bg'), 'var(--advent-accent)');
+    assert.equal(property('later-fg'), 'var(--advent-accent-ink)');
+    assert.equal(property('later-border'), 'var(--advent-accent-ink)');
+    assert.ok(ratio('accentInk', 'accent') >= 4.5);
+  });
+
+  test('"Open it anyway" is the quiet outline: link colour on the paper card (text 4.5:1, edge 3:1)', () => {
+    assert.equal(property('anyway-bg'), 'transparent');
+    assert.equal(property('anyway-fg'), 'var(--advent-link)');
+    assert.equal(property('anyway-border'), 'var(--advent-link)');
+    assert.ok(ratio('link', 'paper') >= 4.5, `link on paper ${ratio('link', 'paper').toFixed(2)}`);
+    assert.ok(ratio('link', 'paper') >= 3);
+  });
+
+  test('the gold fill alone is below 3:1 against the paper, so the dark ink border carries the button edge (ink on paper at least 3:1)', () => {
+    assert.ok(ratio('accent', 'paper') < 3);
+    assert.ok(ratio('accentInk', 'paper') >= 3);
+  });
+
+  test('every colour named is a real token', () => {
+    for (const name of ['later-bg', 'later-fg', 'anyway-fg', 'anyway-border']) assert.ok(theme.colours[colourOf(property(name))], name);
+  });
+});
+
 // Two pairings that are NOT used, because they fail. They are listed so nobody reaches for them:
 //   focus on accent 1.52 and link on accent 3.56. The focus ring on the gold "today" door works only because
 //   it is drawn 3px OUTSIDE the door (outline-offset), so it sits against the dark sky, never on the gold.

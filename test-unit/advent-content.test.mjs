@@ -157,3 +157,13 @@ describe('wording fixes of 13 Oct 2026 (Greg): Day 1, Day 2 and Day 4', () => {
     assert.ok(!text(4).includes('hundreds of years'));
   });
 });
+
+describe('Day 25 follows Luke 2:20 (Greg, 14 Oct 2026): the shepherds returned glorifying and praising God, they did not kneel', () => {
+  const text = content.days.find((d) => d.day === 25).paragraphs[0];
+  test('the new sentence is in, the old one is gone, the KJV quotation is intact', () => {
+    assert.ok(text.includes('The shepherds arrived, breathless, and found everything just as they had been told. Then they went out, telling everyone what they had seen, and returned glorifying and praising God for all they had heard. Mary quietly treasured it all in her heart.'));
+    assert.ok(!text.includes('knelt'));
+    assert.ok(!text.includes('singing'));
+    assert.ok(text.includes('"And the Word was made flesh, and dwelt among us" (KJV).'));
+  });
+});

@@ -86,17 +86,13 @@ const BEFORE_CLEANUP = {
   'day-07.svg': 'cd04794df680b5ee4d3e7191e140e7ee0d93d65b57903e7a9e0f444477f42312',
   'day-08.svg': '38ca0a16255cfa55e736862b624467865ff1fb528e329e56c6207c2cce436059',
   'day-09.svg': '46bcbde119f4c22ea4ba2ad85eb9d1f42bbc488e44404c3a94d93ad16dc1c3b9',
-  'day-10.svg': '4e99a8a7980ea70e7ee6f477a23bd9e2b7f41fe60fabcb226a59bdd4d28ace45',
   'day-11.svg': 'e2bbd9f6eb025415829714d8edd14be830386b6c6c259d721fb3e2595965ee09',
   'day-12.svg': '707af3eada0903dddcdc63ca248c7ea032fe8bc84e83d60c0658e1174fde13f7',
   'day-13.svg': 'c1ce27bbe52636a729e56d5f055fc801b41f081b694a4a55996b42834edc02b6',
   'day-14.svg': '8b8d6d9a538708ca627e254077830aa7478ecf19eb9271d504985bbd4808cf12',
-  'day-15.svg': '8ad4fea5add982588f3f103d50f14acce970991027fec8cfb5679539a85ddc23',
   'day-16.svg': '18cb17f9a918abab17b8156b14b79f9df686e3231fefd9a8a11d57c825eaee3a',
   'day-17.svg': 'd6aa4a11f05e580cb3d1cdcb3bd67f4687cb415e91ab7d25575832328e54233f',
   'day-18.svg': 'b79e6ac0c073ca7394932e7d26b0948f22854492a1eafa75870eff12a722e5a6',
-  'day-19.svg': 'b546e9809d86c834ac4bb92ac859bbe57731d2581d43b1854c56739c6ee5711d',
-  'day-20.svg': 'a82a020e03e2de23f9b13b2688cea259e62fe99507c4f6b6422be9e317f860f6',
   'day-21.svg': '0c231f82288342ebfd8e950d0475b7fbfe37064e40e099d5e8231c9f6c5de1d9',
   'day-22.svg': 'b2f86df217b6105c6d322916d73fb19f978773e5252d5c8f9c3835d92140998d',
   'day-23.svg': '9e0bd298be3b4f9d60d58ad3645f4e9499202bc00700a69a7441b4aa61712b2a',
@@ -104,11 +100,28 @@ const BEFORE_CLEANUP = {
   'day-25.svg': '8f17447e146078ae6023164e03a837df874101b0102628c6694f0deea96c1850',
   'day-26.svg': 'd4a03ffa3caabaecd7d4d305af43af7200939406934cf91826e6814e643240ae',
 };
+// Redrawn on purpose on 14 Oct 2026 (the illustrator's second pass from the UX review: Day 10 thicker gold crown on a darker
+// sky, Day 15 richer palette and gold-edged road, Day 19 clearer house, figures and notes, Day 20 no stray badge and larger
+// figures). Their old hashes are gone from the table above; these are the new files' exact (raw) hashes.
+const REDRAWN_14_OCT = {
+  'day-10.svg': 'dcb23b58c5e4319f4ffddad4c39ca7028f3eb171d0c2111a65144379c3d351e6',
+  'day-15.svg': '8fc2152f7c43725b694f3c6c2bd0339a0bdb5030982dbbab4e80acd5213c1fb2',
+  'day-19.svg': 'ba2528ef8c8f60c228e46f6c07ebf230444f1d7a46c80da08b13b785aa8ebc88',
+  'day-20.svg': 'f9914e64a0442cf9b5a3bfb0e02a55deade021a3c6697b9dd3c50da704258b07',
+};
 const normalised = (text) => text.replace(/<desc>[\s\S]*?<\/desc>/, '').replace('x="183" y="0" width="34"', 'x="183" y="-3" width="34"');
 
 describe('the picture clean-up of 13 Oct 2026', () => {
+  test('the four pictures redrawn on 14 Oct 2026 are exactly the illustrator files, and the other 22 are in the old table', () => {
+    assert.deepEqual(Object.keys(REDRAWN_14_OCT), ['day-10.svg', 'day-15.svg', 'day-19.svg', 'day-20.svg']);
+    assert.equal(Object.keys(BEFORE_CLEANUP).length, 22);
+    for (const [name, expected] of Object.entries(REDRAWN_14_OCT)) {
+      assert.equal(createHash('sha256').update(readFileSync(join(ART, name))).digest('hex'), expected, name);
+    }
+  });
+
   test('after taking out the <desc> (and putting Day 25\'s star back), all 26 pictures are exactly what they were before', () => {
-    for (const name of names) {
+    for (const name of names.filter((n) => !(n in REDRAWN_14_OCT))) {
       const hash = createHash('sha256').update(normalised(readFileSync(join(ART, name), 'utf8'))).digest('hex');
       assert.equal(hash, BEFORE_CLEANUP[name], name);
     }

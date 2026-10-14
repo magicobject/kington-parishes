@@ -290,23 +290,26 @@ test.describe('the gentle "not yet" message is a small card, and the archive off
     await expect(page.getByRole('dialog', { name: 'Not quite yet' })).toBeVisible();
   });
 
-  test('which button is visually primary is one swap of two custom properties (Open it anyway is filled today)', async ({ page }) => {
+  test('which button is visually primary is one swap of two custom properties (Maybe later is the filled gold button today)', async ({ page }) => {
     await openAt(page, '2026-12-12T12:00:00Z');
     await door(page, 20).click();
     const anyway = dialog(page).getByRole('button', { name: 'Open it anyway' });
     const later = dialog(page).getByRole('button', { name: 'Maybe later' });
     const background = (button: typeof anyway) => button.evaluate((el) => getComputedStyle(el).backgroundColor);
-    expect(await background(anyway)).not.toBe('rgba(0, 0, 0, 0)');
-    expect(await background(later)).toBe('rgba(0, 0, 0, 0)');
-    // The swap: exchange the two background properties and the filled one moves to "Maybe later".
+    expect(await background(later)).not.toBe('rgba(0, 0, 0, 0)');
+    expect(await background(anyway)).toBe('rgba(0, 0, 0, 0)');
+    // The swap: exchange the two background properties and the filled one moves to "Open it anyway".
     await page.evaluate(() => {
       const root = document.querySelector('.advent') as HTMLElement;
-      const filled = getComputedStyle(root).getPropertyValue('--advent-gentle-anyway-bg');
-      root.style.setProperty('--advent-gentle-anyway-bg', 'transparent');
-      root.style.setProperty('--advent-gentle-later-bg', filled);
+      const filled = getComputedStyle(root).getPropertyValue('--advent-gentle-later-bg');
+      root.style.setProperty('--advent-gentle-later-bg', 'transparent');
+      root.style.setProperty('--advent-gentle-anyway-bg', filled);
     });
-    expect(await background(anyway)).toBe('rgba(0, 0, 0, 0)');
-    expect(await background(later)).not.toBe('rgba(0, 0, 0, 0)');
+    expect(await background(later)).toBe('rgba(0, 0, 0, 0)');
+    expect(await background(anyway)).not.toBe('rgba(0, 0, 0, 0)');
+    // Whatever looks primary, the keyboard order and the accessible names do not change: "Open it anyway" first, then "Maybe later".
+    const names = await dialog(page).getByRole('button').allInnerTexts();
+    expect(names.indexOf('Open it anyway')).toBeLessThan(names.indexOf('Maybe later'));
   });
 
   test('in the archive there is a quiet "Start with Day 1" pill under the status line, and it opens Day 1', async ({ page }) => {
