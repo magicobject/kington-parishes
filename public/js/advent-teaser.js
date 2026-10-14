@@ -56,6 +56,16 @@ function previewNotice(parts) {
   return notice;
 }
 
+// advent-early.js (a classic script that runs while the page is still being read) may have reserved the banner's room and
+// moved the container to its place, so that showing the banner does not push the page down. Once the banner is built its own
+// height takes over; if there turns out to be nothing to show, the container goes back to taking no room at all.
+function release(root, hide) {
+  if (!root.hasAttribute('data-advent-reserved')) return;
+  root.removeAttribute('data-advent-reserved');
+  root.style.minHeight = '';
+  if (hide) root.hidden = true;
+}
+
 // `season` is null when the preview date is outside the season: then only the notice is shown.
 async function show(root, config, season, parts, preview) {
   const sheets = [stylesheetUrl(root.dataset.themeCss), stylesheetUrl(root.dataset.teaserCss)].filter(Boolean);
@@ -82,6 +92,8 @@ async function show(root, config, season, parts, preview) {
   open.href = calendarUrl(location.origin, `/${config.slug}.html`);
   text.append(heading, line, open);
   if (banner) banner.append(text);
+  // While the room is only reserved, keep the unstyled content out of sight until its stylesheets have loaded.
+  inner.hidden = root.hasAttribute('data-advent-reserved');
   root.replaceChildren(inner);
 
   await Promise.all(sheets.map(addStylesheet));
@@ -89,7 +101,9 @@ async function show(root, config, season, parts, preview) {
   // element between the hero and the next section). To show the banner it moves to just after the hero.
   const host = root.closest('section');
   if (host) host.after(root);
+  inner.hidden = false;
   root.hidden = false;
+  release(root, false);
 
   if (banner && season === 'live') {
     try {
@@ -104,7 +118,7 @@ async function show(root, config, season, parts, preview) {
 
 function start(root) {
   const config = readConfig(root.dataset);
-  if (!config || !config.enabled) return;
+  if (!config || !config.enabled) return release(root, true);
   const { parts, preview } = effectiveDate({
     realNow: Date.now(),
     search: location.search,
@@ -116,6 +130,7 @@ function start(root) {
   const season = visibleSeason(seasonState(parts, config.season), preview, config);
   const inSeason = season === 'live' || season === 'archive';
   if (inSeason || preview) show(root, config, inSeason ? season : null, parts, preview).catch(() => {});
+  else release(root, true);
 }
 
 const root = document.querySelector('[data-advent-teaser]');

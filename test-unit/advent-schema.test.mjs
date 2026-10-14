@@ -290,4 +290,18 @@ describe('the live season must match the number of doors (architect review, 13 O
     assert.doesNotThrow(() => validateTheme(withSeason({ month: 12, day: 7 }, { month: 12, day: 31 }, null))); // 25 days
     assert.throws(() => validateTheme(withSeason({ month: 12, day: 7 }, { month: 12, day: 30 }, null)), /25 days|25 doors/); // 24 days
   });
+
+  test('a season that crosses 29 February changes length in a leap year, so it is refused, with a message that says so', () => {
+    // 28 February to 24 March is 25 days in an ordinary year and 26 in a leap year (the architect's follow-up, 14 Oct 2026).
+    assert.throws(
+      () => validateTheme(withSeason({ month: 2, day: 28 }, { month: 3, day: 24 }, null)),
+      /exactly 25 days in every year.*26 days in a leap year.*25 days in other years/,
+    );
+  });
+
+  test('seasons that do not cross 29 February are the same length every year and are accepted', () => {
+    assert.doesNotThrow(() => validateTheme(withSeason({ month: 1, day: 20 }, { month: 2, day: 13 }, null))); // ends before 29 February
+    assert.doesNotThrow(() => validateTheme(withSeason({ month: 3, day: 1 }, { month: 3, day: 25 }, null))); // starts after it
+    assert.doesNotThrow(() => validateTheme(withSeason({ month: 2, day: 4 }, { month: 2, day: 28 }, null))); // ends on 28 February
+  });
 });

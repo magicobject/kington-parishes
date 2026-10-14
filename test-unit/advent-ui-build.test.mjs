@@ -164,9 +164,9 @@ describe('the home-page banner token {{ADVENT_TEASER}}', () => {
     assert.equal(renderAdventTeaserToken('<p>hello</p>', ctx), '<p>hello</p>');
   });
 
-  test('writes one empty, hidden container and one script tag; nothing else', () => {
+  test('writes one empty, hidden container, the early classic script and the banner module script; nothing else', () => {
     const middle = out.replace('<p>before</p>\n', '').replace('\n<p>after</p>', '');
-    assert.match(middle, /^<div class="advent-teaser" data-advent-teaser [^>]*hidden><\/div>\n<script type="module" src="\/js\/advent-teaser\.js"><\/script>$/);
+    assert.match(middle, /^<div class="advent-teaser" data-advent-teaser [^>]*hidden><\/div>\n<script src="\/js\/advent-early\.js"><\/script>\n<script type="module" src="\/js\/advent-teaser\.js"><\/script>$/);
   });
 
   test('has no text, no heading, no link, no image, no button, no inline script or style, no event handler', () => {
@@ -209,8 +209,11 @@ describe('the calendar in the site search (as it will be once publicListing is t
     const ctx = run().result.tokenContext;
     const page = `<main><div class="page-header"><h1>Advent</h1></div><section>${renderAdventToken('{{ADVENT}}', ctx)}</section></main>`;
     const entries = extractSearchEntries(ensureSectionIds(page), { slug: 'advent', title: 'Advent', description: 'x' });
-    const calendar = entries.filter((entry) => /Advent calendar/.test(entry.heading ?? entry.title ?? ''));
+    // Searching "advent" must give ONE result for the page (the tester's finding S3 was two: the h1 and this section's h2). The
+    // section's h2 carries data-search-skip, so only the page's own h1 entry remains.
+    const calendar = entries.filter((entry) => /advent/i.test(entry.heading ?? entry.title ?? ''));
     assert.equal(calendar.length, 1, JSON.stringify(entries.map((e) => e.heading ?? e.title)));
+    assert.equal(calendar[0].heading ?? calendar[0].title, 'Advent');
     assert.equal(new Set(entries.map((entry) => entry.href ?? entry.id ?? entry.anchor)).size, entries.length, 'every entry has its own address');
   });
 });
@@ -243,5 +246,15 @@ describe('the scene picture has a sprinkling of tiny stars', () => {
     assert.deepEqual(lintSvg(text), []);
     assert.ok(Buffer.byteLength(text) < 4096);
     assert.ok(svgDrawWeight(text) < 80, `weight ${svgDrawWeight(text)}`);
+  });
+});
+
+describe('the print stylesheet starts a printed day at the top of the page', () => {
+  const css = readFileSync(new URL('../modules/advent/client/advent.css', import.meta.url), 'utf8');
+  const printBlock = css.slice(css.indexOf('@media print'));
+
+  test('the open dialog is un-centred in print: no margin, no inset, auto height, so there is no blank gap above the day (tester N4)', () => {
+    const rule = /\.advent \.advent-dialog\[open\] \{([^}]*)\}/.exec(printBlock)[1];
+    for (const declaration of ['position: static', 'margin: 0', 'inset: auto', 'height: auto']) assert.ok(rule.includes(declaration), declaration);
   });
 });

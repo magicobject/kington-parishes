@@ -34,6 +34,9 @@
 /css/advent.css
   Cache-Control: public, max-age=31536000, immutable
 
+/js/advent-early.js
+  Cache-Control: public, max-age=31536000, immutable
+
 /js/advent-teaser.js
   Cache-Control: public, max-age=31536000, immutable
 

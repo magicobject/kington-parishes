@@ -176,12 +176,13 @@ test.describe('doors at large text sizes (root font size 100, 150, 200, 300 perc
           const live = document.querySelector('.advent-live')!;
           const list = document.querySelector('.advent-doors')!;
           const labelProblems: string[] = [];
-          for (const el of document.querySelectorAll('.advent-doors li:not(.advent-door-wide) .advent-door-number, .advent-doors li:not(.advent-door-wide) .advent-door-sub')) {
+          for (const el of document.querySelectorAll('.advent-doors .advent-door-number, .advent-doors .advent-door-sub, .advent-doors .advent-door-note')) {
             const style = getComputedStyle(el);
             const lineHeight = parseFloat(style.lineHeight) || parseFloat(style.fontSize) * 1.25;
             const lines = Math.round(el.getBoundingClientRect().height / lineHeight);
             const words = (el.textContent ?? '').trim().split(' ').length;
             if (lines > words) labelProblems.push(`${el.textContent} wraps to ${lines} lines`);
+            if (el.scrollWidth > el.clientWidth + 1) labelProblems.push(`${el.textContent} overflows its box`);
           }
           const columns = getComputedStyle(list).gridTemplateColumns.split(' ').length;
           const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
@@ -358,8 +359,57 @@ test.describe('the home banner thumbnail shows today\'s picture', () => {
       expect((await banner(page).boundingBox())!.height).toBe(height);
       const cls = await page.evaluate(() => (window as unknown as { __cls: number }).__cls);
       console.log(`home banner layout shift at ${width}px: ${cls.toFixed(4)}`);
-      // The banner itself appearing (in season only) pushes the page down once: that is the whole shift. Google's 'good' limit is 0.1.
-      expect(cls, `layout shift ${cls}`).toBeLessThan(0.1);
+      // The banner's room is reserved by advent-early.js before the page is painted, so showing it moves almost nothing (it was
+      // 0.068 at 375px before the reservation, and 0.14 to 0.17 when measured on the real page). Google's 'good' limit is 0.1.
+      expect(cls, `layout shift ${cls}`).toBeLessThan(0.05);
+    });
+  }
+
+  // The tester's finding S1: the banner used to be inserted after the page was painted, pushing everything below it down.
+  async function layoutShift(page: Page, width: number, iso: string, query: string) {
+    await page.setViewportSize({ width, height: 800 });
+    await page.addInitScript(() => {
+      (window as unknown as { __cls: number }).__cls = 0;
+      new PerformanceObserver((list) => { for (const entry of list.getEntries() as unknown as { value: number; hadRecentInput: boolean }[]) if (!entry.hadRecentInput) (window as unknown as { __cls: number }).__cls += entry.value; }).observe({ type: 'layout-shift', buffered: true });
+    });
+    await openAt(page, iso, query, '/');
+    await expect(banner(page).locator('.advent-teaser-banner')).toBeVisible();
+    await expect.poll(() => banner(page).locator('img.advent-teaser-thumb').evaluate((img: HTMLImageElement) => img.complete)).toBe(true);
+    await page.waitForTimeout(500);
+    return page.evaluate(() => (window as unknown as { __cls: number }).__cls);
+  }
+
+  for (const width of [375, 768, 1100]) {
+    for (const [label, iso, query] of [['the real date (12 December)', '2026-12-12T12:00:00Z', ''], ['a 12 December preview', '2026-10-13T12:00:00Z', '?advent-preview=2026-12-12'], ['a 28 December preview (the archive)', '2026-10-13T12:00:00Z', '?advent-preview=2026-12-28']] as const) {
+      test(`layout shift under 0.05 at ${width}px on ${label}`, async ({ page }) => {
+        const cls = await layoutShift(page, width, iso, query);
+        console.log(`CLS at ${width}px, ${label}: ${cls.toFixed(4)}`);
+        expect(cls).toBeLessThan(0.05);
+      });
+    }
+  }
+
+  test('the reservation is released: after the banner shows there is no leftover minimum height or reserved marker', async ({ page }) => {
+    await layoutShift(page, 375, '2026-12-12T12:00:00Z', '');
+    const state = await page.locator('[data-advent-teaser]').evaluate((el: HTMLElement) => ({ marker: el.hasAttribute('data-advent-reserved'), minHeight: el.style.minHeight }));
+    expect(state).toEqual({ marker: false, minHeight: '' });
+  });
+
+  for (const width of [375, 1100]) {
+    test(`out of season (and with the real date before launch) the home page is exactly as it was at ${width}px: same height with the Advent scripts blocked`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 800 });
+      await openAt(page, '2026-06-12T12:00:00Z', '', '/');
+      await page.waitForTimeout(500);
+      const withScripts = await page.evaluate(() => ({ height: document.documentElement.scrollHeight, hidden: document.querySelector('[data-advent-teaser]')!.hasAttribute('hidden'), reserved: document.querySelector('[data-advent-teaser]')!.hasAttribute('data-advent-reserved') }));
+      const blocked = await page.context().newPage();
+      await blocked.setViewportSize({ width, height: 800 });
+      await blocked.route(/^https?:\/\/(?!localhost)/, (route) => route.abort());
+      await blocked.route(/advent[^/]*\.js/, (route) => route.abort());
+      await blocked.clock.install({ time: new Date('2026-06-12T12:00:00Z') });
+      await blocked.goto('/');
+      await blocked.waitForTimeout(500);
+      const without = await blocked.evaluate(() => document.documentElement.scrollHeight);
+      expect(withScripts).toEqual({ height: without, hidden: true, reserved: false });
     });
   }
 

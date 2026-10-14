@@ -8,7 +8,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 export const MANIFEST_FILES = [
-  'date.mjs', 'preview.mjs', 'day.mjs', 'logic.mjs', 'schema.mjs', 'build.mjs', 'make-manifest.mjs', 'client/advent.js', 'client/advent.css', 'client/advent-teaser.js', 'client/advent-teaser.css', 'client/scene.svg',
+  'date.mjs', 'preview.mjs', 'day.mjs', 'logic.mjs', 'schema.mjs', 'build.mjs', 'make-manifest.mjs', 'client/advent.js', 'client/advent.css', 'client/advent-teaser.js', 'client/advent-early.js','client/advent-teaser.css', 'client/scene.svg',
 ];
 
 const MODULE_DIR = dirname(fileURLToPath(import.meta.url));

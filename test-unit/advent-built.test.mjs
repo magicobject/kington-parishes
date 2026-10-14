@@ -190,10 +190,13 @@ describe('the home page and the (hidden) Advent banner', () => {
   const home = read('index.html');
   const container = /<div class="advent-teaser" data-advent-teaser [^>]*hidden><\/div>/;
   const script = /<script type="module" src="\/js\/advent-teaser\.js\?v=[0-9a-f]{10}"><\/script>/;
+  const early = /<script src="\/js\/advent-early\.js\?v=[0-9a-f]{10}"><\/script>/;
 
   test('contains exactly one empty hidden container and exactly one banner script tag', () => {
     assert.equal(home.match(new RegExp(container.source, 'g')).length, 1);
     assert.equal(home.match(new RegExp(script.source, 'g')).length, 1);
+    assert.equal(home.match(new RegExp(early.source, 'g')).length, 1, 'and exactly one early script that reserves the banner room');
+    assert.ok(home.indexOf('data-advent-teaser') < home.search(early) && home.search(early) < home.search(script), 'container, early script, banner script, in that order');
   });
 
   test('the container has no text, no child element and no link; it carries only data attributes', () => {
@@ -205,7 +208,7 @@ describe('the home page and the (hidden) Advent banner', () => {
   });
 
   test('apart from those two pieces the home page does not mention the calendar at all', () => {
-    const rest = home.replace(container, '').replace(script, '');
+    const rest = home.replace(container, '').replace(script, '').replace(early, '');
     assert.ok(!/advent/i.test(rest.replace(/Advent Sunday/g, '')), 'the home page mentions the calendar somewhere else');
     assert.ok(!rest.includes('advent-preview'));
   });
@@ -255,7 +258,7 @@ describe('the hashed Advent assets and their immutable cache rule', () => {
   });
 
   test('every import in the built Advent scripts carries ?v=<hash>', () => {
-    const scripts = ['js/advent.js', 'js/advent-teaser.js', ...readdirSync(join(PUBLIC, 'js', 'advent')).map((n) => `js/advent/${n}`)];
+    const scripts = ['js/advent.js', 'js/advent-early.js', 'js/advent-teaser.js', ...readdirSync(join(PUBLIC, 'js', 'advent')).map((n) => `js/advent/${n}`)];
     let imports = 0;
     for (const path of scripts) {
       for (const match of read(path).matchAll(/^import\s*\{[^}]*\}\s*from\s*'([^']+)';$/gm)) {
@@ -296,9 +299,9 @@ describe('the hashed Advent assets and their immutable cache rule', () => {
   });
 
   test('every file those paths match is a generated, hashed one (nothing hand-made or unhashed can be cached for a year)', () => {
-    const matched = ['js/advent.js', 'js/advent-teaser.js', ...readdirSync(join(PUBLIC, 'js', 'advent')).map((n) => `js/advent/${n}`), 'css/advent.css', 'css/advent-teaser.css', 'css/advent-theme.css'];
+    const matched = ['js/advent.js', 'js/advent-early.js', 'js/advent-teaser.js', ...readdirSync(join(PUBLIC, 'js', 'advent')).map((n) => `js/advent/${n}`), 'css/advent.css', 'css/advent-teaser.css', 'css/advent-theme.css'];
     for (const path of matched) assert.match(read(path).slice(0, 60), /AUTO-GENERATED/, path);
     assert.deepEqual(readdirSync(join(PUBLIC, 'css')).filter((n) => /^advent/.test(n)).sort(), ['advent-teaser.css', 'advent-theme.css', 'advent.css']);
-    assert.deepEqual(readdirSync(join(PUBLIC, 'js')).filter((n) => /^advent/.test(n) && n.endsWith('.js')).sort(), ['advent-teaser.js', 'advent.js']);
+    assert.deepEqual(readdirSync(join(PUBLIC, 'js')).filter((n) => /^advent/.test(n) && n.endsWith('.js')).sort(), ['advent-early.js', 'advent-teaser.js', 'advent.js']);
   });
 });

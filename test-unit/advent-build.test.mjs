@@ -440,9 +440,9 @@ describe('renderAdventToken', () => {
     assert.match(out, /<div class="advent-live" data-advent-live hidden>/);
   });
 
-  test('ONE h2 for the whole calendar section (it moves between the calm and live parts), so the search finds one result', () => {
+  test('ONE h2 for the whole calendar section (it moves between the calm and live parts), and the search skips it (data-search-skip), so the search finds one result', () => {
     assert.equal((out.match(/<h2/g) ?? []).length, 1);
-    assert.match(out, /<div class="advent-calm" data-advent-calm>\s*<h2 data-advent-heading>Kington Parishes Advent calendar<\/h2>/);
+    assert.match(out, /<div class="advent-calm" data-advent-calm>\s*<h2 data-advent-heading data-search-skip>Kington Parishes Advent calendar<\/h2>/);
     const live = out.slice(out.indexOf('data-advent-live'));
     assert.ok(!live.includes('<h2'));
   });

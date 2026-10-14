@@ -117,27 +117,6 @@ const MAX_POINTS_TEXT = 1024;
 const SEGMENT_ARITY = { M: 2, L: 2, T: 2, H: 1, V: 1, C: 6, S: 4, Q: 4 };
 const NUMBER_AT = /^[\s,]*(-?(?:\d+\.?\d*|\.\d+)(?:[eE][-+]?\d+)?)/;
 
-// Arc arguments are rx ry rotation flag flag x y, and the two flags may be written without separators ("a1 1 0 011 1"),
-// so they are read one character at a time.
-function arcSegments(args) {
-  let rest = args;
-  let count = 0;
-  const take = (pattern) => {
-    const match = pattern.exec(rest);
-    if (!match) return false;
-    rest = rest.slice(match[0].length);
-    return true;
-  };
-  for (;;) {
-    let ok = true;
-    for (let i = 0; i < 3 && ok; i += 1) ok = take(NUMBER_AT);
-    for (let i = 0; i < 2 && ok; i += 1) ok = take(/^[\s,]*[01]/);
-    for (let i = 0; i < 2 && ok; i += 1) ok = take(NUMBER_AT);
-    if (!ok) return Math.max(count, args.trim() === '' ? 0 : 1);
-    count += 1;
-  }
-}
-
 /** The number of segments in path data (see above). At least 1 for any non-empty data. */
 export function pathSegments(d) {
   let segments = 0;
@@ -205,30 +184,173 @@ const RESOURCE_REFERENCE = /^url\(#([A-Za-z][A-Za-z0-9_-]*)\)$/;
 
 const MAX_STOPS = 16;
 const LARGE_SHARE = 0.25;
+// Hard backstops, whatever the weights say (counted per DRAWN shape, after paint is inherited from the groups around a shape
+// and through <use>, and counted per reference for shapes inside a mask or clipPath): at most MAX_GRADIENT_SHAPES shapes may
+// fill or stroke with ANY gradient, and at most MAX_LARGE_SHAPES may be "large" (covering over 25% of the picture, counting
+// stroke width, a percentage size, a scale transform or a symbol scaled up by its <use>). The real pictures use at most
+// 6 gradient shapes and 6 large ones, so both caps leave over 2.5 times that (a test measures the real maxima).
+export const MAX_GRADIENT_SHAPES = 20;
+export const MAX_LARGE_SHAPES = 15;
+const SHAPE_ELEMENTS = new Set(['path', 'circle', 'ellipse', 'rect', 'line', 'polyline', 'polygon']);
+const GEOMETRY_ATTRIBUTES = ['x', 'y', 'cx', 'cy', 'r', 'rx', 'ry', 'x1', 'y1', 'x2', 'y2', 'width', 'height'];
+const PATH_COMMANDS = /([MmLlHhVvCcSsQqTtAaZz])([^MmLlHhVvCcSsQqTtAaZz]*)/g;
+const GRADIENTS = new Set(['linearGradient', 'radialGradient']);
 
-// The area of the picture, from the root's viewBox (or width and height), for the large-shape test below.
-function pictureArea(root) {
+// The size of the picture, from the root's viewBox (or width and height).
+function pictureSize(root) {
   const box = (root?.attrs.viewBox ?? '').split(/[ ,]+/).map(Number);
-  if (box.length === 4 && box.every(Number.isFinite) && box[2] > 0 && box[3] > 0) return box[2] * box[3];
+  if (box.length === 4 && box.every(Number.isFinite) && box[2] > 0 && box[3] > 0) return { area: box[2] * box[3], side: Math.min(box[2], box[3]) };
   const [width, height] = [Number(root?.attrs.width), Number(root?.attrs.height)];
-  return width > 0 && height > 0 ? width * height : 400 * 225;
+  return width > 0 && height > 0 ? { area: width * height, side: Math.min(width, height) } : { area: 400 * 225, side: 225 };
 }
 
-// Whether a rect, circle or ellipse covers more than a quarter of the picture (a paint over a large area costs more).
-function coversMuch(record, area) {
-  const n = (name) => Number(record.attrs[name] ?? 0);
-  if (record.name === 'rect') return n('width') * n('height') > LARGE_SHARE * area;
-  if (record.name === 'circle') return Math.PI * n('r') * n('r') > LARGE_SHARE * area;
-  if (record.name === 'ellipse') return Math.PI * n('rx') * n('ry') > LARGE_SHARE * area;
-  return false;
+const numbersIn = (text) => (text ?? '').match(NUMBER)?.map(Number) ?? [];
+
+// A paint or stroke width as the browser would see it: a style setting beats the attribute.
+function ownSetting(attrs, name) {
+  const fromStyle = new RegExp(`(?:^|;)\\s*${name}\\s*:\\s*([^;]+)`).exec(attrs.style ?? '');
+  return fromStyle ? fromStyle[1].trim() : attrs[name];
 }
 
-// What one shape pays for ONE paint (fill or stroke) that is a gradient: ceil(stops / 2); 8 more if the gradient repeats or
-// reflects (a browser works through every repeat); 10 more if the shape covers more than 25% of the picture (a gradient
-// over a large area is rasterised pixel by pixel). Real art uses gradients of up to 4 stops on a few shapes.
-function gradientCharge(gradient, shape, area) {
+// How much a transform can multiply an area by (a scale or a matrix). Rotations, shifts and skews keep the area.
+function transformScale(value) {
+  let scale = 1;
+  for (const [, name, args] of (value ?? '').matchAll(/([A-Za-z]+)\s*\(([^)]*)\)/g)) {
+    const n = numbersIn(args);
+    if (name === 'scale' && n.length > 0) scale *= Math.abs(n[0] * (n[1] ?? n[0]));
+    else if (name === 'matrix' && n.length === 6) scale *= Math.abs(n[0] * n[3] - n[1] * n[2]);
+  }
+  return scale;
+}
+
+// How much a <use> of a <symbol> with a viewBox magnifies the symbol's content (counting the larger way of fitting it).
+function symbolScale(use, target, size) {
+  const box = (target?.attrs.viewBox ?? '').split(/[ ,]+/).map(Number);
+  if (target?.name !== 'symbol' || box.length !== 4 || !box.every(Number.isFinite) || box[2] <= 0 || box[3] <= 0) return 1;
+  const [width, height] = [Number(use.attrs.width), Number(use.attrs.height)];
+  const [wide, high] = width > 0 && height > 0 ? [width, height] : [Math.sqrt(size.area), Math.sqrt(size.area)];
+  return Math.max(wide / box[2], high / box[3]) ** 2;
+}
+
+// An arc's own numbers, one arc at a time (the two flags may be written without separators).
+function arcList(args) {
+  let rest = args;
+  const take = (pattern) => {
+    const match = pattern.exec(rest);
+    if (!match) return null;
+    rest = rest.slice(match[0].length);
+    return match[1] ?? match[0];
+  };
+  const arcs = [];
+  for (;;) {
+    const [rx, ry] = [take(NUMBER_AT), take(NUMBER_AT)];
+    const rotation = take(NUMBER_AT);
+    const flags = [take(/^[\s,]*[01]/), take(/^[\s,]*[01]/)];
+    const [x, y] = [take(NUMBER_AT), take(NUMBER_AT)];
+    if ([rx, ry, rotation, ...flags, x, y].some((part) => part === null)) return { arcs, leftover: args.trim() !== '' && arcs.length === 0 };
+    arcs.push({ rx: Math.abs(Number(rx)), ry: Math.abs(Number(ry)), x: Number(x), y: Number(y) });
+  }
+}
+
+function arcSegments(args) {
+  const { arcs, leftover } = arcList(args);
+  return Math.max(arcs.length, leftover ? 1 : 0);
+}
+
+// A box around a path and an over-estimate of its length, read conservatively (control points count as points, an arc is
+// allowed to bulge by twice its radius, relative commands are followed).
+function pathGeometry(d) {
+  let [x, y, startX, startY] = [0, 0, 0, 0];
+  const box = [Infinity, Infinity, -Infinity, -Infinity];
+  let length = 0;
+  const see = (px, py) => { box[0] = Math.min(box[0], px); box[1] = Math.min(box[1], py); box[2] = Math.max(box[2], px); box[3] = Math.max(box[3], py); };
+  const lineTo = (nx, ny) => { length += Math.hypot(nx - x, ny - y); see(nx, ny); [x, y] = [nx, ny]; };
+  for (const [, command, args] of d.matchAll(PATH_COMMANDS)) {
+    const upper = command.toUpperCase();
+    const relative = command !== upper;
+    const [ox, oy] = relative ? [x, y] : [0, 0];
+    const n = numbersIn(args);
+    if (upper === 'Z') lineTo(startX, startY);
+    else if (upper === 'H') for (const v of n) lineTo(ox + v, y);
+    else if (upper === 'V') for (const v of n) lineTo(x, oy + v);
+    else if (upper === 'A') {
+      for (const arc of arcList(args).arcs) {
+        const r = 2 * Math.max(arc.rx, arc.ry);
+        see(x - r, y - r);
+        see(x + r, y + r);
+        length += 2 * Math.PI * Math.max(arc.rx, arc.ry);
+        lineTo(ox + arc.x, oy + arc.y);
+      }
+    } else if (upper === 'M' || upper === 'L' || upper === 'T') {
+      for (let i = 0; i + 1 < n.length; i += 2) {
+        if (upper === 'M' && i === 0) { [x, y] = [ox + n[0], oy + n[1]]; [startX, startY] = [x, y]; see(x, y); } else lineTo(ox + n[i], oy + n[i + 1]);
+      }
+    } else if (upper === 'C' || upper === 'S' || upper === 'Q') {
+      const points = upper === 'C' ? 3 : 2;
+      for (let i = 0; i + 2 * points - 1 < n.length; i += 2 * points) {
+        for (let k = 0; k < points - 1; k += 1) { length += Math.hypot(ox + n[i + 2 * k] - x, oy + n[i + 2 * k + 1] - y); see(ox + n[i + 2 * k], oy + n[i + 2 * k + 1]); }
+        lineTo(ox + n[i + 2 * points - 2], oy + n[i + 2 * points - 1]);
+      }
+    }
+  }
+  return { box, length };
+}
+
+// The area a shape's fill covers (its box) and the length its stroke runs along, or null when its size is not a plain
+// number (a percentage), which counts as large.
+function shapeExtent(record) {
+  if (GEOMETRY_ATTRIBUTES.some((name) => (record.attrs[name] ?? '').includes('%'))) return null;
+  const n = (name) => Number(record.attrs[name] ?? 0) || 0;
+  switch (record.name) {
+    case 'rect': return { fill: n('width') * n('height'), length: 2 * (n('width') + n('height')) };
+    case 'circle': return { fill: Math.PI * n('r') ** 2, length: 2 * Math.PI * n('r') };
+    case 'ellipse': return { fill: Math.PI * n('rx') * n('ry'), length: 2 * Math.PI * Math.max(n('rx'), n('ry')) };
+    case 'line': return { fill: 0, length: Math.hypot(n('x2') - n('x1'), n('y2') - n('y1')) };
+    case 'path': {
+      const { box, length } = pathGeometry(record.attrs.d ?? '');
+      return { fill: box[2] >= box[0] ? (box[2] - box[0]) * (box[3] - box[1]) : 0, length };
+    }
+    default: { // polygon, polyline
+      const values = numbersIn(record.attrs.points);
+      const [xs, ys] = [values.filter((_, i) => i % 2 === 0), values.filter((_, i) => i % 2 === 1)];
+      if (xs.length === 0 || ys.length === 0) return { fill: 0, length: 0 };
+      let length = 0;
+      for (let i = 1; i < xs.length && i < ys.length; i += 1) length += Math.hypot(xs[i] - xs[i - 1], ys[i] - ys[i - 1]);
+      return { fill: (Math.max(...xs) - Math.min(...xs)) * (Math.max(...ys) - Math.min(...ys)), length };
+    }
+  }
+}
+
+// Whether a drawn shape covers over 25% of the picture: its fill (the box around it) plus its stroke (length x width), times
+// whatever scale transforms and symbol magnification apply, or its stroke is wider than a quarter of the shorter side.
+function isLarge(record, context, size) {
+  const extent = shapeExtent(record);
+  if (extent === null) return true;
+  const fills = context.fill !== 'none' && record.name !== 'line';
+  const strokes = context.stroke !== 'none';
+  const width = strokes ? context.strokeWidth : 0;
+  if (strokes && width * Math.sqrt(context.scale) > LARGE_SHARE * size.side) return true;
+  return ((fills ? extent.fill : 0) + (strokes ? extent.length * width : 0)) * context.scale > LARGE_SHARE * size.area;
+}
+
+// The paint, stroke width and scale a drawn element passes to everything inside it. Painting is INHERITED: a <g fill="url(#g)">
+// makes every shape inside it (and inside a <use> of it) a gradient shape.
+const ROOT_CONTEXT = { fill: 'black', stroke: 'none', strokeWidth: 1, scale: 1 };
+function inherit(record, context) {
+  const width = ownSetting(record.attrs, 'stroke-width');
+  return {
+    fill: ownSetting(record.attrs, 'fill') ?? context.fill,
+    stroke: ownSetting(record.attrs, 'stroke') ?? context.stroke,
+    strokeWidth: width === undefined ? context.strokeWidth : (numbersIn(width)[0] ?? context.strokeWidth),
+    scale: context.scale * transformScale(record.attrs.transform),
+  };
+}
+
+// What one shape pays for ONE paint that is a gradient: ceil(stops / 2); 8 more if the gradient repeats or reflects (a browser
+// works through every repeat); 10 more if the shape is large (a gradient over a large area is rasterised pixel by pixel).
+function gradientCharge(gradient, large) {
   const spread = gradient.attrs.spreadMethod;
-  return Math.ceil(stopCount(gradient) / 2) + (spread === 'repeat' || spread === 'reflect' ? 8 : 0) + (coversMuch(shape, area) ? 10 : 0);
+  return Math.ceil(stopCount(gradient) / 2) + (spread === 'repeat' || spread === 'reflect' ? 8 : 0) + (large ? 10 : 0);
 }
 const stopCount = (record) => record.children.filter((child) => child.name === 'stop').length;
 
@@ -246,61 +368,95 @@ function drawCost(records) {
     if (inside && (RESOURCE_ATTRIBUTES.some((name) => name in record.attrs) || record.name === 'use')) {
       return { problem: 'has a mask, clip-path or use inside a mask or clipPath (resource references may not nest)', weight: 0 };
     }
-    if ((record.name === 'linearGradient' || record.name === 'radialGradient') && stopCount(record) > MAX_STOPS) {
+    if (GRADIENTS.has(record.name) && stopCount(record) > MAX_STOPS) {
       return { problem: `has a gradient with more than ${MAX_STOPS} stops`, weight: 0 };
     }
     if (RESOURCE_ELEMENTS.has(record.name) && descendantCount(record) > MAX_RESOURCE_CHILDREN) {
       return { problem: `has a mask or clipPath with more than ${MAX_RESOURCE_CHILDREN} elements inside (at most ${MAX_RESOURCE_CHILDREN} are allowed)`, weight: 0 };
     }
+    if (record.name === 'svg' && record.parent) return { problem: 'has an svg inside the svg (only the outer one is allowed)', weight: 0 };
   }
 
-  let weight = 0;
-  let references = 0;
-  const referenceCounts = new Map(); // id of a mask or clipPath -> how many drawn elements reference it
   const root = records.find((record) => !record.parent);
-  const viewBoxArea = pictureArea(root);
-  const draw = (record) => {
-    weight += ownWeight(record);
-    for (const name of ['fill', 'stroke']) {
-      const paint = RESOURCE_REFERENCE.exec(record.attrs[name] ?? '');
-      const gradient = paint ? byId.get(paint[1]) : null;
-      if (gradient && (gradient.name === 'linearGradient' || gradient.name === 'radialGradient')) weight += gradientCharge(gradient, record, viewBoxArea);
-    }
-    for (const name of RESOURCE_ATTRIBUTES) {
-      const match = RESOURCE_REFERENCE.exec(record.attrs[name] ?? '');
-      if (!(name in record.attrs)) continue;
-      references += 1;
-      if (match) referenceCounts.set(match[1], (referenceCounts.get(match[1]) ?? 0) + 1);
-    }
-  };
-  const walk = (record) => {
+  const size = pictureSize(root);
+
+  // Walks the DRAWN instances below `record` (a <use> draws its target, with the use's own paint and scale), calling
+  // `visit(element, context)` for each one.
+  const drawnInstances = (record, context, visit) => {
     if (NOT_DRAWN_DIRECTLY.has(record.name)) return;
+    const own = inherit(record, context);
     if (record.name === 'use') {
-      weight += 1;
       const target = record.attrs.href ? byId.get(record.attrs.href.slice(1)) : null;
-      if (!target) {
-        weight += 1;
-        return;
-      }
-      const drawSubtree = (node) => { draw(node); node.children.filter((child) => !NOT_DRAWN_DIRECTLY.has(child.name)).forEach(drawSubtree); };
-      // The target itself (a symbol, group or shape) is drawn whatever its kind; its drawn descendants follow.
-      drawSubtree(target);
+      visit(record, own);
+      if (!target) return;
+      const inside = { ...own, scale: own.scale * symbolScale(record, target, size) };
+      const drawSubtree = (node, parent) => {
+        const mine = inherit(node, parent);
+        visit(node, mine);
+        node.children.filter((child) => !NOT_DRAWN_DIRECTLY.has(child.name)).forEach((child) => drawSubtree(child, mine));
+      };
+      drawSubtree(target, inside);
       return;
     }
-    draw(record);
-    record.children.forEach(walk);
+    visit(record, own);
+    record.children.forEach((child) => drawnInstances(child, own, visit));
   };
-  records.filter((record) => !record.parent).forEach(walk);
+
+  // What an element costs to draw once: its own weight, plus what each gradient paint costs, and whether it counts
+  // towards the gradient and large-shape caps.
+  const cost = { weight: 0, gradients: 0, large: 0 };
+  const charge = (record, context, into) => {
+    into.weight += record.name === 'use' ? 1 + (record.attrs.href && byId.has(record.attrs.href.slice(1)) ? 0 : 1) : ownWeight(record);
+    if (!SHAPE_ELEMENTS.has(record.name)) return;
+    const large = isLarge(record, context, size);
+    const painted = context.fill !== 'none' || context.stroke !== 'none';
+    if (large && painted) into.large += 1;
+    let gradientShape = false;
+    for (const paint of [context.fill, context.stroke]) {
+      const reference = RESOURCE_REFERENCE.exec(paint ?? '');
+      const gradient = reference ? byId.get(reference[1]) : null;
+      if (!gradient || !GRADIENTS.has(gradient.name)) continue;
+      into.weight += gradientCharge(gradient, large);
+      gradientShape = true;
+    }
+    if (gradientShape) into.gradients += 1;
+  };
+
+  let references = 0;
+  const referenceCounts = new Map(); // id of a mask or clipPath -> how many drawn elements reference it
+  records.filter((record) => !record.parent).forEach((record) => drawnInstances(record, ROOT_CONTEXT, (node, context) => {
+    charge(node, context, cost);
+    for (const name of RESOURCE_ATTRIBUTES) {
+      if (!(name in node.attrs)) continue;
+      references += 1;
+      const match = RESOURCE_REFERENCE.exec(node.attrs[name]);
+      if (match) referenceCounts.set(match[1], (referenceCounts.get(match[1]) ?? 0) + 1);
+    }
+  }));
 
   if (references > MAX_RESOURCE_REFERENCES) {
-    return { problem: `has more mask or clip-path references than allowed (at most ${MAX_RESOURCE_REFERENCES}, counting each use of a group that holds one)`, weight };
+    return { problem: `has more mask or clip-path references than allowed (at most ${MAX_RESOURCE_REFERENCES}, counting each use of a group that holds one)`, weight: cost.weight };
   }
+  // A browser redraws the whole content of a mask or clipPath for every reference, gradients and large shapes included.
   for (const [id, count] of referenceCounts) {
     const resource = byId.get(id);
-    if (resource && RESOURCE_ELEMENTS.has(resource.name)) weight += subtreeWeight(resource) * count;
+    if (!resource || !RESOURCE_ELEMENTS.has(resource.name)) continue;
+    const inside = { weight: 0, gradients: 0, large: 0 };
+    const subtree = (node, parent) => {
+      const mine = inherit(node, parent);
+      charge(node, mine, inside);
+      node.children.filter((child) => !NOT_DRAWN_DIRECTLY.has(child.name)).forEach((child) => subtree(child, mine));
+    };
+    subtree(resource, ROOT_CONTEXT);
+    cost.weight += inside.weight * count;
+    cost.gradients += inside.gradients * count;
+    cost.large += inside.large * count;
   }
-  if (weight > MAX_DRAW_WEIGHT) return { problem: `would be too costly to draw (weight ${weight}, the limit is ${MAX_DRAW_WEIGHT})`, weight };
-  return { problem: null, weight };
+  const stats = { weight: cost.weight, gradientShapes: cost.gradients, largeShapes: cost.large };
+  if (cost.gradients > MAX_GRADIENT_SHAPES) return { problem: `has too many shapes painted with a gradient (${cost.gradients}, at most ${MAX_GRADIENT_SHAPES}, counting inherited paint, uses and masks)`, ...stats };
+  if (cost.large > MAX_LARGE_SHAPES) return { problem: `has too many large shapes (${cost.large}, at most ${MAX_LARGE_SHAPES}; a large shape covers over a quarter of the picture)`, ...stats };
+  if (cost.weight > MAX_DRAW_WEIGHT) return { problem: `would be too costly to draw (weight ${cost.weight}, the limit is ${MAX_DRAW_WEIGHT})`, ...stats };
+  return { problem: null, ...stats };
 }
 
 // A problem with the numbers in one attribute, or null.
@@ -449,7 +605,7 @@ export function lintSvg(text, stats = {}) {
   if (!sawRoot) return fail('is not an svg picture');
   if (useTargets.some((target) => idsWithUse.has(target))) return fail('has a use of an element that contains another use');
   const cost = drawCost(records);
-  stats.weight = cost.weight;
+  Object.assign(stats, { weight: cost.weight, gradientShapes: cost.gradientShapes, largeShapes: cost.largeShapes });
   if (cost.problem) return fail(cost.problem);
   return [];
 }
@@ -581,6 +737,7 @@ function clientFiles() {
     ['js/advent/preview.js', previewText],
     ['js/advent/logic.js', logicText],
     ['js/advent.js', copy('client/advent.js', fromPage)],
+    ['js/advent-early.js', copy('client/advent-early.js')],
     ['js/advent-teaser.js', copy('client/advent-teaser.js', fromPage)],
     ['css/advent.css', css('client/advent.css')],
     ['css/advent-teaser.css', css('client/advent-teaser.css')],
@@ -754,7 +911,7 @@ export function renderAdventToken(html, ctx) {
     <p data-advent-notice-text></p>
   </div>
   <div class="advent-calm" data-advent-calm>
-    <h2 data-advent-heading>${heading}</h2>
+    <h2 data-advent-heading data-search-skip>${heading}</h2>
     <p data-advent-calm-text>${escapeText(servedText)}</p>
   </div>
   <div class="advent-live" data-advent-live hidden>
@@ -781,7 +938,7 @@ export function renderAdventTeaserToken(html, ctx) {
   const css = [['data-theme-css', ctx.themeCssUrl], ['data-teaser-css', ctx.teaserCssUrl]]
     .filter(([, value]) => typeof value === 'string' && /^\/css\/advent-[a-z]+\.css\?v=[0-9a-f]{10}$/.test(value));
   const attributes = attributeText([...pairs.filter(([name]) => name !== 'data-opens-text'), ...css]);
-  const markup = `<div class="advent-teaser" data-advent-teaser ${attributes} hidden></div>\n<script type="module" src="/js/advent-teaser.js"></script>`;
+  const markup = `<div class="advent-teaser" data-advent-teaser ${attributes} hidden></div>\n<script src="/js/advent-early.js"></script>\n<script type="module" src="/js/advent-teaser.js"></script>`;
   return html.split(TEASER_TOKEN).join(markup);
 }
 

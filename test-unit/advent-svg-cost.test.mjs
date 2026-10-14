@@ -6,6 +6,7 @@ import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { lintSvg, svgDrawWeight, MAX_DRAW_WEIGHT } from '../modules/advent/build.mjs';
+import { largestAccepted } from './support/svg-attacks.mjs';
 
 const R = (body) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 225">${body}</svg>`;
 const rect = '<rect width="10" height="10" fill="#fff"/>';
@@ -84,19 +85,14 @@ describe('the weighted draw budget', () => {
     assert.ok(svgDrawWeight(sample) < 400);
   });
 
-  test('the heaviest ACCEPTED fixture (used by the browser timing test) passes and sits close under the cap', () => {
-    const text = readFileSync(new URL('../test/support/heaviest-accepted.svg', import.meta.url), 'utf8');
-    assert.deepEqual(lintSvg(text), []);
-    const weight = svgDrawWeight(text);
-    assert.ok(weight > 0.9 * MAX_DRAW_WEIGHT && weight <= MAX_DRAW_WEIGHT, `weight ${weight}`);
-  });
-
-  test('the heaviest accepted PATH fixture (49 uses of a 160-arc stroked path) passes and sits near the cap', () => {
-    const text = readFileSync(new URL('../test/support/heaviest-path-accepted.svg', import.meta.url), 'utf8');
-    assert.deepEqual(lintSvg(text), []);
-    const weight = svgDrawWeight(text);
-    assert.ok(weight > 0.9 * MAX_DRAW_WEIGHT && weight <= MAX_DRAW_WEIGHT, `weight ${weight}`);
-    assert.equal((text.match(/<use /g) ?? []).length, 49);
+  // The old static "heaviest accepted" fixtures were rebuilt from the shape-capped classes in test/support/svg-attacks.mjs:
+  // the largest picture of each class that the lint still accepts sits near the cap, and the browser spec times it.
+  test('the heaviest accepted pictures of the weight-bound classes sit close under the cap', () => {
+    for (const name of ['X2_thousands_of_round_caps', 'X4_clip_and_opacity_small_shapes', 'X5_scaled_group_of_small_shapes', 'Y1_mask_of_small_circles_many_references', 'Y2_uses_of_a_complex_stroked_path']) {
+      const accepted = largestAccepted(name);
+      assert.ok(accepted, name);
+      assert.ok(accepted.stats.weight > 0.9 * MAX_DRAW_WEIGHT && accepted.stats.weight <= MAX_DRAW_WEIGHT, `${name} weight ${accepted.stats.weight}`);
+    }
   });
 });
 
@@ -135,13 +131,13 @@ describe('earlier rules still stand', () => {
 // round 3). So a mask costs (its subtree) x (the number of references to it, counting each use of a group that holds
 // a reference), and there are hard caps on references and on the size of a mask.
 describe('masks and clip paths are charged per reference', () => {
-  const circles = (count) => '<circle cx="200" cy="112" r="300" fill-opacity=".5"/>'.repeat(count);
+  const circles = (count) => '<circle cx="200" cy="112" r="20" fill-opacity=".5"/>'.repeat(count);
   const maskPicture = (inside, references, element = 'mask') => {
     const attribute = element === 'mask' ? 'mask' : 'clip-path';
     const tag = element === 'mask' ? 'mask' : 'clipPath';
-    return R(`<defs><${tag} id="m">${inside}</${tag}></defs>${`<rect width="400" height="225" ${attribute}="url(#m)"/>`.repeat(references)}`);
+    return R(`<defs><${tag} id="m">${inside}</${tag}></defs>${`<rect width="40" height="40" ${attribute}="url(#m)"/>`.repeat(references)}`);
   };
-  const costly = /too costly to draw|at most (?:20|50)|larger than 40 KB/;
+  const costly = /too costly to draw|too many|at most (?:20|50)|larger than 40 KB/;
 
   test('the security engineer\'s reproducer (1800 circles in one mask, 136 references) is refused', () => {
     assert.match(lintSvg(maskPicture(circles(1800), 136))[0], costly);
@@ -177,16 +173,9 @@ describe('masks and clip paths are charged per reference', () => {
   test('a small legitimate gradient mask on a few shapes is still accepted, with its cost counted', () => {
     const sample = R('<defs><linearGradient id="fade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#000"/></linearGradient><mask id="soft"><rect width="400" height="225" fill="url(#fade)"/></mask></defs><circle cx="100" cy="100" r="50" mask="url(#soft)"/><circle cx="200" cy="100" r="50" mask="url(#soft)"/><circle cx="300" cy="100" r="50" mask="url(#soft)"/>');
     assert.deepEqual(lintSvg(sample), []);
-    // svg 1, three circles 11 each (1 + 5 + 5), the mask (rect 1 + mask 1 = 2) x 3 references = 6
-    assert.equal(svgDrawWeight(sample), 1 + 33 + 6);
-  });
-
-  test('the heaviest accepted MASK fixture (for the browser timing test) is accepted and sits near the cap', () => {
-    const text = readFileSync(new URL('../test/support/heaviest-mask-accepted.svg', import.meta.url), 'utf8');
-    assert.deepEqual(lintSvg(text), []);
-    const weight = svgDrawWeight(text);
-    assert.ok(weight > 0.9 * MAX_DRAW_WEIGHT && weight <= MAX_DRAW_WEIGHT, `weight ${weight}`);
-    assert.equal((text.match(/mask="url/g) ?? []).length, 20, 'it uses all of the 20 references');
+    // svg 1, three circles 11 each (1 + 5 + 5), and the mask x 3 references: the mask 1 + its rect 1 + the gradient (1 for two stops, 10 for
+    // covering the picture) = 13 each time, because the paint INSIDE a mask is charged for every reference
+    assert.equal(svgDrawWeight(sample), 1 + 33 + 39);
   });
 });
 
@@ -323,18 +312,18 @@ describe('gradients are charged for their stops, per shape that uses them', () =
   const linear = `<defs><linearGradient id="l" x1="0" x2="0.003" spreadMethod="repeat">${hostileStops()}</linearGradient></defs>`;
 
   test('a06: 200 full-size rectangles filled with a reflecting 16-stop radial gradient are refused', () => {
-    assert.match(lintSvg(R(radial + '<rect width="400" height="225" fill="url(#g)"/>'.repeat(200)))[0], /too costly/);
-    assert.match(lintSvg(R(radial + '<rect width="400" height="225" fill="url(#g)"/>'.repeat(213)))[0], /too costly/); // the reviewer's accepted count
+    assert.match(lintSvg(R(radial + '<rect width="400" height="225" fill="url(#g)"/>'.repeat(200)))[0], /too costly|too many shapes/);
+    assert.match(lintSvg(R(radial + '<rect width="400" height="225" fill="url(#g)"/>'.repeat(213)))[0], /too costly|too many shapes/); // the reviewer's accepted count
   });
 
   test('a14: 120 full-size rectangles with a repeating 16-stop linear gradient as fill and stroke are refused', () => {
-    assert.match(lintSvg(R(linear + '<rect width="400" height="225" fill="url(#l)" fill-opacity=".3" stroke="url(#l)" stroke-width="50"/>'.repeat(126)))[0], /too costly/);
-    assert.match(lintSvg(R(linear + '<rect width="400" height="225" fill="url(#l)" fill-opacity=".3" stroke="url(#l)" stroke-width="50"/>'.repeat(60)))[0], /too costly/);
+    assert.match(lintSvg(R(linear + '<rect width="400" height="225" fill="url(#l)" fill-opacity=".3" stroke="url(#l)" stroke-width="50"/>'.repeat(126)))[0], /too costly|too many shapes/);
+    assert.match(lintSvg(R(linear + '<rect width="400" height="225" fill="url(#l)" fill-opacity=".3" stroke="url(#l)" stroke-width="50"/>'.repeat(60)))[0], /too costly|too many shapes/);
   });
 
   test('a01: 126 huge circles with gradient fill and stroke are refused', () => {
     const both = radial.replace('</defs>', '') + linear.replace('<defs>', '');
-    assert.match(lintSvg(R(both + '<circle cx="200" cy="100" r="99999" fill="url(#g)" stroke="url(#l)" stroke-width="99999" fill-opacity=".4"/>'.repeat(126)))[0], /too costly/);
+    assert.match(lintSvg(R(both + '<circle cx="200" cy="100" r="99999" fill="url(#g)" stroke="url(#l)" stroke-width="99999" fill-opacity=".4"/>'.repeat(126)))[0], /too costly|too many shapes/);
   });
 
   test('ordinary use stays accepted: a few big gradient backgrounds and a handful of gradient shapes', () => {
@@ -346,7 +335,7 @@ describe('gradients are charged for their stops, per shape that uses them', () =
 
   test('450 stops on 300 full-size rectangles (607 ms in a browser) and 16 stops on 300 shapes (over the budget) are refused', () => {
     assert.ok(lintSvg(gradient(450, 300)).length > 0);
-    assert.match(lintSvg(gradient(16, 300))[0], /too costly/);
+    assert.match(lintSvg(gradient(16, 300))[0], /too costly|too many shapes/);
   });
 
   test('a use of a shape with a gradient charges it again each time', () => {

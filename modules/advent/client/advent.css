@@ -111,6 +111,14 @@
   border-radius: 2.25rem 2.25rem 0.375rem 0.375rem;
 }
 .advent .advent-door-note { font-size: 1rem; font-weight: 600; min-width: 0; }
+/* In the two wide rows the text may not be bigger than the row can hold a whole word at: its size is capped at a share of the
+   calendar block's own width (cqi), so at 300% text on the narrowest phone "Christmas Day" and "Today" shrink a little instead of
+   breaking mid-word or overflowing. At normal sizes the cap is far above the sizes below, so nothing changes. */
+.advent .advent-door-wide .advent-door-number { font-size: min(1.45rem, 11cqi); }
+.advent .advent-door-wide .advent-door-star .advent-door-number { font-size: min(1.7rem, 11cqi); }
+.advent .advent-door-wide .advent-door-bonus .advent-door-number { font-size: min(0.85rem, 11cqi); }
+.advent .advent-door-wide .advent-door-sub { font-size: min(0.75rem, 11cqi); }
+.advent .advent-door-wide .advent-door-note { font-size: min(1rem, 11cqi); }
 /* Not yet: dimmer, dashed, with its date written on it. */
 .advent .advent-door-future { background: var(--advent-door-locked); border-style: dashed; }
 /* Today: gold, a pale ring and a soft glow, and the WORD "Today", so nothing rests on colour or border width alone. */
@@ -242,7 +250,9 @@ html:has(.advent-dialog[open]), body:has(.advent-dialog[open]) { overflow: hidde
   .advent .advent-sr, .advent .advent-start, .advent .advent-panel-top { display: none !important; }
   .advent { background: #fff; color: #000; padding: 0; margin: 0; max-width: none; }
   .advent:has(.advent-dialog[open]) > :not(.advent-dialog) { display: none !important; }
-  .advent .advent-dialog[open] { position: static; display: block; width: auto; max-width: none; max-height: none; overflow: visible; box-shadow: none; background: #fff; color: #000; }
+  /* A modal dialog sits in the top layer, where the browser turns position: static into absolute and centres it with auto margins
+     (170px of blank above a printed day): so no margin, no inset, and it starts where the page does. */
+  .advent .advent-dialog[open] { position: static; margin: 0; inset: auto; display: block; width: auto; max-width: none; height: auto; max-height: none; overflow: visible; box-shadow: none; background: #fff; color: #000; }
   .advent .advent-panel { animation: none; padding: 0; font-family: Georgia, 'Times New Roman', serif; font-size: 12pt; }
   .advent .advent-panel *, .advent .advent-live, .advent .advent-live * { color: #000 !important; background: none !important; }
   .advent .advent-print-site { display: block; margin: 0 0 0.5rem; font-weight: 700; }

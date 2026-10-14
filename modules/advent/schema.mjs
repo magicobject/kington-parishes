@@ -137,7 +137,13 @@ export function validateTheme(theme) {
   if (monthDay(season.end) < monthDay(season.start)) fail('theme.season', 'the end must not be before the start');
   // One door per day: the live season must be exactly as many days as there are numbered doors, or a door would have no day
   // (or a day no door).
-  const days = Math.round((Date.UTC(2001, season.end.month - 1, season.end.day) - Date.UTC(2001, season.start.month - 1, season.start.day)) / 86400000) + 1;
+  // It is counted in an ordinary year (2001) AND in a leap year (2000): a season that crosses 29 February is a day longer in a leap
+  // year, so it would have 26 days every fourth year.
+  const daysIn = (year) => Math.round((Date.UTC(year, season.end.month - 1, season.end.day) - Date.UTC(year, season.start.month - 1, season.start.day)) / 86400000) + 1;
+  const [days, leapDays] = [daysIn(2001), daysIn(2000)];
+  if (days !== leapDays) {
+    fail('theme.season', `the live season (start to end) must be exactly ${DAY_COUNT} days in every year, but it is ${leapDays} days in a leap year and ${days} days in other years (a season that crosses 29 February changes length)`);
+  }
   if (days !== DAY_COUNT) fail('theme.season', `the live season (start to end) must be exactly ${DAY_COUNT} days, one for each of the ${DAY_COUNT} doors, but it is ${days} days`);
   if (season.archiveUntil !== null) {
     validateMonthDay(season.archiveUntil, 'theme.season.archiveUntil');

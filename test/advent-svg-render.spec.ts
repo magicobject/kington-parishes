@@ -1,5 +1,6 @@
 import { test, expect, type Page } from '@playwright/test';
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { existsSync, readdirSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import { join } from 'node:path';
 
 // GROUND TRUTH for the picture check (modules/advent/build.mjs, drawCost and the caps). The lint estimates how
@@ -8,10 +9,8 @@ import { join } from 'node:path';
 // pictures). Each time is the median of three runs.
 //   (a) every real picture that exists (public/advent/art/*.svg and the scene*.svg) must render in under 300 ms at
 //       400px wide. Real art takes a few milliseconds; a slow CI machine gets generous headroom;
-//   (b) the HEAVIEST pictures the check still accepts (test/support/heaviest-*.svg: opacity shapes under a clip path,
-//       a 32-shape mask used 20 times, and 49 uses of a 160-arc stroked path) must render in under 1 s at 400px and at
-//       800px. Their weights sit at the cap, asserted in test-unit/advent-svg-cost.test.mjs.
-// If (b) fails, MAX_DRAW_WEIGHT or the per-reference charges are too generous for real browsers: lower them.
+//   (b) the LARGEST accepted picture of every hostile class, at 400, 800 and 1200px, each under 1 s (see below).
+// If (b) fails, MAX_DRAW_WEIGHT, the per-reference charges or the shape caps are too generous for real browsers: lower them.
 const REAL_LIMIT_MS = 300;
 const HEAVIEST_LIMIT_MS = 1000;
 const advent = join(__dirname, '..', 'public', 'advent');
@@ -48,7 +47,7 @@ test('there is at least one real picture to time (the site scene)', () => {
 });
 
 for (const { url } of realFiles) {
-  for (const width of [400, 800]) {
+  for (const width of [400, 800, 1200]) {
     test(`real picture ${url} renders at ${width}px in under ${REAL_LIMIT_MS} ms`, async ({ page }) => {
       await page.goto('/404.html');
       const elapsed = await renderMedian(page, url, width);
@@ -58,15 +57,25 @@ for (const { url } of realFiles) {
   }
 }
 
-for (const name of ['heaviest-accepted.svg', 'heaviest-mask-accepted.svg', 'heaviest-path-accepted.svg']) {
+// (b) the LARGEST picture of every hostile class that the lint still accepts (test-unit/support/svg-attacks.mjs: the security
+// engineer's and the tester's accepted-slow files, the shape-capped classes, and weight-bound classes) must render in under
+// a second at 400, 800 and 1200px. The lint's caps (draw weight, 20 gradient shapes, 15 large shapes) exist to make this true.
+const accepted: { name: string; text: string; n: number; weight: number }[] = JSON.parse(
+  execFileSync(process.execPath, [join(__dirname, '..', 'test-unit', 'support', 'dump-accepted-attacks.mjs')], { maxBuffer: 64 * 1024 * 1024 }).toString(),
+);
+
+test('there are accepted hostile pictures to time', () => {
+  expect(accepted.length).toBeGreaterThanOrEqual(30);
+});
+
+for (const { name, text, n, weight } of accepted) {
   for (const width of [400, 800, 1200]) {
-    test(`${name} (the heaviest the check accepts) renders at ${width}px in under a second`, async ({ page }) => {
-      const svg = readFileSync(join(__dirname, 'support', name), 'utf8');
-      await page.route('**/advent/art/heaviest-fixture.svg*', (route) => route.fulfill({ contentType: 'image/svg+xml', body: svg }));
+    test(`${name} (the heaviest the check accepts, n=${n}, weight ${weight}) renders at ${width}px in under a second`, async ({ page }) => {
+      await page.route('**/advent/art/heaviest-fixture.svg*', (route) => route.fulfill({ contentType: 'image/svg+xml', body: text }));
       await page.goto('/404.html');
       const elapsed = await renderMedian(page, '/advent/art/heaviest-fixture.svg', width);
       console.log(`${name} at ${width}px: ${Math.round(elapsed)} ms`);
-      expect(elapsed, `${name} took ${Math.round(elapsed)} ms at ${width}px (limit ${HEAVIEST_LIMIT_MS} ms): lower MAX_DRAW_WEIGHT or the caps`).toBeLessThan(HEAVIEST_LIMIT_MS);
+      expect(elapsed, `${name} took ${Math.round(elapsed)} ms at ${width}px (limit ${HEAVIEST_LIMIT_MS} ms): tighten the caps or the weights`).toBeLessThan(HEAVIEST_LIMIT_MS);
     });
   }
 }

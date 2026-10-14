@@ -89,11 +89,18 @@ describe('modules/advent folder', () => {
 
   test('the browser scripts (client/*.js) import no Node module and only the date, preview and logic modules', () => {
     const client = codeFiles.filter((file) => file.name.startsWith('client/'));
-    assert.deepEqual(client.map((file) => file.name).sort(), ['client/advent-teaser.js', 'client/advent.js']);
-    for (const file of client) {
+    assert.deepEqual(client.map((file) => file.name).sort(), ['client/advent-early.js', 'client/advent-teaser.js', 'client/advent.js']);
+    // advent-early.js is a classic script that imports nothing at all (it is checked separately below)
+    for (const file of client.filter((f) => f.name !== 'client/advent-early.js')) {
       const imports = [...file.text.matchAll(specifier)].map((match) => match[2]);
       assert.deepEqual(imports.sort(), ['../date.mjs', '../logic.mjs', '../preview.mjs'], file.name);
     }
+  });
+
+  test('the early banner script is a classic script: no import, no export, no network, no storage', () => {
+    const early = codeFiles.find((file) => file.name === 'client/advent-early.js').text;
+    const code = early.replace(/\/\/.*$/gm, '');
+    assert.ok(!/\bimport\b|\bexport\b|fetch\(|XMLHttpRequest|localStorage|sessionStorage|document\.cookie|innerHTML|eval\(/.test(code));
   });
 
   test('the pure modules the browser runs (date, preview, day, logic) import only each other', () => {

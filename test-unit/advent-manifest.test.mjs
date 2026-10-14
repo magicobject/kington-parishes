@@ -13,7 +13,7 @@ describe('modules/advent VERSION and MANIFEST.sha256', () => {
   });
 
   test('the manifest lists the generic code and never the site-owned files', () => {
-    assert.deepEqual(MANIFEST_FILES.slice().sort(), ['build.mjs', 'client/advent-teaser.css', 'client/advent-teaser.js', 'client/advent.css', 'client/advent.js', 'client/scene.svg', 'date.mjs', 'day.mjs', 'logic.mjs', 'make-manifest.mjs', 'preview.mjs', 'schema.mjs']);
+    assert.deepEqual(MANIFEST_FILES.slice().sort(), ['build.mjs', 'client/advent-early.js', 'client/advent-teaser.css', 'client/advent-teaser.js', 'client/advent.css', 'client/advent.js', 'client/scene.svg', 'date.mjs', 'day.mjs', 'logic.mjs', 'make-manifest.mjs', 'preview.mjs', 'schema.mjs']);
     assert.ok(!/theme\.mjs|content\.mjs/.test(read('MANIFEST.sha256')));
   });
 

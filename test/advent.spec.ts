@@ -543,6 +543,25 @@ test.describe('sharing and printing', () => {
     expect(await dialog(page).locator('.advent-wonder').evaluate((el: HTMLDetailsElement) => el.open)).toBe(true); // open by default at desktop width, and put back after printing
   });
 
+  test('print: the printed day starts at the top of the page, with no blank gap above it (the dialog is not centred any more)', async ({ page }) => {
+    await page.setViewportSize({ width: 1100, height: 900 });
+    await openAt(page, '2026-12-12T12:00:00Z');
+    await door(page, 5).click();
+    await expect(dialogTitle(page)).toHaveText(TITLES[5]);
+    await page.emulateMedia({ media: 'print' });
+    await page.evaluate(() => window.dispatchEvent(new Event('beforeprint')));
+    const box = await dialog(page).evaluate((el) => {
+      const style = getComputedStyle(el);
+      const printSite = el.querySelector('.advent-print-site')!.getBoundingClientRect();
+      return { position: style.position, margin: style.margin, top: Math.round(el.getBoundingClientRect().top), firstLine: Math.round(printSite.top) };
+    });
+    expect(['static', 'absolute']).toContain(box.position); // (a top-layer element's static is computed as absolute)
+    expect(box.margin).toBe('0px');
+    // Nothing above the day but the page's own top (the site header is hidden in print): it was 170px of blank before.
+    expect(box.top).toBeLessThan(40);
+    expect(box.firstLine).toBeLessThan(60);
+  });
+
   test('print with no day open: the scene and the buttons are still hidden', async ({ page }) => {
     await openAt(page, '2026-12-12T12:00:00Z');
     await expectDoors(page, 12);
