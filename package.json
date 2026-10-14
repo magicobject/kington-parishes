@@ -15,7 +15,8 @@
     "typecheck": "tsc",
     "audit": "npm audit --audit-level=high",
     "advent:manifest": "node modules/advent/make-manifest.mjs",
-    "advent:rehearse": "node scripts/advent-rehearse.mjs"
+    "advent:rehearse": "node scripts/advent-rehearse.mjs",
+    "advent:after-launch": "node scripts/advent-after-launch-edits.mjs"
   },
   "repository": {
     "type": "git",

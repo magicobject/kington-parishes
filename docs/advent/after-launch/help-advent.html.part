@@ -1,0 +1,36 @@
+@@ h-comment
+@@ h-lede
+      <p class="lede">A calendar of 25 doors for December, with one short Bible story behind each. It is <strong>live</strong> on the website from 1 December to 25 December, and stays open as "The Christmas Story" until 6 January. This page explains how to look at it on any date, what you will see, how to change a day's words or picture, and what to do after the season.</p>
+@@ h-jump
+        <a href="#after-the-season">After the season</a>
+@@ h-good
+@@ h-banner
+To see it on another date, add <strong>?advent-preview=2026-12-07</strong> to the <em>home page</em> address (a preview on the home page shows a "Preview mode" notice too).
+@@ h-pictures
+Every picture is also timed in a real browser whenever the tests run. The pictures for all 26 days are in.
+@@ h-pictures-missing
+The website refuses to build if a day's picture is missing.
+@@ h-section
+  <section class="alt" id="after-the-season">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">When it ends</div>
+        <h2>After the season</h2>
+        <p>The calendar opens by itself on 1 December and closes by itself: after 6 January the page shows "The Advent calendar opens on 1 December." until next year. Nothing needs switching on or off. This is what to do if you want something different.</p>
+      </div>
+      <div class="card-grid">
+        <div class="card reveal">
+          <h3>Stopping the pretend date</h3>
+          <p>The pretend date in the address is for the website team. To stop it working for everyone, ask Claude to set <strong>previewEnabled</strong> to false. It is sensible to do that after 6 January.</p>
+        </div>
+        <div class="card reveal">
+          <h3>Putting it away</h3>
+          <p>To take the calendar away completely, ask Claude to set <strong>adventEnabled</strong> to false.</p>
+        </div>
+        <div class="card reveal">
+          <h3>Running it again next year</h3>
+          <p>Check the dates and the words, add any new pictures, and ask Claude to run the tests.</p>
+        </div>
+      </div>
+    </div>
+  </section>

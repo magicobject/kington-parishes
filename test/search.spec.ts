@@ -1,5 +1,9 @@
 import { test, expect } from './support/fixtures';
 import { AxeBuilder } from '@axe-core/playwright';
+import { execFileSync } from 'node:child_process';
+import { existsSync, readFileSync, statSync } from 'node:fs';
+import { createServer } from 'node:http';
+import { extname, join, resolve, sep } from 'node:path';
 
 // The header search box: fetches /search-index.json (regenerated on every
 // build — see scripts/build-search-index.mjs and its own unit tests) and
@@ -189,4 +193,40 @@ test('axe: search results open, on the homepage', async ({ page }) => {
   await expect(page.locator('#site-search-results')).toBeVisible();
   const results = await new AxeBuilder({ page }).analyze();
   expect(results.violations).toEqual([]);
+});
+
+// The LAUNCHED site (tester finding S3): once the calendar is in the sitemap and the site search, searching "advent" must give ONE
+// result, not two (the page's h1 and the calendar section's h2). The real build is not launched yet, so this builds a temporary COPY
+// of the repository with the three launch flags flipped (scripts/advent-launched-copy.mjs, the same steps as `npm run advent:rehearse`),
+// serves its public folder, and searches there. Slow (a copy and a build), so it is a single test.
+test('on the launched site, searching "advent" gives exactly one result, and its target is visible', async ({ page }) => {
+  test.setTimeout(240_000);
+  const made = JSON.parse(execFileSync(process.execPath, [join(__dirname, '..', 'scripts', 'advent-launched-copy.mjs'), 'make'], { maxBuffer: 64 * 1024 * 1024 }).toString()) as { temp: string; publicDir: string };
+  const types: Record<string, string> = { '.html': 'text/html; charset=utf-8', '.css': 'text/css', '.js': 'application/javascript', '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.xml': 'application/xml', '.txt': 'text/plain' };
+  const server = createServer((request, response) => {
+    const path = resolve(join(made.publicDir, decodeURIComponent((request.url ?? '/').split('?')[0].split('#')[0]).replace(/^\/$/, '/index.html')));
+    if (!path.startsWith(resolve(made.publicDir) + sep) || !existsSync(path) || statSync(path).isDirectory()) { response.writeHead(404); response.end('not found'); return; }
+    response.writeHead(200, { 'Content-Type': types[extname(path)] ?? 'application/octet-stream' });
+    response.end(readFileSync(path));
+  });
+  await new Promise<void>((done) => server.listen(0, 'localhost', done));
+  try {
+    const base = `http://localhost:${(server.address() as { port: number }).port}`;
+    const index = JSON.parse(readFileSync(join(made.publicDir, 'search-index.json'), 'utf8')) as { page: string; heading: string }[];
+    expect(index.filter((entry) => entry.page === 'advent.html').map((entry) => entry.heading), 'the launched index lists the calendar page once').toEqual(['Advent']);
+    await page.goto(`${base}/index.html`);
+    await page.getByRole('combobox', { name: 'Search the site' }).fill('advent');
+    const results = page.locator('#site-search-results');
+    await expect(results).toBeVisible();
+    await expect(results.getByRole('option')).toHaveCount(1);
+    const result = results.getByRole('option').first();
+    await expect(result).toHaveAttribute('href', 'advent.html#advent');
+    await result.click();
+    await expect(page).toHaveURL(/advent\.html#advent$/);
+    await expect(page.locator('#advent')).toBeVisible();
+    await expect(page.locator('h1#advent')).toHaveText('Advent');
+  } finally {
+    server.close();
+    execFileSync(process.execPath, [join(__dirname, '..', 'scripts', 'advent-launched-copy.mjs'), 'remove', made.temp]);
+  }
 });
