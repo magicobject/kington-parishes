@@ -113,6 +113,18 @@ npm ci
   so pull `main` (or merge it into your branch) before writing your changelog entry.
 - Remove a worktree when finished: `git worktree remove ../my-second-copy`.
 
+## Two helpers that live beside the hooks
+
+- **`npm run check:live`** (`scripts/check-live.mjs`) checks the live site after a deploy, read-only: it waits until the new build
+  number shows on `/updates` (`--wait`), then checks the inline-script hashes against the Content-Security-Policy, the Advent
+  calendar's hidden or launched state, that no calendar text leaks, the cache and picture headers, and that every day file and picture
+  exists. Usage: `npm run check:live -- --build latest --wait` (`--state hidden|launched|auto`, `--base <url>`, `--timeout <seconds>`).
+  It cannot see browser console errors: look at those yourself.
+- **`node scripts/ascii-escape.mjs <file>`** rewrites a JavaScript file so every non-ASCII character in a string, regular expression or
+  comment becomes a `\uXXXX` escape. The file-writing tool turns such escapes into the literal character, so a file can quietly gain
+  non-ASCII bytes; `test-unit/ascii-escape.test.mjs` fails if any Advent file (`modules/advent/**`, `scripts/advent-*.mjs`,
+  `test-unit/advent-*.mjs`) contains one, and says to run this command.
+
 ## CI and the date
 
 `.github/workflows/ci.yml` rebuilds the site and then runs `node scripts/ci-drift-check.mjs`, which fails if the committed

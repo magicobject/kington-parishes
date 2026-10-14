@@ -97,6 +97,7 @@
         <a href="#api-security">MailerLite API security</a>
         <a href="#the-code">The code</a>
         <a href="#ci-cd">Build, test and deploy: where each happens</a>
+        <a href="#saving-safely">Saving your work safely</a>
       </nav>
     </div>
   </div>
@@ -159,7 +160,7 @@
           <p><code>npm audit</code> blocks any push carrying a known high or critical severity dependency vulnerability (see <a href="#api-security">MailerLite API security</a> below), and the same test suite acts as a regression net for the security headers whenever <code>public/_headers</code> changes.</p>
         </div>
       </div>
-      <p>All of it runs locally in well under a minute, and its result — pass or fail — is what actually decides whether a change gets pushed, not a judgement call. See step 3 of <a href="help-making-a-change.html#the-steps">Making a change</a>.</p>
+      <p>The quick checks (the unit tests, the type check and the security check) take about a minute, and the full browser suite, which includes the accessibility scan, takes about a minute and a half. They run on the machine making the change and again on GitHub (see <a href="#ci-cd">below</a>), and their result — pass or fail — is what decides whether a change is ready, not a judgement call. See step 3 of <a href="help-making-a-change.html#the-steps">Making a change</a>.</p>
     </div>
   </section>
 
@@ -252,10 +253,43 @@
     <div class="wrap">
       <div class="section-head">
         <div class="kicker">Build, test and deploy: where each happens</div>
-        <h2>No CI on GitHub — the build and the test suite both run locally</h2>
-        <p>It's easy to assume a project like this has a GitHub Actions workflow that builds and tests every push. It doesn't. The workflows in <code>.github/workflows</code> do other jobs — the Claude Code assistants, the volunteer-edit pipeline (which tests its own proposed edits before opening a pull request), and the <a href="#api-security">daily vulnerability watch</a> — alongside <a href="https://github.com/magicobject/kington-parishes/blob/main/.github/dependabot.yml" target="_blank" rel="noopener">Dependabot's config</a> for dependency update PRs. None of them builds or tests a push to <code>main</code>: for that, GitHub's only job is to host the repository and be the place Cloudflare watches for new commits on <code>main</code>.</p>
-        <p>The actual building and testing happens on whichever machine is making the change — see <a href="#build-templates">Build &amp; templates</a> and <a href="#testing">Testing</a> above. <code>npm run build</code> regenerates <code>public/</code> on every commit (via the pre-commit git hook), and <code>npm test</code> plus <code>npm run audit</code> run before every push, both locally, both before anything reaches GitHub at all. By the time a commit lands on <code>main</code>, it's already been built and already passed the full test suite — nothing on GitHub's side builds or tests it again.</p>
-        <p>What a push to <code>main</code> <em>does</em> trigger is Cloudflare's own deployment, via its GitHub integration (see <a href="#hosting">Hosting</a> above) — but that's a deploy, not a build or test step: it uploads the already-built <code>public/</code> folder and the Worker code exactly as they were committed, live in well under a minute. If a change were ever pushed without running the local build and test suite first, Cloudflare would deploy it anyway, untested — which is exactly why that suite running locally, before every push, is a standing rule for this project rather than a courtesy.</p>
+        <h2>Checked twice: on the machine that makes the change, and again automatically on GitHub</h2>
+        <p>The first round of building and testing happens on whichever machine is making the change — see <a href="#build-templates">Build &amp; templates</a> and <a href="#testing">Testing</a> above. The build runs on every save. Every push runs the security audit, the quick unit tests and the type check; the full browser suite is run by hand before a release, and by GitHub on every push. That is the first line of defence.</p>
+        <p>GitHub then runs a second, automatic check, called <em>CI</em> (continuous integration), on every push to <code>main</code> and on every pull request, including the ones Dependabot opens to update add-on software. It starts from a clean machine, rebuilds the whole website from the source files, and fails if the finished pages saved in the project do not match that fresh rebuild (the only difference allowed is the calendar's list of upcoming events, which depends on today's date). It then runs the same automatic tests as before: the quick tests, the type check, the full browser suite including the accessibility scan, and the security check. Its recipe is the file <code>.github/workflows/ci.yml</code>.</p>
+        <p>What a green or red result means: <strong>green</strong> means the website as saved is exactly what a clean rebuild produces and every test passed, so the change is confirmed good. Cloudflare has usually deployed the change already by then, so green confirms the result rather than holding the change back. <strong>Red</strong> means something does not add up, and the failing step's name says what: the pages are out of step with their source, a test failed, or a security problem was found. A red result is a request to fix something, not a catastrophe, and nothing on the live site is changed by the check itself. The other workflows in <code>.github/workflows</code> do different jobs: the Claude Code assistants, the volunteer-edit pipeline (which tests its own proposed edits before opening a pull request), and the <a href="#api-security">daily vulnerability watch</a>.</p>
+        <p>Publishing is separate. A push to <code>main</code> also triggers Cloudflare's own deployment, via its GitHub integration (see <a href="#hosting">Hosting</a> above), which uploads the already-built <code>public/</code> folder and the Worker code exactly as saved, live in well under a minute. Cloudflare does not wait for the CI result, so the local checks before every push stay the main protection, and CI is the safety net that catches anything that slipped past them.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="saving-safely">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">Saving your work safely</div>
+        <h2>Saving your work safely (commit hooks and worktrees)</h2>
+        <p>Whenever someone saves a change to this website's code, a few small checking programs, called <em>hooks</em>, run by themselves. They exist so that the house rules (every change is written up on the <a href="updates.html">/updates</a> page, every change gets its own build number, and changes are checked before they are sent) are checked by the computer by default rather than left to someone's memory. A person can switch the hooks off for one command (<code>--no-verify</code>), so that should only be done when you know exactly why. The full technical description is in <code>docs/hooks.md</code> in the repository.</p>
+      </div>
+      <div class="card-grid">
+        <div class="card reveal">
+          <h3>What the hooks do</h3>
+          <p>When a change is saved, the first hook checks that the folder of add-on programs is present, that the change has its line on the /updates page with the right build number, and that nothing is half finished. If everything is in order it rebuilds the website pages and attaches them to the change. Straight after saving, a second hook gives the change its label (the build tag). Before a change is sent to GitHub, a third hook runs the security audit, the quick unit tests and the type check, and says which one failed. The slower browser suite is not part of that hook: GitHub runs it on every push.</p>
+        </div>
+        <div class="card reveal">
+          <h3>When a hook says no</h3>
+          <p>A refusal is a plain sentence saying what is wrong and what to do. The usual ones: the line on the /updates page is missing or has the wrong number (the message tells you the number it expected); a file the website is built from has been changed but not included in the save (add it, or put the change back); or the add-on programs are missing (run <code>npm ci</code> in that folder). Nothing is lost when a hook refuses: fix the point it names and save again.</p>
+        </div>
+        <div class="card reveal">
+          <h3>Why a second session needs its own worktree</h3>
+          <p>If two people, or two Claude sessions, work in the same folder at once, one person's unfinished work blocks the other's save, or gets swept into the wrong change. A <em>worktree</em> is a second, separate copy of the project folder on its own branch, so each session has its own space and the two cannot trip over each other. Build numbers are shared by the whole project, so whoever saves second first brings in the latest changes and takes the next number.</p>
+        </div>
+        <div class="card reveal">
+          <h3>Copy the add-on programs, never link them</h3>
+          <p>Each worktree needs its own folder of add-on programs (<code>node_modules</code>). Make it by running <code>npm ci</code> in the new folder, or by copying the folder. Never make a shortcut that points at another copy's folder, and never delete the main copy's folder: that folder has twice been found mysteriously emptied, and a shortcut would let one session empty everyone's.</p>
+        </div>
+        <div class="card reveal">
+          <h3>The escape hatch</h3>
+          <p>In a rare emergency the "half finished" check can be skipped for one save by starting that command with <code>HOOK_ALLOW_UNSTAGED=1</code>. The hook then prints a loud warning, because the rebuilt pages may not match what is saved. The changelog check and the add-on programs check cannot be skipped this way. Skipping all the hooks (<code>--no-verify</code>) is for emergencies only, and the automatic checks on GitHub will still notice if the pages are out of step.</p>
+        </div>
       </div>
     </div>
   </section>

@@ -71,24 +71,31 @@ step in the launch commit message.
 
 ## After the deploy: verify production (read-only)
 
-- `curl -I https://www.kingtonparishes.org.uk/advent` shows the normal security headers and a 200;
-- `curl -I` on one `/advent/art/day-NN.svg` and on `/advent/scene.svg` shows two Content-Security-Policy headers (the site one and
-  `default-src 'none'; style-src 'unsafe-inline'; sandbox`);
-- `curl -I` on `/advent/day-03.json` shows `x-robots-tag: noindex` and `cache-control: public, max-age=0, must-revalidate`;
-- the hashed scripts and stylesheets (`/js/advent.js?v=...`, `/js/advent-early.js?v=...` and friends) come back with
-  `cache-control: public, max-age=31536000, immutable`, and a made-up path such as `/js/advent/nothing.js` does not;
-- the browser console on `/advent` and `/advent?advent-preview=2026-12-07` has no errors and no CSP violations (Cloudflare can
-  inject its own scripts: look for them);
-- `sitemap.xml` now lists the calendar page, and the site search finds it exactly once (one result for "advent");
-- **no day title or text is in the pages that are not the calendar's own day files** (the sitemap, the search index, the calendar
-  page and the home page). Run, from the repo root:
+Run, from the repo root (replace `<n>` with the build number of the launch commit, for example `2026.12.01.004`):
 
 ```
-node --input-type=module -e "const {content}=await import('./modules/advent/content.mjs');const titles=[...content.days,content.bonus].map((d)=>d.title);let bad=0;for(const u of ['sitemap.xml','search-index.json','advent','']){const r=await fetch('https://www.kingtonparishes.org.uk/'+u);const t=await r.text();const hits=titles.filter((x)=>t.includes(x));const ok=r.status===200&&hits.length===0;if(!ok)bad+=1;console.log(u||'/',r.status,r.status!==200?'NOT 200: this check proves nothing':hits.length?'LEAK: '+hits.join(', '):'clean');}process.exitCode=bad?1:0;"
+npm run check:live -- --state launched --build <n> --wait
 ```
 
-  Every line must say `200` and `clean`, and the command must exit with 0 (it exits 1 if any page is not a 200, because a page that
-  does not load proves nothing about what it contains).
+`--wait` polls `/updates` every 15 seconds until the build number appears (that is how you know Cloudflare has deployed), then runs
+every check below against the live site and prints one PASS or FAIL line each, with the URL and the HTTP status. It exits 0 only if
+every check passes. A page that does not answer HTTP 200 fails, because it proves nothing about what it contains. The checks
+(`scripts/check-live.mjs`, tested in `test-unit/check-live.test.mjs`):
+
+- `/updates` lists the build;
+- on eight sample pages (`/`, `/church-kington`, `/advent`, `/calendar`, `/contact`, `/our-churches`, `/our-people`, `/services`) the
+  sha256 of every executable inline script is in that response's Content-Security-Policy `script-src`;
+- launched state: `sitemap.xml` lists the calendar page, the search index has exactly one public Advent entry, `/advent` is not
+  `noindex` and says `data-go-live="true"` (the hidden state checks the opposite);
+- no day title or text from `content.mjs` is in the sitemap, the search index, `/advent` or the home page;
+- every immutable-cached path in `public/_headers` returns exactly one `Cache-Control` with `immutable`, and a made-up neighbour path is
+  a 404 without it; `/advent/day-03.json` has `x-robots-tag: noindex`; one `/advent/art/day-NN.svg` and `/advent/scene.svg` carry the
+  site policy and the sandbox policy `default-src 'none'; style-src 'unsafe-inline'; sandbox` (as two headers or one joined header: it
+  says which);
+- all the day files and all the pictures (26 each while the bonus day exists) return 200.
+
+Still by hand, in a browser (the command prints this reminder): the console on `/advent` and `/advent?advent-preview=2026-12-07` has no
+errors and no CSP violations (Cloudflare can inject its own scripts: look for them), and the site search for "advent" gives one result.
 
 Notes: the repository is public, so `modules/advent/content.mjs` is readable on GitHub whatever the switches say, and
 `public/advent/day-NN.json` can be fetched by anyone who guesses the address (the `X-Robots-Tag` header only keeps crawlers away).
@@ -124,7 +131,7 @@ stale wording is left, and that every edit is listed here.
 | `c-intro` | the intro line ``[LAUNCH] `modules/advent/` is a self-contained`` ("hidden from the public until launch") | the same intro, saying it is **live** |
 | `c-launch` | the bullet `- [LAUNCH] **Launch:**` | `- **Launched** (date of the launch commit: ____)...` (fill in the date) |
 | `c-flags` | the bullet `- [LAUNCH] **Three launch flags` | the flags bullet, all `true` |
-| `c-home` | the bullet `- [LAUNCH] **Home page:**` ("Greg accepted this source-only mention while hidden") | the home-page bullet without that sentence |
+| `c-home` | the bullet `- [LAUNCH] **Home page:**` (the empty container and scripts on the home page) | the home-page bullet, worded for the live calendar |
 | `c-help` | the bullet `- [LAUNCH] The hidden help guide` | the help-guide bullet, listed in the help search scope |
 
 Fill in the date in the `c-launch` result by hand (the `____`): that is step 9, and a unit test enforces it.
