@@ -139,7 +139,9 @@
   // the same element — e.g. .card:hover — aren't left permanently inert).
   (function () {
     if (!location.hash) return;
-    var target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    var id = location.hash.slice(1);
+    try { id = decodeURIComponent(id); } catch (e) {} // a malformed %-escape: use it as typed
+    var target = document.getElementById(id);
     var revealEl = target && target.closest('.reveal');
     if (!revealEl) return;
     revealEl.classList.add('in');

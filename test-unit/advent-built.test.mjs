@@ -132,7 +132,7 @@ describe('generated files', () => {
     const headers = read('_headers');
     const blocks = headers.split(/\n(?=\S)/).filter((b) => !b.startsWith('#') || b.includes('\n/'));
     assert.match(headers, /^\/advent\/art\/\*\n {2}Content-Security-Policy: default-src 'none'; style-src 'unsafe-inline'; sandbox$/m);
-    assert.match(headers, /^\/\*\n {2}Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-4RwqUYD4JP\/ewBt0bVqlJ2A4I4YwLluTC3ZXzQNSUbs='; /);
+    assert.match(headers, /^\/\*\n {2}Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-OdggO0jg0wMi1\/GjqgfEGLTmfWtTo2bcrEA9M34iIxw='; /);
     assert.ok(blocks.length >= 2);
   });
 });
