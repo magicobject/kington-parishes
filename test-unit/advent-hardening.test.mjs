@@ -3,9 +3,13 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import { validateContent, validateTheme, artPathIsSafe, RESERVED_SLUGS } from '../modules/advent/schema.mjs';
-import { content } from '../modules/advent/content.mjs';
-import { theme } from '../modules/advent/theme.mjs';
-import { PAGES } from '../src/pages.config.mjs';
+import { content } from '../src/advent/content.mjs';
+import { theme } from '../src/advent/theme.mjs';
+import { PAGES, adventPage } from '../src/pages.config.mjs';
+import { buildAdvent } from '../modules/advent/build.mjs';
+import { mkdtempSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 
 const clone = (value) => structuredClone(value);
 const withDay1 = (field, value) => {
@@ -120,20 +124,30 @@ describe('slugs', () => {
     }
   });
 
-  test('every page name in src/pages.config.mjs is reserved (generic list plus the theme list), and each is rejected', () => {
-    // The calendar's own page is the one page that takes the slug, so it is not in the reserved list.
-    for (const page of PAGES.filter((p) => p.slug !== theme.slug)) {
-      assert.ok(RESERVED_SLUGS.includes(page.slug) || theme.reservedSlugs.includes(page.slug), `${page.slug} should be reserved`);
-      assert.throws(() => validateTheme(slugged(page.slug)), /"slug"/, page.slug);
+  test('every page name in src/pages.config.mjs is refused as the slug by the build (taken from the real page list, not a hand-kept copy)', () => {
+    // The calendar's own page is the one page that takes the slug, so it is left out BY IDENTITY (never by slug, which would hide a clash).
+    const pageNames = PAGES.filter((page) => page !== adventPage).map((page) => page.slug);
+    assert.ok(pageNames.length > 10, 'expected the real page list');
+    const publicDir = mkdtempSync(join(tmpdir(), 'advent-slug-'));
+    try {
+      for (const name of pageNames) {
+        assert.throws(() => buildAdvent({ theme: slugged(name), content, publicDir, siteUrl: 'https://example.test', pageNames }), /already used by another page|clashes with a reserved page name/, name);
+      }
+      buildAdvent({ theme: { ...theme, scene: null, artRequired: false, goLive: false, publicListing: false }, content, publicDir, siteUrl: 'https://example.test', pageNames }); // the real slug is accepted
+    } finally {
+      rmSync(publicDir, { recursive: true, force: true });
     }
     for (const reserved of RESERVED_SLUGS) {
       assert.throws(() => validateTheme(slugged(reserved)), /"slug"/, reserved);
     }
   });
 
-  test('reservedSlugs must be a list of page names', () => {
-    for (const bad of [undefined, 'contact', [5], ['A b'], new Array(201).fill('a')]) {
-      assert.throws(() => validateTheme(withTheme((t) => { t.reservedSlugs = bad; })), /reservedSlugs|missing key/);
+  test('reservedSlugs is optional, and when given it must be a list of page names', () => {
+    validateTheme(withTheme((t) => { delete t.reservedSlugs; }));
+    validateTheme(withTheme((t) => { t.reservedSlugs = ['contact']; }));
+    assert.throws(() => validateTheme(withTheme((t) => { t.reservedSlugs = ['advent']; t.slug = 'advent'; })), /reserved/);
+    for (const bad of ['contact', [5], ['A b'], new Array(201).fill('a'), null]) {
+      assert.throws(() => validateTheme(withTheme((t) => { t.reservedSlugs = bad; })), /reservedSlugs/);
     }
   });
 

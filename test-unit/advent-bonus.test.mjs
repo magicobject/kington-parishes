@@ -9,11 +9,11 @@ import { join } from 'node:path';
 import { londonDateParts, seasonState, doorState, isDayUnlocked, BONUS_DAY } from '../modules/advent/date.mjs';
 import { validateContent, validateTheme, validateDay, DAY_COUNT } from '../modules/advent/schema.mjs';
 import { buildAdvent, renderAdventToken, validateDayFile } from '../modules/advent/build.mjs';
-import { theme as realTheme } from '../modules/advent/theme.mjs';
+import { theme as realTheme } from '../src/advent/theme.mjs';
 // Builds into empty temporary folders, so use the real theme without its own scene file.
 import { pinFlags } from './support/fixture-flags.mjs';
 const theme = { ...pinFlags(realTheme), scene: null };
-import { content as realContent } from '../modules/advent/content.mjs';
+import { content as realContent } from '../src/advent/content.mjs';
 // The 25 days only: these tests build with and without a bonus day on purpose (the real bonus is tested in advent-built).
 const content = { days: realContent.days };
 import { BONUS_FIXTURE } from './support/bonus-fixture.mjs';

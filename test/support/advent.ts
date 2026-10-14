@@ -7,9 +7,9 @@ import { ADVENT_PAGE } from './pages';
 // The theme and the content are the site's own ES modules; Node loads them straight into these CommonJS specs (no regular
 // expression over their source), so the specs follow the real flags and the real number of days.
 // eslint-disable-next-line @typescript-eslint/no-require-imports
-const { theme } = require('../../modules/advent/theme.mjs') as { theme: { publicListing: boolean; goLive: boolean; artRequired: boolean; bonus?: { label: string } | null } };
+const { theme } = require('../../src/advent/theme.mjs') as { theme: { publicListing: boolean; goLive: boolean; artRequired: boolean; bonus?: { label: string } | null } };
 // eslint-disable-next-line @typescript-eslint/no-require-imports
-const { content } = require('../../modules/advent/content.mjs') as { content: { days: { day: number }[]; bonus?: { day: number } } };
+const { content } = require('../../src/advent/content.mjs') as { content: { days: { day: number }[]; bonus?: { day: number } } };
 
 /** How many numbered doors the content has (25 for Kington). */
 export const DAY_COUNT: number = content.days.length;

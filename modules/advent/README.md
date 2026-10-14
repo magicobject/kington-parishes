@@ -16,15 +16,22 @@ Generic code (the same for every church, never mentions a particular church):
 - `build.mjs` is the build step: it checks everything, writes the generated files, and supplies the page markup and the page's entry for the host's page list.
 - `client/` holds the browser files, written by hand and copied by the build: `advent.js` and `advent.css` (the calendar page), `advent-teaser.js`, `advent-early.js` (a tiny classic script that reserves the banner's room before the first paint) and `advent-teaser.css` (the home-page banner) and `scene.svg` (the plain default scene).
 
-Site-owned files (each church writes its own):
+Also in this folder:
 
-- `theme.mjs` holds the site name, dates, page address, switches and colours.
-- `content.mjs` holds the 25 days of story text, references, picture names and descriptions.
+- `site-config.mjs` is the placeholder guard: it refuses a theme or content that is still the template.
+- `examples/theme.mjs` and `examples/content.mjs` are NEUTRAL TEMPLATES ("Example Parish", 25 placeholder days). A second church copies them to `src/advent/` and replaces everything. They are templates, not content to publish.
+- `INTEGRATION.md` is the step-by-step guide for adopting the module on another site (it was followed on a copy of a sibling site to prove it works).
+- `host-kit/` holds the host-side files a second church copies out of the module (`advent-config.mjs`, `advent-headers.mjs` and two tests); `test-unit/advent-host-kit.test.mjs` keeps them identical to the working copies in `scripts/` and `test-unit/`. `host-patches/` holds ready-made patches for host features a sibling site lacked (see its README). Neither folder is module code: the boundary and safety tests do not scan `host-kit/` for Node use.
+
+Site-owned files (each church writes its own) live OUTSIDE this folder, in the host site's `src/advent/`, so copying `modules/advent/` never copies a church's text or pictures:
+
+- `src/advent/theme.mjs` holds the site name, dates, page address, switches and colours.
+- `src/advent/content.mjs` holds the 25 days of story text, references, picture names and descriptions.
 
 ## The bonus door (optional)
 
 A site may add a 26th door that opens on a date inside the archive period (here 6 January, "Epiphany").
-It needs two things: `bonus: {on: {month, day}, label}` in `theme.mjs` and a `bonus` day in `content.mjs`
+It needs two things: `bonus: {on: {month, day}, label}` in `src/advent/theme.mjs` and a `bonus` day in `src/advent/content.mjs`
 (a normal day object numbered exactly 26, checked by the same rules). Until the content exists the calendar
 shows 25 doors, so the theme setting can go in first. The door is "future" until its date and on the date
 itself is "today" (the archive's last day); `day-26.json` is written beside the others and `day-26.svg` is
@@ -55,7 +62,7 @@ What a visitor gets, by season (all computed in the browser from the London date
 
 ### How it is wired into the site
 
-- `scripts/build.mjs` calls `buildAdvent({theme, content, publicDir, siteUrl, pageNames})` once. It checks the theme and content with the validators and uses the copies they return, checks the pictures and the scene, and only then writes:
+- `src/pages.config.mjs` loads the two site-owned files through `scripts/advent-config.mjs` (which stops the build with a plain message when one is missing or still the template), and `scripts/build.mjs` calls `buildAdvent({theme, content, publicDir, siteUrl, pageNames})` once. It checks the theme and content with the validators and uses the copies they return, checks the pictures and the scene, and only then writes:
   - `public/advent/day-01.json` to `day-25.json` (and `day-26.json` when the bonus has content), plain text, fixed key order, checked again;
   - `public/css/advent-theme.css` (the colours as `--advent-*` variables);
   - `public/css/advent.css`, `public/css/advent-teaser.css`, `public/js/advent.js`, `public/js/advent-early.js`, `public/js/advent-teaser.js` (copies of `client/`);
@@ -65,7 +72,7 @@ What a visitor gets, by season (all computed in the browser from the London date
   Every generated file carries an AUTO-GENERATED banner (JSON cannot) and is written the same way every time.
 - The pure, browser-safe code: `date.mjs` (dates, season and door states, the bonus door), `preview.mjs`, `day.mjs` (the rules for one day, no imports, so the browser checks every fetched day with the build's own rules) and `logic.mjs` (settings, addresses, labels, share links, the size-capped `fetchDayFile`). The two page scripts only wire these to the page.
 - `renderAdventToken` replaces `{{ADVENT}}` with markup only (settings as `data-*`, the status line, the primary button, an empty door list, the scene holder, a no-JavaScript note). `renderAdventTeaserToken` replaces `{{ADVENT_TEASER}}` (below). `adventPageEntry(theme)` gives `src/pages.config.mjs` the page's entry.
-- `public/_headers` has extra tightening rules for `/advent/art/*`, `/advent/scene*.svg` and `/advent/day-*.json` (see below).
+- `public/_headers` has extra tightening rules for `/advent/art/*`, `/advent/scene*.svg` and `/advent/day-*.json`, and one exact cache rule per built script and stylesheet (see below). `npm run advent:headers` prints the exact rules, and `test-unit/advent-headers.test.mjs` fails if `public/_headers` lacks any of them.
 
 ### The launch flags
 Three theme flags flip together at launch: `goLive` (until true, a real visitor ALWAYS gets the calm state on the calendar page and the home banner, whatever the date; the markup says `data-go-live="true"` only when it is on, and anything else is read as off), `publicListing` (sitemap, search, no noindex) and `artRequired` (the build refuses missing pictures). The theme validator and `test-unit/advent-launch-flags.test.mjs` refuse `goLive: true` without the other two. `publicListing: true` without `goLive: true` is allowed (the page is listed while a real visitor still sees only the calm sentence). `?advent-preview=` works whatever the flags say: it is the only way to see the calendar before launch. `test/advent-prelaunch.spec.ts` (deleted at launch) fakes 12 December with the real flags and asserts the calendar stays hidden; the other browser tests force `goLive` on through a route (`forceGoLive` in `test/support/advent.ts`).
@@ -113,7 +120,9 @@ The numbered doors are a grid of 1, 2, 3, 4 or 6 columns, chosen by how wide the
 
 ### Moving or renaming the page
 
-If you change the theme's `slug`, rename `src/pages/<slug>.html` to match, rebuild, and delete the old `public/<old-slug>.html` by hand. The build does not remove stale pages.
+If you change the theme's `slug`, rename `src/pages/<slug>.html` to match, rebuild, and delete the old `public/<old-slug>.html` by hand. The build does not remove stale pages. The build refuses a slug that another page of the site already uses (it checks the site's real page list, so the theme's `reservedSlugs` is optional and only for extra names to keep free).
+
+**Known limitation:** only the PAGE address follows the slug. The data folder is fixed at `/advent/` (the day files `/advent/day-NN.json`, the pictures `/advent/art/` and the scene `/advent/scene*.svg`): the address is built into `logic.mjs` (which the browser runs), the build, the `_headers` rules and `check:live`. A site whose slug is not `advent` still serves its data from `/advent/`. Making the folder follow the slug is a later phase.
 
 ## Going live (for the person in charge)
 

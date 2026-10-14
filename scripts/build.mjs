@@ -8,7 +8,7 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { NAV, FOOTER_NAV, PAGES } from '../src/pages.config.mjs';
+import { NAV, FOOTER_NAV, PAGES, adventConfig, adventPage } from '../src/pages.config.mjs';
 import { SITE } from '../src/site.config.mjs';
 import { CHURCHES } from '../src/churches.config.mjs';
 import { JOURNEY, SKETCHES } from '../src/journey.config.mjs';
@@ -20,8 +20,7 @@ import { ONE_OFF_EVENTS, expandEvents, placeFor, formatEventTime, formatEventDat
 import { ensureSectionIds, extractSearchEntries, isSearchablePage, isIndexable, isHelpPage } from './build-search-index.mjs';
 import { splitNewsletterIssues, formatIssueMonth } from './newsletter-issues.mjs';
 import { buildAdvent, renderAdventToken, renderAdventTeaserToken } from '../modules/advent/build.mjs';
-import { theme as adventTheme } from '../modules/advent/theme.mjs';
-import { content as adventContent } from '../modules/advent/content.mjs';
+const { theme: adventTheme, content: adventContent } = adventConfig;
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (path) => readFileSync(join(root, path), 'utf8');
@@ -380,7 +379,7 @@ const advent = buildAdvent({
   content: adventContent,
   publicDir: join(root, 'public'),
   siteUrl: SITE_URL,
-  pageNames: PAGES.map((p) => p.slug).filter((slug) => slug !== adventTheme.slug),
+  pageNames: PAGES.filter((page) => page !== adventPage).map((page) => page.slug),
 });
 console.log(`built public/advent/ (${advent.files.length} files)`);
 

@@ -2,8 +2,8 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import { validateContent, validateTheme, artPathIsSafe, DAY_COUNT } from '../modules/advent/schema.mjs';
-import { content } from '../modules/advent/content.mjs';
-import { theme } from '../modules/advent/theme.mjs';
+import { content } from '../src/advent/content.mjs';
+import { theme } from '../src/advent/theme.mjs';
 
 const clone = (value) => structuredClone(value);
 const rejects = (mutate, pattern, base = content, validate = validateContent) => {

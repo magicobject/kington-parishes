@@ -3,7 +3,7 @@ import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { PAGES, helpAdventPage } from '../src/pages.config.mjs';
-import { theme } from '../modules/advent/theme.mjs';
+import { theme } from '../src/advent/theme.mjs';
 import { isIndexable, isSearchablePage, isHelpPage } from '../scripts/build-search-index.mjs';
 
 const withListing = (publicListing) => ({ ...structuredClone(theme), publicListing });

@@ -1,5 +1,5 @@
 // A TEST FIXTURE for the bonus (26th) door. This is NOT the real text for the real calendar: that is being
-// written separately and is added to modules/advent/content.mjs when it is approved. Used by unit tests and
+// written separately and is added to src/advent/content.mjs when it is approved. Used by unit tests and
 // (through a test-only build) by the browser tests.
 export const BONUS_FIXTURE = {
   day: 26,

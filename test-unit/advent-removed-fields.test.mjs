@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
-import { content } from '../modules/advent/content.mjs';
+import { content } from '../src/advent/content.mjs';
 import { validateDay, validateContent } from '../modules/advent/schema.mjs';
 import { validateDayPayload } from '../modules/advent/day.mjs';
 import { readDayFile } from '../modules/advent/logic.mjs';

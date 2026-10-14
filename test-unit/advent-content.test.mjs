@@ -5,7 +5,7 @@
 // stop, question mark or exclamation mark inside the closing quote mark is ignored.
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
-import { content } from '../modules/advent/content.mjs';
+import { content } from '../src/advent/content.mjs';
 
 const KJV = 'Retold in our own words, with a short quotation from the King James Version.';
 const WEB = 'Retold in our own words, with short quotations from the World English Bible.';
@@ -113,7 +113,7 @@ describe('the 6 January bonus door ("Gifts for a King")', () => {
   });
 
   test('the theme names the bonus door, so the door appears', async () => {
-    const { theme } = await import('../modules/advent/theme.mjs');
+    const { theme } = await import('../src/advent/theme.mjs');
     assert.deepEqual(theme.bonus, { on: { month: 1, day: 6 }, label: 'Epiphany' });
   });
 });

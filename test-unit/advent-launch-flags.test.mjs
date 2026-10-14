@@ -3,7 +3,7 @@
 // calendar (goLive) before the pictures are required (artRequired) and the page is listed (publicListing).
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
-import { theme } from '../modules/advent/theme.mjs';
+import { theme } from '../src/advent/theme.mjs';
 import { validateTheme } from '../modules/advent/schema.mjs';
 
 describe('the launch flags', () => {

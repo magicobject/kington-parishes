@@ -5,8 +5,8 @@ import assert from 'node:assert/strict';
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
-import { theme } from '../modules/advent/theme.mjs';
-import { content } from '../modules/advent/content.mjs';
+import { theme } from '../src/advent/theme.mjs';
+import { content } from '../src/advent/content.mjs';
 const realBonus = content.bonus;
 
 const PUBLIC = fileURLToPath(new URL('../public/', import.meta.url));

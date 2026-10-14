@@ -40,7 +40,7 @@
 .advent .advent-pill-quiet,
 .advent .advent-action { background: transparent; color: var(--advent-link); border-color: var(--advent-link); }
 /* The two buttons of the gentle "not yet" card. Which one looks primary is a swap of these four properties: today "Maybe later"
-   is the filled gold primary and "Open it anyway" is the quiet outline (Greg, 14 Oct 2026). */
+   is the filled gold primary and "Open it anyway" is the quiet outline (the site owner, 14 Oct 2026). */
 .advent {
   --advent-gentle-later-bg: var(--advent-accent); --advent-gentle-later-fg: var(--advent-accent-ink); --advent-gentle-later-border: var(--advent-accent-ink);
   --advent-gentle-anyway-bg: transparent; --advent-gentle-anyway-fg: var(--advent-link); --advent-gentle-anyway-border: var(--advent-link);

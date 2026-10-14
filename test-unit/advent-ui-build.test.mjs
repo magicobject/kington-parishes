@@ -8,10 +8,10 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { buildAdvent, renderAdventToken, renderAdventTeaserToken, lintSvg, svgDrawWeight } from '../modules/advent/build.mjs';
 import { validateTheme, sceneNameIsSafe } from '../modules/advent/schema.mjs';
-import { theme as realTheme } from '../modules/advent/theme.mjs';
+import { theme as realTheme } from '../src/advent/theme.mjs';
 import { pinFlags } from './support/fixture-flags.mjs';
 const theme = pinFlags(realTheme);
-import { content } from '../modules/advent/content.mjs';
+import { content } from '../src/advent/content.mjs';
 
 const dirs = [];
 after(() => { for (const dir of dirs) rmSync(dir, { recursive: true, force: true }); });

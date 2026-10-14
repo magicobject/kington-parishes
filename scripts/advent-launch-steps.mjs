@@ -8,7 +8,7 @@ import { dirname, join, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { applyAfterLaunch } from './advent-after-launch-edits.mjs';
 
-export const LAUNCH_FLAGS = ['goLive', 'publicListing', 'artRequired']; // flipped false -> true in modules/advent/theme.mjs
+export const LAUNCH_FLAGS = ['goLive', 'publicListing', 'artRequired']; // flipped false -> true in src/advent/theme.mjs
 export const GUARD_FILES = ['test-unit/advent-prelaunch.test.mjs', 'test/advent-prelaunch.spec.ts']; // deleted outright
 export const GUARD_TEST = { file: 'test/sitemap.spec.ts', name: 'PRE-LAUNCH: the sitemap and the search index do not mention the Advent calendar' }; // removed from the end of the file
 
@@ -61,7 +61,7 @@ export function makeLaunchedCopy({ log = () => {}, fullNodeModules = false } = {
   if (fullNodeModules) cpSync(from, join(copy, 'node_modules'), { recursive: true });
   else for (const name of PACKAGES) if (existsSync(join(from, name))) cpSync(join(from, name), join(copy, 'node_modules', name), { recursive: true });
   log(`rehearsing the launch in a copy: ${copy}`);
-  const themePath = join(copy, 'modules', 'advent', 'theme.mjs');
+  const themePath = join(copy, 'src', 'advent', 'theme.mjs');
   // A repository that has ALREADY launched (flags true, guards deleted) is copied as it is: the steps below then change nothing, and a guard
   // that is missing is expected. In an unlaunched repository a missing guard is an error (the checklist and the script have drifted).
   const alreadyLaunched = LAUNCH_FLAGS.every((flag) => new RegExp(`^[ ]*${flag}:[ ]*true,`, 'm').test(readFileSync(themePath, 'utf8')));

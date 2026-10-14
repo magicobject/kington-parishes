@@ -17,13 +17,13 @@ step in the launch commit message.
    (`test/advent-svg-render.spec.ts`), and `test-unit/advent-art.test.mjs` builds in the strict launch mode against them.
 3. **Look at the real thing** in preview on every date (docs/advent/ux-design.md), on a phone and a desktop, at 200% text size,
    including the home page with `/?advent-preview=2026-12-07` and the archive with `/advent?advent-preview=2026-12-28`.
-4. **The bonus door** is built and its text is in (`bonus` in `modules/advent/content.mjs`, `day-26.svg` is in the art folder).
+4. **The bonus door** is built and its text is in (`bonus` in `src/advent/content.mjs`, `day-26.svg` is in the art folder).
 5. **Rehearse the launch, in a copy: `npm run advent:rehearse`.** It copies the repo to a temporary folder, flips the three flags,
    deletes the guard tests and applies the after-launch wording and the launch date exactly as steps 6 to 9 below say, builds, and then runs BOTH the unit suite
    and the whole browser suite (`npm test`, about 90 seconds more) there. It must print `REHEARSAL PASS` (and a line `kington-parishes (launched copy): N passed in Xs`).
    It never touches the real repo: the temporary folder is outside it, node_modules is copied (never linked), the browser suite runs on its own port,
    and the folder is removed at the end. `npm run advent:rehearse -- --unit-only` skips the browser suite: use it only for a quick look, not for this step.
-6. **Flip the three launch flags together** in `modules/advent/theme.mjs`:
+6. **Flip the three launch flags together** in `src/advent/theme.mjs`:
    - `goLive: true`: the real date now drives the calendar page and the home-page banner (until then it never does);
    - `publicListing: true`: the calendar page joins the sitemap and the site search and loses its noindex, and the Advent help
      guide rejoins the (help scope) search. This does not add a menu or footer link: add those as a separate, reviewed change if
@@ -59,7 +59,7 @@ step in the launch commit message.
    flags flipped and the wording applied: this is the run the rehearsal predicted), `npm test`, `npm run audit`,
    `npm run typecheck`. All must pass.
 11. **Decide `previewEnabled` after the season (a step, not an afterthought).** Security recommends: keep it on until 6 January
-   (so the team can still check any date), then set `previewEnabled: false` in `theme.mjs` and deploy; with it false the preview
+   (so the team can still check any date), then set `previewEnabled: false` in `src/advent/theme.mjs` and deploy; with it false the preview
    parameter does nothing anywhere. Greg decides; write the decision in the launch commit message.
 12. **Privacy policy:** update `src/pages/privacy-policy.html` only if something changed. It should not need to: the calendar
     stores nothing in the visitor's browser and uses no outside service. Confirm that is still true (the safety scans in
@@ -87,7 +87,7 @@ every check passes. A page that does not answer HTTP 200 fails, because it prove
   sha256 of every executable inline script is in that response's Content-Security-Policy `script-src`;
 - launched state: `sitemap.xml` lists the calendar page, the search index has exactly one public Advent entry, `/advent` is not
   `noindex` and says `data-go-live="true"` (the hidden state checks the opposite);
-- no day title or text from `content.mjs` is in the sitemap, the search index, `/advent` or the home page;
+- no day title or text from `src/advent/content.mjs` is in the sitemap, the search index, `/advent` or the home page;
 - every immutable-cached path in `public/_headers` returns exactly one `Cache-Control` with `immutable`, and a made-up neighbour path is
   a 404 without it; `/advent/day-03.json` has `x-robots-tag: noindex`; one `/advent/art/day-NN.svg` and `/advent/scene.svg` carry the
   site policy and the sandbox policy `default-src 'none'; style-src 'unsafe-inline'; sandbox` (as two headers or one joined header: it
@@ -97,7 +97,7 @@ every check passes. A page that does not answer HTTP 200 fails, because it prove
 Still by hand, in a browser (the command prints this reminder): the console on `/advent` and `/advent?advent-preview=2026-12-07` has no
 errors and no CSP violations (Cloudflare can inject its own scripts: look for them), and the site search for "advent" gives one result.
 
-Notes: the repository is public, so `modules/advent/content.mjs` is readable on GitHub whatever the switches say, and
+Notes: the repository is public, so `src/advent/content.mjs` is readable on GitHub whatever the switches say, and
 `public/advent/day-NN.json` can be fetched by anyone who guesses the address (the `X-Robots-Tag` header only keeps crawlers away).
 The calendar is hidden, not secret.
 

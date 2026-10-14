@@ -9,7 +9,7 @@ import {
 import { validateDayPayload, BONUS_DAY as DAY_BONUS_DAY, DAY_COUNT } from '../modules/advent/day.mjs';
 import { BONUS_DAY as DATE_BONUS_DAY } from '../modules/advent/date.mjs';
 import { londonDateParts } from '../modules/advent/date.mjs';
-import { content } from '../modules/advent/content.mjs';
+import { content } from '../src/advent/content.mjs';
 import { BONUS_FIXTURE } from './support/bonus-fixture.mjs';
 
 const DATA = {

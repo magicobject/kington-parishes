@@ -4,7 +4,7 @@ import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
 import { GUARD_FILES, GUARD_TEST, LAUNCH_FLAGS } from '../scripts/advent-launch-steps.mjs';
-import { theme } from '../modules/advent/theme.mjs';
+import { theme } from '../src/advent/theme.mjs';
 
 const read = (path) => readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
 const checklist = read('docs/advent/launch-checklist.md');

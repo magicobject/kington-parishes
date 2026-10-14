@@ -87,13 +87,17 @@
       <div class="kicker">Build history</div>
       <h1 id="site-updates">Site updates</h1>
       <p class="lede">An internal changelog: every build number and what changed. This page isn't linked from anywhere else on the site, and refreshes itself every minute.</p>
-      <p class="build-number">Current build: 2026.10.14.007</p>
+      <p class="build-number">Current build: 2026.10.14.008</p>
     </div>
   </div>
 
   <section>
     <div class="wrap">
       <ul class="changelog">
+        <li>
+          <div class="changelog-meta"><span class="changelog-build">2026.10.14.008</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">14 October 2026</span></div>
+          <p>Behind the scenes, no change to what visitors see: the Advent calendar module is now ready to be given to another church. The site's own theme and 25 days of text moved out of the module folder into <code>src/advent/</code>, so copying the module carries none of this site's content, and a neutral "Example Parish" template sits in its place. The module has a 14-step adoption guide (<code>modules/advent/INTEGRATION.md</code>, proved by adding the calendar to copies of two other church sites), a command that prints the website security-header rules a second site needs, patches for sites missing a build feature, and a build that refuses leftover placeholder text once the calendar goes live. See the <a href="help-advent.html">Advent calendar help guide</a>.</p>
+        </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.14.007</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">14 October 2026</span></div>
           <p>Behind the scenes, no change to what visitors see: one command, <code>npm run check:live</code>, now runs every after-deploy check against the live site (page scripts match the security policy, the hidden or launched state, headers and caching, no calendar text leaking, all pictures present); a short <code>CODING_STANDARDS.md</code> for reviewers; a slimmer <code>CLAUDE.md</code> that points at the module README and launch checklist; an ASCII check with a ready-made fixer for the Advent source files; and a plain-English section on commit hooks, worktrees and the new automatic checks on GitHub in the hidden <a href="help-technical-details.html">technical details guide</a>.</p>

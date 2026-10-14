@@ -12,7 +12,7 @@
 // day rules; the preview date is never put into any link, share address or canonical; no outside requests.
 import { seasonState, doorState, msUntilNextMidnight, BONUS_DAY } from './advent/date.js?v=437781ad7f';
 import { effectiveDate, formatPreviewNotice } from './advent/preview.js?v=0a66911aae';
-import { FRIENDLY_ERROR, artUrl, calendarUrl, dateLabel, doorName, doorNumberText, doorSub, fetchDayFile, neighbours, parseDayHash, readConfig, shareUrl, statusText, todayDoor, visibleSeason } from './advent/logic.js?v=89613fa558';
+import { FRIENDLY_ERROR, artUrl, calendarUrl, dateLabel, doorName, doorNumberText, doorSub, fetchDayFile, neighbours, parseDayHash, readConfig, shareUrl, statusText, todayDoor, visibleSeason } from './advent/logic.js?v=2997937e28';
 
 function make(tag, className, text) {
   const node = document.createElement(tag);

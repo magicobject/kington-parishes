@@ -1,0 +1,13 @@
+diff --git a/scripts/build-search-index.mjs b/scripts/build-search-index.mjs
+index 293fb59..29e44cf 100644
+--- a/scripts/build-search-index.mjs
++++ b/scripts/build-search-index.mjs
+@@ -130,3 +130,7 @@ const NEVER_INDEXED_SLUGS = new Set(['updates', '404']);
+ export function isIndexable(page) {
+-  return !NEVER_INDEXED_SLUGS.has(page.slug);
++  // `unlisted: true` on a page entry (the Advent calendar's, until launch) keeps it out of the search index and the sitemap like these.
++  if ('unlisted' in page && typeof page.unlisted !== 'boolean') {
++    throw new Error('build: page "' + page.slug + '" has an unlisted flag that is not true or false');
++  }
++  return !NEVER_INDEXED_SLUGS.has(page.slug) && page.unlisted !== true;
+ }

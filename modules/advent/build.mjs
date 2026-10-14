@@ -26,6 +26,7 @@ import { dirname, join, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { COLOUR_NAMES, DAY_COUNT, BONUS_DAY, artPathIsSafe, validateContent, validateTheme } from './schema.mjs';
 import { validateDayPayload } from './day.mjs';
+import { assertNoPlaceholderText } from './site-config.mjs';
 
 const MODULE_DIR = dirname(fileURLToPath(import.meta.url));
 const MONTH_NAMES = [
@@ -777,7 +778,7 @@ const kebab = (name) => name.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCas
 
 function themeCss(theme) {
   const lines = COLOUR_NAMES.map((name) => `  --advent-${kebab(name)}: ${theme.colours[name].toLowerCase()};`);
-  return `${banner('the theme in modules/advent/theme.mjs', 'block')}:root {\n${lines.join('\n')}\n}\n`;
+  return `${banner('the Advent theme', 'block')}:root {\n${lines.join('\n')}\n}\n`;
 }
 
 // ---------------------------------------------------------------------------
@@ -791,6 +792,8 @@ function themeCss(theme) {
 export function buildAdvent({ theme, content, publicDir, siteUrl, pageNames } = {}) {
   const checkedTheme = validateTheme(theme);
   const checkedContent = validateContent(content);
+  // A live site must not carry the template's own text (an edited day that kept the example story is as bad as an unchanged file).
+  if (checkedTheme.goLive) assertNoPlaceholderText({ theme: checkedTheme, content: checkedContent });
   if (typeof siteUrl !== 'string' || !/^https:\/\/[^\s/]+$/.test(siteUrl)) {
     throw new Error('siteUrl must be an https address with no path, like https://example.org');
   }
@@ -965,6 +968,34 @@ export function adventPageEntry(theme) {
   };
   if (!checked.publicListing) entry.robots = 'noindex, nofollow';
   return entry;
+}
+
+// ---------------------------------------------------------------------------
+// The host's _headers rules
+
+const PICTURE_CSP = "default-src 'none'; style-src 'unsafe-inline'; sandbox";
+const IMMUTABLE_CACHE = 'public, max-age=31536000, immutable';
+
+/**
+ * The rules the host's `_headers` file needs, as [{ path, comment, headers: [line, ...] }]. `files` is buildAdvent(...).files (paths
+ * relative to public/). The pictures and the scene get a tightening Content-Security-Policy, the day files ask crawlers to stay away,
+ * and every built script and stylesheet gets its own EXACT one-year immutable cache rule (never a wildcard), which is safe only
+ * because the build addresses them all by content hash (?v=).
+ */
+export function adventHeaderRules(files) {
+  const cached = files.filter((file) => /^(?:js|css)\//.test(file)).map((file) => `/${file}`).sort();
+  return [
+    { path: '/advent/art/*', comment: 'Advent calendar pictures: tighten only. A picture may use inline styles and nothing else.', headers: [`Content-Security-Policy: ${PICTURE_CSP}`] },
+    { path: '/advent/scene*.svg', comment: "The calendar's scene picture: the same tightening as the day pictures.", headers: [`Content-Security-Policy: ${PICTURE_CSP}`] },
+    { path: '/advent/day-*.json', comment: 'Keeps crawlers away from the day files. It does not hide them: anyone who knows an address can still fetch one.', headers: ['X-Robots-Tag: noindex'] },
+    ...cached.map((path) => ({ path, comment: null, headers: [`Cache-Control: ${IMMUTABLE_CACHE}`] })),
+  ];
+}
+
+/** The same rules as text, ready to paste into `_headers`. */
+export function adventHeadersText(files) {
+  const block = ({ path, comment, headers }) => [...(comment ? [`# ${comment}`] : []), path, ...headers.map((line) => `  ${line}`), ''].join('\n');
+  return adventHeaderRules(files).map(block).join('\n');
 }
 
 /** The draw weight of a picture (see drawCost), or null if the picture is refused for another reason first. */

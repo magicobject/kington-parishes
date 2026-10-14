@@ -3,7 +3,7 @@
 //   node scripts/check-live.mjs [--base https://www.kingtonparishes.org.uk] [--build 2026.10.14.006|latest]
 //        [--wait [--timeout 900]] [--state auto|hidden|launched]
 // --wait polls /updates every 15 seconds (--interval, in seconds, changes that) until the build number appears: that is how we
-// know Cloudflare has deployed. --state auto reads the Advent flags in modules/advent/theme.mjs.
+// know Cloudflare has deployed. --state auto reads the Advent flags in src/advent/theme.mjs.
 // Every check prints one PASS or FAIL line with the URL and the HTTP status. A check on a page that is not HTTP 200 FAILS, because
 // a page that does not load proves nothing about what it contains. Exit code 0 only if every check passes. Console errors need a
 // browser and are out of scope: the last line reminds the person to look.
@@ -107,7 +107,7 @@ export function latestBuild(root = ROOT) {
 }
 
 async function stateFromFlags() {
-  const { theme } = await import(pathToFileURL(join(ROOT, 'modules/advent/theme.mjs')).href);
+  const { theme } = await import(pathToFileURL(join(ROOT, 'src/advent/theme.mjs')).href);
   if (theme.goLive && theme.publicListing) return 'launched';
   if (!theme.goLive && !theme.publicListing) return 'hidden';
   throw new Error('the Advent flags in theme.mjs are mixed (goLive and publicListing differ), so the expected state is unclear: pass --state hidden or --state launched');
@@ -115,7 +115,7 @@ async function stateFromFlags() {
 
 /** Runs every check against `base`; returns the list of { ok, text }. */
 export async function runChecks({ base, build, state }) {
-  const { content } = await import(pathToFileURL(join(ROOT, 'modules/advent/content.mjs')).href);
+  const { content } = await import(pathToFileURL(join(ROOT, 'src/advent/content.mjs')).href);
   const dayCount = content.days.length + (content.bonus ? 1 : 0);
   const launched = state === 'launched';
   const results = [];

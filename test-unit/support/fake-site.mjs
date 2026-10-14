@@ -4,7 +4,7 @@
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { createServer } from 'node:http';
-import { content } from '../../modules/advent/content.mjs';
+import { content } from '../../src/advent/content.mjs';
 
 export const PAGES = ['/', '/church-kington', '/advent', '/calendar', '/contact', '/our-churches', '/our-people', '/services'];
 const SCRIPT = 'window.fixture = 1;';

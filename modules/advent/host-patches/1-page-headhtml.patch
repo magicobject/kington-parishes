@@ -1,0 +1,13 @@
+diff --git a/scripts/build.mjs b/scripts/build.mjs
+index b1075ba..6735daa 100644
+--- a/scripts/build.mjs
++++ b/scripts/build.mjs
+@@ -254,6 +254,8 @@ for (const page of PAGES) {
+ 
+   let extraHead = '';
+   if (page.robots) extraHead += `<meta name="robots" content="${page.robots}">\n`;
++  // Extra stylesheets/scripts for one page (the Advent calendar's); versionAssetUrls adds their ?v= hashes.
++  if (page.headHtml) extraHead += `${page.headHtml}\n`;
+   if (page.canonical !== false) {
+     extraHead += `<link rel="canonical" href="${pageUrl}">\n`;
+   }

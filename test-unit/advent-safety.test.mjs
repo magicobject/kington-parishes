@@ -15,7 +15,8 @@ const walk = (dir) => readdirSync(dir).flatMap((name) => {
 const rel = (full) => relative(ROOT, full).split(sep).join('/');
 const load = (full) => ({ name: rel(full), text: readFileSync(full, 'utf8') });
 
-const sourceCode = walk(join(ROOT, 'modules', 'advent')).filter((f) => /\.(mjs|js)$/.test(f)).map(load);
+// host-kit/ is host-side build tooling a second church copies out of the module (see the boundary test); it is not module code.
+const sourceCode = walk(join(ROOT, 'modules', 'advent')).filter((f) => /\.(mjs|js)$/.test(f) && !rel(f).startsWith('modules/advent/host-kit/')).map(load);
 const builtJs = ['public/js/advent.js', 'public/js/advent-teaser.js', ...readdirSync(join(ROOT, 'public/js/advent')).map((n) => `public/js/advent/${n}`)]
   .map((path) => load(join(ROOT, path)));
 const builtCss = ['public/css/advent.css', 'public/css/advent-theme.css', 'public/css/advent-teaser.css'].map((path) => load(join(ROOT, path)));

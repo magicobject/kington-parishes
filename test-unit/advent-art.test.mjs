@@ -8,8 +8,8 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildAdvent, lintSvg, svgDrawWeight } from '../modules/advent/build.mjs';
-import { theme } from '../modules/advent/theme.mjs';
-import { content } from '../modules/advent/content.mjs';
+import { theme } from '../src/advent/theme.mjs';
+import { content } from '../src/advent/content.mjs';
 
 const PUBLIC = fileURLToPath(new URL('../public/', import.meta.url));
 const ART = join(PUBLIC, 'advent', 'art');

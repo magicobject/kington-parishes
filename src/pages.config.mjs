@@ -12,8 +12,17 @@
 
 import { SITE } from './site.config.mjs';
 import { CHURCHES } from './churches.config.mjs';
-import { theme as adventTheme } from '../modules/advent/theme.mjs';
+import { fileURLToPath } from 'node:url';
 import { adventPageEntry } from '../modules/advent/build.mjs';
+import { loadAdventConfigOrExit } from '../scripts/advent-config.mjs';
+
+// The Advent calendar's site-owned settings and content (src/advent/theme.mjs and content.mjs). Loading them stops the
+// build with a plain message when either file is missing or is still the placeholder from modules/advent/examples/.
+export const adventConfig = await loadAdventConfigOrExit(fileURLToPath(new URL('..', import.meta.url)));
+const adventTheme = adventConfig.theme;
+// The calendar page's entry. The build tells the calendar module the names of every OTHER page by leaving out THIS object (by identity,
+// never by comparing slugs, which would hide a clash with another page).
+export const adventPage = adventPageEntry(adventTheme);
 
 // One schema.org Church per entry in src/churches.config.mjs, for the
 // our-churches page's structured data. `geo` and `hasMap` come from each
@@ -393,7 +402,7 @@ export const PAGES = [
   // The Advent calendar page. Its entry comes from the module: while the theme's
   // publicListing is false it is unlisted (not in the sitemap or search) and noindex,
   // and it is in no nav, footer or page link either. See modules/advent/README.md.
-  adventPageEntry(adventTheme),
+  adventPage,
   {
     slug: 'updates',
     title: 'Site Updates — Kington Parishes',

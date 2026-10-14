@@ -41,7 +41,7 @@ The calendar tells one story: God has been leaning toward the world since the be
 
 ## 4. The 25 doors
 
-> Note (13 Oct 2026, Greg): the "Try this together" activity and the "Hidden detail" fields below were DROPPED from the live content (`modules/advent/content.mjs` no longer has `activity` or `hidden`; the pictures keep their hidden objects). Day 3 now says "Hergest Ridge" (not "Radnor hills"); Day 24 and Day 25 were made date-neutral. Day 25's picture was simplified on 13 Oct 2026 at Greg's request: the front ledge gathering the hidden objects from the earlier days is gone (the live picture is a manger, a star, watchers and the golden thread). The plan text below is the historical draft.
+> Note (13 Oct 2026, Greg): the "Try this together" activity and the "Hidden detail" fields below were DROPPED from the live content (`src/advent/content.mjs` no longer has `activity` or `hidden`; the pictures keep their hidden objects). Day 3 now says "Hergest Ridge" (not "Radnor hills"); Day 24 and Day 25 were made date-neutral. Day 25's picture was simplified on 13 Oct 2026 at Greg's request: the front ledge gathering the hidden objects from the earlier days is gone (the live picture is a manger, a star, watchers and the golden thread). The plan text below is the historical draft.
 
 ### Day 1: "Let There Be Light"
 **Bible:** Genesis 1:1-5 (KJV quote: "Let there be light")
@@ -346,7 +346,7 @@ The calendar tells one story: God has been leaning toward the world since the be
 
 ## 6. Bonus and alternative doors
 
-- **Bonus A, "Gifts for a King" (6 January, Epiphany): FINAL TEXT, approved by Greg and now in `modules/advent/content.mjs` (`bonus`, day 26).** Matthew 2:1-12 (World English Bible, quotations verified). The wise travellers (never "three": the Bible does not say) arrive, and the gold, frankincense and myrrh. Wording: "the wise travellers".
+- **Bonus A, "Gifts for a King" (6 January, Epiphany): FINAL TEXT, approved by Greg and now in `src/advent/content.mjs` (`bonus`, day 26).** Matthew 2:1-12 (World English Bible, quotations verified). The wise travellers (never "three": the Bible does not say) arrive, and the gold, frankincense and myrrh. Wording: "the wise travellers".
   - **Title:** Gifts for a King. **Reference:** Matthew 2:1-12.
   - **Paragraph 1:** On Day 21 some wise people set out from far away, following a star. Now their long road is nearly over. They reach Jerusalem, the great city, and ask everyone they meet, "Where is he who is born King of the Jews? For we saw his star in the east, and have come to worship him."
   - **Paragraph 2:** King Herod was frightened when he heard this, because he thought of himself as the only king. His advisers told him the old prophets had named the place: Bethlehem, the small town from Day 13. Herod sent the travellers on their way. "Go and search diligently for the young child. When you have found him, bring me word, so that I also may come and worship him." The travellers could not know what was in his heart.

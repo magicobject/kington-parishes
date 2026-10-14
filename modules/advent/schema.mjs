@@ -11,11 +11,10 @@
 //   bonus is OPTIONAL: one more day, numbered exactly 26, checked by the same rules. It needs a bonus
 //   entry in the theme; a theme with a bonus but content without one simply shows 25 doors.
 //
-// THEME shape (all keys required):
+// THEME shape (all keys required except those listed under OPTIONAL):
 //   siteName, translationName   text, up to 80
 //   timeZone                    a name from Intl.supportedValuesOf('timeZone')
 //   season                      { start: {month, day}, end: {month, day}, archiveUntil: {month, day} | null }
-//   reservedSlugs               the site's own page names (a list of slugs, up to 200); the slug may not be one
 //   slug                        page name without slashes, like "advent" or "christmas-calendar";
 //                               lower case words joined by single hyphens, up to 32, not a reserved name
 //   previewEnabled, adventEnabled, publicListing, artRequired, goLive   true or false
@@ -25,6 +24,8 @@
 //                               artRequired and publicListing true: the three launch flags flip together)
 //   colours                     name -> "#rrggbb" (every colour the stylesheet needs, see COLOUR_NAMES)
 // plus OPTIONAL keys:
+//   reservedSlugs               extra page names the slug may not take (a list of slugs, up to 200). The host's real page
+//                               list is checked by buildAdvent (pageNames), so a site does not need to list its pages here.
 //   bonus                       null, or { on: {month, day}, label } for the 26th door. "on" is the date it opens and
 //                               must fall in the archive period (after season.end, up to season.archiveUntil), so the
 //                               season needs an archiveUntil. label is the door's short name, up to 30 characters.
@@ -42,15 +43,15 @@ export const COLOUR_NAMES = [
 ];
 
 // Names a calendar page must never take, on any site: files and routes that always exist.
-// Each site also lists its own page names in the theme's reservedSlugs; a test checks that
-// the two lists together cover every page in the site's page list.
+// The host's own page names are checked by buildAdvent (its pageNames argument); the theme's optional
+// reservedSlugs adds any further names a site wants to keep free.
 export const RESERVED_SLUGS = Object.freeze([
   'api', 'js', 'css', 'img', 'assets', 'index', '404', 'sitemap', 'robots', 'search-index',
   'updates', 'cdn-cgi', 'functions', 'help', '_headers', '_redirects',
 ]);
 
-const THEME_OPTIONAL_KEYS = ['bonus', 'scene'];
-const THEME_KEYS = ['siteName', 'timeZone', 'season', 'slug', 'previewEnabled', 'adventEnabled', 'publicListing', 'artRequired', 'goLive', 'translationName', 'colours', 'reservedSlugs'];
+const THEME_OPTIONAL_KEYS = ['bonus', 'scene', 'reservedSlugs'];
+const THEME_KEYS = ['siteName', 'timeZone', 'season', 'slug', 'previewEnabled', 'adventEnabled', 'publicListing', 'artRequired', 'goLive', 'translationName', 'colours'];
 const DAYS_IN_MONTH = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
 function copyOf(value, where) {
@@ -161,11 +162,12 @@ export function validateTheme(theme) {
     fail('theme', '"slug" must be lower-case words and numbers joined by single hyphens, up to 32 characters');
   }
   if (/^(?:con|prn|aux|nul|com[1-9]|lpt[1-9])$/.test(copy.slug)) fail('theme', '"slug" is a device name that Windows will not allow as a file name');
-  if (!Array.isArray(copy.reservedSlugs) || copy.reservedSlugs.length > 200 ||
-      !copy.reservedSlugs.every((name) => typeof name === 'string' && /^[a-z0-9_-]{1,64}$/.test(name))) {
+  const extraReserved = copy.reservedSlugs === undefined ? [] : copy.reservedSlugs;
+  if (!Array.isArray(extraReserved) || extraReserved.length > 200 ||
+      !extraReserved.every((name) => typeof name === 'string' && /^[a-z0-9_-]{1,64}$/.test(name))) {
     fail('theme', '"reservedSlugs" must be a list of up to 200 page names');
   }
-  if (RESERVED_SLUGS.includes(copy.slug) || copy.reservedSlugs.includes(copy.slug)) fail('theme', '"slug" clashes with a reserved page name');
+  if (RESERVED_SLUGS.includes(copy.slug) || extraReserved.includes(copy.slug)) fail('theme', '"slug" clashes with a reserved page name');
   for (const flag of ['previewEnabled', 'adventEnabled', 'publicListing', 'artRequired', 'goLive']) {
     if (typeof copy[flag] !== 'boolean') fail('theme', `"${flag}" must be true or false`);
   }

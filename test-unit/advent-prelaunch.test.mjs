@@ -6,7 +6,7 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { theme } from '../modules/advent/theme.mjs';
+import { theme } from '../src/advent/theme.mjs';
 
 const publicFile = (path) => readFileSync(new URL(`../public/${path}`, import.meta.url), 'utf8');
 

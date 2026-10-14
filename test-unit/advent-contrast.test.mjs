@@ -1,9 +1,10 @@
 // WCAG 2 contrast checks for the colour pairings the Advent calendar uses
-// (computed from modules/advent/theme.mjs, never eyeballed).
+// (computed from src/advent/theme.mjs, never eyeballed).
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { theme } from '../modules/advent/theme.mjs';
+import { theme } from '../src/advent/theme.mjs';
+import { theme as exampleTheme } from '../modules/advent/examples/theme.mjs';
 
 function luminance(hex) {
   const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255)
@@ -11,8 +12,8 @@ function luminance(hex) {
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 }
 
-function ratio(foreground, background) {
-  const [a, b] = [luminance(theme.colours[foreground]), luminance(theme.colours[background])];
+function ratio(foreground, background, palette = theme) {
+  const [a, b] = [luminance(palette.colours[foreground]), luminance(palette.colours[background])];
   return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
 }
 
@@ -43,12 +44,23 @@ describe('contrast', () => {
     ['focus', 'door', 3], //          11.85  the pale "today" ring against an open door
     ['accent', 'sky2', 4.5], //        6.70  the banner heading on the lighter end of its gradient
   ];
-  for (const [foreground, background, minimum] of pairs) {
-    test(`${foreground} on ${background} is at least ${minimum}:1`, () => {
-      const actual = ratio(foreground, background);
-      assert.ok(actual >= minimum, `${foreground} on ${background} is ${actual.toFixed(2)}:1`);
-    });
+  // The site's palette AND the module's example palette (the template a second church starts from) must both pass.
+  for (const [label, palette] of [['site', theme], ['example', exampleTheme]]) {
+    for (const [foreground, background, minimum] of pairs) {
+      test(`${label} palette: ${foreground} on ${background} is at least ${minimum}:1`, () => {
+        const actual = ratio(foreground, background, palette);
+        assert.ok(actual >= minimum, `${foreground} on ${background} is ${actual.toFixed(2)}:1`);
+      });
+    }
   }
+  test('the example palette is its own: it shares no colour with the site palette', () => {
+    const site = new Set(Object.values(theme.colours).map((c) => c.toLowerCase()));
+    assert.deepEqual(Object.values(exampleTheme.colours).filter((c) => site.has(c.toLowerCase())), []);
+  });
+  test('the example palette passes the gentle-card and failing-pairing rules too', () => {
+    assert.ok(ratio('accent', 'paper', exampleTheme) < 3 && ratio('accentInk', 'paper', exampleTheme) >= 3);
+    assert.ok(ratio('focus', 'accent', exampleTheme) < 3 && ratio('link', 'accent', exampleTheme) < 4.5);
+  });
 });
 
 // The two buttons of the "Not quite yet" card (Greg, 14 Oct 2026: "Maybe later" is the filled gold primary, "Open it anyway" the

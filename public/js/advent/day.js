@@ -18,7 +18,7 @@
 //   credit      who made the picture, up to 200, never empty
 //   translation which Bible translation is quoted (or that it is retold), up to 200, REQUIRED
 // (The fields `activity` and `hidden` were removed on 13 Oct 2026
-// by Greg: a day that carries either is refused as an unknown key.)
+// by the site owner: a day that carries either is refused as an unknown key.)
 //
 // TEXT RULES (every content string, and the theme names): not empty, within its cap, and
 // containing none of: angle brackets, "@", control characters, invisible or direction

@@ -7,7 +7,7 @@ import assert from 'node:assert/strict';
 import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
-import { theme } from '../modules/advent/theme.mjs';
+import { theme } from '../src/advent/theme.mjs';
 import { EDITS, HELP_FILE, CLAUDE_FILE, PART_FILES, afterLaunchTexts, applyAfterLaunch, applyEdits, applyOrSkip, matchText, parseParts } from '../scripts/advent-after-launch-edits.mjs';
 
 const read = (path) => readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
