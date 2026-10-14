@@ -10,8 +10,8 @@
 // is exactly as it was. test-unit/advent-early.test.mjs checks it against the real date rules for every day of the year.
 //
 // The reservation is made with style properties set from script (which a content security policy allows), is released by
-// advent-teaser.js as soon as the banner is built (or at once if that script decides there is no banner), and by a timer here
-// if that script never runs.
+// advent-teaser.js as soon as the banner is built (or at once if that script decides there is no banner or fails), and by a
+// timer here (1.5 seconds, smoothly) if that script never even starts.
 (function () {
   var script = document.currentScript;
   var root = script && script.previousElementSibling;
@@ -30,13 +30,22 @@
     root.style.minHeight = (wide ? (preview ? 15.5 : 12) : (preview ? 25 : 17.5)) + 'rem';
     root.hidden = false;
     root.setAttribute('data-advent-reserved', '');
+    // If the banner script has not even STARTED after 1.5 seconds (blocked, or it failed to load), the room is given back rather than
+    // leaving a blank band: it shrinks smoothly (at once for someone who asked for reduced motion). A script that has started but is
+    // slow keeps its room, and releases it itself.
     window.setTimeout(function () {
-      if (root.hasAttribute('data-advent-reserved') && !root.querySelector('.advent-teaser-inner')) {
+      if (!root.hasAttribute('data-advent-reserved') || root.hasAttribute('data-advent-started')) return;
+      root.removeAttribute('data-advent-reserved');
+      var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduced) {
         root.hidden = true;
         root.style.minHeight = '';
-        root.removeAttribute('data-advent-reserved');
+        return;
       }
-    }, 5000);
+      root.style.transition = 'min-height 0.3s ease';
+      root.style.minHeight = '0px';
+      window.setTimeout(function () { root.hidden = true; root.style.minHeight = ''; root.style.transition = ''; }, 350);
+    }, 1500);
   } catch (ignored) {
     // Anything unexpected leaves the page exactly as it was.
   }

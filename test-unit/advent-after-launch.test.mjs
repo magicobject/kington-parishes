@@ -4,15 +4,17 @@
 // real files are free of it.
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { dirname, join } from 'node:path';
 import { theme } from '../modules/advent/theme.mjs';
-import { EDITS, HELP_FILE, CLAUDE_FILE, PART_FILES, afterLaunchTexts, applyEdits, matchText, parseParts } from '../scripts/advent-after-launch-edits.mjs';
+import { EDITS, HELP_FILE, CLAUDE_FILE, PART_FILES, afterLaunchTexts, applyAfterLaunch, applyEdits, applyOrSkip, matchText, parseParts } from '../scripts/advent-after-launch-edits.mjs';
 
 const read = (path) => readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
 const launched = theme.goLive === true;
 
 // Words that are only true while the calendar is hidden.
-const STALE = [/not public yet/i, /hidden from the public/i, /before launch/i, /nobody can find/i, /PRE-LAUNCH/, /\[LAUNCH\]/, /going-live/, /go live/i, /until launch/i, /until we go/i, /the real date shows nothing/i];
+const STALE = [/not public yet/i, /hidden from the public/i, /before launch/i, /nobody can find/i, /PRE-LAUNCH/, /\[LAUNCH\]/, /going-live/, /go live/i, /until launch/i, /until we go/i, /the real date shows nothing/i, /not linked from anywhere/i, /once it exists/i];
 
 const advent = (claude) => claude.slice(claude.indexOf('## Advent calendar module'), claude.indexOf('\n## ', claude.indexOf('## Advent calendar module') + 5));
 
@@ -48,6 +50,51 @@ describe('the after-launch edits', () => {
   });
 });
 
+describe('running the after-launch command twice (N1)', () => {
+  const blocks = new Map([['a', 'NEW A'], ['b', '']]);
+  const edits = [{ id: 'a', line: 'old a' }, { id: 'b', line: 'old b' }];
+
+  test('applyOrSkip applies a fresh file, and a file that is already applied is left as it is', () => {
+    const fresh = applyOrSkip(['keep', 'old a', 'old b', 'keep'].join('\n'), edits, blocks);
+    assert.deepEqual(fresh, { text: ['keep', 'NEW A', 'keep'].join('\n'), already: false });
+    assert.deepEqual(applyOrSkip(fresh.text, edits, blocks), { text: fresh.text, already: true });
+  });
+
+  test('a block with the ____ launch-date placeholder still counts as applied after the maintainer has written the real date over it', () => {
+    const dated = new Map([['a', '- **Launched** (date of the launch commit: ____). More.']]);
+    const one = [{ id: 'a', line: '- [LAUNCH] **Launch:**' }];
+    assert.equal(applyOrSkip('keep\n- **Launched** (date of the launch commit: 2026-12-01). More.', one, dated).already, true);
+    assert.equal(applyOrSkip('keep\n- **Launched** (date of the launch commit: ____). More.', one, dated).already, true);
+    assert.equal(applyOrSkip('keep\n- [LAUNCH] **Launch:** old', one, dated).already, false);
+  });
+
+  test('a partly applied file stops with a clear message that names what is missing', () => {
+    assert.throws(() => applyOrSkip(['keep', 'NEW A', 'old b'].join('\n'), edits, blocks), /partly applied.*"b"/);
+    assert.throws(() => applyOrSkip('keep', edits, blocks), /"a".*not found/s);
+  });
+
+  test('the real command, run twice on a copy of the files: the second run says nothing to do and changes no byte', { skip: launched ? 'launched: the real files are already edited' : false }, () => {
+    const root = mkdtempSync(join(tmpdir(), 'advent-after-twice-'));
+    try {
+      for (const file of [...Object.keys(PART_FILES), ...Object.values(PART_FILES)]) {
+        mkdirSync(dirname(join(root, file)), { recursive: true });
+        cpSync(new URL(`../${file}`, import.meta.url), join(root, file));
+      }
+      const first = applyAfterLaunch(root);
+      assert.deepEqual(first, { changed: [HELP_FILE, CLAUDE_FILE], already: [] });
+      const bytes = Object.keys(PART_FILES).map((file) => readFileSync(join(root, file)));
+      const second = applyAfterLaunch(root);
+      assert.deepEqual(second, { changed: [], already: [HELP_FILE, CLAUDE_FILE] });
+      Object.keys(PART_FILES).forEach((file, index) => assert.ok(readFileSync(join(root, file)).equals(bytes[index]), `${file} changed`));
+      // partial: put one stale line back
+      writeFileSync(join(root, HELP_FILE), readFileSync(join(root, HELP_FILE), 'utf8').replace('        <a href="#after-the-season">After the season</a>', '        <a href="#going-live">Going live</a>'));
+      assert.throws(() => applyAfterLaunch(root), /partly applied/);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
+});
+
 describe('before launch: applying the edits leaves no stale wording', { skip: launched ? 'launched: the files are already edited' : false }, () => {
   const texts = afterLaunchTexts();
 
@@ -80,6 +127,24 @@ describe('before launch: applying the edits leaves no stale wording', { skip: la
     const claude = read(CLAUDE_FILE).split('\n');
     const claudeAfter = texts[CLAUDE_FILE].split('\n');
     assert.ok(claude.filter((line) => !claudeAfter.includes(line)).every((line) => /LAUNCH\]|PRE-LAUNCH/.test(line)), 'only [LAUNCH] lines and the pre-launch comment change in CLAUDE.md');
+  });
+});
+
+describe('the launch date (N2): the maintainer fills it in by hand, and the tests refuse to pass until they have', { skip: launched ? false : 'not launched yet' }, () => {
+  test('no literal ____ is left in the Advent section of CLAUDE.md once the calendar has gone live', () => {
+    assert.ok(!advent(read(CLAUDE_FILE)).includes('____'), 'CLAUDE.md still says "date of the launch commit: ____": write the real date of the launch commit there (checklist step 9)');
+  });
+});
+
+describe('the checklist has an explicit step for the launch date (N2)', () => {
+  test('a numbered step names the Launched line and the ____ to replace, and comes after the wording step and before the final run', () => {
+    const checklist = read('docs/advent/launch-checklist.md');
+    const start = checklist.search(/^\d+\. \*\*Fill in the launch date/m);
+    assert.ok(start >= 0, 'no numbered step "Fill in the launch date"');
+    const step = checklist.slice(start, checklist.indexOf('\n\n', start) > 0 ? checklist.indexOf('\n\n', start) : undefined);
+    assert.ok(step.includes('____') && step.includes('date of the launch commit'));
+    assert.ok(start > checklist.indexOf('Apply the after-launch wording'));
+    assert.ok(start < checklist.indexOf('Run everything with the flags flipped'));
   });
 });
 

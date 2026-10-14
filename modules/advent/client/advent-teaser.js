@@ -114,6 +114,7 @@ async function show(root, config, season, parts, preview) {
 }
 
 function start(root) {
+  root.setAttribute('data-advent-started', ''); // tells advent-early.js this script is running, so it keeps the reserved room for us
   const config = readConfig(root.dataset);
   if (!config || !config.enabled) return release(root, true);
   const { parts, preview } = effectiveDate({
@@ -126,7 +127,7 @@ function start(root) {
   });
   const season = visibleSeason(seasonState(parts, config.season), preview, config);
   const inSeason = season === 'live' || season === 'archive';
-  if (inSeason || preview) show(root, config, inSeason ? season : null, parts, preview).catch(() => {});
+  if (inSeason || preview) show(root, config, inSeason ? season : null, parts, preview).catch(() => release(root, true));
   else release(root, true);
 }
 
@@ -135,6 +136,7 @@ if (root) {
   try {
     start(root);
   } catch {
-    // Anything unexpected leaves the page exactly as it was.
+    // Anything unexpected leaves the page exactly as it was (and gives back any room that was reserved).
+    release(root, true);
   }
 }

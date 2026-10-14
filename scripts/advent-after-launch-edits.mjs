@@ -20,6 +20,8 @@ export const EDITS = [
   { id: 'h-lede', file: HELP_FILE, line: '      <p class="lede">A calendar of 25 doors' },
   { id: 'h-jump', file: HELP_FILE, line: '        <a href="#going-live">' },
   { id: 'h-good', file: HELP_FILE, text: " (before launch this is the only way to see the calendar at all, whatever today's date)" },
+  { id: 'h-linked', file: HELP_FILE, text: 'The page is not linked from anywhere, so type it in or bookmark it.' },
+  { id: 'h-exists', file: HELP_FILE, text: 'the picture (once it exists), the Bible reference' },
   { id: 'h-banner', file: HELP_FILE, text: 'Before launch it only appears when you add <strong>?advent-preview=2026-12-07</strong> to the <em>home page</em> address; the real date shows nothing (and a preview on the home page shows a "Preview mode" notice too).' },
   { id: 'h-pictures', file: HELP_FILE, text: 'Before launch every picture is also timed in a real browser. The pictures for all 26 days are in.' },
   { id: 'h-pictures-missing', file: HELP_FILE, text: 'A day whose picture file is missing simply has none, until launch, when the website refuses to build without all of them.' },
@@ -73,24 +75,71 @@ export function applyEdits(text, edits, replacements) {
   return out;
 }
 
-/** The text of the two files with every edit applied (nothing is written). */
+// How many places in `text` an edit's rule matches.
+function matchCount(text, edit) {
+  if (edit.text !== undefined) return text.split(edit.text).length - 1;
+  return text.split('\n').filter((line) => line.startsWith(edit.line ?? edit.from)).length;
+}
+
+// Whether a block's wording is in the text. A block may hold the ____ placeholder (the launch date) that the maintainer later fills in
+// by hand (checklist step 9), so ____ matches any text up to the next closing bracket on that line.
+function hasBlock(text, block) {
+  if (!block.includes('____')) return text.includes(block);
+  const escape = (part) => part.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return new RegExp(block.split('____').map(escape).join('[^)\\n]*')).test(text);
+}
+
+/**
+ * Applies the edits to one file's text, unless they are ALREADY applied (the command can be run twice). An edit is "already applied"
+ * when its stale text is gone and its after-launch wording is there (an empty block has no wording to look for, so gone is enough).
+ * Returns { text, already }. If only some edits are applied, or an edit's text is neither the stale text nor the new wording,
+ * it stops with a plain message instead of guessing.
+ */
+export function applyOrSkip(text, edits, replacements) {
+  const pending = [];
+  const done = [];
+  for (const edit of edits) {
+    const count = matchCount(text, edit);
+    const block = replacements.get(edit.id);
+    if (block !== undefined && block !== '' && hasBlock(text, block)) done.push(edit.id); // (its new wording is there, even if it starts like the old)
+    else if (count >= 1) pending.push(edit.id);
+    else if (block === '') done.push(edit.id);
+    else throw new Error(`after-launch edit "${edit.id}": its text was not found, and the after-launch wording is not in the file either (is this the right file?)`);
+  }
+  if (pending.length === 0) return { text, already: true };
+  if (done.length > 0) throw new Error(`after-launch wording is partly applied: ${done.map((id) => `"${id}"`).join(', ')} done, but ${pending.map((id) => `"${id}"`).join(', ')} not: put the file back to its state before the command, or finish the missing edits by hand`);
+  return { text: applyEdits(text, edits, replacements), already: false };
+}
+
+/** The text of the two files with every edit applied, and which were already applied (nothing is written). */
 export function afterLaunchTexts(root = ROOT) {
   const result = {};
+  const already = [];
   for (const [file, partFile] of Object.entries(PART_FILES)) {
     const replacements = parseParts(readFileSync(join(root, partFile), 'utf8'));
-    result[file] = applyEdits(readFileSync(join(root, file), 'utf8'), EDITS.filter((edit) => edit.file === file), replacements);
+    const outcome = applyOrSkip(readFileSync(join(root, file), 'utf8'), EDITS.filter((edit) => edit.file === file), replacements);
+    result[file] = outcome.text;
+    if (outcome.already) already.push(file);
   }
+  result.already = already;
   return result;
 }
 
-/** Writes both files with every edit applied. */
+/** Writes both files with every edit applied; files that were already applied are left untouched. */
 export function applyAfterLaunch(root = ROOT) {
-  const texts = afterLaunchTexts(root);
-  for (const [file, text] of Object.entries(texts)) writeFileSync(join(root, file), text);
-  return Object.keys(texts);
+  const { already, ...texts } = afterLaunchTexts(root);
+  const changed = Object.keys(texts).filter((file) => !already.includes(file));
+  for (const file of changed) writeFileSync(join(root, file), texts[file]);
+  return { changed, already };
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  const files = applyAfterLaunch();
-  console.log(`applied the ${EDITS.length} after-launch edits to ${files.join(' and ')}`);
+  try {
+    const { changed, already } = applyAfterLaunch();
+    if (changed.length === 0) console.log('already applied: nothing to do');
+    else console.log(`applied the ${EDITS.length} after-launch edits to ${changed.join(' and ')}${already.length ? ` (${already.join(' and ')} was already done)` : ''}`);
+  } catch (error) {
+    console.error(error.message);
+    process.exitCode = 1;
+  }
 }

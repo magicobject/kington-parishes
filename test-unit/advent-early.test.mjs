@@ -19,11 +19,12 @@ const dataFor = (season, extra = {}) => ({
 });
 
 /** Runs the early script on a fake page; returns what it did to the container. */
-function run({ data, search = '', now, wide = false, withHost = true }) {
+function run({ data, search = '', now, wide = false, withHost = true, fire = false, reduced = false, started = false }) {
   const FixedDate = class extends Date { constructor(...args) { if (args.length === 0) super(now); else super(...args); } };
   const moved = [];
   const style = {};
   const attributes = new Set(['data-advent-teaser']);
+  if (started) attributes.add('data-advent-started');
   const timers = [];
   const host = { parentNode: {}, after: (node) => moved.push(node) };
   const root = {
@@ -34,11 +35,12 @@ function run({ data, search = '', now, wide = false, withHost = true }) {
   const context = {
     document: { currentScript: { previousElementSibling: root } },
     location: { search },
-    window: { matchMedia: () => ({ matches: wide }), setTimeout: (fn, ms) => timers.push({ fn, ms }) },
+    window: { matchMedia: (query) => ({ matches: /reduced-motion/.test(query) ? reduced : wide }), setTimeout: (fn, ms) => timers.push({ fn, ms }) },
     Intl, Date: FixedDate, Number, RegExp,
   };
   vm.runInNewContext(source, context);
-  return { reserved: attributes.has('data-advent-reserved'), hidden: root.hidden, minHeight: style.minHeight, moved: moved.length, timers };
+  if (fire) timers[0].fn();
+  return { reserved: attributes.has('data-advent-reserved'), hidden: root.hidden, minHeight: style.minHeight, transition: style.transition, moved: moved.length, timers };
 }
 
 /** What the real code decides: the banner shows when the setting is on and the date is live or in the archive (or previewing). */
@@ -93,13 +95,13 @@ describe('what the early script does and does not do', () => {
       run({ data: dataFor(SEASON, { goLive: 'false' }), now: inSeason }),
       run({ data: dataFor(SEASON, { enabled: 'false' }), now: inSeason, search: '?advent-preview=2026-12-12' }),
     ]) {
-      assert.deepEqual({ ...result, timers: result.timers.length }, { reserved: false, hidden: true, minHeight: undefined, moved: 0, timers: 0 });
+      assert.deepEqual({ ...result, timers: result.timers.length }, { reserved: false, hidden: true, minHeight: undefined, transition: undefined, moved: 0, timers: 0 });
     }
   });
 
   test('in season it moves the container after its hero, reserves room (in rem) and un-hides it, and sets a safety timer', () => {
     const phone = run({ data: dataFor(SEASON), now: inSeason });
-    assert.deepEqual({ ...phone, timers: phone.timers.length }, { reserved: true, hidden: false, minHeight: '17.5rem', moved: 1, timers: 1 });
+    assert.deepEqual({ ...phone, timers: phone.timers.length }, { reserved: true, hidden: false, minHeight: '17.5rem', transition: undefined, moved: 1, timers: 1 });
     assert.equal(run({ data: dataFor(SEASON), now: inSeason, wide: true }).minHeight, '12rem');
   });
 
@@ -112,10 +114,20 @@ describe('what the early script does and does not do', () => {
     assert.equal(run({ data: dataFor(SEASON), now: outOfSeason, search: '?notadvent-preview=2026-12-12' }).reserved, false);
   });
 
-  test('the safety timer gives the room back if the banner script never ran', () => {
-    // (The sandbox container has no banner content, so the timer hides it again.)
-    const sandbox = run({ data: dataFor(SEASON), now: inSeason });
-    assert.equal(sandbox.timers[0].ms, 5000);
+  test('the room is given back after 1.5 seconds if the banner script has not even STARTED (blocked, failed to load), smoothly unless reduced motion is asked for', () => {
+    const first = run({ data: dataFor(SEASON), now: inSeason });
+    assert.equal(first.timers[0].ms, 1500);
+    // (the sandbox container never gets the started marker, so the timer lets go)
+    const gone = run({ data: dataFor(SEASON), now: inSeason, fire: true, reduced: true });
+    assert.deepEqual({ reserved: gone.reserved, hidden: gone.hidden, minHeight: gone.minHeight }, { reserved: false, hidden: true, minHeight: '' });
+    const smooth = run({ data: dataFor(SEASON), now: inSeason, fire: true });
+    assert.deepEqual({ reserved: smooth.reserved, hidden: smooth.hidden, minHeight: smooth.minHeight, transition: smooth.transition }, { reserved: false, hidden: false, minHeight: '0px', transition: 'min-height 0.3s ease' });
+    assert.equal(smooth.timers[1].ms, 350, 'and hides it for good once the shrinking is done');
+  });
+
+  test('once the banner script has started, the timer leaves the room alone (the module is slow, not missing)', () => {
+    const slow = run({ data: dataFor(SEASON), now: inSeason, fire: true, started: true });
+    assert.deepEqual({ reserved: slow.reserved, hidden: slow.hidden, minHeight: slow.minHeight }, { reserved: true, hidden: false, minHeight: '17.5rem' });
   });
 
   test('anything unexpected (no container, a broken time zone) leaves the page alone and throws nothing', () => {

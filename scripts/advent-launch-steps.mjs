@@ -18,13 +18,23 @@ const SKIP_TOP = new Set(['node_modules', '.git', 'test-results', 'playwright-re
 // browsers are not needed and are large.
 const PACKAGES = ['node-html-parser', 'boolbase', 'css-select', 'css-what', 'dom-serializer', 'domelementtype', 'domhandler', 'domutils', 'entities', 'nth-check'];
 
+/**
+ * Flips the three launch flags from false to true in a copy of theme.mjs. Safe to run on anything: all three already true is a
+ * no-op (the file is left untouched), and any other state (a flag missing, not a plain true or false, or only some flags on) is
+ * refused with a plain message and nothing written.
+ */
 export function flipFlags(themePath) {
   let text = readFileSync(themePath, 'utf8');
+  const state = {};
   for (const flag of LAUNCH_FLAGS) {
-    const pattern = new RegExp(`^([ ]*${flag}:[ ]*)false(,)`, 'm');
-    if (!pattern.test(text)) throw new Error(`rehearsal: could not find "${flag}: false," in the copy of theme.mjs`);
-    text = text.replace(pattern, '$1true$2');
+    const found = new RegExp(`^[ ]*${flag}:[ ]*(true|false),`, 'm').exec(text);
+    if (!found) throw new Error(`rehearsal: could not find "${flag}: true," or "${flag}: false," in the copy of theme.mjs`);
+    state[flag] = found[1] === 'true';
   }
+  const on = LAUNCH_FLAGS.filter((flag) => state[flag]);
+  if (on.length === LAUNCH_FLAGS.length) return; // already launched: nothing to flip
+  if (on.length > 0) throw new Error(`rehearsal: theme.mjs is partly launched (on: ${on.join(', ')}; off: ${LAUNCH_FLAGS.filter((flag) => !state[flag]).join(', ')}): flip all three together or none`);
+  for (const flag of LAUNCH_FLAGS) text = text.replace(new RegExp(`^([ ]*${flag}:[ ]*)false(,)`, 'm'), '$1true$2');
   writeFileSync(themePath, text);
 }
 
@@ -38,24 +48,39 @@ export function removeGuardTest(path, name) {
 
 /**
  * Makes a temporary copy of the repository (outside it) and does the mechanical launch steps in the copy: the three flags, the guard
- * deletions, and the after-launch wording. Returns { temp, copy, log }. The caller builds in the copy and must call removeTemp(temp).
+ * deletions, and the after-launch wording. Returns { temp, copy }. The caller builds in the copy and must call removeTemp(temp).
  */
-export function makeLaunchedCopy({ log = () => {} } = {}) {
+export function makeLaunchedCopy({ log = () => {}, fullNodeModules = false } = {}) {
   const temp = mkdtempSync(join(tmpdir(), 'advent-rehearsal-'));
   if (resolve(temp).startsWith(ROOT + sep)) throw new Error('rehearsal: the temporary folder must be outside the repository');
   const copy = join(temp, 'repo');
   cpSync(ROOT, copy, { recursive: true, filter: (source) => { const rel = source.slice(ROOT.length + 1).split(sep); return !(rel.length === 1 && SKIP_TOP.has(rel[0])) && !(rel.join('/') === 'docs/advent/art-drafts'); } });
-  for (const name of PACKAGES) {
-    const from = join(ROOT, 'node_modules', name);
-    if (existsSync(from)) cpSync(from, join(copy, 'node_modules', name), { recursive: true });
-  }
+  // The unit tests need only a few small packages. The browser stage needs the test runner, its helpers and the server (all of node_modules,
+  // about 70 MB): either way they are COPIED, never linked, so the real node_modules is only ever read.
+  const from = join(ROOT, 'node_modules');
+  if (fullNodeModules) cpSync(from, join(copy, 'node_modules'), { recursive: true });
+  else for (const name of PACKAGES) if (existsSync(join(from, name))) cpSync(join(from, name), join(copy, 'node_modules', name), { recursive: true });
   log(`rehearsing the launch in a copy: ${copy}`);
-  flipFlags(join(copy, 'modules', 'advent', 'theme.mjs'));
+  const themePath = join(copy, 'modules', 'advent', 'theme.mjs');
+  // A repository that has ALREADY launched (flags true, guards deleted) is copied as it is: the steps below then change nothing, and a guard
+  // that is missing is expected. In an unlaunched repository a missing guard is an error (the checklist and the script have drifted).
+  const alreadyLaunched = LAUNCH_FLAGS.every((flag) => new RegExp(`^[ ]*${flag}:[ ]*true,`, 'm').test(readFileSync(themePath, 'utf8')));
+  flipFlags(themePath);
   log(`flipped ${LAUNCH_FLAGS.join(', ')} to true`);
-  for (const file of GUARD_FILES) { rmSync(join(copy, file), { force: false }); log(`deleted ${file}`); }
-  removeGuardTest(join(copy, GUARD_TEST.file), GUARD_TEST.name);
-  log(`removed the guard test "${GUARD_TEST.name}" from ${GUARD_TEST.file}`);
-  log(`applied the after-launch wording to ${applyAfterLaunch(copy).join(' and ')}`);
+  for (const file of GUARD_FILES) { rmSync(join(copy, file), { force: alreadyLaunched }); log(`deleted ${file}`); }
+  if (!alreadyLaunched || readFileSync(join(copy, GUARD_TEST.file), 'utf8').includes(GUARD_TEST.name)) {
+    removeGuardTest(join(copy, GUARD_TEST.file), GUARD_TEST.name);
+    log(`removed the guard test "${GUARD_TEST.name}" from ${GUARD_TEST.file}`);
+  }
+  const { changed } = applyAfterLaunch(copy);
+  log(changed.length > 0 ? `applied the after-launch wording to ${changed.join(' and ')}` : 'the after-launch wording was already applied');
+  // Step 9 of the checklist (a person writes the real launch date into CLAUDE.md): the copy gets today's date.
+  const claudePath = join(copy, 'CLAUDE.md');
+  const claude = readFileSync(claudePath, 'utf8');
+  if (claude.includes('date of the launch commit: ____')) {
+    writeFileSync(claudePath, claude.replace('date of the launch commit: ____', `date of the launch commit: ${new Date().toISOString().slice(0, 10)}`));
+    log('filled in the launch date in CLAUDE.md');
+  }
   return { temp, copy };
 }
 

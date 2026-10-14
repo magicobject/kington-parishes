@@ -19,8 +19,10 @@ step in the launch commit message.
    including the home page with `/?advent-preview=2026-12-07` and the archive with `/advent?advent-preview=2026-12-28`.
 4. **The bonus door** is built and its text is in (`bonus` in `modules/advent/content.mjs`, `day-26.svg` is in the art folder).
 5. **Rehearse the launch, in a copy: `npm run advent:rehearse`.** It copies the repo to a temporary folder, flips the three flags,
-   deletes the guard tests and applies the after-launch wording exactly as steps 6, 7 and 8 below say, builds, and runs the unit suite there. It must print
-   `REHEARSAL PASS`. It never touches the real repo (the temporary folder is outside it and is removed at the end).
+   deletes the guard tests and applies the after-launch wording and the launch date exactly as steps 6 to 9 below say, builds, and then runs BOTH the unit suite
+   and the whole browser suite (`npm test`, about 90 seconds more) there. It must print `REHEARSAL PASS` (and a line `kington-parishes (launched copy): N passed in Xs`).
+   It never touches the real repo: the temporary folder is outside it, node_modules is copied (never linked), the browser suite runs on its own port,
+   and the folder is removed at the end. `npm run advent:rehearse -- --unit-only` skips the browser suite: use it only for a quick look, not for this step.
 6. **Flip the three launch flags together** in `modules/advent/theme.mjs`:
    - `goLive: true`: the real date now drives the calendar page and the home-page banner (until then it never does);
    - `publicListing: true`: the calendar page joins the sitemap and the site search and loses its noindex, and the Advent help
@@ -48,21 +50,24 @@ step in the launch commit message.
    of `CLAUDE.md`, replacing every sentence that is only true while the calendar is hidden ("not public yet", "hidden from the
    public", "before launch", "nobody can find it", the pre-launch comments, and the "How to go live" section) with the wording
    in `docs/advent/after-launch/`. The command refuses, and names the edit, if any piece of text it expects is not found exactly
-   once. The full list of edits is under "After-launch edits" below. Do this BEFORE the next step: with the flags on, a unit test
-   fails while any stale wording is left. Then `npm run build`.
-9. **Run everything with the flags flipped, in the real repo:** `npm run build`, `npm run test:unit` (the unit suite with the
+   once, and saying "already applied: nothing to do" (exit 0, no file changed) if you run it a second time. The full list of edits is under
+   "After-launch edits" below. Do this BEFORE the next steps: with the flags on, a unit test fails while any stale wording is left.
+9. **Fill in the launch date.** In `CLAUDE.md`, in the Advent section, the line `- **Launched** (date of the launch commit: ____)` came from step 8:
+   replace the `____` with the real date of the launch commit (for example `2026-12-01`). A unit test fails while a literal `____` is left in
+   that section once the flags are on. Then `npm run build`.
+10. **Run everything with the flags flipped, in the real repo:** `npm run build`, `npm run test:unit` (the unit suite with the
    flags flipped and the wording applied: this is the run the rehearsal predicted), `npm test`, `npm run audit`,
    `npm run typecheck`. All must pass.
-10. **Decide `previewEnabled` after the season (a step, not an afterthought).** Security recommends: keep it on until 6 January
+11. **Decide `previewEnabled` after the season (a step, not an afterthought).** Security recommends: keep it on until 6 January
    (so the team can still check any date), then set `previewEnabled: false` in `theme.mjs` and deploy; with it false the preview
    parameter does nothing anywhere. Greg decides; write the decision in the launch commit message.
-11. **Privacy policy:** update `src/pages/privacy-policy.html` only if something changed. It should not need to: the calendar
+12. **Privacy policy:** update `src/pages/privacy-policy.html` only if something changed. It should not need to: the calendar
     stores nothing in the visitor's browser and uses no outside service. Confirm that is still true (the safety scans in
     `test-unit/advent-safety.test.mjs` enforce it).
-12. **Share preview.** The page title ("Advent calendar", then the site name) and meta description ("Open a new door each day from
+13. **Share preview.** The page title ("Advent calendar", then the site name) and meta description ("Open a new door each day from
     1 to 25 December to read the Christmas story, from Genesis to Bethlehem.") come from the theme. The share image is the site's
     ordinary photo (`og:image` is unchanged); a dedicated image for the calendar is an optional later extra.
-13. **Commit, tag, deploy.** Add the `/updates` entry, commit, tag `build-<date>.<NNN>`, push.
+14. **Commit, tag, deploy.** Add the `/updates` entry, commit, tag `build-<date>.<NNN>`, push.
 
 ## After the deploy: verify production (read-only)
 
@@ -79,7 +84,7 @@ step in the launch commit message.
   page and the home page). Run, from the repo root:
 
 ```
-node --input-type=module -e "const {content}=await import('./modules/advent/content.mjs');const titles=[...content.days,content.bonus].map((d)=>d.title);let bad=0;for(const u of ['sitemap.xml','search-index.json','advent','']){const r=await fetch('https://www.kingtonparishes.org.uk/'+u);const t=await r.text();const hits=titles.filter((x)=>t.includes(x));const ok=r.status===200&&hits.length===0;if(!ok)bad+=1;console.log(u||'/',r.status,r.status!==200?'NOT 200: this check proves nothing':hits.length?'LEAK: '+hits.join(', '):'clean');}process.exit(bad?1:0);"
+node --input-type=module -e "const {content}=await import('./modules/advent/content.mjs');const titles=[...content.days,content.bonus].map((d)=>d.title);let bad=0;for(const u of ['sitemap.xml','search-index.json','advent','']){const r=await fetch('https://www.kingtonparishes.org.uk/'+u);const t=await r.text();const hits=titles.filter((x)=>t.includes(x));const ok=r.status===200&&hits.length===0;if(!ok)bad+=1;console.log(u||'/',r.status,r.status!==200?'NOT 200: this check proves nothing':hits.length?'LEAK: '+hits.join(', '):'clean');}process.exitCode=bad?1:0;"
 ```
 
   Every line must say `200` and `clean`, and the command must exit with 0 (it exits 1 if any page is not a 200, because a page that
@@ -104,6 +109,8 @@ stale wording is left, and that every edit is listed here.
 | `h-lede` | the lede paragraph `<p class="lede">A calendar of 25 doors` ("is being built in stages and is **not public yet**: nobody can find it") | "It is **live** on the website from 1 December to 25 December, and stays open as The Christmas Story until 6 January" |
 | `h-jump` | the jump link `<a href="#going-live">Going live</a>` (page header) | `<a href="#after-the-season">After the season</a>` |
 | `h-good` | in "Good to know": ` (before launch this is the only way to see the calendar at all, whatever today's date)` | removed |
+| `h-linked` | in "Look at it early": `The page is not linked from anywhere, so type it in or bookmark it.` | "The page is in the website's search and its sitemap but not in the menu or the footer, so you can also type the address in or bookmark it." |
+| `h-exists` | in "What you will see": `the picture (once it exists), the Bible reference` | `the picture, the Bible reference` |
 | `h-banner` | in "The home page banner": `Before launch it only appears when you add ?advent-preview=...; the real date shows nothing (and a preview...)` | "To see it on another date, add ?advent-preview=2026-12-07 to the home page address (...)" |
 | `h-pictures` | in "The pictures": `Before launch every picture is also timed in a real browser. The pictures for all 26 days are in.` | "Every picture is also timed in a real browser whenever the tests run. The pictures for all 26 days are in." |
 | `h-pictures-missing` | in "The pictures": `A day whose picture file is missing simply has none, until launch, when the website refuses to build without all of them.` | "The website refuses to build if a day's picture is missing." |
@@ -120,7 +127,10 @@ stale wording is left, and that every edit is listed here.
 | `c-home` | the bullet `- [LAUNCH] **Home page:**` ("Greg accepted this source-only mention while hidden") | the home-page bullet without that sentence |
 | `c-help` | the bullet `- [LAUNCH] The hidden help guide` | the help-guide bullet, listed in the help search scope |
 
-Fill in the date in the `c-launch` result by hand (the `____`), then commit.
+Fill in the date in the `c-launch` result by hand (the `____`): that is step 9, and a unit test enforces it.
+
+## Known limitation: the picture-cost check is a best-effort safety net (accepted by Greg, 14 Oct 2026)
+The picture-cost lint estimates how costly a picture is to draw; it is a safety net, not a proof. The real pictures are hand-made, reviewed, and every one is timed in a real browser by the test suite. The security engineer showed the estimate can be fooled by unit suffixes (for example `10em` or `50%` written where a plain number is expected), duplicate style declarations, relative path commands, a root without a viewBox, and stroke widths in `em`. Greg accepted this on 14 Oct 2026 ("no real world threat"): the pictures are added only by the website team, so nothing here is reachable by a visitor. It is recorded so nobody mistakes the lint for a guarantee; the test suite's browser timing of the real pictures is what to rely on.
 
 ## Picture-safety fixes (done, 13 and 14 Oct 2026)
 - DONE: `lintSvg` caps `<use>` elements at 50 and refuses a `<use>` of an element that contains (or is) another `<use>` (no cycles,

@@ -13,6 +13,10 @@
     <div class="wrap">
       <ul class="changelog">
         <li>
+          <div class="changelog-meta"><span class="changelog-build">2026.10.14.004</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">14 October 2026</span></div>
+          <p>Advent calendar (still hidden): the launch rehearsal now also runs the whole browser test suite in the launched copy and fails if anything fails; launching twice is safe (the commands say "already applied" instead of crashing); the checklist has a step for writing in the launch date, the help page loses two more sentences that are only true while the calendar is hidden, and the home banner gives back its reserved space within 1.5 seconds if the banner script is blocked. See the <a href="index.html">home page</a> and the <a href="help-advent.html">Advent help guide</a>.</p>
+        </li>
+        <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.14.003</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">14 October 2026</span></div>
           <p>Advent calendar (still hidden): the launch checklist is corrected and finished: launching is now a short list of commands (npm run advent:rehearse, then npm run advent:after-launch to replace every sentence that says the calendar is hidden), the rehearsal and the checklist share one list of what gets deleted, and the post-deploy check now also demands a 200 for every page it reads. See the <a href="help-advent.html">Advent help guide</a>.</p>
         </li>

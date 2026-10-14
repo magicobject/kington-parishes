@@ -389,6 +389,34 @@ test.describe('the home banner thumbnail shows today\'s picture', () => {
     }
   }
 
+  test('if the banner script is blocked, the reserved room is given back within about 2 seconds: no blank band, and a layout shift under 0.05 (tester S1)', async ({ page }) => {
+    await page.route('**/advent-teaser.js*', (route) => route.abort());
+    await page.setViewportSize({ width: 375, height: 800 });
+    await page.addInitScript(() => {
+      (window as unknown as { __cls: number }).__cls = 0;
+      new PerformanceObserver((list) => { for (const entry of list.getEntries() as unknown as { value: number; hadRecentInput: boolean }[]) if (!entry.hadRecentInput) (window as unknown as { __cls: number }).__cls += entry.value; }).observe({ type: 'layout-shift', buffered: true });
+    });
+    await openAt(page, '2026-12-12T12:00:00Z', '', '/');
+    // Reserved at first (so the page does not jump when a banner is about to arrive)...
+    await expect(page.locator('[data-advent-teaser]')).toHaveAttribute('data-advent-reserved', '');
+    // ...and given back once the script has plainly not started: nothing left, the container takes no room.
+    await expect(page.locator('[data-advent-teaser]')).toBeHidden({ timeout: 4000 });
+    const state = await page.locator('[data-advent-teaser]').evaluate((el: HTMLElement) => ({ reserved: el.hasAttribute('data-advent-reserved'), minHeight: el.style.minHeight, height: el.getBoundingClientRect().height }));
+    expect(state).toEqual({ reserved: false, minHeight: '', height: 0 });
+    const cls = await page.evaluate(() => (window as unknown as { __cls: number }).__cls);
+    console.log(`CLS at 375px with the banner script blocked: ${cls.toFixed(4)}`);
+    expect(cls).toBeLessThan(0.05);
+  });
+
+  test('with reduced motion the room is given back at once, with no shrinking', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.route('**/advent-teaser.js*', (route) => route.abort());
+    await page.setViewportSize({ width: 375, height: 800 });
+    await openAt(page, '2026-12-12T12:00:00Z', '', '/');
+    await expect(page.locator('[data-advent-teaser]')).toBeHidden({ timeout: 4000 });
+    expect(await page.locator('[data-advent-teaser]').evaluate((el: HTMLElement) => el.style.transition)).toBe('');
+  });
+
   test('the reservation is released: after the banner shows there is no leftover minimum height or reserved marker', async ({ page }) => {
     await layoutShift(page, 375, '2026-12-12T12:00:00Z', '');
     const state = await page.locator('[data-advent-teaser]').evaluate((el: HTMLElement) => ({ marker: el.hasAttribute('data-advent-reserved'), minHeight: el.style.minHeight }));
