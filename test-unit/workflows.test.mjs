@@ -11,7 +11,7 @@ const dir = join(import.meta.dirname, '..', '.github', 'workflows');
 // claude-code-review.yml use tag-pinned actions (@v4, @v1), and
 // volunteer-edit.yml (a synced copy of SiteAdmin's) does too. Add each one
 // here once it's pinned to commit SHAs.
-const GUARDED = ['vuln-watch.yml'];
+const GUARDED = ['ci.yml', 'vuln-watch.yml'];
 const workflows = readdirSync(dir).filter((f) => GUARDED.includes(f)).map((f) => ({ file: f, text: readFileSync(join(dir, f), 'utf8') }));
 
 describe('guarded workflows', () => {
@@ -31,6 +31,55 @@ describe('guarded workflows', () => {
       assert.doesNotMatch(text, /write-all/);
     });
   }
+});
+
+describe('ci.yml', () => {
+  const text = readFileSync(join(dir, 'ci.yml'), 'utf8');
+  // every line of every run step, including the lines of a multi-line "run: |" block
+  const runLines = text.split('\n').filter((line) => /^\s*(- )?run:/.test(line) || /^\s{10,}\S/.test(line));
+
+  test('runs on pull requests and on pushes to main', () => {
+    assert.match(text, /^on:\n\s+pull_request:/m);
+    assert.match(text, /push:\n\s+branches: \[main\]/);
+  });
+
+  test('is read-only, has no secrets, and has a timeout and a concurrency group', () => {
+    assert.match(text, /^permissions:\n\s+contents: read\n/m);
+    assert.doesNotMatch(text, /: write/);
+    assert.doesNotMatch(text, /secrets\./);
+    assert.doesNotMatch(text, /GH_TOKEN|github\.token/);
+    assert.match(text, /^concurrency:\n\s+group: /m);
+    assert.match(text, /timeout-minutes: 20\b/);
+  });
+
+  test('puts no event text or any other expression inside a run step', () => {
+    assert.ok(runLines.length > 5);
+    for (const line of runLines) assert.doesNotMatch(line, /\$\{\{/, line);
+    assert.doesNotMatch(text, /github\.event|head_ref|pull_request\.title/);
+  });
+
+  test('checks out without keeping credentials, and installs without package install scripts', () => {
+    assert.match(text, /persist-credentials: false/);
+    assert.match(text, /npm ci --ignore-scripts/);
+    assert.match(text, /node-version: 24/);
+  });
+
+  test('runs the build, the drift check, the unit tests, the type check, the browser suite and the audit, in that order', () => {
+    const steps = ['npm run build', 'node scripts/ci-drift-check.mjs', 'npm run test:unit', 'npm run typecheck', 'npm test', 'npm run audit'];
+    const at = steps.map((step) => text.indexOf(step));
+    assert.ok(at.every((i) => i >= 0), `missing: ${steps.filter((_, i) => at[i] < 0)}`);
+    assert.deepEqual([...at].sort((a, b) => a - b), at);
+  });
+
+  test('uses only the two actions vuln-watch.yml already uses, at the very same pinned commits', () => {
+    const vuln = readFileSync(join(dir, 'vuln-watch.yml'), 'utf8');
+    for (const action of ['actions/checkout', 'actions/setup-node']) {
+      const pin = (t) => new RegExp(`${action}@[0-9a-f]{40}`).exec(t)?.[0];
+      assert.ok(pin(text));
+      assert.equal(pin(text), pin(vuln));
+    }
+    assert.deepEqual([...text.matchAll(/uses:\s*([^@\s]+)/g)].map((m) => m[1]).sort(), ['actions/checkout', 'actions/setup-node']);
+  });
 });
 
 describe('vuln-watch.yml', () => {

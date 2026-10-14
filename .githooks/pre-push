@@ -1,11 +1,38 @@
 #!/bin/sh
-# Block the push if npm audit finds any high/critical severity vulnerability.
-# Low/moderate findings are left to judgement and don't block — only serious
-# ones do. Run `npm run audit` any time to check without pushing.
-npm run audit || {
+# Before anything is pushed: npm audit (high/critical blocks), the unit tests and the type check. The full browser
+# suite (npm test, about 1.5 minutes) runs in CI (.github/workflows/ci.yml) and is a manual step before a release.
+# A push of tags only (git push origin build-...) skips the unit tests and type check: the code was already checked
+# when it was committed and pushed. A push that only DELETES remote branches or tags skips every check.
+# See docs/hooks.md. To skip everything (not recommended): git push --no-verify.
+zero=0000000000000000000000000000000000000000
+tags_only=1
+deletes_only=1
+while read -r local_ref local_sha remote_ref remote_sha; do
+  case "$local_ref" in refs/tags/*) ;; *) tags_only=0 ;; esac
+  [ "$local_sha" = "$zero" ] || deletes_only=0
+done
+[ "$deletes_only" = 1 ] && exit 0
+
+fail() {
   echo "" >&2
-  echo "pre-push: npm audit found high/critical vulnerabilities — push blocked." >&2
-  echo "Run 'npm audit' for details, 'npm audit fix' to try an automatic fix," >&2
-  echo "or 'git push --no-verify' to push anyway (not recommended)." >&2
+  echo "pre-push: $1 failed, so the push is blocked." >&2
+  echo "$2" >&2
+  echo "(git push --no-verify skips these checks; treat that as a deliberate, logged exception.)" >&2
   exit 1
 }
+
+audit_output=$(npm run audit 2>&1)
+audit_status=$?
+echo "$audit_output"
+if [ "$audit_status" != 0 ]; then
+  if echo "$audit_output" | grep -qiE 'ENOTFOUND|ECONNREFUSED|EAI_AGAIN|ETIMEDOUT|ECONNRESET|audit endpoint returned an error|network'; then
+    fail "npm audit (could not reach the npm registry)" "This is a network problem, not a vulnerability. Connect and retry, or use git push --no-verify if you must (the push is NOT audited then)."
+  fi
+  fail "npm audit (high/critical vulnerabilities)" "Run 'npm audit' for details, or 'npm audit fix' to try an automatic fix."
+fi
+if [ "$tags_only" = 0 ]; then
+  npm run test:unit || fail "the unit tests (npm run test:unit)" "Fix the failing tests, then push again."
+  npm run typecheck || fail "the type check (npm run typecheck)" "Fix the type errors, then push again."
+  echo "pre-push: audit, unit tests and type check passed. Reminder: the full browser suite (npm test) runs in CI; run it yourself before a release." >&2
+fi
+exit 0

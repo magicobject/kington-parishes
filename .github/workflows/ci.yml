@@ -1,0 +1,45 @@
+# Continuous integration: the checks the commit and push hooks cannot be trusted to run on their own (a hook can be
+# skipped with --no-verify; this cannot). See docs/hooks.md.
+#   1. the committed public/ must equal a fresh build (generated-files drift check)
+#   2. the unit tests, the type check, the whole browser suite, and npm audit
+# Read-only: no secrets, no write permissions, nothing is published from here.
+#
+# Actions are pinned to exact commits, not tags (same pins as vuln-watch.yml; Dependabot proposes updates).
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+      # --ignore-scripts: nothing here needs a package's install script (the hooks are wired by "prepare", which CI
+      # doesn't want), and a compromised package's install script is exactly what to avoid running.
+      - run: npm ci --ignore-scripts
+      - run: npx playwright install --with-deps chromium
+      - run: npm run build
+      # The committed generated files (public/*.html, sitemap, search index, ...) must be what a fresh build makes. The one
+      # allowed difference is the calendar's Event data, which depends on the build date (see scripts/ci-drift-check.mjs).
+      - name: Generated files are up to date
+        run: node scripts/ci-drift-check.mjs
+      - run: npm run test:unit
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run audit

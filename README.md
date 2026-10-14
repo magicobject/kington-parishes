@@ -108,19 +108,24 @@ Because Home has no nav link, `test/support/pages.ts` keeps it as a standalone `
 
 The homepage also gained a **Find Us** section just above the footer: a full-width Google Maps embed pinned on St Mary's, Kington, using the same `.map-full`/`.map-full-embed` pattern as the [kingtonfoodbank](https://github.com/magicobject/kingtonfoodbank) site's map, for a consistent look across the two.
 
-## Git hooks: build number on commit, npm audit on push
+## Git hooks: changelog, build number and tag on commit; audit, unit tests and type check on push
 
-`npm install` runs the `prepare` script, which points git at the tracked [.githooks/](.githooks) directory (`core.hooksPath`) — so both hooks below are wired up automatically, no manual setup.
+`npm install` runs the `prepare` script, which points git at the tracked [.githooks/](.githooks) directory (`core.hooksPath`). The plain-English guide, including the escape hatch and how to use a second worktree, is [docs/hooks.md](docs/hooks.md).
 
-**[.githooks/pre-commit](.githooks/pre-commit)** — [/updates.html](src/pages/updates.html) shows the current build number, like `Current build: 2026.08.29.003` (format `yyyy.mm.dd.NNN`, where `NNN` counts commits made that day, stored in [build-number.json](build-number.json)). This is maintained automatically, not by hand. On every commit, the hook:
+**[.githooks/pre-commit](.githooks/pre-commit)** (the work is in [scripts/pre-commit.mjs](scripts/pre-commit.mjs); the design is in its header comment). `/updates.html` shows the current build number, like `Current build: 2026.08.29.003` (format `yyyy.mm.dd.NNN`, `NNN` counting commits that day, stored in [build-number.json](build-number.json)). On every commit the hook:
 
-1. Runs [scripts/bump-build-number.mjs](scripts/bump-build-number.mjs), which increments today's counter in `build-number.json`.
-2. Runs `npm run build`, regenerating `public/`. The build number itself only appears on `/updates.html` — it used to be in every page's footer and in every `?v=` cache-buster, which meant every commit rewrote every page. Cache-busting now uses a hash of each file's own content instead (`css/style.css?v=ab25f78f35`), added automatically to every same-origin `<link href>`/`<script src>` a page loads, so a page's HTML only changes when something it actually loads has changed. `sitemap.xml` likewise has no `<lastmod>` (it was only ever the build date, not a real per-page date).
-3. Stages the results (`git add public build-number.json`) so they're included in the commit you're about to make.
+1. Refuses if `node_modules` is missing or nearly empty (it has been found empty twice).
+2. Works out the build number this commit will get, without writing it, and refuses unless the *staged* top entry of the changelog in [src/pages/updates.html](src/pages/updates.html) has exactly that number and the whole list is well formed.
+3. Refuses if any source file feeding the build has unstaged changes, or an untracked file sits in a folder the build reads (it names them): the pages would be built from work that is not in the commit.
+4. Bumps the build number ([scripts/bump-build-number.mjs](scripts/bump-build-number.mjs)), runs the build, and stages only the regenerated files that changed plus `build-number.json`. Generated files that already had somebody else's unstaged changes are never swept in: the commit is refused and everything is put back. (The build number only appears on `/updates.html`, and cache-busting uses a hash of each file's own content, so a commit only rewrites the pages it really touches.)
 
-**[.githooks/pre-push](.githooks/pre-push)** — runs `npm run audit` (`npm audit --audit-level=high`) and blocks the push if it finds any high or critical severity vulnerability in a dependency. Low/moderate findings don't block — those are worth a look but aren't push-blocking on their own. `npm run audit` can be run any time without pushing; `npm audit fix` will resolve most findings automatically. In the rare case you need to push past a known, already-assessed issue, `git push --no-verify` skips the hook — but treat that as a deliberate, logged exception, not a habit.
+Only unstaged changes to files the build reads (list in [docs/hooks.md](docs/hooks.md)) block a commit. `git commit`, `git commit -a` (tracked files only; an untracked build input is refused until you `git add` it) and `git commit FILE ...` all work; a build number whose tag already exists is refused. The build and the build number use the Europe/London date; `BUILD_DATE=YYYY-MM-DD` overrides it for the build. CI tolerates the one date-dependent part of `public/` (the calendar's Event data) with [scripts/ci-drift-check.mjs](scripts/ci-drift-check.mjs).
 
-In other words: **you never bump the build number or rebuild `public/` yourself** — just edit source files under `src/`/`templates/` and commit as normal.
+`HOOK_ALLOW_UNSTAGED=1 git commit ...` skips step 3 and the generated-file check for that one command, with a loud warning.
+
+**[.githooks/post-commit](.githooks/post-commit)** creates the `build-<date>.<NNN>` tag for the new commit if it does not exist (it never moves a tag and never pushes). Push it yourself: `git push origin build-<date>.<NNN>`.
+
+**[.githooks/pre-push](.githooks/pre-push)** runs `npm run audit` (high or critical vulnerabilities block), `npm run test:unit` and `npm run typecheck`, and says which one failed. A push of tags only runs just the audit. The full browser suite (`npm test`, about 1.5 minutes) is not in the hook: it runs in [CI](.github/workflows/ci.yml) (which also checks that the committed `public/` equals a fresh build) and is run by hand before a release. `git push --no-verify` skips the hook; treat that as a deliberate, logged exception.
 
 ## Daily vulnerability watch
 

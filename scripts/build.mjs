@@ -13,6 +13,7 @@ import { SITE } from '../src/site.config.mjs';
 import { CHURCHES } from '../src/churches.config.mjs';
 import { JOURNEY, SKETCHES } from '../src/journey.config.mjs';
 import { renderJourneyNav } from './ridge.mjs';
+import { resolveBuildDate } from './build-date.mjs';
 import { CLERGY, PTO_CLERGY, CHURCH_OFFICERS } from '../src/people.config.mjs';
 import { NEWSLETTER_ISSUES } from '../src/newsletter.config.mjs';
 import { ONE_OFF_EVENTS, expandEvents, placeFor, formatEventTime, formatEventDate } from '../src/events.config.mjs';
@@ -39,7 +40,7 @@ const DEFAULT_OG_IMAGE = '/img/our-churches/kington.webp';
 // what's still upcoming — Google penalizes Event rich results that list
 // events that have already happened, and this list only gets regenerated on
 // a rebuild, so "upcoming" means "as of this build" until the next one.
-const todayStr = new Date().toISOString().slice(0, 10);
+const todayStr = resolveBuildDate(); // London date, or BUILD_DATE (see scripts/build-date.mjs)
 
 function escapeHtml(s) {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');

@@ -87,13 +87,17 @@
       <div class="kicker">Build history</div>
       <h1 id="site-updates">Site updates</h1>
       <p class="lede">An internal changelog: every build number and what changed. This page isn't linked from anywhere else on the site, and refreshes itself every minute.</p>
-      <p class="build-number">Current build: 2026.10.14.005</p>
+      <p class="build-number">Current build: 2026.10.14.006</p>
     </div>
   </div>
 
   <section>
     <div class="wrap">
       <ul class="changelog">
+        <li>
+          <div class="changelog-meta"><span class="changelog-build">2026.10.14.006</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">14 October 2026</span></div>
+          <p>Behind the scenes, no change to what visitors see: safer commit hooks. A commit now holds only what you staged plus the pages rebuilt from it (it can no longer sweep in another session's half-finished work), refuses clearly if the changelog entry is missing or has the wrong build number, and tags the build automatically. Pushing now also runs the unit tests and the type check, and a new automatic check (CI) rebuilds the site and fails if the committed pages have drifted. Explained in plain English in <code>docs/hooks.md</code> (a page in the hidden help guide is a follow-up).</p>
+        </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.14.005</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">14 October 2026</span></div>
           <p>Fixed a console error on every page: a web address ending in a broken <code>%</code> escape (for example <code>/#%</code>) no longer makes the page's small scroll-to-section script throw. The script's security fingerprint in the site's security policy was updated to match (nothing else in the policy changed), and a new test fails if the script and the fingerprint ever drift apart. Touches every page, e.g. the <a href="index.html">home page</a> and the <a href="calendar.html">calendar</a>.</p>

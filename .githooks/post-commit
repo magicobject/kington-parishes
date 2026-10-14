@@ -1,0 +1,7 @@
+#!/bin/sh
+# Tags the new commit build-<date>.<NNN> from build-number.json (see scripts/post-commit.mjs). Never pushes.
+if ! command -v node >/dev/null 2>&1; then
+  echo "post-commit: Node.js was not found, so the build tag was NOT created. Create it yourself:  git tag build-<date>.<NNN>" >&2
+  exit 0
+fi
+node scripts/post-commit.mjs || true
