@@ -87,13 +87,17 @@
       <div class="kicker">Build history</div>
       <h1 id="site-updates">Site updates</h1>
       <p class="lede">An internal changelog: every build number and what changed. This page isn't linked from anywhere else on the site, and refreshes itself every minute.</p>
-      <p class="build-number">Current build: 2026.10.15.002</p>
+      <p class="build-number">Current build: 2026.10.15.003</p>
     </div>
   </div>
 
   <section>
     <div class="wrap">
       <ul class="changelog">
+        <li>
+          <div class="changelog-meta"><span class="changelog-build">2026.10.15.003</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">15 October 2026</span></div>
+          <p>Behind the scenes, no change to what visitors see: the automatic tests now clear Git's own settings before they start, so a test run from the push check can no longer touch the real repository. See the <a href="help-technical-details.html">technical details guide</a>.</p>
+        </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.15.002</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">15 October 2026</span></div>
           <p>Behind the scenes, no change to what visitors see: the check that runs before changes are pushed no longer lets Git's own settings leak into the automatic tests, which had made some of them fail (and could alter the repository's settings). See the <a href="help-technical-details.html">technical details guide</a>.</p>
