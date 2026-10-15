@@ -93,7 +93,7 @@ export const CHURCH_OFFICERS = {
     {
       name: 'Christine Robinson',
       role: 'Parish Safeguarding Officer · Church Secretary',
-      bio: 'Our named contact for any safeguarding concern — see the <a href="safeguarding.html">Safeguarding page</a> for how to get in touch.',
+      bio: 'Our named contact for any safeguarding concern — see the <a href="safeguarding.html">Safeguarding page</a> for how to get in touch. Phone: <a href="tel:+447741463231">07741 463231</a>.',
       iconSvg: SHIELD_ICON,
     },
     {
