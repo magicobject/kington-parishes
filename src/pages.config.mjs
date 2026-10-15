@@ -225,16 +225,16 @@ export const PAGES = [
     description: 'The family magazine of the Churches of Kington, Huntington, Old Radnor, Kinnerton and Titley.',
     active: 'parish-news.html',
     header: true,
-    image: '/img/parish-news/parish-news-2026-10.jpg',
+    image: '/img/parish-news/parish-news-2026-11.jpg',
     // Describes the latest issue — update alongside the "Latest issue" card
     // in src/pages/parish-news.html when a new issue is published.
     structuredData: {
       '@context': 'https://schema.org',
       '@type': 'CreativeWork',
-      name: 'Parish News — October 2026',
-      url: 'https://www.kingtonparishes.org.uk/parish-news/parish-news-2026-10.pdf',
+      name: 'Parish News — November 2026',
+      url: 'https://www.kingtonparishes.org.uk/parish-news/parish-news-2026-11.pdf',
       encodingFormat: 'application/pdf',
-      thumbnailUrl: 'https://www.kingtonparishes.org.uk/img/parish-news/parish-news-2026-10.jpg',
+      thumbnailUrl: 'https://www.kingtonparishes.org.uk/img/parish-news/parish-news-2026-11.jpg',
       isPartOf: {
         '@type': 'CreativeWorkSeries',
         name: 'Parish News',
@@ -250,7 +250,7 @@ export const PAGES = [
     // not from the primary nav — same pattern as Safeguarding.
     active: null,
     header: true,
-    image: '/img/parish-news/parish-news-2026-10.jpg',
+    image: '/img/parish-news/parish-news-2026-11.jpg',
   },
   {
     slug: 'newsletter',
