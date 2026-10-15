@@ -21,6 +21,10 @@ fail() {
   exit 1
 }
 
+# Git runs hooks with GIT_DIR (and friends) set. They leak into the unit tests' throwaway repositories, which then
+# act on (and rewrite the config of) this repository instead. Clear them before running anything.
+for v in $(env | grep -o '^GIT_[A-Z_]*'); do unset "$v"; done
+
 audit_output=$(npm run audit 2>&1)
 audit_status=$?
 echo "$audit_output"
