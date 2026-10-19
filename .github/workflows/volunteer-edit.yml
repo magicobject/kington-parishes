@@ -76,6 +76,11 @@ jobs:
           echo "$body" | jq -c '.globs' > /tmp/globs.json
           echo "$body" | jq -r '"\(.github_owner)/\(.github_repo)"' > /tmp/expected_repo.txt
           echo "$body" | jq -r '.volunteer_name // empty' | tr -d '\r\n' > /tmp/volunteer_name.txt
+          # So the deploy-confirmation step below knows where to poll for the
+          # new build number — no new credential. The /updates page, not the
+          # homepage: not every managed site stamps a build number into its
+          # footer, but every one shows it on /updates.
+          echo "$body" | jq -r '.updates_url // empty' | tr -d '\r\n' > /tmp/updates_url.txt
 
       # Fail loudly on mismatch rather than proceeding — see
       # ARCHITECTURE.md's "Security testing", "Action self-check".
@@ -140,7 +145,9 @@ jobs:
       # fetchDayFile tests hit a test-runner bug that gets the whole suite
       # cancelled (failureType: cancelledByParent) - 100% reproducible on
       # that Node version, not a flake, and not reachable by fixing the test
-      # itself. ci.yml already pins Node 24 and never sees this.
+      # itself. ci.yml already pins Node 24 and never sees this (see #44 —
+      # this repo's own fix, carried forward into the siteadmin template
+      # copy below rather than dropped by it).
       - uses: actions/setup-node@v7
         with:
           node-version: 24
@@ -156,6 +163,23 @@ jobs:
       # pages. No secrets are in scope for this step.
       - name: Install dependencies
         run: npm ci
+
+      # Report "working" before Claude Code even starts — the Worker records
+      # this so the widget can show "Working on it…" instead of going quiet
+      # for however long the edit takes. Best-effort in spirit (no retry),
+      # same as every other callback here: this workflow doesn't retry a
+      # failed notification, and a missed "working" ping is harmless since
+      # the next real callback (merged/held/error) still lands.
+      - name: Report "working" status to siteadmin
+        env:
+          ACTION_SHARED_SECRET: ${{ secrets.SITEADMIN_ACTION_SECRET }}
+        run: |
+          payload=$(jq -nc --arg cid "$CONVERSATION_ID" '{conversation_id:$cid, status:"working"}')
+          curl -sS -X POST "$SITEADMIN_URL/internal/callback" \
+            -H "Authorization: Bearer ${ACTION_SHARED_SECRET}" \
+            -H "Content-Type: application/json" \
+            -H "X-Siteadmin-Action-Marker: edit-pipeline-v1" \
+            -d "$payload"
 
       # Speed matters here: this step was the slowest and least predictable
       # part of the pipeline (27s to 14 minutes). Three things keep it short:
@@ -330,6 +354,79 @@ jobs:
           sha=$(gh pr view "${{ steps.pr.outputs.pr_url }}" --json mergeCommit -q '.mergeCommit.oid // empty')
           echo "commit_url=https://github.com/${{ github.repository }}/commit/$sha" >> "$GITHUB_OUTPUT"
 
+      # The merge itself is NOT "live" — Cloudflare Workers Builds deploys
+      # on its own schedule after this push to main, entirely outside this
+      # workflow (see CLAUDE.md's "The bug we're fixing"). These two quick
+      # pings keep the widget's status line moving instead of leaving it
+      # saying "Merged and live" when the production site hasn't actually
+      # redeployed yet — the "Wait for the deploy to go live" step below is
+      # what actually confirms that.
+      - name: Report "merged" status to siteadmin
+        if: steps.merge.outcome == 'success'
+        env:
+          ACTION_SHARED_SECRET: ${{ secrets.SITEADMIN_ACTION_SECRET }}
+        run: |
+          payload=$(jq -nc --arg cid "$CONVERSATION_ID" --arg url "${{ steps.merge.outputs.commit_url }}" \
+            '{conversation_id:$cid, status:"merged", commit_url:$url}')
+          curl -sS -X POST "$SITEADMIN_URL/internal/callback" \
+            -H "Authorization: Bearer ${ACTION_SHARED_SECRET}" \
+            -H "Content-Type: application/json" \
+            -H "X-Siteadmin-Action-Marker: edit-pipeline-v1" \
+            -d "$payload"
+
+      - name: Report "deploying" status to siteadmin
+        if: steps.merge.outcome == 'success'
+        env:
+          ACTION_SHARED_SECRET: ${{ secrets.SITEADMIN_ACTION_SECRET }}
+        run: |
+          payload=$(jq -nc --arg cid "$CONVERSATION_ID" --arg url "${{ steps.merge.outputs.commit_url }}" \
+            '{conversation_id:$cid, status:"deploying", commit_url:$url}')
+          curl -sS -X POST "$SITEADMIN_URL/internal/callback" \
+            -H "Authorization: Bearer ${ACTION_SHARED_SECRET}" \
+            -H "Content-Type: application/json" \
+            -H "X-Siteadmin-Action-Marker: edit-pipeline-v1" \
+            -d "$payload"
+
+      # The actual deploy confirmation, with NO new Cloudflare credential —
+      # deliberately avoided, see CLAUDE.md/ARCHITECTURE.md. Every managed
+      # site already bumps its build number on every commit (the Commit
+      # step's pre-commit hook above) and shows the current one on its
+      # /updates page (CLAUDE.md's "Build numbers and changelog" convention)
+      # — but not every site's wording is the same (kingtonfoodbank's footer
+      # says "Build 2026.10.19.001", kington-parishes' /updates page says
+      # "Current build: 2026.10.19.001", bob's changelog just shows the bare
+      # number), so this matches the bare build-number TOKEN on /updates
+      # rather than a fixed phrase, which every managed site's page contains
+      # regardless of wording. Up to 30 attempts at 10s is ~5 minutes — a
+      # slow Cloudflare Workers Build shouldn't be mistaken for a failed one
+      # before then. Deliberately no `set -e` here: a transient curl failure
+      # (DNS blip, momentary 5xx) must count as "not live yet" and keep
+      # retrying, not abort the step and leave the volunteer with no outcome
+      # at all. `--` before every URL so a value curl/grep could otherwise
+      # mistake for a flag is always read as a positional argument.
+      - name: Wait for the deploy to go live
+        if: steps.changes.outputs.has_changes == 'true' && steps.tests.outcome == 'success' && steps.scope.outcome == 'success'
+        env:
+          ACTION_SHARED_SECRET: ${{ secrets.SITEADMIN_ACTION_SECRET }}
+        run: |
+          build=$(jq -r '"\(.date).\(.build | tostring | if length==1 then "00"+. elif length==2 then "0"+. else . end)"' build-number.json)
+          updates_url=$(cat /tmp/updates_url.txt)
+          status="deploy_unconfirmed"
+          for attempt in $(seq 1 30); do
+            if curl -sS -- "$updates_url" 2>/dev/null | grep -qF -- "$build"; then
+              status="deployed"
+              break
+            fi
+            sleep 10
+          done
+          payload=$(jq -nc --arg cid "$CONVERSATION_ID" --arg status "$status" --arg url "${{ steps.merge.outputs.commit_url }}" \
+            '{conversation_id:$cid, status:$status, commit_url:$url}')
+          curl -sS -X POST "$SITEADMIN_URL/internal/callback" \
+            -H "Authorization: Bearer ${ACTION_SHARED_SECRET}" \
+            -H "Content-Type: application/json" \
+            -H "X-Siteadmin-Action-Marker: edit-pipeline-v1" \
+            -d "$payload"
+
       - name: Leave a note if held for review
         if: steps.changes.outputs.has_changes == 'true' && (steps.tests.outcome != 'success' || steps.scope.outcome != 'success')
         env:
@@ -339,18 +436,36 @@ jobs:
 
       # Phase 5: report the outcome back so the volunteer sees a chat
       # message instead of silence — see ARCHITECTURE.md's "Notification".
+      # The success path (tests + scope both green, merged) is already
+      # fully reported above (merged -> deploying -> deployed/
+      # deploy_unconfirmed), so this is only the remaining three cases: the
+      # job failed before it could even produce a diff to check (has_changes
+      # never got set at all — e.g. "Install dependencies" or Claude Code
+      # itself crashed outright), nothing changed, or the test/scope gate
+      # failed.
       - name: Report completion back to siteadmin
         if: always()
         env:
           ACTION_SHARED_SECRET: ${{ secrets.SITEADMIN_ACTION_SECRET }}
         run: |
-          if [ "${{ steps.changes.outputs.has_changes }}" = "false" ]; then
+          if [ -z "${{ steps.changes.outputs.has_changes }}" ]; then
+            # The "changes" step never ran (or never got to write its output),
+            # meaning something upstream crashed outright — a genuine
+            # infra-level failure, distinct from a well-formed request that
+            # just needs a human look. Never misreport this as "held for
+            # review": there's no diff and no PR to review.
+            payload=$(jq -nc --arg cid "$CONVERSATION_ID" \
+              --arg reason "Workflow failed before a diff could be produced — see the Action run log: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+              '{conversation_id:$cid, status:"error", reason:$reason}')
+          elif [ "${{ steps.changes.outputs.has_changes }}" = "false" ]; then
             # Nothing was changed, so no PR exists and nothing is waiting for
             # anyone — the widget shows this as "didn't go through".
             payload=$(jq -nc --arg cid "$CONVERSATION_ID" '{conversation_id:$cid, status:"held_for_review", reason:"no changes"}')
           elif [ "${{ steps.tests.outcome }}" = "success" ] && [ "${{ steps.scope.outcome }}" = "success" ]; then
-            payload=$(jq -nc --arg cid "$CONVERSATION_ID" --arg url "${{ steps.merge.outputs.commit_url }}" \
-              '{conversation_id:$cid, status:"merged", commit_url:$url}')
+            # Already reported in full by the dedicated merged/deploying/
+            # deployed (or deploy_unconfirmed) steps above — nothing left to
+            # tell siteadmin here.
+            exit 0
           else
             reason="tests: ${{ steps.tests.outcome }}, scope check: ${{ steps.scope.outcome }}"
             payload=$(jq -nc --arg cid "$CONVERSATION_ID" --arg reason "$reason" --arg pr "${{ steps.pr.outputs.pr_url }}" \
