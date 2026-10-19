@@ -134,10 +134,16 @@ jobs:
 
       # Restores ~/.npm between runs, keyed on package-lock.json. That holds
       # npx's download of Claude Code below as well as the test gate's
-      # packages. No node-version on purpose: keeps the runner's own Node,
-      # exactly as before this step existed.
+      # packages. Pinned to the same major version as ci.yml (24): left
+      # unpinned, this ran on the runner's own default Node (22.23.3 as of
+      # 19 Oct 2026), where test-unit/advent-logic.test.mjs's real-timer
+      # fetchDayFile tests hit a test-runner bug that gets the whole suite
+      # cancelled (failureType: cancelledByParent) - 100% reproducible on
+      # that Node version, not a flake, and not reachable by fixing the test
+      # itself. ci.yml already pins Node 24 and never sees this.
       - uses: actions/setup-node@v7
         with:
+          node-version: 24
           cache: npm
 
       # Install dependencies BEFORE Claude Code runs. It's blocked from
