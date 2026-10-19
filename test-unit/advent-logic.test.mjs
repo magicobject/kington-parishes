@@ -428,8 +428,13 @@ describe('fetchDayFile: a request that never answers is cut off', () => {
 
   test('the default timeout is 10 seconds', async () => {
     assert.equal(DAY_FETCH_TIMEOUT_MS, 10000);
+    // Exercised with a short override, not the real 10s default: AbortSignal.timeout() has no
+    // cancel, so letting it run for the full default here would leave a real 10-second timer
+    // dangling past the end of this test - which, under the load of the CI job that runs this
+    // suite back-to-back with other work, was enough to get this whole suite torn down mid-run
+    // ("cancelledByParent") rather than completing cleanly.
     let signal = null;
-    await fetchDayFile(7, async (url, init) => { signal = init.signal; return ok; });
+    await fetchDayFile(7, async (url, init) => { signal = init.signal; return ok; }, { timeoutMs: 50 });
     assert.equal(signal.aborted, false);
   });
 
