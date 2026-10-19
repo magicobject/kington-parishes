@@ -59,11 +59,11 @@ describe('expandEvents', () => {
   });
 
   test('a date listed in a series\' except array is skipped', () => {
-    // Stay and Play (Tuesdays) excludes 2026-10-27.
+    // Toddle Time (Thursdays) excludes 2026-12-24.
     const dates = expandEvents()
-      .filter((e) => e.title === 'Stay and Play')
+      .filter((e) => e.title === 'Toddle Time (10am to 12pm)')
       .map((e) => e.date);
-    assert.ok(!dates.includes('2026-10-27'));
+    assert.ok(!dates.includes('2026-12-24'));
   });
 
   test('one-off events and expanded recurring events are merged into a single chronologically sorted list', () => {
