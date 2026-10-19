@@ -87,13 +87,17 @@
       <div class="kicker">Build history</div>
       <h1 id="site-updates">Site updates</h1>
       <p class="lede">An internal changelog: every build number and what changed. This page isn't linked from anywhere else on the site, and refreshes itself every minute.</p>
-      <p class="build-number">Current build: 2026.10.19.005</p>
+      <p class="build-number">Current build: 2026.10.19.006</p>
     </div>
   </div>
 
   <section>
     <div class="wrap">
       <ul class="changelog">
+        <li>
+          <div class="changelog-meta"><span class="changelog-build">2026.10.19.006</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">19 October 2026</span></div>
+          <p>Behind the scenes, no change to what visitors see: added the <code>claude-pr-automerge.yml</code> GitHub Action, which re-runs this site's own test gate and audit against a pull request before merging, holding, or asking Greg by name, depending on the PR's risk and this repo's auto-merge level. Also added the <code>risk:simple</code>/<code>risk:complex</code>/<code>risk:gnarly</code> labels and set the <code>AUTO_MERGE_LEVEL</code> repo variable. See the <a href="help-technical-details.html">technical details guide</a>.</p>
+        </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.19.005</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">19 October 2026</span></div>
           <p>Behind the scenes, no change to what visitors see: the SiteAdmin volunteer-edit pipeline now reports its progress (working, merged, deploying, deployed) instead of telling a volunteer a change is "live" the instant it merges — it was saying this before the site had actually redeployed. It also now confirms a deploy really went live by checking this site's own <a href="updates.html">updates page</a>, rather than just trusting the merge. See the <a href="help-technical-details.html">technical details guide</a>.</p>
