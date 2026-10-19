@@ -87,10 +87,10 @@ export const RECURRING_SERIES = [
   // the homepage noticeboard).
   { title: 'Kington Zero Waste', location: "St Mary's Parish Hall", weekday: 1, time: '12:15', from: '2026-08-31', until: '2027-12-31' },
   { title: 'Kington Zero Waste', location: "St Mary's Parish Hall", weekday: 5, time: '10:00', from: '2026-09-04', until: '2027-12-31', except: ['2026-12-25'] },
-  // Term-time only (per the homepage noticeboard) — skip Herefordshire
+  // Toddle Time is term-time only (per the homepage noticeboard) — skip Herefordshire
   // school holidays (council dates for 2026-27 and 2027-28, herefordshire.gov.uk/TermDates).
   // Update `except` if a school's own dates differ.
-  { title: 'Stay and Play', location: "St Mary's Parish Hall", weekday: 2, time: '09:15', from: '2026-09-01', until: '2027-12-31', except: ['2026-09-22', '2026-09-29', '2026-10-27', '2026-12-22', '2026-12-29', '2027-02-16', '2027-03-30', '2027-04-06', '2027-06-01', '2027-07-27', '2027-08-03', '2027-08-10', '2027-08-17', '2027-08-24', '2027-08-31', '2027-10-26', '2027-12-21', '2027-12-28'] },
+  { title: 'Toddle Time (10am to 12pm)', location: 'The Dove, 37 High Street', weekday: 4, time: '10:00', from: '2026-11-05', until: '2027-12-31', except: ['2026-12-24', '2026-12-31', '2027-02-18', '2027-04-01', '2027-04-08', '2027-06-03', '2027-07-29', '2027-08-05', '2027-08-12', '2027-08-19', '2027-08-26', '2027-10-28', '2027-12-23', '2027-12-30'] },
   // Not term-time restricted — runs straight through, including the school
   // holidays Stay and Play skips.
   { title: 'Marches Voices Choir', location: 'Kington Parish Hall', weekday: 2, time: '14:00', from: '2026-09-01', until: '2027-12-31' },
