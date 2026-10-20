@@ -171,8 +171,9 @@ class Calendar {
     const item = make('li', day === this.config.dayCount || day === BONUS_DAY ? 'advent-door-wide' : '');
     const door = make('button', `advent-door advent-door-${state}${day === this.config.dayCount ? ' advent-door-star' : ''}${day === BONUS_DAY ? ' advent-door-bonus' : ''}`);
     door.type = 'button';
-    door.append(make('span', 'advent-door-number', doorNumberText(day, this.config)), make('span', 'advent-door-sub', doorSub({ day, state }, this.config)));
-    if (day === this.config.dayCount) door.append(make('span', 'advent-door-note', 'Christmas Day'));
+    // Spaces between the spans keep the door's text reading as its accessible name begins (WCAG 2.5.3).
+    door.append(make('span', 'advent-door-number', doorNumberText(day, this.config)), ' ', make('span', 'advent-door-sub', doorSub({ day, state }, this.config)));
+    if (day === this.config.dayCount) door.append(' ', make('span', 'advent-door-note', 'Christmas Day'));
     door.setAttribute('aria-label', doorName({ day, state, title: state === 'future' ? undefined : this.titles.get(day) }, this.config));
     door.addEventListener('click', () => this.openDay(day, door));
     this.doors.set(day, door);

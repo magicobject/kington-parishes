@@ -158,24 +158,24 @@ describe('labels: dates, door names, door text', () => {
   });
 
   test('accessible names follow the design table; only an unlocked door ever carries its title', () => {
-    assert.equal(doorName({ day: 12, state: 'future' }, config), 'Day 12, 12 December, not yet');
-    assert.equal(doorName({ day: 12, state: 'future', title: 'SECRET TITLE' }, config), 'Day 12, 12 December, not yet');
-    assert.equal(doorName({ day: 12, state: 'today', title: 'A Title' }, config), 'Day 12, 12 December, today. A Title');
-    assert.equal(doorName({ day: 12, state: 'today' }, config), 'Day 12, 12 December, today');
-    assert.equal(doorName({ day: 7, state: 'available', title: 'A Title' }, config), 'Day 7, 7 December. A Title');
-    assert.equal(doorName({ day: 7, state: 'available' }, config), 'Day 7, 7 December');
+    assert.equal(doorName({ day: 12, state: 'future' }, config), '12 12 Dec. Day 12, 12 December, not yet');
+    assert.equal(doorName({ day: 12, state: 'future', title: 'SECRET TITLE' }, config), '12 12 Dec. Day 12, 12 December, not yet');
+    assert.equal(doorName({ day: 12, state: 'today', title: 'A Title' }, config), '12 Today. Day 12, 12 December, today. A Title');
+    assert.equal(doorName({ day: 12, state: 'today' }, config), '12 Today. Day 12, 12 December, today');
+    assert.equal(doorName({ day: 7, state: 'available', title: 'A Title' }, config), '7 7 Dec. Day 7, 7 December. A Title');
+    assert.equal(doorName({ day: 7, state: 'available' }, config), '7 7 Dec. Day 7, 7 December');
   });
 
   test('the star door (25) also says Christmas Day', () => {
-    assert.equal(doorName({ day: 25, state: 'future' }, config), 'Day 25, 25 December, Christmas Day, not yet');
-    assert.equal(doorName({ day: 25, state: 'today', title: 'T' }, config), 'Day 25, 25 December, Christmas Day, today. T');
-    assert.equal(doorName({ day: 25, state: 'available', title: 'T' }, config), 'Day 25, 25 December, Christmas Day. T');
+    assert.equal(doorName({ day: 25, state: 'future' }, config), '2605 25 Dec Christmas Day. Day 25, 25 December, Christmas Day, not yet');
+    assert.equal(doorName({ day: 25, state: 'today', title: 'T' }, config), '2605 Today Christmas Day. Day 25, 25 December, Christmas Day, today. T');
+    assert.equal(doorName({ day: 25, state: 'available', title: 'T' }, config), '2605 25 Dec Christmas Day. Day 25, 25 December, Christmas Day. T');
   });
 
   test('the bonus door is named by its label', () => {
-    assert.equal(doorName({ day: 26, state: 'future' }, config), 'Epiphany door, 6 January, not yet');
-    assert.equal(doorName({ day: 26, state: 'today', title: 'Gifts' }, config), 'Epiphany door, 6 January, today. Gifts');
-    assert.equal(doorName({ day: 26, state: 'available', title: 'Gifts' }, config), 'Epiphany door, 6 January. Gifts');
+    assert.equal(doorName({ day: 26, state: 'future' }, config), 'Epiphany 6 Jan. Epiphany door, 6 January, not yet');
+    assert.equal(doorName({ day: 26, state: 'today', title: 'Gifts' }, config), 'Epiphany Today. Epiphany door, 6 January, today. Gifts');
+    assert.equal(doorName({ day: 26, state: 'available', title: 'Gifts' }, config), 'Epiphany 6 Jan. Epiphany door, 6 January. Gifts');
   });
 
   test('visible door text: the number (a star for 25, the label for the bonus) and the word Today or the date', () => {

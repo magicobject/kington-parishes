@@ -136,6 +136,12 @@ export function shortDateLabel(day, config) {
  * a future door never carries its title, in the page or in its name.
  */
 export function doorName({ day, state, title }, config) {
+  // WCAG 2.5.3 (Label in Name): the name starts with the text printed on the door, in the order it is printed.
+  const printed = `${doorNumberText(day, config)} ${doorSub({ day, state }, config)}${day === config.dayCount ? ' Christmas Day' : ''}. `;
+  return printed + spokenDoorName({ day, state, title }, config);
+}
+
+function spokenDoorName({ day, state, title }, config) {
   const date = dateLabel(day, config);
   const lead = day === BONUS_DAY ? `${config.bonus.label} door, ${date}` : day === config.dayCount ? `Day ${day}, ${date}, Christmas Day` : `Day ${day}, ${date}`;
   if (state === 'future') return `${lead}, not yet`;

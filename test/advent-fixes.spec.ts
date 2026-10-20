@@ -177,7 +177,7 @@ test.describe('midnight: the page refreshes itself when the date changes', () =>
     await page.clock.runFor(32_000); // just past midnight (30s + 1s); not so far that the fake clock times out the title fetches
     await expect(door(page, 13)).toHaveClass(/advent-door-today/);
     await expect(door(page, 12)).toHaveClass(/advent-door-available/);
-    await expect(door(page, 13)).toHaveAttribute('aria-label', `Day 13, 13 December, today. ${TITLES[13]}`);
+    await expect(door(page, 13)).toHaveAttribute('aria-label', `13 Today. Day 13, 13 December, today. ${TITLES[13]}`);
     await expect(status(page)).toHaveText(`Today is Day 13: ${TITLES[13]}`);
     await expect(door(page, 14)).toHaveClass(/advent-door-future/);
   });
@@ -202,7 +202,7 @@ test.describe('midnight: the page refreshes itself when the date changes', () =>
 
   test('an open day is not disturbed: the page catches up when the dialog closes', async ({ page }) => {
     await openAt(page, '2026-12-12T23:59:30Z');
-    await expect(door(page, 12)).toHaveAttribute('aria-label', /\. /);
+    await expect(door(page, 12)).toHaveAttribute('aria-label', /December(, Christmas Day)?(, today)?\. /);
     await door(page, 5).click();
     await expect(dialogTitle(page)).toHaveText(TITLES[5]);
     await page.clock.runFor(32_000); // just past midnight (30s + 1s); not so far that the fake clock times out the title fetches
@@ -279,7 +279,7 @@ test.describe('the dialog: backdrop click, scroll lock, hint, wrapping', () => {
 
   test('long words in the title and the status line wrap instead of overflowing', async ({ page }) => {
     await openAt(page, '2026-12-12T12:00:00Z');
-    await expect(door(page, 7)).toHaveAttribute('aria-label', /\. /);
+    await expect(door(page, 7)).toHaveAttribute('aria-label', /December(, Christmas Day)?(, today)?\. /);
     await door(page, 7).click();
     expect(await dialogTitle(page).evaluate((el) => getComputedStyle(el).overflowWrap)).toBe('anywhere');
     expect(await status(page).evaluate((el) => getComputedStyle(el).overflowWrap)).toBe('anywhere');
@@ -308,7 +308,7 @@ test.describe('the star door takes a whole row of its own', () => {
     test(`at ${width}px it spans the grid, is at least 72px tall, sits below door 24, and keeps its accessible name`, async ({ page }) => {
       await page.setViewportSize({ width, height: 900 });
       await openAt(page, '2026-12-12T12:00:00Z');
-      await expect(door(page, 12)).toHaveAttribute('aria-label', /\. /);
+      await expect(door(page, 12)).toHaveAttribute('aria-label', /December(, Christmas Day)?(, today)?\. /);
       const boxes = await page.evaluate(() => {
         const list = document.querySelector('.advent-doors')!.getBoundingClientRect();
         const rect = (el: Element) => { const r = el.getBoundingClientRect(); return { x: r.x, y: r.y, w: r.width, h: r.height }; };
@@ -318,7 +318,7 @@ test.describe('the star door takes a whole row of its own', () => {
       expect(boxes.star.w).toBeGreaterThanOrEqual(boxes.list.w - 2);
       expect(boxes.star.h).toBeGreaterThanOrEqual(72);
       expect(boxes.star.y).toBeGreaterThanOrEqual(boxes.previous.y + boxes.previous.h);
-      await expect(door(page, 25)).toHaveAttribute('aria-label', 'Day 25, 25 December, Christmas Day, not yet');
+      await expect(door(page, 25)).toHaveAttribute('aria-label', '★ 25 Dec Christmas Day. Day 25, 25 December, Christmas Day, not yet');
       await expect(door(page, 25)).toContainText('Christmas Day');
       expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(0);
     });
@@ -351,7 +351,7 @@ test.describe('survivors: deep link focus, labels after "Open it anyway"', () =>
 
   test('after "Open it anyway" on day 13 the labels of not-yet neighbours still say "not yet" with no title', async ({ page }) => {
     await openAt(page, '2026-12-12T12:00:00Z');
-    await expect(door(page, 12)).toHaveAttribute('aria-label', /\. /);
+    await expect(door(page, 12)).toHaveAttribute('aria-label', /December(, Christmas Day)?(, today)?\. /);
     await door(page, 13).click();
     await dialog(page).getByRole('button', { name: 'Open it anyway' }).click();
     await expect(dialogTitle(page)).toHaveText(TITLES[13]);
@@ -360,6 +360,6 @@ test.describe('survivors: deep link focus, labels after "Open it anyway"', () =>
     await expect(dialogTitle(page)).toHaveText(TITLES[12]);
     await expect(dialog(page).locator('.advent-next')).toHaveAttribute('aria-label', 'Next: Day 13, not yet');
     expect(await dialog(page).locator('.advent-nav').innerText()).not.toContain(TITLES[13]);
-    expect(await door(page, 13).getAttribute('aria-label')).toBe('Day 13, 13 December, not yet');
+    expect(await door(page, 13).getAttribute('aria-label')).toBe('13 13 Dec. Day 13, 13 December, not yet');
   });
 });

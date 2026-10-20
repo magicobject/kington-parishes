@@ -39,7 +39,9 @@ const live = (page: Page) => dialog(page).locator('[role="status"]');
 type State = 'future' | 'today' | 'available';
 
 function expectedName(day: number, state: State, withTitle = true): RegExp {
-  const lead = `Day ${day}, ${day} December${day === 25 ? ', Christmas Day' : ''}`;
+  // The name starts with the text printed on the door (WCAG 2.5.3): the number or star, then Today or the short date.
+  const printed = `${day === 25 ? '★' : day} ${state === 'today' ? 'Today' : `${day} Dec`}${day === 25 ? ' Christmas Day' : ''}. `;
+  const lead = `${printed}Day ${day}, ${day} December${day === 25 ? ', Christmas Day' : ''}`;
   if (state === 'future') return new RegExp(`^${escapeRegExp(`${lead}, not yet`)}$`);
   const head = state === 'today' ? `${lead}, today` : lead;
   return new RegExp(`^${escapeRegExp(head)}${withTitle ? `\\. ${escapeRegExp(TITLES[day])}` : ''}$`);
@@ -390,7 +392,7 @@ test.describe('the gentle rule for doors that are not open yet', () => {
     await page.keyboard.press('Escape');
     await expect(door(page, 15)).toBeFocused();
     // Nothing is remembered: the door is still "not yet" and still asks.
-    await expect(door(page, 15)).toHaveAttribute('aria-label', 'Day 15, 15 December, not yet');
+    await expect(door(page, 15)).toHaveAttribute('aria-label', '15 15 Dec. Day 15, 15 December, not yet');
     await door(page, 15).click();
     await expect(dialogTitle(page)).toHaveText('Not quite yet');
     await page.keyboard.press('Escape');
@@ -578,7 +580,7 @@ test.describe('the bonus door (Epiphany, 6 January), with test-fixture content',
     await openAt(page, '2027-01-05T12:00:00Z');
     await expect(doors(page)).toHaveCount(26);
     await expect(door(page, 26)).toHaveClass(/advent-door-future/);
-    await expect(door(page, 26)).toHaveAttribute('aria-label', 'Epiphany door, 6 January, not yet');
+    await expect(door(page, 26)).toHaveAttribute('aria-label', 'Epiphany 6 Jan. Epiphany door, 6 January, not yet');
     await expect(door(page, 26)).toContainText('Epiphany');
     await expect(door(page, 26)).toContainText('6 Jan');
     await expect(section(page).locator('.advent-door-future')).toHaveCount(1);
@@ -599,7 +601,7 @@ test.describe('the bonus door (Epiphany, 6 January), with test-fixture content',
     await expect(doors(page)).toHaveCount(26);
     await expect(door(page, 26)).toHaveClass(/advent-door-today/);
     await expect(door(page, 26)).toContainText('Today');
-    await expect(door(page, 26)).toHaveAttribute('aria-label', `Epiphany door, 6 January, today. ${bonusFile().title}`);
+    await expect(door(page, 26)).toHaveAttribute('aria-label', `Epiphany Today. Epiphany door, 6 January, today. ${bonusFile().title}`);
     await expect(section(page).locator('.advent-door-available')).toHaveCount(25);
     await expect(status(page)).toHaveText('All 25 doors are open. The Epiphany door opens today. Read at your own pace.');
     await expect(primary(page)).toBeVisible();
@@ -836,7 +838,7 @@ test.describe('nothing is stored, nothing leaves the site', () => {
     for (const [time, query] of [[REAL_TODAY, ''], ['2026-12-12T12:00:00Z', ''], [REAL_TODAY, '?advent-preview=2026-12-07'], ['2026-12-27T12:00:00Z', '']]) {
       await openAt(page, time, query);
       if (await doors(page).count()) {
-        await expect(door(page, 2)).toHaveAttribute('aria-label', /\. /);
+        await expect(door(page, 2)).toHaveAttribute('aria-label', /December(, Christmas Day)?(, today)?\. /);
         await door(page, 2).click();
         await expect(dialogTitle(page)).toHaveText(TITLES[2]);
         await dialog(page).locator('.advent-next').click();
@@ -949,7 +951,7 @@ test.describe('when things go wrong', () => {
     await page.route('**/advent/day-*.json', (route) => route.abort('internetdisconnected'));
     await openAt(page, '2026-12-12T12:00:00Z');
     await expect(doors(page)).toHaveCount(25);
-    await expect(door(page, 3)).toHaveAttribute('aria-label', 'Day 3, 3 December');
+    await expect(door(page, 3)).toHaveAttribute('aria-label', '3 3 Dec. Day 3, 3 December');
     await expect(status(page)).toHaveText('Today is Day 12.');
     await door(page, 3).click();
     await expect(dialog(page).locator('.advent-message-text')).toHaveText(FRIENDLY);
@@ -1015,7 +1017,7 @@ test.describe('keyboard', () => {
     const focused: string[] = [];
     for (let i = 0; i < 25; i += 1) {
       await page.keyboard.press('Tab');
-      focused.push(await page.evaluate(() => document.activeElement?.getAttribute('aria-label')?.match(/^Day (\d+),/)?.[1] ?? ''));
+      focused.push(await page.evaluate(() => document.activeElement?.getAttribute('aria-label')?.match(/Day (\d+),/)?.[1] ?? ''));
     }
     expect(focused).toEqual(Array.from({ length: 25 }, (_, i) => String(i + 1)));
   });

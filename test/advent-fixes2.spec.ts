@@ -25,13 +25,13 @@ test.describe('focus after a refresh that waited for the dialog to close', () =>
   for (const [name, start, expected] of [['12 to 13 December', '2026-12-12T23:59:30Z', 'Day 5,'], ['25 to 26 December', '2026-12-25T23:59:30Z', 'Day 5,']] as const) {
     test(`${name}: Escape leaves focus on the rebuilt door, not on the page body`, async ({ page }) => {
       await openAt(page, start);
-      await expect(door(page, 12)).toHaveAttribute('aria-label', /\. /);
+      await expect(door(page, 12)).toHaveAttribute('aria-label', /December(, Christmas Day)?(, today)?\. /);
       await door(page, 5).click();
       await expect(dialog(page)).toBeVisible();
       await page.clock.runFor(32_000);
       await page.keyboard.press('Escape');
       await expect(dialog(page)).toBeHidden();
-      await expect.poll(() => activeLabel(page)).toMatch(new RegExp(`^${expected}`));
+      await expect.poll(() => activeLabel(page)).toMatch(new RegExp(`${expected}`));
       expect(await page.evaluate(() => document.activeElement === document.body)).toBe(false);
     });
   }
@@ -39,7 +39,7 @@ test.describe('focus after a refresh that waited for the dialog to close', () =>
   test('6 to 7 January: the doors are gone, so focus lands on the calm sentence (never on the body)', async ({ page }) => {
     await openAt(page, '2027-01-06T23:59:30Z');
     await expect(doors(page)).toHaveCount(25);
-    await expect(door(page, 5)).toHaveAttribute('aria-label', /\. /);
+    await expect(door(page, 5)).toHaveAttribute('aria-label', /December(, Christmas Day)?(, today)?\. /);
     await door(page, 5).click();
     await page.clock.runFor(32_000);
     await page.keyboard.press('Escape');
@@ -99,7 +99,7 @@ test.describe('the real bonus door (Epiphany, "Gifts for a King")', () => {
     await openAt(page, '2027-01-05T12:00:00Z');
     await expect(doors(page)).toHaveCount(26);
     await expect(door(page, 26)).toHaveClass(/advent-door-future/);
-    await expect(door(page, 26)).toHaveAttribute('aria-label', 'Epiphany door, 6 January, not yet');
+    await expect(door(page, 26)).toHaveAttribute('aria-label', 'Epiphany 6 Jan. Epiphany door, 6 January, not yet');
     const style = await door(page, 26).evaluate((el) => { const s = getComputedStyle(el); return { borderStyle: s.borderTopStyle, width: el.getBoundingClientRect().width, list: el.closest('ul')!.getBoundingClientRect().width }; });
     expect(style.borderStyle).toBe('dashed');
     expect(style.width).toBeGreaterThanOrEqual(style.list - 2);
@@ -135,7 +135,7 @@ test.describe('the pictures in the day panel', () => {
       await page.route('**/advent/art/day-04.svg', async (route) => { await new Promise((r) => setTimeout(r, 600)); await route.continue(); });
       await page.setViewportSize({ width, height: 900 });
       await openAt(page, '2026-12-12T12:00:00Z');
-      await expect(door(page, 4)).toHaveAttribute('aria-label', /\. /);
+      await expect(door(page, 4)).toHaveAttribute('aria-label', /December(, Christmas Day)?(, today)?\. /);
       await door(page, 4).click();
       const title = page.locator('#advent-dialog-title');
       await expect(title).toBeVisible();
@@ -211,7 +211,7 @@ test.describe('the Close button stays in reach (the header bar of the day sheet 
     test(`at ${width}x${height}: Close is inside the screen after opening, after scrolling to the bottom, and when the title has focus`, async ({ page }) => {
       await page.setViewportSize({ width, height });
       await openAt(page, '2026-12-28T12:00:00Z');
-      await expect(door(page, 12)).toHaveAttribute('aria-label', /\. /);
+      await expect(door(page, 12)).toHaveAttribute('aria-label', /December(, Christmas Day)?(, today)?\. /);
       await door(page, 12).click();
       await expect(page.locator('#advent-dialog-title')).toBeFocused();
       const close = dialog(page).getByRole('button', { name: 'Close' });
@@ -264,7 +264,7 @@ test.describe('the gentle "not yet" message is a small card, and the archive off
   test('on a phone the message is a small centred card (not a full-screen sheet) with the backdrop visible, then "Open it anyway" turns it into the full-screen day', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 812 });
     await openAt(page, '2026-12-12T12:00:00Z');
-    await expect(door(page, 12)).toHaveAttribute('aria-label', /\. /);
+    await expect(door(page, 12)).toHaveAttribute('aria-label', /December(, Christmas Day)?(, today)?\. /);
     await door(page, 20).click();
     await expect(dialog(page).locator('#advent-dialog-title')).toHaveText('Not quite yet');
     await dialog(page).locator('.advent-panel').evaluate((el) => Promise.all(el.getAnimations().map((a) => a.finished)));
