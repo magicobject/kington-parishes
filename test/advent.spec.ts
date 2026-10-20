@@ -40,7 +40,7 @@ type State = 'future' | 'today' | 'available';
 
 function expectedName(day: number, state: State, withTitle = true): RegExp {
   // The name starts with the text printed on the door (WCAG 2.5.3): the number or star, then Today or the short date.
-  const printed = `${day === 25 ? '★' : day} ${state === 'today' ? 'Today' : `${day} Dec`}${day === 25 ? ' Christmas Day' : ''}. `;
+  const printed = `${day === 25 ? '\u2605' : day} ${state === 'today' ? 'Today' : `${day} Dec`}${day === 25 ? ' Christmas Day' : ''}. `;
   const lead = `${printed}Day ${day}, ${day} December${day === 25 ? ', Christmas Day' : ''}`;
   if (state === 'future') return new RegExp(`^${escapeRegExp(`${lead}, not yet`)}$`);
   const head = state === 'today' ? `${lead}, today` : lead;

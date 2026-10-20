@@ -318,7 +318,7 @@ test.describe('the star door takes a whole row of its own', () => {
       expect(boxes.star.w).toBeGreaterThanOrEqual(boxes.list.w - 2);
       expect(boxes.star.h).toBeGreaterThanOrEqual(72);
       expect(boxes.star.y).toBeGreaterThanOrEqual(boxes.previous.y + boxes.previous.h);
-      await expect(door(page, 25)).toHaveAttribute('aria-label', '★ 25 Dec Christmas Day. Day 25, 25 December, Christmas Day, not yet');
+      await expect(door(page, 25)).toHaveAttribute('aria-label', '\u2605 25 Dec Christmas Day. Day 25, 25 December, Christmas Day, not yet');
       await expect(door(page, 25)).toContainText('Christmas Day');
       expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(0);
     });

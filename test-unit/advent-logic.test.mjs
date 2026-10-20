@@ -167,9 +167,9 @@ describe('labels: dates, door names, door text', () => {
   });
 
   test('the star door (25) also says Christmas Day', () => {
-    assert.equal(doorName({ day: 25, state: 'future' }, config), '2605 25 Dec Christmas Day. Day 25, 25 December, Christmas Day, not yet');
-    assert.equal(doorName({ day: 25, state: 'today', title: 'T' }, config), '2605 Today Christmas Day. Day 25, 25 December, Christmas Day, today. T');
-    assert.equal(doorName({ day: 25, state: 'available', title: 'T' }, config), '2605 25 Dec Christmas Day. Day 25, 25 December, Christmas Day. T');
+    assert.equal(doorName({ day: 25, state: 'future' }, config), '\u2605 25 Dec Christmas Day. Day 25, 25 December, Christmas Day, not yet');
+    assert.equal(doorName({ day: 25, state: 'today', title: 'T' }, config), '\u2605 Today Christmas Day. Day 25, 25 December, Christmas Day, today. T');
+    assert.equal(doorName({ day: 25, state: 'available', title: 'T' }, config), '\u2605 25 Dec Christmas Day. Day 25, 25 December, Christmas Day. T');
   });
 
   test('the bonus door is named by its label', () => {
