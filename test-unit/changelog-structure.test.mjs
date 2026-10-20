@@ -80,7 +80,7 @@ describe('build numbers', () => {
 
 describe('isDerived', () => {
   test('lists what the build writes and nothing hand-maintained', () => {
-    for (const file of ['public/index.html', 'public/sitemap.xml', 'public/search-index.json', 'public/js/calendar-events.js', 'public/advent/day-01.json', 'public/advent/scene-default.svg', 'public/css/advent-theme.css', 'public/js/advent.js', 'public/js/advent/date.mjs']) assert.ok(isDerived(file), file);
-    for (const file of ['public/css/style.css', 'public/img/x.png', 'public/advent/art/day-01.svg', 'public/advent/scene.svg', 'src/pages/index.html', 'public/_headers', 'public/js/search-ui.js']) assert.ok(!isDerived(file), file);
+    for (const file of ['public/index.html', 'public/sitemap.xml', 'public/search-index.json', 'public/js/calendar-events.js']) assert.ok(isDerived(file), file);
+    for (const file of ['public/css/style.css', 'public/img/x.png', 'src/pages/index.html', 'public/_headers', 'public/js/search-ui.js']) assert.ok(!isDerived(file), file);
   });
 });

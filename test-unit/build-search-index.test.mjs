@@ -217,7 +217,7 @@ describe('isHelpPage', () => {
   });
 });
 
-describe('unlisted pages (the Advent calendar before launch)', () => {
+describe('unlisted pages', () => {
   test('a page with unlisted: true is neither indexable nor searchable, whatever its slug', () => {
     assert.equal(isIndexable({ slug: 'anything', unlisted: true }), false);
     assert.equal(isSearchablePage({ slug: 'anything', unlisted: true }), false);
@@ -227,12 +227,6 @@ describe('unlisted pages (the Advent calendar before launch)', () => {
     assert.equal(isIndexable({ slug: 'anything', unlisted: false }), true);
     assert.equal(isSearchablePage({ slug: 'anything', unlisted: false }), true);
     assert.equal(isSearchablePage({ slug: 'anything' }), true);
-  });
-
-  test('the Advent help page is part of the hidden help guide', () => {
-    assert.equal(isHelpPage({ slug: 'help-advent' }), true);
-    assert.equal(isSearchablePage({ slug: 'help-advent' }), false);
-    assert.equal(isIndexable({ slug: 'help-advent' }), true);
   });
 });
 

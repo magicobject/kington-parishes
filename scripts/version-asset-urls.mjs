@@ -2,8 +2,7 @@
 // LAST step of making each page: `html = versionAssetUrls(html);`, with `const versionAssetUrls = createAssetVersioner(join(root, 'public'));`.
 // Every same-origin <link href="/x.css"> and <script src="/x.js"> becomes "/x.css?v=<first 10 hex digits of the file's SHA-256>". A reference to
 // a file that does not exist fails the build, so a typo is caught. Only the file's content decides the address, so a page changes only when
-// something it loads has changed. Never write a ?v= by hand. A host that already has an equivalent (any code that does the same) does not need
-// this file: test-unit/advent-host-features.test.mjs checks the built page, not the code.
+// something it loads has changed. Never write a ?v= by hand.
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';

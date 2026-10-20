@@ -3,7 +3,7 @@ import { test, expect } from './support/fixtures';
 // The inline script in templates/page.html reads location.hash on every page.
 // A malformed percent escape in the fragment must not raise an error.
 // (The fixtures block outside requests, whose aborted loads log 'Failed to load resource'; those are not ours.)
-const PAGES = ['/', '/church-kington.html', '/advent', '/calendar.html'];
+const PAGES = ['/', '/church-kington.html', '/calendar.html'];
 const BAD_FRAGMENTS = ['#%', '#%E0%A4%A', '#day-%'];
 
 for (const path of PAGES) {

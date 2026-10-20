@@ -13,12 +13,7 @@
     "test:headed": "playwright test --headed",
     "serve": "tsx test/support/static-server.ts",
     "typecheck": "tsc",
-    "check:live": "node scripts/check-live.mjs",
-    "audit": "npm audit --audit-level=high",
-    "advent:headers": "node scripts/advent-headers.mjs",
-    "advent:manifest": "node modules/advent/make-manifest.mjs",
-    "advent:rehearse": "node scripts/advent-rehearse.mjs",
-    "advent:after-launch": "node scripts/advent-after-launch-edits.mjs"
+    "audit": "npm audit --audit-level=high"
   },
   "repository": {
     "type": "git",

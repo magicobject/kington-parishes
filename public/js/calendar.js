@@ -117,19 +117,25 @@
 
       var chipsHtml = evs.slice(0, 2).map(function (ev) {
         return '<span class="cal-chip">' + formatEventTime(ev) + ' ' + escapeHtml(ev.title) + '</span>';
-      }).join('');
+      }).join(' ');
+      // The button's visible text, which its accessible name must start with (WCAG 2.5.3 Label in Name).
+      var visibleText = String(cellDate.getDate());
+      evs.slice(0, 2).forEach(function (ev) {
+        visibleText += ' ' + formatEventTime(ev) + ' ' + ev.title;
+      });
       if (evs.length > 2) {
-        chipsHtml += '<span class="cal-chip cal-chip--more">+' + (evs.length - 2) + ' more</span>';
+        chipsHtml += ' <span class="cal-chip cal-chip--more">+' + (evs.length - 2) + ' more</span>';
+        visibleText += ' +' + (evs.length - 2) + ' more';
       }
       var dot = evs.length ? '<span class="cal-day-dot" aria-hidden="true"></span>' : '';
 
-      var label = WEEKDAY_LONG[(cellDate.getDay() + 6) % 7] + ' ' + cellDate.getDate() + ' ' + MONTH_NAMES[cellDate.getMonth()] +
+      var label = visibleText + '. ' + WEEKDAY_LONG[(cellDate.getDay() + 6) % 7] + ' ' + cellDate.getDate() + ' ' + MONTH_NAMES[cellDate.getMonth()] +
         (isToday ? ' (today)' : '') +
         (evs.length ? ', ' + evs.length + ' event' + (evs.length > 1 ? 's' : '') : '');
 
       cellsHtml +=
-        '<button type="button" class="' + classes.join(' ') + '" data-date="' + cds + '" aria-label="' + label + '">' +
-          '<span class="cal-day-num">' + cellDate.getDate() + dot + '</span>' +
+        '<button type="button" class="' + classes.join(' ') + '" data-date="' + cds + '" aria-label="' + escapeHtml(label) + '">' +
+          '<span class="cal-day-num">' + cellDate.getDate() + dot + '</span> ' +
           '<span class="cal-day-chips">' + chipsHtml + '</span>' +
         '</button>';
     }

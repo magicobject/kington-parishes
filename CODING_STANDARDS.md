@@ -1,6 +1,6 @@
 # Coding standards: judgement rules
 
-These are the lessons of the Advent calendar build, written for the people and agents who write and review code here.
+These are lessons learned building this site, written for the people and agents who write and review code here.
 `CLAUDE.md` holds the repo's mechanical rules (tests before a push, accessibility, security headers); this file holds the
 judgement calls. A reviewer checks a change against each rule that applies.
 
@@ -43,13 +43,6 @@ judgement calls. A reviewer checks a change against each rule that applies.
 ## Working in the repo
 - Give each concurrent session its own git worktree. Copy `node_modules` into it; never link or share it.
 - Stage your own files by name. Leave other sessions' files alone.
-
-## Source files
-- The Advent source files (`modules/advent/**`, `scripts/advent-*.mjs`, `test-unit/advent-*.mjs`) are plain ASCII, with
-  `\uXXXX` escapes for other characters, and a unit test fails if one gains a non-ASCII byte. Elsewhere in the repo
-  non-ASCII text is fine.
-- Some file-writing tools turn an escape into the literal character. After writing an Advent file, run
-  `node scripts/ascii-escape.mjs <file>` to put the escapes back.
 
 ## Documentation
 - When a section of one document copies a paragraph, list or table from another file (for example a `CLAUDE.md` section

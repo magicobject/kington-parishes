@@ -26,7 +26,7 @@ Before git records your commit, the hook checks, in this order, and stops with a
    `build-number.json`. Edits to `README.md`, `CLAUDE.md`, `docs/`, `test/` and `test-unit/` never block a commit
    (and are never added to it). Add the files (`git add FILE`), set them aside (`git stash`), or use a worktree (below).
 4. **Then it builds.** It bumps `build-number.json`, runs the build and stages exactly the regenerated files that
-   changed (`public/*.html`, the sitemap, the search index, the calendar and Advent generated files) plus
+   changed (`public/*.html`, the sitemap, the search index, the calendar generated file) plus
    `build-number.json`. The commit holds what you staged plus those, and nothing else. If a generated file already
    had somebody else's unsaved changes that the build does not reproduce, the hook puts everything back exactly as it
    was and refuses; it never sweeps them into your commit. Pages you rebuilt by hand with `npm run build` are fine.
@@ -113,17 +113,11 @@ npm ci
   so pull `main` (or merge it into your branch) before writing your changelog entry.
 - Remove a worktree when finished: `git worktree remove ../my-second-copy`.
 
-## Two helpers that live beside the hooks
+## A helper that lives beside the hooks
 
-- **`npm run check:live`** (`scripts/check-live.mjs`) checks the live site after a deploy, read-only: it waits until the new build
-  number shows on `/updates` (`--wait`), then checks the inline-script hashes against the Content-Security-Policy, the Advent
-  calendar's hidden or launched state, that no calendar text leaks, the cache and picture headers, and that every day file and picture
-  exists. Usage: `npm run check:live -- --build latest --wait` (`--state hidden|launched|auto`, `--base <url>`, `--timeout <seconds>`).
-  It cannot see browser console errors: look at those yourself.
 - **`node scripts/ascii-escape.mjs <file>`** rewrites a JavaScript file so every non-ASCII character in a string, regular expression or
   comment becomes a `\uXXXX` escape. The file-writing tool turns such escapes into the literal character, so a file can quietly gain
-  non-ASCII bytes; `test-unit/ascii-escape.test.mjs` fails if any Advent file (`modules/advent/**`, `scripts/advent-*.mjs`,
-  `test-unit/advent-*.mjs`) contains one, and says to run this command.
+  non-ASCII bytes.
 
 ## CI and the date
 

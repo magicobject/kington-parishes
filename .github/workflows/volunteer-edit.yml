@@ -141,8 +141,7 @@ jobs:
       # npx's download of Claude Code below as well as the test gate's
       # packages. Pinned to the same major version as ci.yml (24): left
       # unpinned, this ran on the runner's own default Node (22.23.3 as of
-      # 19 Oct 2026), where test-unit/advent-logic.test.mjs's real-timer
-      # fetchDayFile tests hit a test-runner bug that gets the whole suite
+      # 19 Oct 2026), where a real-timer unit test hit a test-runner bug that gets the whole suite
       # cancelled (failureType: cancelledByParent) - 100% reproducible on
       # that Node version, not a flake, and not reachable by fixing the test
       # itself. ci.yml already pins Node 24 and never sees this (see #44 —

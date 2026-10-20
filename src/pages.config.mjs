@@ -12,17 +12,6 @@
 
 import { SITE } from './site.config.mjs';
 import { CHURCHES } from './churches.config.mjs';
-import { fileURLToPath } from 'node:url';
-import { adventPageEntry } from '../modules/advent/build.mjs';
-import { loadAdventConfigOrExit } from '../scripts/advent-config.mjs';
-
-// The Advent calendar's site-owned settings and content (src/advent/theme.mjs and content.mjs). Loading them stops the
-// build with a plain message when either file is missing or is still the placeholder from modules/advent/examples/.
-export const adventConfig = await loadAdventConfigOrExit(fileURLToPath(new URL('..', import.meta.url)));
-const adventTheme = adventConfig.theme;
-// The calendar page's entry. The build tells the calendar module the names of every OTHER page by leaving out THIS object (by identity,
-// never by comparing slugs, which would hide a clash with another page).
-export const adventPage = adventPageEntry(adventTheme);
 
 // One schema.org Church per entry in src/churches.config.mjs, for the
 // our-churches page's structured data. `geo` and `hasMap` come from each
@@ -75,21 +64,6 @@ export const FOOTER_NAV = [
   { href: 'https://www.youtube.com/@KingtonStMaryLive', label: 'Our YouTube Channel' },
   { href: 'https://www.facebook.com/kingtonparishes', label: 'Our Facebook Community' },
 ];
-
-// The hidden Advent help guide. While the calendar is not public (theme.publicListing false) this page is
-// unlisted too, so the search index (a public file) says nothing about the calendar; it rejoins the help-scope
-// search automatically when the calendar goes public. It stays noindex either way, like every help page.
-export function helpAdventPage(theme) {
-  return {
-    slug: 'help-advent',
-    title: 'Advent Calendar — Help — Kington Parishes',
-    description: "How to preview the Advent calendar on any date, what to expect each day, how to change a day's words or picture, and how to switch it on for everyone.",
-    active: null,
-    header: true,
-    robots: 'noindex, nofollow',
-    unlisted: theme.publicListing !== true,
-  };
-}
 
 export const PAGES = [
   {
@@ -399,10 +373,6 @@ export const PAGES = [
     active: null,
     header: true,
   },
-  // The Advent calendar page. Its entry comes from the module: while the theme's
-  // publicListing is false it is unlisted (not in the sitemap or search) and noindex,
-  // and it is in no nav, footer or page link either. See modules/advent/README.md.
-  adventPage,
   {
     slug: 'updates',
     title: 'Site Updates — Kington Parishes',
@@ -478,7 +448,6 @@ export const PAGES = [
     header: true,
     robots: 'noindex, nofollow',
   },
-  helpAdventPage(adventTheme),
   {
     slug: '404',
     title: 'Page not found — Kington Parishes',

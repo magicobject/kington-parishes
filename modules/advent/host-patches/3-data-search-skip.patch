@@ -1,9 +1,0 @@
-diff --git a/scripts/build-search-index.mjs b/scripts/build-search-index.mjs
-index 293fb59..e0d5264 100644
---- a/scripts/build-search-index.mjs
-+++ b/scripts/build-search-index.mjs
-@@ -81,2 +81,4 @@ export function extractSearchEntries(html, page) {
-   const root = parse(html);
-+  // An element marked data-search-skip is left out of the index entirely (the Advent calendar's calm-state heading).
-+  root.querySelectorAll('[data-search-skip]').forEach((node) => node.remove());
-   const headings = root.querySelectorAll('h1, h2, h3');

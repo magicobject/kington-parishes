@@ -1,6 +1,5 @@
 import { test, expect } from './support/fixtures';
 import { ALL_PAGES, HELP_PAGES } from './support/pages';
-import { adventHiddenPaths, adventPubliclyListed } from './support/advent';
 
 // scripts/build.mjs generates public/sitemap.xml from the same
 // isSearchablePage predicate used to gate the public search index (see
@@ -9,8 +8,7 @@ import { adventHiddenPaths, adventPubliclyListed } from './support/advent';
 // actually reflects that, or stays in sync with what test/page-content.spec.ts
 // asserts about noindex/robots meta tags.
 
-// The Advent calendar joins this set only while its theme's publicListing switch is off.
-const NOINDEX_PATHS = new Set(['/updates.html', ...HELP_PAGES.map((p) => p.path), ...adventHiddenPaths()]);
+const NOINDEX_PATHS = new Set(['/updates.html', ...HELP_PAGES.map((p) => p.path)]);
 
 test('sitemap.xml is well-formed and lists https URLs under the real domain', async ({ request }) => {
   const response = await request.get('/sitemap.xml');
@@ -50,14 +48,8 @@ test('the internal changelog, 404 and hidden help guide are never listed in the 
   }
 });
 
-test('the Advent calendar page is in the sitemap exactly when its theme says it is publicly listed', async ({ request }) => {
-  const body = await (await request.get('/sitemap.xml')).text();
-  expect(body.includes('/advent.html')).toBe(adventPubliclyListed());
-});
-
-// PRE-LAUNCH GUARD (hard-coded on purpose, it does not follow the theme's flags). DELETE THIS TEST AT LAUNCH:
-// see docs/advent/launch-checklist.md. While the Advent calendar is hidden, neither public file may mention it.
-test('PRE-LAUNCH: the sitemap and the search index do not mention the Advent calendar', async ({ request }) => {
+// The Advent calendar was removed (20 Oct 2026). Neither public file may mention it again.
+test('the sitemap and the search index do not mention the Advent calendar', async ({ request }) => {
   const sitemap = await (await request.get('/sitemap.xml')).text();
   expect(sitemap.toLowerCase()).not.toContain('advent');
   const index = await (await request.get('/search-index.json')).text();
