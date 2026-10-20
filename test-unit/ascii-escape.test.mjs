@@ -1,5 +1,5 @@
-// scripts/ascii-escape.mjs and the guard that keeps the Advent files plain ASCII (the file-writing tool turns \uXXXX escapes into
-// literal characters, so source written through it can silently gain non-ASCII bytes; this is the fix-up and the check).
+// scripts/ascii-escape.mjs (the file-writing tool turns \uXXXX escapes into
+// literal characters, so source written through it can silently gain non-ASCII bytes; this is the fix-up).
 // The non-ASCII characters in THIS file are written as escapes too, so the file itself is ASCII.
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
@@ -80,28 +80,5 @@ describe('the command line', () => {
     } finally {
       rmSync(dir, { recursive: true, force: true });
     }
-  });
-});
-
-// The guard. Every file of the Advent module and of its scripts and tests is plain ASCII.
-function walk(dir, found = []) {
-  for (const name of readdirSync(dir)) {
-    const path = join(dir, name);
-    if (statSync(path).isDirectory()) walk(path, found);
-    else found.push(path);
-  }
-  return found;
-}
-
-describe('the Advent files are plain ASCII', () => {
-  const advent = (dir) => readdirSync(join(ROOT, dir)).filter((name) => /^advent-.*\.mjs$/.test(name)).map((name) => join(ROOT, dir, name));
-  const adventTests = readdirSync(join(ROOT, 'test')).filter((name) => /^advent.*\.spec\.ts$/.test(name)).map((name) => join(ROOT, 'test', name));
-  const files = [...walk(join(ROOT, 'modules', 'advent')), ...advent('scripts'), ...advent('test-unit'), ...adventTests, join(ROOT, 'test', 'support', 'advent.ts')];
-
-  test('there are files to check', () => assert.ok(files.length > 30));
-
-  test('none contains a non-ASCII byte', () => {
-    const offenders = files.filter((file) => readFileSync(file).some((byte) => byte > 127)).map((file) => relative(ROOT, file));
-    assert.deepEqual(offenders, [], `non-ASCII bytes in: ${offenders.join(', ')}. Run: node scripts/ascii-escape.mjs <file> for each (it rewrites them as \\uXXXX escapes; it refuses a file with non-ASCII outside a string, regular expression or comment, which you fix by hand)`);
   });
 });

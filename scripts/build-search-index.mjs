@@ -89,7 +89,7 @@ export function ensureSectionIds(html) {
 // heading, and the shared boundary element's text once, not once per h3.
 export function extractSearchEntries(html, page) {
   const root = parse(html);
-  // An element marked data-search-skip is left out of the index entirely (the hidden help hub's Advent card).
+  // An element marked data-search-skip is left out of the index entirely.
   root.querySelectorAll('[data-search-skip]').forEach((node) => node.remove());
   const headings = root.querySelectorAll('h1, h2, h3');
 
@@ -142,8 +142,7 @@ export function extractSearchEntries(html, page) {
 
 // Pages with no real content, ever — excluded from the search index
 // entirely, not just from the public-facing scope of it. A page can also say
-// `unlisted: true` in its src/pages.config.mjs entry (the Advent calendar does
-// until its theme's publicListing is switched on): it is then kept out of the
+// `unlisted: true` in its src/pages.config.mjs entry: it is then kept out of the
 // search index and the sitemap exactly like these, and rejoins both
 // automatically the moment the flag goes.
 const NEVER_INDEXED_SLUGS = new Set(['updates', '404']);
@@ -160,7 +159,7 @@ export function isIndexable(page) {
 // (public/js/search-ui.js): only surfaced while already on a help page, and
 // hidden everywhere else — a site visitor shouldn't be able to search their
 // way into internal process documentation from an ordinary page.
-const HELP_SLUGS = new Set(['help', 'help-getting-set-up', 'help-making-a-change', 'help-technical-details', 'help-dns-setup', 'help-when-it-goes-wrong', 'help-advent']);
+const HELP_SLUGS = new Set(['help', 'help-getting-set-up', 'help-making-a-change', 'help-technical-details', 'help-dns-setup', 'help-when-it-goes-wrong']);
 export function isHelpPage(page) {
   return HELP_SLUGS.has(page.slug);
 }

@@ -1,6 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
 
-// (PW_PORT lets the launch rehearsal run this suite in a temporary copy on its own port, never reusing a server from the real repo)
+// (PW_PORT runs the suite on its own port, so it never reuses a server left running from another checkout)
 const PORT = Number(process.env.PW_PORT ?? 4176);
 
 export default defineConfig({

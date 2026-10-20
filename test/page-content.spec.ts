@@ -1,6 +1,5 @@
 import { test, expect } from './support/fixtures';
 import { ALL_PAGES, HELP_PAGES } from './support/pages';
-import { adventHiddenPaths } from './support/advent';
 
 // Regression guard: each page's file should show its own title and heading,
 // not another page's — this bit us once on a different site's build script.
@@ -29,8 +28,7 @@ test('every page links to a unique canonical URL matching its own filename', asy
 // genuine search-result destinations) still carry the noindex signal; this
 // test used to assert the opposite, back when the whole site was a
 // noindexed proof-of-concept.
-// The Advent calendar joins this set only while its theme's publicListing switch is off.
-const NOINDEX_PATHS = new Set(['/updates.html', ...HELP_PAGES.map((p) => p.path), ...adventHiddenPaths()]);
+const NOINDEX_PATHS = new Set(['/updates.html', ...HELP_PAGES.map((p) => p.path)]);
 
 test('only the internal changelog, help guide and 404 carry a noindex tag', async ({ page }) => {
   for (const sitePage of ALL_PAGES) {

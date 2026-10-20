@@ -82,15 +82,11 @@ export function nodeModulesProblem(dir, minimum = 5) {
 }
 
 // Files the build writes. They are regenerated from their sources, so the hook may stage them. Anything else under
-// public/ (css/style.css, images, the Advent pictures) is hand-maintained and counts as a source.
+// public/ (css/style.css, images) is hand-maintained and counts as a source.
 const DERIVED = [
   /^public\/[^/]+\.html$/,
   /^public\/(sitemap\.xml|search-index\.json)$/,
   /^public\/js\/calendar-events\.js$/,
-  /^public\/advent\/(day-\d+\.json|scene-default\.svg)$/,
-  /^public\/css\/(advent-theme|advent|advent-teaser)\.css$/,
-  /^public\/js\/(advent|advent-teaser)\.js$/,
-  /^public\/js\/advent\/[^/]+$/,
 ];
 export const isDerived = (path) => DERIVED.some((pattern) => pattern.test(path));
 
