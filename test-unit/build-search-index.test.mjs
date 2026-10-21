@@ -91,7 +91,7 @@ describe('extractSearchEntries', () => {
       '<div class="card"><h2>Fundraising</h2><p>Support the fete.</p></div>',
     );
     const [entry] = extractSearchEntries(html, page);
-    assert.equal(entry.page, 'get-involved.html');
+    assert.equal(entry.page, '/get-involved');
     assert.equal(entry.pageTitle, page.title);
     assert.equal(entry.anchor, 'fundraising');
     assert.equal(entry.heading, 'Fundraising');

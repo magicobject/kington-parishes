@@ -17,26 +17,30 @@ const CHURCHES = [
   { anchor: 'huntington', label: 'More about St Thomas à Becket, Huntington', photoLabel: 'More about St Thomas à Becket, Huntington', portal: '/church-huntington.html', heading: /st thomas à becket, huntington/i },
 ];
 
+// Links use the clean address ("/church-kington"), not the ".html" file name,
+// so a click is one 200 instead of a 307 hop.
+const cleanPortal = (church: { portal: string }) => church.portal.replace(/\.html$/, '');
+
 for (const church of CHURCHES) {
   test(`Our Churches links to the ${church.portal} portal page for #${church.anchor}`, async ({ page }) => {
     await page.goto('/our-churches.html');
     const link = page.locator(`#${church.anchor} .portal-link`);
     await expect(link).toHaveText(church.label);
-    await expect(link).toHaveAttribute('href', church.portal.slice(1));
+    await expect(link).toHaveAttribute('href', cleanPortal(church));
 
     await link.click();
-    await expect(page).toHaveURL(new RegExp(`${church.portal}$`));
+    await expect(page).toHaveURL(new RegExp(`${cleanPortal(church)}$`));
     await expect(page.locator('h1')).toHaveText(church.heading);
   });
 
   test(`the church photo for #${church.anchor} also links to ${church.portal}`, async ({ page }) => {
     await page.goto('/our-churches.html');
     const photoLink = page.locator(`#${church.anchor} .parish-photo a`);
-    await expect(photoLink).toHaveAttribute('href', church.portal.slice(1));
+    await expect(photoLink).toHaveAttribute('href', cleanPortal(church));
     await expect(photoLink).toHaveAccessibleName(church.photoLabel);
 
     await photoLink.click();
-    await expect(page).toHaveURL(new RegExp(`${church.portal}$`));
+    await expect(page).toHaveURL(new RegExp(`${cleanPortal(church)}$`));
     await expect(page.locator('h1')).toHaveText(church.heading);
   });
 }
@@ -111,7 +115,7 @@ test("Christine Robinson's card links to the Safeguarding page identically on bo
   for (const path of ['/our-people.html', '/church-kington.html']) {
     await page.goto(path);
     const card = page.locator('.card', { has: page.getByRole('heading', { name: 'Christine Robinson', exact: true }) });
-    await expect(card.getByRole('link', { name: 'Safeguarding page' })).toHaveAttribute('href', 'safeguarding.html');
+    await expect(card.getByRole('link', { name: 'Safeguarding page' })).toHaveAttribute('href', '/safeguarding');
   }
 });
 

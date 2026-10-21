@@ -38,22 +38,22 @@
 <header class="site">
   <div class="nav-row">
     <div class="nav-primary">
-      <a class="brand" href="index.html">Kington Parishes</a>
+      <a class="brand" href="/">Kington Parishes</a>
       <nav class="links" id="primary-nav" aria-label="Primary">
-      <a href="our-churches.html">Our Churches</a>
-      <a href="our-people.html">Our People</a>
-      <a href="services.html">Services &amp; Events</a>
-      <a href="parish-news.html">Parish Magazine</a>
-      <a href="newsletter.html">InSpire</a>
-      <a href="blog.html">Blog</a>
-      <a href="life-events.html">Life Events</a>
-      <a href="get-involved.html">Get Involved</a>
-      <a href="vacancies.html">Vacancies</a>
-      <a href="resources.html">Resources</a>
-      <a href="parish-hall.html">Parish Hall</a>
-      <a href="calendar.html">Calendar</a>
-      <a href="walkers.html">Walkers</a>
-      <a href="contact.html">Contact</a>
+      <a href="/our-churches">Our Churches</a>
+      <a href="/our-people">Our People</a>
+      <a href="/services">Services &amp; Events</a>
+      <a href="/parish-news">Parish Magazine</a>
+      <a href="/newsletter">InSpire</a>
+      <a href="/blog">Blog</a>
+      <a href="/life-events">Life Events</a>
+      <a href="/get-involved">Get Involved</a>
+      <a href="/vacancies">Vacancies</a>
+      <a href="/resources">Resources</a>
+      <a href="/parish-hall">Parish Hall</a>
+      <a href="/calendar">Calendar</a>
+      <a href="/walkers">Walkers</a>
+      <a href="/contact">Contact</a>
       </nav>
       <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="primary-nav">
         <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="5" cy="12" r="2.2" fill="currentColor"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/><circle cx="19" cy="12" r="2.2" fill="currentColor"/></svg>
@@ -74,7 +74,7 @@
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10 8.5v7l6-3.5-6-3.5Z" fill="currentColor" stroke="none"/></svg>
           Live Stream
         </a>
-        <a class="btn-donate" href="donate.html">Donate Now</a>
+        <a class="btn-donate" href="/donate">Donate Now</a>
       </div>
     </div>
   </div>
@@ -87,7 +87,7 @@
       <div class="kicker">Build history</div>
       <h1 id="site-updates">Site updates</h1>
       <p class="lede">An internal changelog: every build number and what changed. This page isn't linked from anywhere else on the site, and refreshes itself every minute.</p>
-      <p class="build-number">Current build: 2026.10.21.001</p>
+      <p class="build-number">Current build: 2026.10.21.002</p>
     </div>
   </div>
 
@@ -95,64 +95,68 @@
     <div class="wrap">
       <ul class="changelog">
         <li>
+          <div class="changelog-meta"><span class="changelog-build">2026.10.21.002</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">21 October 2026</span></div>
+          <p>Every link between pages (the menu, footer, buttons, the five-church map, the home page journey line and site search results) now goes straight to the clean address, such as <code>/contact</code>, instead of the <code>.html</code> form that Cloudflare redirects. Clicking is one fewer round trip and the address bar stays tidy. Affects every page, for example the <a href="/">home page</a>, <a href="/our-churches">Our Churches</a> and <a href="/contact">Contact</a>. A new test fails if any page links to a <code>.html</code> address, and checks that every link target loads.</p>
+        </li>
+        <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.21.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">21 October 2026</span></div>
-          <p>From a site health check: every page's canonical address, its sharing (Open Graph) address, the sitemap and the structured data now use the clean address (<code>/contact</code>, and <code>/</code> for the <a href="index.html">home page</a>) instead of the <code>.html</code> form, which Cloudflare redirects, so search engines get one consistent address per page. Also swapped the Old Radnor film-show poster on the <a href="index.html">home page</a> from a 2.7 MB PNG to a 250 KB WebP, which was most of the page's weight on a phone.</p>
+          <p>From a site health check: every page's canonical address, its sharing (Open Graph) address, the sitemap and the structured data now use the clean address (<code>/contact</code>, and <code>/</code> for the <a href="/">home page</a>) instead of the <code>.html</code> form, which Cloudflare redirects, so search engines get one consistent address per page. Also swapped the Old Radnor film-show poster on the <a href="/">home page</a> from a 2.7 MB PNG to a 250 KB WebP, which was most of the page's weight on a phone.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.20.004</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">20 October 2026</span></div>
-          <p>Removed the Advent calendar completely (its hidden page, help guide, scripts, pictures, tests and launch tooling), because it can't be used. The <a href="index.html">home page</a> and <a href="help.html">help guide</a> no longer carry its hooks, and the <code>check:live</code> post-deploy script, which existed to check the calendar's state, went with it. The git history keeps the code if it is ever wanted back. Also carried over the one fix from the closed Advent-era pull request that still matters: each day button on the <a href="calendar.html">calendar</a> now has an accessible name that starts with its visible text (WCAG 2.5.3), which axe 4.14 had started failing.</p>
+          <p>Removed the Advent calendar completely (its hidden page, help guide, scripts, pictures, tests and launch tooling), because it can't be used. The <a href="/">home page</a> and <a href="/help">help guide</a> no longer carry its hooks, and the <code>check:live</code> post-deploy script, which existed to check the calendar's state, went with it. The git history keeps the code if it is ever wanted back. Also carried over the one fix from the closed Advent-era pull request that still matters: each day button on the <a href="/calendar">calendar</a> now has an accessible name that starts with its visible text (WCAG 2.5.3), which axe 4.14 had started failing.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.20.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">20 October 2026</span></div>
-          <p>Replaced Stay &amp; Play with Toddle Time (Thursdays 10:00–12:00, The Dove, 37 High Street, Kington) in the ongoing community programmes on the <a href="index.html">home page</a>.</p>
+          <p>Replaced Stay &amp; Play with Toddle Time (Thursdays 10:00–12:00, The Dove, 37 High Street, Kington) in the ongoing community programmes on the <a href="/">home page</a>.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.19.006</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">19 October 2026</span></div>
-          <p>Behind the scenes, no change to what visitors see: added the <code>claude-pr-automerge.yml</code> GitHub Action, which re-runs this site's own test gate and audit against a pull request before merging, holding, or asking Greg by name, depending on the PR's risk and this repo's auto-merge level. Also added the <code>risk:simple</code>/<code>risk:complex</code>/<code>risk:gnarly</code> labels and set the <code>AUTO_MERGE_LEVEL</code> repo variable. See the <a href="help-technical-details.html">technical details guide</a>.</p>
+          <p>Behind the scenes, no change to what visitors see: added the <code>claude-pr-automerge.yml</code> GitHub Action, which re-runs this site's own test gate and audit against a pull request before merging, holding, or asking Greg by name, depending on the PR's risk and this repo's auto-merge level. Also added the <code>risk:simple</code>/<code>risk:complex</code>/<code>risk:gnarly</code> labels and set the <code>AUTO_MERGE_LEVEL</code> repo variable. See the <a href="/help-technical-details">technical details guide</a>.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.19.005</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">19 October 2026</span></div>
-          <p>Behind the scenes, no change to what visitors see: the SiteAdmin volunteer-edit pipeline now reports its progress (working, merged, deploying, deployed) instead of telling a volunteer a change is "live" the instant it merges — it was saying this before the site had actually redeployed. It also now confirms a deploy really went live by checking this site's own <a href="updates.html">updates page</a>, rather than just trusting the merge. See the <a href="help-technical-details.html">technical details guide</a>.</p>
+          <p>Behind the scenes, no change to what visitors see: the SiteAdmin volunteer-edit pipeline now reports its progress (working, merged, deploying, deployed) instead of telling a volunteer a change is "live" the instant it merges — it was saying this before the site had actually redeployed. It also now confirms a deploy really went live by checking this site's own <a href="/updates">updates page</a>, rather than just trusting the merge. See the <a href="/help-technical-details">technical details guide</a>.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.19.004</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">19 October 2026</span></div>
-          <p>Replaced the Stay and Play entries on the <a href="calendar.html">calendar</a> with Toddle Time at The Dove, 37 High Street: Thursdays 10am to 12pm in term time from 5 November 2026.</p>
+          <p>Replaced the Stay and Play entries on the <a href="/calendar">calendar</a> with Toddle Time at The Dove, 37 High Street: Thursdays 10am to 12pm in term time from 5 November 2026.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.19.003</span><span class="changelog-author">Phillippa Wright</span><span class="changelog-date">19 October 2026</span></div>
-          <p>Replaced the Stay &amp; Play poster on the <a href="index.html#noticeboard">home page noticeboard</a> with a new poster for Toddle Time, a free play group for under 3s at The Dove, Kington, on Thursdays from 5 November.</p>
+          <p>Replaced the Stay &amp; Play poster on the <a href="/#noticeboard">home page noticeboard</a> with a new poster for Toddle Time, a free play group for under 3s at The Dove, Kington, on Thursdays from 5 November.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.19.002</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">19 October 2026</span></div>
-          <p>Behind the scenes, no change to what visitors see: pinned the SiteAdmin volunteer-edit pipeline to the same Node version as the main CI, after finding it was running on a different, older default that made an Advent-calendar test's timer handling unreliable. See the <a href="help-technical-details.html">technical details guide</a>.</p>
+          <p>Behind the scenes, no change to what visitors see: pinned the SiteAdmin volunteer-edit pipeline to the same Node version as the main CI, after finding it was running on a different, older default that made an Advent-calendar test's timer handling unreliable. See the <a href="/help-technical-details">technical details guide</a>.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.19.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">19 October 2026</span></div>
-          <p>Behind the scenes, no change to what visitors see: fixed a flaky Advent-calendar unit test that was leaving a real 10-second timer running uncleared, which under load could get the whole test suite cancelled mid-run and block an unrelated change from going out. See the <a href="help-technical-details.html">technical details guide</a>.</p>
+          <p>Behind the scenes, no change to what visitors see: fixed a flaky Advent-calendar unit test that was leaving a real 10-second timer running uncleared, which under load could get the whole test suite cancelled mid-run and block an unrelated change from going out. See the <a href="/help-technical-details">technical details guide</a>.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.15.004</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">15 October 2026</span></div>
-          <p>Published the November 2026 issue of <a href="parish-news.html">Parish News</a> (homepage teaser and latest issue); October moved into the <a href="parish-news-archive.html">archive</a>.</p>
+          <p>Published the November 2026 issue of <a href="/parish-news">Parish News</a> (homepage teaser and latest issue); October moved into the <a href="/parish-news-archive">archive</a>.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.15.003</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">15 October 2026</span></div>
-          <p>Behind the scenes, no change to what visitors see: the automatic tests now clear Git's own settings before they start, so a test run from the push check can no longer touch the real repository. See the <a href="help-technical-details.html">technical details guide</a>.</p>
+          <p>Behind the scenes, no change to what visitors see: the automatic tests now clear Git's own settings before they start, so a test run from the push check can no longer touch the real repository. See the <a href="/help-technical-details">technical details guide</a>.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.15.002</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">15 October 2026</span></div>
-          <p>Behind the scenes, no change to what visitors see: the check that runs before changes are pushed no longer lets Git's own settings leak into the automatic tests, which had made some of them fail (and could alter the repository's settings). See the <a href="help-technical-details.html">technical details guide</a>.</p>
+          <p>Behind the scenes, no change to what visitors see: the check that runs before changes are pushed no longer lets Git's own settings leak into the automatic tests, which had made some of them fail (and could alter the repository's settings). See the <a href="/help-technical-details">technical details guide</a>.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.15.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">15 October 2026</span></div>
-          <p>Added Christine Robinson's phone number (07741 463231) as Parish Safeguarding Officer on <a href="our-people.html">Our People</a>, <a href="church-kington.html">St Mary's, Kington</a> and <a href="safeguarding.html">Safeguarding</a>.</p>
+          <p>Added Christine Robinson's phone number (07741 463231) as Parish Safeguarding Officer on <a href="/our-people">Our People</a>, <a href="/church-kington">St Mary's, Kington</a> and <a href="/safeguarding">Safeguarding</a>.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.14.008</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">14 October 2026</span></div>
-          <p>Behind the scenes, no change to what visitors see: the Advent calendar module is now ready to be given to another church. The site's own theme and 25 days of text moved out of the module folder into <code>src/advent/</code>, so copying the module carries none of this site's content, and a neutral "Example Parish" template sits in its place. The module has a 14-step adoption guide (<code>modules/advent/INTEGRATION.md</code>, proved by adding the calendar to copies of two other church sites), a command that prints the website security-header rules a second site needs, patches for sites missing a build feature, and a build that refuses leftover placeholder text once the calendar goes live. See the <a href="help-advent.html">Advent calendar help guide</a>.</p>
+          <p>Behind the scenes, no change to what visitors see: the Advent calendar module is now ready to be given to another church. The site's own theme and 25 days of text moved out of the module folder into <code>src/advent/</code>, so copying the module carries none of this site's content, and a neutral "Example Parish" template sits in its place. The module has a 14-step adoption guide (<code>modules/advent/INTEGRATION.md</code>, proved by adding the calendar to copies of two other church sites), a command that prints the website security-header rules a second site needs, patches for sites missing a build feature, and a build that refuses leftover placeholder text once the calendar goes live. See the <a href="/help-advent">Advent calendar help guide</a>.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.14.007</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">14 October 2026</span></div>
-          <p>Behind the scenes, no change to what visitors see: one command, <code>npm run check:live</code>, now runs every after-deploy check against the live site (page scripts match the security policy, the hidden or launched state, headers and caching, no calendar text leaking, all pictures present); a short <code>CODING_STANDARDS.md</code> for reviewers; a slimmer <code>CLAUDE.md</code> that points at the module README and launch checklist; an ASCII check with a ready-made fixer for the Advent source files; and a plain-English section on commit hooks, worktrees and the new automatic checks on GitHub in the hidden <a href="help-technical-details.html">technical details guide</a>.</p>
+          <p>Behind the scenes, no change to what visitors see: one command, <code>npm run check:live</code>, now runs every after-deploy check against the live site (page scripts match the security policy, the hidden or launched state, headers and caching, no calendar text leaking, all pictures present); a short <code>CODING_STANDARDS.md</code> for reviewers; a slimmer <code>CLAUDE.md</code> that points at the module README and launch checklist; an ASCII check with a ready-made fixer for the Advent source files; and a plain-English section on commit hooks, worktrees and the new automatic checks on GitHub in the hidden <a href="/help-technical-details">technical details guide</a>.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.14.006</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">14 October 2026</span></div>
@@ -160,23 +164,23 @@
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.14.005</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">14 October 2026</span></div>
-          <p>Fixed a console error on every page: a web address ending in a broken <code>%</code> escape (for example <code>/#%</code>) no longer makes the page's small scroll-to-section script throw. The script's security fingerprint in the site's security policy was updated to match (nothing else in the policy changed), and a new test fails if the script and the fingerprint ever drift apart. Touches every page, e.g. the <a href="index.html">home page</a> and the <a href="calendar.html">calendar</a>.</p>
+          <p>Fixed a console error on every page: a web address ending in a broken <code>%</code> escape (for example <code>/#%</code>) no longer makes the page's small scroll-to-section script throw. The script's security fingerprint in the site's security policy was updated to match (nothing else in the policy changed), and a new test fails if the script and the fingerprint ever drift apart. Touches every page, e.g. the <a href="/">home page</a> and the <a href="/calendar">calendar</a>.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.14.004</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">14 October 2026</span></div>
-          <p>Advent calendar (still hidden): the launch rehearsal now also runs the whole browser test suite in the launched copy and fails if anything fails; launching twice is safe (the commands say "already applied" instead of crashing); the checklist has a step for writing in the launch date, the help page loses two more sentences that are only true while the calendar is hidden, and the home banner gives back its reserved space within 1.5 seconds if the banner script is blocked. See the <a href="index.html">home page</a> and the <a href="help-advent.html">Advent help guide</a>.</p>
+          <p>Advent calendar (still hidden): the launch rehearsal now also runs the whole browser test suite in the launched copy and fails if anything fails; launching twice is safe (the commands say "already applied" instead of crashing); the checklist has a step for writing in the launch date, the help page loses two more sentences that are only true while the calendar is hidden, and the home banner gives back its reserved space within 1.5 seconds if the banner script is blocked. See the <a href="/">home page</a> and the <a href="/help-advent">Advent help guide</a>.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.14.003</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">14 October 2026</span></div>
-          <p>Advent calendar (still hidden): the launch checklist is corrected and finished: launching is now a short list of commands (npm run advent:rehearse, then npm run advent:after-launch to replace every sentence that says the calendar is hidden), the rehearsal and the checklist share one list of what gets deleted, and the post-deploy check now also demands a 200 for every page it reads. See the <a href="help-advent.html">Advent help guide</a>.</p>
+          <p>Advent calendar (still hidden): the launch checklist is corrected and finished: launching is now a short list of commands (npm run advent:rehearse, then npm run advent:after-launch to replace every sentence that says the calendar is hidden), the rehearsal and the checklist share one list of what gets deleted, and the post-deploy check now also demands a 200 for every page it reads. See the <a href="/help-advent">Advent help guide</a>.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.14.002</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">14 October 2026</span></div>
-          <p>Advent calendar (still hidden): the picture check now charges paint per painted shape and has hard caps, so no accepted picture takes more than about 0.15 seconds to draw (the largest accepted file of every hostile class is timed at three sizes in a real browser); the home banner reserves its room before the page is painted (no layout shift); searching for advent gives one result; printed days start at the top of the page; the Christmas Day and Epiphany doors stay readable at 300% text; a season that crosses 29 February is refused. See the <a href="advent.html">Advent page</a>, the <a href="index.html">home page</a> and the <a href="help-advent.html">Advent help guide</a>.</p>
+          <p>Advent calendar (still hidden): the picture check now charges paint per painted shape and has hard caps, so no accepted picture takes more than about 0.15 seconds to draw (the largest accepted file of every hostile class is timed at three sizes in a real browser); the home banner reserves its room before the page is painted (no layout shift); searching for advent gives one result; printed days start at the top of the page; the Christmas Day and Epiphany doors stay readable at 300% text; a season that crosses 29 February is refused. See the <a href="/advent">Advent page</a>, the <a href="/">home page</a> and the <a href="/help-advent">Advent help guide</a>.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.14.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">14 October 2026</span></div>
-          <p>Advent calendar (still hidden): Day 25 now follows Luke 2:20 (the shepherds went out and returned glorifying and praising God), the "Not quite yet" card makes "Maybe later" the main gold button, and the pictures for Days 10, 15, 19 and 20 are redrawn. See the <a href="advent.html">Advent page</a>.</p>
+          <p>Advent calendar (still hidden): Day 25 now follows Luke 2:20 (the shepherds went out and returned glorifying and praising God), the "Not quite yet" card makes "Maybe later" the main gold button, and the pictures for Days 10, 15, 19 and 20 are redrawn. See the <a href="/advent">Advent page</a>.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.13.028</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">13 October 2026</span></div>
@@ -184,79 +188,79 @@
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.13.027</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">13 October 2026</span></div>
-          <p>Safeguarding strip now on literally every page, including the <a href="index.html">home page</a> and <a href="safeguarding.html">Safeguarding</a>. It now lives only in the footer template (the separate strip template and the per-page off switch are gone), so it can no longer be missing from a page by accident.</p>
+          <p>Safeguarding strip now on literally every page, including the <a href="/">home page</a> and <a href="/safeguarding">Safeguarding</a>. It now lives only in the footer template (the separate strip template and the per-page off switch are gone), so it can no longer be missing from a page by accident.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.13.026</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">13 October 2026</span></div>
-          <p>Advent calendar (still hidden): new launch rehearsal command (<code>npm run advent:rehearse</code>) and a rewritten launch checklist; Day 1, Day 2 and Day 4 wording tidied. See the <a href="advent.html">Advent page</a>.</p>
+          <p>Advent calendar (still hidden): new launch rehearsal command (<code>npm run advent:rehearse</code>) and a rewritten launch checklist; Day 1, Day 2 and Day 4 wording tidied. See the <a href="/advent">Advent page</a>.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.13.025</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">13 October 2026</span></div>
-          <p>Advent calendar (still hidden): doors reflow at large text sizes, the day window has a sticky Close bar, the not-yet message is a small "Not quite yet" card, the archive has a "Start with Day 1" button, the page has one heading and a date-neutral no-JavaScript sentence with a better title and description, the home banner shows today's picture, the scene has tiny stars, the schema requires a 25-day season, and the picture draw-cost check charges gradients more. See the <a href="advent.html">Advent page</a> and the <a href="help-advent.html">Advent help guide</a>.</p>
+          <p>Advent calendar (still hidden): doors reflow at large text sizes, the day window has a sticky Close bar, the not-yet message is a small "Not quite yet" card, the archive has a "Start with Day 1" button, the page has one heading and a date-neutral no-JavaScript sentence with a better title and description, the home banner shows today's picture, the scene has tiny stars, the schema requires a 25-day season, and the picture draw-cost check charges gradients more. See the <a href="/advent">Advent page</a> and the <a href="/help-advent">Advent help guide</a>.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.13.024</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">13 October 2026</span></div>
-          <p>Safeguarding strip (999 reminder and button) now appears in the footer of every page except the <a href="index.html">home page</a> (which has its own safeguarding section) and <a href="safeguarding.html">Safeguarding</a> itself; it was missing from <a href="advent.html">Advent</a>, the 404 page and the help guide.</p>
+          <p>Safeguarding strip (999 reminder and button) now appears in the footer of every page except the <a href="/">home page</a> (which has its own safeguarding section) and <a href="/safeguarding">Safeguarding</a> itself; it was missing from <a href="/advent">Advent</a>, the 404 page and the help guide.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.13.023</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">13 October 2026</span></div>
-          <p>Advent calendar (still hidden): the 26 pictures are replaced by tidied copies (the hidden description text no longer has the old hidden-object game wording, and the Day 25 star is no longer clipped at the top). See the <a href="advent.html">Advent page</a>.</p>
+          <p>Advent calendar (still hidden): the 26 pictures are replaced by tidied copies (the hidden description text no longer has the old hidden-object game wording, and the Day 25 star is no longer clipped at the top). See the <a href="/advent">Advent page</a>.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.13.022</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">13 October 2026</span></div>
-          <p>Advent calendar (still hidden): the Day 25 picture is simplified (the row of tiny objects along the front is gone). See the <a href="advent.html">Advent page</a>.</p>
+          <p>Advent calendar (still hidden): the Day 25 picture is simplified (the row of tiny objects along the front is gone). See the <a href="/advent">Advent page</a>.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.13.021</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">13 October 2026</span></div>
-          <p>Advent calendar (still hidden): the Day 13 prayer now says "bless our villages and towns". See the <a href="advent.html">Advent page</a>.</p>
+          <p>Advent calendar (still hidden): the Day 13 prayer now says "bless our villages and towns". See the <a href="/advent">Advent page</a>.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.13.020</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">13 October 2026</span></div>
-          <p>Advent calendar (still hidden): Day 21 now ends "We will meet them properly at Epiphany, on 6 January." See the <a href="advent.html">Advent page</a>.</p>
+          <p>Advent calendar (still hidden): Day 21 now ends "We will meet them properly at Epiphany, on 6 January." See the <a href="/advent">Advent page</a>.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.13.019</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">13 October 2026</span></div>
-          <p>Advent calendar (still hidden), Greg's changes: the "Try this together" and "Can you find something hidden" parts are removed from every day, Day 3 now mentions Hergest Ridge, and Days 24 and 25 read correctly on any date. See the <a href="advent.html">Advent page</a> and the <a href="help-advent.html">Advent calendar help guide</a>.</p>
+          <p>Advent calendar (still hidden), Greg's changes: the "Try this together" and "Can you find something hidden" parts are removed from every day, Day 3 now mentions Hergest Ridge, and Days 24 and 25 read correctly on any date. See the <a href="/advent">Advent page</a> and the <a href="/help-advent">Advent calendar help guide</a>.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.13.018</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">13 October 2026</span></div>
-          <p>Advent calendar (still hidden): the 26 pictures are now in the site, so every day of the <a href="advent.html">Advent page</a> shows its illustration (with the "Can you find something hidden" hint) when opened in a preview. Updated the <a href="help-advent.html">Advent calendar help guide</a>.</p>
+          <p>Advent calendar (still hidden): the 26 pictures are now in the site, so every day of the <a href="/advent">Advent page</a> shows its illustration (with the "Can you find something hidden" hint) when opened in a preview. Updated the <a href="/help-advent">Advent calendar help guide</a>.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.13.017</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">13 October 2026</span></div>
-          <p>Advent calendar (still hidden): the real text for the 6 January bonus door, "Gifts for a King" (Epiphany), is in, so the <a href="advent.html">Advent page</a> now has a 26th door. Its picture still has to be drawn. See the <a href="help-advent.html">Advent calendar help guide</a>.</p>
+          <p>Advent calendar (still hidden): the real text for the 6 January bonus door, "Gifts for a King" (Epiphany), is in, so the <a href="/advent">Advent page</a> now has a 26th door. Its picture still has to be drawn. See the <a href="/help-advent">Advent calendar help guide</a>.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.13.016</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">13 October 2026</span></div>
-          <p>Stopped GitHub's automatic "pages build and deployment" job failing on every push: added an empty <code>.nojekyll</code> file so GitHub no longer tries to treat our planning documents as Jekyll templates (it choked on the double curly braces in the Advent spec). The live site is built and served by Cloudflare and is unaffected. See the <a href="help.html">help hub</a>.</p>
+          <p>Stopped GitHub's automatic "pages build and deployment" job failing on every push: added an empty <code>.nojekyll</code> file so GitHub no longer tries to treat our planning documents as Jekyll templates (it choked on the double curly braces in the Advent spec). The live site is built and served by Cloudflare and is unaffected. See the <a href="/help">help hub</a>.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.13.015</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">13 October 2026</span></div>
-          <p>Advent calendar (still hidden), security fix: the picture check now weighs a picture by how detailed its outlines really are, charges gradients per colour stop, bans dashed lines and sets size limits, and a browser test now times every real picture so none can be slow to draw. See the <a href="help-advent.html">Advent calendar help guide</a>.</p>
+          <p>Advent calendar (still hidden), security fix: the picture check now weighs a picture by how detailed its outlines really are, charges gradients per colour stop, bans dashed lines and sets size limits, and a browser test now times every real picture so none can be slow to draw. See the <a href="/help-advent">Advent calendar help guide</a>.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.13.014</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">13 October 2026</span></div>
-          <p>Advent calendar (still hidden), security fixes: the picture check now charges for the real work a mask or clip path causes (once per element that uses it) with hard limits, so no picture can freeze a browser, and the one-year cache rules now name each Advent script and stylesheet exactly instead of using wildcards. See the <a href="help-advent.html">Advent calendar help guide</a> for how pictures are checked.</p>
+          <p>Advent calendar (still hidden), security fixes: the picture check now charges for the real work a mask or clip path causes (once per element that uses it) with hard limits, so no picture can freeze a browser, and the one-year cache rules now name each Advent script and stylesheet exactly instead of using wildcards. See the <a href="/help-advent">Advent calendar help guide</a> for how pictures are checked.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.13.013</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">13 October 2026</span></div>
-          <p>Advent calendar (still hidden), small fixes: after a day is closed the <a href="advent.html">Advent page</a> keeps keyboard focus on the right door when midnight has passed, the doors now sit in an even grid with no gap before the star door, big text no longer overflows the doors, and the picture description for Day 21 now begins "Distant travellers cross desert dunes".</p>
+          <p>Advent calendar (still hidden), small fixes: after a day is closed the <a href="/advent">Advent page</a> keeps keyboard focus on the right door when midnight has passed, the doors now sit in an even grid with no gap before the star door, big text no longer overflows the doors, and the picture description for Day 21 now begins "Distant travellers cross desert dunes".</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.13.012</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">13 October 2026</span></div>
-          <p>Advent calendar (still hidden), more review fixes: the preview on the <a href="index.html">home page</a> now shows a "Preview mode" notice and an exit link, the home page is laid out exactly as before when there is no banner, the <a href="advent.html">Advent page</a> refreshes itself at midnight, a day that will not load offers "Try again" and times out after 10 seconds, the star door fills its own row on phones, dragging a text selection no longer closes a day, and the calendar files are cached for a year safely. Updated the <a href="help-advent.html">Advent calendar help guide</a>.</p>
+          <p>Advent calendar (still hidden), more review fixes: the preview on the <a href="/">home page</a> now shows a "Preview mode" notice and an exit link, the home page is laid out exactly as before when there is no banner, the <a href="/advent">Advent page</a> refreshes itself at midnight, a day that will not load offers "Try again" and times out after 10 seconds, the star door fills its own row on phones, dragging a text selection no longer closes a day, and the calendar files are cached for a year safely. Updated the <a href="/help-advent">Advent calendar help guide</a>.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.13.011</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">13 October 2026</span></div>
-          <p>Advent calendar (still hidden), review fixes: a new launch switch means the real date shows nothing on the <a href="advent.html">Advent page</a> or the <a href="index.html">home page</a> until we go live, even in December (only the pretend date shows it). The picture check now also limits how much work a picture can ask a browser to do. Updated the <a href="help-advent.html">Advent calendar help guide</a>. Also removed an empty entry from this changelog.</p>
+          <p>Advent calendar (still hidden), review fixes: a new launch switch means the real date shows nothing on the <a href="/advent">Advent page</a> or the <a href="/">home page</a> until we go live, even in December (only the pretend date shows it). The picture check now also limits how much work a picture can ask a browser to do. Updated the <a href="/help-advent">Advent calendar help guide</a>. Also removed an empty entry from this changelog.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.13.010</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">13 October 2026</span></div>
-          <p>Advent calendar (still hidden): the real calendar is built. Doors on a night sky with the five churches along the ridge, a story panel behind each door, a gentle "not yet" message, share and print, "The Christmas Story" after Christmas, and a banner on the <a href="index.html">home page</a> that only appears during the season. Preview it with ?advent-preview=2026-12-07 on the <a href="advent.html">Advent page</a> or the home page. The <a href="help-advent.html">Advent calendar help guide</a> explains it.</p>
+          <p>Advent calendar (still hidden): the real calendar is built. Doors on a night sky with the five churches along the ridge, a story panel behind each door, a gentle "not yet" message, share and print, "The Christmas Story" after Christmas, and a banner on the <a href="/">home page</a> that only appears during the season. Preview it with ?advent-preview=2026-12-07 on the <a href="/advent">Advent page</a> or the home page. The <a href="/help-advent">Advent calendar help guide</a> explains it.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.13.009</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">13 October 2026</span></div>
-          <p>Advent calendar (still hidden): added support for an optional 26th "bonus" door that opens on 6 January (Epiphany); the real text is still to be written, so the calendar keeps its 25 doors for now. The <a href="advent.html">Advent page</a> is unchanged for visitors.</p>
+          <p>Advent calendar (still hidden): added support for an optional 26th "bonus" door that opens on 6 January (Epiphany); the real text is still to be written, so the calendar keeps its 25 doors for now. The <a href="/advent">Advent page</a> is unchanged for visitors.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.13.008</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">13 October 2026</span></div>
@@ -264,15 +268,15 @@
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.13.007</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">13 October 2026</span></div>
-          <p>Advent calendar: launch checklist now notes a picture-safety fix that must be made before the first picture is added (see the <a href="help-advent.html">Advent calendar help guide</a>). Also tidied this changelog's layout. Still hidden.</p>
+          <p>Advent calendar: launch checklist now notes a picture-safety fix that must be made before the first picture is added (see the <a href="/help-advent">Advent calendar help guide</a>). Also tidied this changelog's layout. Still hidden.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.13.006</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">13 October 2026</span></div>
-          <p>Advent calendar: Phase 2 review fixes (still hidden). Stricter picture checking, one calm sentence on the <a href="advent.html">Advent page</a> before and after the season, the Advent help guide hidden from search until launch, and a launch checklist.</p>
+          <p>Advent calendar: Phase 2 review fixes (still hidden). Stricter picture checking, one calm sentence on the <a href="/advent">Advent page</a> before and after the season, the Advent help guide hidden from search until launch, and a launch checklist.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.13.005</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">13 October 2026</span></div>
-          <p>Advent calendar: built into the site but still hidden. The <a href="advent.html">Advent page</a> exists (not in the menu, footer, sitemap or search, and marked noindex) and shows only a calm "Advent opens on 1 December" message; add ?advent-preview=2026-12-07 to its address to try any date. Added the plain-English <a href="help-advent.html">Advent calendar help guide</a>, linked from the <a href="help.html">help hub</a>.</p>
+          <p>Advent calendar: built into the site but still hidden. The <a href="/advent">Advent page</a> exists (not in the menu, footer, sitemap or search, and marked noindex) and shows only a calm "Advent opens on 1 December" message; add ?advent-preview=2026-12-07 to its address to try any date. Added the plain-English <a href="/help-advent">Advent calendar help guide</a>, linked from the <a href="/help">help hub</a>.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.13.004</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">13 October 2026</span></div>
@@ -288,91 +292,91 @@
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.13.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">13 October 2026</span></div>
-          <p>Moved safeguarding out of the footer's Explore list into a highlighted row at the very top of the footer on every page (a purple panel with the 999 reminder and a white "Safeguarding information &amp; contacts" button), e.g. on the <a href="contact.html">Contact page</a>. The <a href="index.html">home page</a> keeps its own fuller safeguarding section instead.</p>
+          <p>Moved safeguarding out of the footer's Explore list into a highlighted row at the very top of the footer on every page (a purple panel with the 999 reminder and a white "Safeguarding information &amp; contacts" button), e.g. on the <a href="/contact">Contact page</a>. The <a href="/">home page</a> keeps its own fuller safeguarding section instead.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.12.010</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">12 October 2026</span></div>
-          <p>Made the safeguarding link in the footer strip stand out on every page: a solid white button with a shield icon (turns gold on hover), e.g. on the <a href="index.html">home page</a>.</p>
+          <p>Made the safeguarding link in the footer strip stand out on every page: a solid white button with a shield icon (turns gold on hover), e.g. on the <a href="/">home page</a>.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.12.009</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">12 October 2026</span></div>
-          <p>Sitewide, replaced the remaining arrow links with the same button-style pills: the footer safeguarding strip, <a href="contact.html">Contact</a>, <a href="donate.html">Donate</a>, <a href="get-involved.html">Get involved</a>, <a href="resources.html">Resources</a>, <a href="services.html">Services</a>, <a href="parish-news.html">Parish News</a>, <a href="newsletter.html">Newsletter</a>, <a href="newsletter-archive.html">Newsletter archive</a>, <a href="safeguarding.html">Safeguarding</a>, <a href="vacancies.html">Vacancies</a>, <a href="blog.html">Blog</a>, the <a href="index.html">home page</a>, the people cards' "Get in touch" and the newsletter issue cards. Links inside sentences just lose the arrow.</p>
+          <p>Sitewide, replaced the remaining arrow links with the same button-style pills: the footer safeguarding strip, <a href="/contact">Contact</a>, <a href="/donate">Donate</a>, <a href="/get-involved">Get involved</a>, <a href="/resources">Resources</a>, <a href="/services">Services</a>, <a href="/parish-news">Parish News</a>, <a href="/newsletter">Newsletter</a>, <a href="/newsletter-archive">Newsletter archive</a>, <a href="/safeguarding">Safeguarding</a>, <a href="/vacancies">Vacancies</a>, <a href="/blog">Blog</a>, the <a href="/">home page</a>, the people cards' "Get in touch" and the newsletter issue cards. Links inside sentences just lose the arrow.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.12.008</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">12 October 2026</span></div>
-          <p>On <a href="our-churches.html">Our Churches</a> and each church's own page (<a href="church-kington.html">Kington</a>, <a href="church-titley.html">Titley</a>, <a href="church-old-radnor.html">Old Radnor</a>, <a href="church-kinnerton.html">Kinnerton</a>, <a href="church-huntington.html">Huntington</a>, <a href="church-kington-history.html">Kington history</a>), replaced the arrow links with button-style pills: "More about" and "Give" first, then an "Exact location" button for the what3words address (with a short explanation of what3words at the top of Our Churches), then quieter reference links marked with an external-link icon.</p>
+          <p>On <a href="/our-churches">Our Churches</a> and each church's own page (<a href="/church-kington">Kington</a>, <a href="/church-titley">Titley</a>, <a href="/church-old-radnor">Old Radnor</a>, <a href="/church-kinnerton">Kinnerton</a>, <a href="/church-huntington">Huntington</a>, <a href="/church-kington-history">Kington history</a>), replaced the arrow links with button-style pills: "More about" and "Give" first, then an "Exact location" button for the what3words address (with a short explanation of what3words at the top of Our Churches), then quieter reference links marked with an external-link icon.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.12.007</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">12 October 2026</span></div>
-          <p>Added a highlighted notice that the building work at St Stephen's will continue until at least the end of February 2027 and that the organ stays covered to protect it from dust, on the <a href="index.html">home page</a>'s What's coming up noticeboard (the existing Heritage Fund grant poster) and at the top of the <a href="church-old-radnor.html">St Stephen's, Old Radnor</a> page.</p>
+          <p>Added a highlighted notice that the building work at St Stephen's will continue until at least the end of February 2027 and that the organ stays covered to protect it from dust, on the <a href="/">home page</a>'s What's coming up noticeboard (the existing Heritage Fund grant poster) and at the top of the <a href="/church-old-radnor">St Stephen's, Old Radnor</a> page.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.12.006</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">12 October 2026</span></div>
-          <p>On the <a href="index.html">home page</a>, put all five church names on one row, level with Kington's, with a faint dashed line down to each church's sketch.</p>
+          <p>On the <a href="/">home page</a>, put all five church names on one row, level with Kington's, with a faint dashed line down to each church's sketch.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.12.005</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">12 October 2026</span></div>
-          <p>On the <a href="index.html">home page</a>, raised the Old Radnor and Titley sketches slightly so the line no longer cuts through them, and tightened the space between the churches line and the Find a service / Our five churches buttons.</p>
+          <p>On the <a href="/">home page</a>, raised the Old Radnor and Titley sketches slightly so the line no longer cuts through them, and tightened the space between the churches line and the Find a service / Our five churches buttons.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.12.004</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">12 October 2026</span></div>
-          <p>On the <a href="index.html">home page</a>, the squiggly line is now the ride between our five churches drawn from finer ground-height data, so Old Radnor and Kinnerton each stand on their own hill with the valley between; each church's sketch and name links to its section of <a href="our-churches.html">Our Churches</a>. Removed the line from every other page's header to free up screen space.</p>
+          <p>On the <a href="/">home page</a>, the squiggly line is now the ride between our five churches drawn from finer ground-height data, so Old Radnor and Kinnerton each stand on their own hill with the valley between; each church's sketch and name links to its section of <a href="/our-churches">Our Churches</a>. Removed the line from every other page's header to free up screen space.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.12.003</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">12 October 2026</span></div>
-          <p>Behind the scenes: fixed an out-of-date automated check on the <a href="calendar.html">Calendar</a>'s repeating events, which still expected them to stop at the end of 2026. No change to what visitors see.</p>
+          <p>Behind the scenes: fixed an out-of-date automated check on the <a href="/calendar">Calendar</a>'s repeating events, which still expected them to stop at the end of 2026. No change to what visitors see.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.12.002</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">12 October 2026</span></div>
-          <p>On the journey line in every page header (for example <a href="contact.html">Contact</a>), raised the Kington and Titley sketches slightly so the line no longer cuts through them, and hid the line completely on phones to give the space back.</p>
+          <p>On the journey line in every page header (for example <a href="/contact">Contact</a>), raised the Kington and Titley sketches slightly so the line no longer cuts through them, and hid the line completely on phones to give the space back.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.12.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">12 October 2026</span></div>
-          <p>On every page header (for example <a href="contact.html">Contact</a>), replaced the squiggly line with a schematic of the ride between our five churches, drawn from real ground heights, with each church's sketch from <a href="our-churches.html">Our Churches</a> standing in its place. On phones only the line shows.</p>
+          <p>On every page header (for example <a href="/contact">Contact</a>), replaced the squiggly line with a schematic of the ride between our five churches, drawn from real ground heights, with each church's sketch from <a href="/our-churches">Our Churches</a> standing in its place. On phones only the line shows.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.10.004</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">10 October 2026</span></div>
-          <p>On <a href="what-we-believe.html">What We Believe</a>, added the Dove Project to the list of village activities our churches are involved in.</p>
+          <p>On <a href="/what-we-believe">What We Believe</a>, added the Dove Project to the list of village activities our churches are involved in.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.10.003</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">10 October 2026</span></div>
-          <p>On <a href="what-we-believe.html">What We Believe</a>, removed the Apostles' Creed section and added a paragraph on the cross and forgiveness.</p>
+          <p>On <a href="/what-we-believe">What We Believe</a>, removed the Apostles' Creed section and added a paragraph on the cross and forgiveness.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.10.002</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">10 October 2026</span></div>
-          <p>Added our own <a href="what-we-believe.html">What We Believe</a> page (a short introduction to the Christian faith, the Apostles' Creed and further resources), and pointed the <a href="index.html">home page</a>'s Dig Deeper button at it instead of an external church's site.</p>
+          <p>Added our own <a href="/what-we-believe">What We Believe</a> page (a short introduction to the Christian faith, the Apostles' Creed and further resources), and pointed the <a href="/">home page</a>'s Dig Deeper button at it instead of an external church's site.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.10.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">10 October 2026</span></div>
-          <p>Added a "Dig Deeper" section to the <a href="index.html">home page</a>, after Stay InSpired, with links to What We Believe, The Chosen, The Jesus Film and All About Jesus.</p>
+          <p>Added a "Dig Deeper" section to the <a href="/">home page</a>, after Stay InSpired, with links to What We Believe, The Chosen, The Jesus Film and All About Jesus.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.08.004</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 October 2026</span></div>
-          <p>Extended the recurring <a href="calendar.html">calendar</a> events (Kington Zero Waste, Stay and Play, Marches Voices Choir and Choral Evensong) through the end of 2027, skipping Stay and Play on Herefordshire school holidays.</p>
+          <p>Extended the recurring <a href="/calendar">calendar</a> events (Kington Zero Waste, Stay and Play, Marches Voices Choir and Choral Evensong) through the end of 2027, skipping Stay and Play on Herefordshire school holidays.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.08.003</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 October 2026</span></div>
-          <p>Added the 21 October Lego Club poster to the <a href="index.html#noticeboard">homepage noticeboard</a> (the event was already on the <a href="calendar.html">calendar</a>).</p>
+          <p>Added the 21 October Lego Club poster to the <a href="/#noticeboard">homepage noticeboard</a> (the event was already on the <a href="/calendar">calendar</a>).</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.08.002</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 October 2026</span></div>
-          <p>Updated the <a href="calendar.html">calendar</a>: Choral Evensong now takes place on the 4th Sunday of each month at 6pm at St Thomas &agrave; Becket, Huntington.</p>
+          <p>Updated the <a href="/calendar">calendar</a>: Choral Evensong now takes place on the 4th Sunday of each month at 6pm at St Thomas &agrave; Becket, Huntington.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.08.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 October 2026</span></div>
-          <p>Updated the <a href="calendar.html">calendar</a> for November: Remembrance Service (8th), Vision Day (14th), Titley Philharmonic concert details (15th), Advent Sunday combined service at Kinnerton and the &lsquo;Light up a Life&rsquo; service (29th).</p>
+          <p>Updated the <a href="/calendar">calendar</a> for November: Remembrance Service (8th), Vision Day (14th), Titley Philharmonic concert details (15th), Advent Sunday combined service at Kinnerton and the &lsquo;Light up a Life&rsquo; service (29th).</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.07.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">7 October 2026</span></div>
-          <p>Published the October 2026 issue of <a href="parish-news.html">Parish News</a> (homepage teaser and latest issue); September moved into the <a href="parish-news-archive.html">archive</a>.</p>
+          <p>Published the October 2026 issue of <a href="/parish-news">Parish News</a> (homepage teaser and latest issue); September moved into the <a href="/parish-news-archive">archive</a>.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.05.002</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">5 October 2026</span></div>
-          <p>Added a blank HTML comment to the top of the <a href="index.html">homepage</a> source as a test marker for site admin changes.</p>
+          <p>Added a blank HTML comment to the top of the <a href="/">homepage</a> source as a test marker for site admin changes.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.05.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">5 October 2026</span></div>
-          <p>Replaced the Stay &amp; Play poster on the <a href="index.html#noticeboard">homepage noticeboard</a> with the new design.</p>
+          <p>Replaced the Stay &amp; Play poster on the <a href="/#noticeboard">homepage noticeboard</a> with the new design.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.04.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">4 October 2026</span></div>
@@ -380,7 +384,7 @@
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.29.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">29 September 2026</span></div>
-          <p>Behind the scenes, no visible change: a routine Dependabot patch update to <code>@types/node</code> (26.6.2 to 26.6.3), which is only used to type-check the site's own tests and never reaches visitors. Rebuilding also refreshed the <a href="calendar.html">Calendar</a>'s hidden search-engine event list, which drops events once their date has passed; what visitors see on the page is unchanged.</p>
+          <p>Behind the scenes, no visible change: a routine Dependabot patch update to <code>@types/node</code> (26.6.2 to 26.6.3), which is only used to type-check the site's own tests and never reaches visitors. Rebuilding also refreshed the <a href="/calendar">Calendar</a>'s hidden search-engine event list, which drops events once their date has passed; what visitors see on the page is unchanged.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.27.006</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">27 September 2026</span></div>
@@ -388,7 +392,7 @@
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.27.005</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">27 September 2026</span></div>
-          <p>Show Revd Phillippa Wright's portrait at half its previous size (240 × 300) on <a href="our-people.html">Our People</a> and every church portal page (<a href="church-kington.html">Kington</a>, <a href="church-titley.html">Titley</a>, <a href="church-old-radnor.html">Old Radnor</a>, <a href="church-kinnerton.html">Kinnerton</a>, <a href="church-huntington.html">Huntington</a>) — the change was saved earlier today but the pages themselves hadn't been rebuilt, so it only goes live with this build. Also, behind the scenes with no visible change: routine Dependabot updates to the <code>tsx</code> build tool and to the GitHub workflows' checkout, Node setup and cache actions.</p>
+          <p>Show Revd Phillippa Wright's portrait at half its previous size (240 × 300) on <a href="/our-people">Our People</a> and every church portal page (<a href="/church-kington">Kington</a>, <a href="/church-titley">Titley</a>, <a href="/church-old-radnor">Old Radnor</a>, <a href="/church-kinnerton">Kinnerton</a>, <a href="/church-huntington">Huntington</a>) — the change was saved earlier today but the pages themselves hadn't been rebuilt, so it only goes live with this build. Also, behind the scenes with no visible change: routine Dependabot updates to the <code>tsx</code> build tool and to the GitHub workflows' checkout, Node setup and cache actions.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.27.004</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">27 September 2026</span></div>
@@ -404,15 +408,15 @@
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.27.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">27 September 2026</span></div>
-          <p>Behind-the-scenes security, no visible change: a daily check now compares every software package the site is built with against published security warnings, and opens a GitHub issue for anything found; Dependabot also proposes updates to the workflow's pinned actions. Explained on <a href="help-technical-details.html">Technical details</a>.</p>
+          <p>Behind-the-scenes security, no visible change: a daily check now compares every software package the site is built with against published security warnings, and opens a GitHub issue for anything found; Dependabot also proposes updates to the workflow's pinned actions. Explained on <a href="/help-technical-details">Technical details</a>.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.26.003</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">26 September 2026</span></div>
-          <p>Behind-the-scenes housekeeping, no visible change: each church's map location is now recorded in one place, instead of being copied separately into the <a href="index.html">homepage</a> map, each church's own page (<a href="church-kington.html">Kington</a>, <a href="church-titley.html">Titley</a>, <a href="church-old-radnor.html">Old Radnor</a>, <a href="church-kinnerton.html">Kinnerton</a>, <a href="church-huntington.html">Huntington</a>) and the search-engine details on <a href="our-churches.html">Our Churches</a> — so moving a pin can't leave one map disagreeing with another.</p>
+          <p>Behind-the-scenes housekeeping, no visible change: each church's map location is now recorded in one place, instead of being copied separately into the <a href="/">homepage</a> map, each church's own page (<a href="/church-kington">Kington</a>, <a href="/church-titley">Titley</a>, <a href="/church-old-radnor">Old Radnor</a>, <a href="/church-kinnerton">Kinnerton</a>, <a href="/church-huntington">Huntington</a>) and the search-engine details on <a href="/our-churches">Our Churches</a> — so moving a pin can't leave one map disagreeing with another.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.26.002</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">26 September 2026</span></div>
-          <p>Behind-the-scenes housekeeping so each change only touches the pages it affects. The build number has moved from every page's footer to the top of this page, and stylesheets, scripts and icons are now versioned by their own content rather than by build number — so returning visitors re-download a file only when it has actually changed, and the <a href="calendar.html">calendar</a> and maps now pick up changes straight away too. The five church pages and the <a href="index.html">homepage</a> share one copy of the map library's include.</p>
+          <p>Behind-the-scenes housekeeping so each change only touches the pages it affects. The build number has moved from every page's footer to the top of this page, and stylesheets, scripts and icons are now versioned by their own content rather than by build number — so returning visitors re-download a file only when it has actually changed, and the <a href="/calendar">calendar</a> and maps now pick up changes straight away too. The five church pages and the <a href="/">homepage</a> share one copy of the map library's include.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.26.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">26 September 2026</span></div>
@@ -424,27 +428,27 @@
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.24.002</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">24 September 2026</span></div>
-          <p>Add Christmas Day (25 December) to the <a href="calendar.html">calendar</a> as a whole-day event, with new all-day event support (shown as "All day", with a date-only structured-data start date).</p>
+          <p>Add Christmas Day (25 December) to the <a href="/calendar">calendar</a> as a whole-day event, with new all-day event support (shown as "All day", with a date-only structured-data start date).</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.24.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">24 September 2026</span></div>
-          <p>Added an illustrated portrait of Revd Phillippa Wright to her card on <a href="our-people.html">Our People</a> and on every church portal page (<a href="church-kington.html">Kington</a>, <a href="church-titley.html">Titley</a>, <a href="church-old-radnor.html">Old Radnor</a>, <a href="church-kinnerton.html">Kinnerton</a>, <a href="church-huntington.html">Huntington</a>). Person cards can now carry an optional <code>photo</code> in <code>src/people.config.mjs</code>, shown in place of the icon badge.</p>
+          <p>Added an illustrated portrait of Revd Phillippa Wright to her card on <a href="/our-people">Our People</a> and on every church portal page (<a href="/church-kington">Kington</a>, <a href="/church-titley">Titley</a>, <a href="/church-old-radnor">Old Radnor</a>, <a href="/church-kinnerton">Kinnerton</a>, <a href="/church-huntington">Huntington</a>). Person cards can now carry an optional <code>photo</code> in <code>src/people.config.mjs</code>, shown in place of the icon badge.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.21.002</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">21 September 2026</span></div>
-          <p>Updated <a href="help-getting-set-up.html">the setup guide</a>'s "Ask for access" step to name Greg explicitly as the person a new volunteer should send their GitHub username to.</p>
+          <p>Updated <a href="/help-getting-set-up">the setup guide</a>'s "Ask for access" step to name Greg explicitly as the person a new volunteer should send their GitHub username to.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.21.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">21 September 2026</span></div>
-          <p>Corrected the Kington Harvest Festival on the <a href="calendar.html">calendar</a> to 11am with lunch afterwards (was wrongly listed at 10am); removed the two Stay &amp; Play occurrences that aren't happening this week and next (22 &amp; 29 September); added the Primary School Harvest Festival (10:30am, Tuesday 29 September, St Mary's, Kington).</p>
+          <p>Corrected the Kington Harvest Festival on the <a href="/calendar">calendar</a> to 11am with lunch afterwards (was wrongly listed at 10am); removed the two Stay &amp; Play occurrences that aren't happening this week and next (22 &amp; 29 September); added the Primary School Harvest Festival (10:30am, Tuesday 29 September, St Mary's, Kington).</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.17.002</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">17 September 2026</span></div>
-          <p>Fixed build 2026.09.17.001: the reverted Lego Club poster was missing its twin card in <a href="services.html">the Archive</a>, so it vanished from the site entirely once its <code>data-expires</code> date passed instead of moving to Past Events, same as every other noticeboard entry.</p>
+          <p>Fixed build 2026.09.17.001: the reverted Lego Club poster was missing its twin card in <a href="/services">the Archive</a>, so it vanished from the site entirely once its <code>data-expires</code> date passed instead of moving to Past Events, same as every other noticeboard entry.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.17.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">17 September 2026</span></div>
-          <p>Reverted the Lego Club poster on <a href="index.html">the homepage noticeboard</a> to its original design (replacing the newer poster added in build 2026.09.14) — same event, image and <code>width</code>/<code>height</code> attributes restored to the original 600×839 aspect ratio.</p>
+          <p>Reverted the Lego Club poster on <a href="/">the homepage noticeboard</a> to its original design (replacing the newer poster added in build 2026.09.14) — same event, image and <code>width</code>/<code>height</code> attributes restored to the original 600×839 aspect ratio.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.16.004</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">16 September 2026</span></div>
@@ -452,7 +456,7 @@
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.16.003</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">16 September 2026</span></div>
-          <p>Added three events to <a href="calendar.html">the calendar</a>: the Lady Hawkins Founder's Day Service (9.15am, Friday 25 September, St Mary's, Kington) and a Funeral Service (12pm, Friday 25 September, St Mary's, Kington). The Jug of Punch concert on Friday 16 October was already listed.</p>
+          <p>Added three events to <a href="/calendar">the calendar</a>: the Lady Hawkins Founder's Day Service (9.15am, Friday 25 September, St Mary's, Kington) and a Funeral Service (12pm, Friday 25 September, St Mary's, Kington). The Jug of Punch concert on Friday 16 October was already listed.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.16.002</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">16 September 2026</span></div>
@@ -464,35 +468,35 @@
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.15.006</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">15 September 2026</span></div>
-          <p>Header is no longer sticky (<code>position: sticky</code> removed from <code>header.site</code>) — it now scrolls away with the page on every page, per user request. That also retired the same-day anchor-scroll compensation (builds .003/.005): with nothing left to overlay a scrolled-to <code>#anchor</code>, the <code>--header-offset</code>/<code>:target</code> CSS, its measuring script in <a href="index.html">templates/page.html</a>, its CSP hash, and <code>test/anchor-scroll.spec.ts</code> were all removed as dead weight rather than left in place doing nothing. Also reworked the mobile/handheld header: Live Stream and Donate now sit next to the search box on the same row (both shrink a little to fit) instead of wrapping onto a row of their own beneath it.</p>
+          <p>Header is no longer sticky (<code>position: sticky</code> removed from <code>header.site</code>) — it now scrolls away with the page on every page, per user request. That also retired the same-day anchor-scroll compensation (builds .003/.005): with nothing left to overlay a scrolled-to <code>#anchor</code>, the <code>--header-offset</code>/<code>:target</code> CSS, its measuring script in <a href="/">templates/page.html</a>, its CSP hash, and <code>test/anchor-scroll.spec.ts</code> were all removed as dead weight rather than left in place doing nothing. Also reworked the mobile/handheld header: Live Stream and Donate now sit next to the search box on the same row (both shrink a little to fit) instead of wrapping onto a row of their own beneath it.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.15.005</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">15 September 2026</span></div>
-          <p>Fixed a live CSP gap from the same-day anchor-scroll fix (build .003): the two inline <code>&lt;script&gt;</code> blocks it added to <a href="index.html">every page</a> were silently blocked by <code>script-src 'self'</code> in production (Cloudflare Workers, <code>_headers</code> applied) even though <code>npm test</code> passed — the plain static test server doesn't apply <code>_headers</code>, so the block never showed up locally. Allow-listed both scripts in <code>public/_headers</code> by SHA-256 hash instead of <code>'unsafe-inline'</code>, verified clean against a real <code>wrangler dev</code> console. Anchor links (search results, church sections, person cards) now actually clear the sticky header in production, not just in tests.</p>
+          <p>Fixed a live CSP gap from the same-day anchor-scroll fix (build .003): the two inline <code>&lt;script&gt;</code> blocks it added to <a href="/">every page</a> were silently blocked by <code>script-src 'self'</code> in production (Cloudflare Workers, <code>_headers</code> applied) even though <code>npm test</code> passed — the plain static test server doesn't apply <code>_headers</code>, so the block never showed up locally. Allow-listed both scripts in <code>public/_headers</code> by SHA-256 hash instead of <code>'unsafe-inline'</code>, verified clean against a real <code>wrangler dev</code> console. Anchor links (search results, church sections, person cards) now actually clear the sticky header in production, not just in tests.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.15.004</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">15 September 2026</span></div>
-          <p>Added a <a href="vacancies.html">Vacancies</a> page, linked in the top menu after Get Involved: a Treasurer for St Mary's, Kington (linking through to the existing Blog post and job description, contacting Greg Wright), and Friday volunteers for Kington Foodbank at the Parish Hall — run by Churches Together in Kington, DBS check required, linking out to kingtonfoodbank.org.uk and contacting Phillippa Wright. Both are long-running vacancies with no expiry.</p>
+          <p>Added a <a href="/vacancies">Vacancies</a> page, linked in the top menu after Get Involved: a Treasurer for St Mary's, Kington (linking through to the existing Blog post and job description, contacting Greg Wright), and Friday volunteers for Kington Foodbank at the Parish Hall — run by Churches Together in Kington, DBS check required, linking out to kingtonfoodbank.org.uk and contacting Phillippa Wright. Both are long-running vacancies with no expiry.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.15.003</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">15 September 2026</span></div>
-          <p>Fixed every #anchor link on the site — search results, church sections, <a href="our-people.html">person cards</a>, and more — landing behind the sticky header instead of below it. The header has no fixed height (the nav's 13 links wrap individually as the viewport narrows, so it's anywhere from ~97px to ~180px tall), so a static scroll offset could never track it correctly. An inline script right after the header now measures its real height and feeds it to a <code>:target { scroll-margin-top: ... }</code> rule that covers every kind of anchor at once; it also settles the reveal-on-scroll animation early for whichever card or section is the actual target, since its pre-reveal <code>transform</code> was throwing the landing position off by another 14px. Also added test coverage for several previously-untested business rules: the calendar's structured data and venue-address mapping, the church coordinate data duplicated across four places, the sitemap, search ranking tie-breaks, and a few newsletter-worker edge cases.</p>
+          <p>Fixed every #anchor link on the site — search results, church sections, <a href="/our-people">person cards</a>, and more — landing behind the sticky header instead of below it. The header has no fixed height (the nav's 13 links wrap individually as the viewport narrows, so it's anywhere from ~97px to ~180px tall), so a static scroll offset could never track it correctly. An inline script right after the header now measures its real height and feeds it to a <code>:target { scroll-margin-top: ... }</code> rule that covers every kind of anchor at once; it also settles the reveal-on-scroll animation early for whichever card or section is the actual target, since its pre-reveal <code>transform</code> was throwing the landing position off by another 14px. Also added test coverage for several previously-untested business rules: the calendar's structured data and venue-address mapping, the church coordinate data duplicated across four places, the sitemap, search ranking tie-breaks, and a few newsletter-worker edge cases.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.14.014</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">14 September 2026</span></div>
-          <p>Fixed a build quirk on <a href="calendar.html">the calendar page</a>: the HTML comment explaining the EVENTS_NOSCRIPT token named it in curly braces, so the build's own token substitution matched that mention too and spliced the full generated event list into the comment's sentence. Harmless — it's never rendered — but bloated the file and looked broken in view-source. Reworded the comment so it names the token without triggering the substitution.</p>
+          <p>Fixed a build quirk on <a href="/calendar">the calendar page</a>: the HTML comment explaining the EVENTS_NOSCRIPT token named it in curly braces, so the build's own token substitution matched that mention too and spliced the full generated event list into the comment's sentence. Harmless — it's never rendered — but bloated the file and looked broken in view-source. Reworded the comment so it names the token without triggering the substitution.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.14.013</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">14 September 2026</span></div>
-          <p>Added a Wedding at St Mary's, Kington to the <a href="calendar.html">calendar</a>, 2:00pm on Saturday 24 July 2027.</p>
+          <p>Added a Wedding at St Mary's, Kington to the <a href="/calendar">calendar</a>, 2:00pm on Saturday 24 July 2027.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.14.012</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">14 September 2026</span></div>
-          <p>Changed the previous build's photo-beside-blurb layout on <a href="our-churches.html">Our Churches</a> and each church's own page from two rigid side-by-side columns to a proper float: the text now wraps around the photo and only spreads to full width once it's read past the bottom of the image, instead of leaving a blank gap when the blurb is shorter than the photo. Headings always start on a fresh full-width line rather than being squeezed into the text column, except the very first one right after the photo (e.g. "Join us for worship" on St Mary's, Kington), which is short enough to sit comfortably alongside it.</p>
+          <p>Changed the previous build's photo-beside-blurb layout on <a href="/our-churches">Our Churches</a> and each church's own page from two rigid side-by-side columns to a proper float: the text now wraps around the photo and only spreads to full width once it's read past the bottom of the image, instead of leaving a blank gap when the blurb is shorter than the photo. Headings always start on a fresh full-width line rather than being squeezed into the text column, except the very first one right after the photo (e.g. "Join us for worship" on St Mary's, Kington), which is short enough to sit comfortably alongside it.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.14.011</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">14 September 2026</span></div>
-          <p>Restyled each church's entry on <a href="our-churches.html">Our Churches</a>: the photo is smaller and sits beside its blurb on desktop screens (860px and up) instead of above it, so there's more room for the text and less scrolling to get through all five. On mobile, the photo stays above the blurb as before.</p>
+          <p>Restyled each church's entry on <a href="/our-churches">Our Churches</a>: the photo is smaller and sits beside its blurb on desktop screens (860px and up) instead of above it, so there's more room for the text and less scrolling to get through all five. On mobile, the photo stays above the blurb as before.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.14.010</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">14 September 2026</span></div>
@@ -504,11 +508,11 @@
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.14.008</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">14 September 2026</span></div>
-          <p>Made the site header sticky (stays pinned to the top while the page scrolls beneath it) on <a href="index.html">the homepage</a> and every other page, and shrank it: menu items now sit on the same line as the "Kington Parishes" brand, letting Site Search and the Live Stream/Donate Now buttons move up onto a shorter second row. Reworked the mobile menu to overlay the page instead of growing the sticky header taller than the screen.</p>
+          <p>Made the site header sticky (stays pinned to the top while the page scrolls beneath it) on <a href="/">the homepage</a> and every other page, and shrank it: menu items now sit on the same line as the "Kington Parishes" brand, letting Site Search and the Live Stream/Donate Now buttons move up onto a shorter second row. Reworked the mobile menu to overlay the page instead of growing the sticky header taller than the screen.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.14.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">14 September 2026</span></div>
-          <p>Replaced the "St Mary's Lego Club" poster on <a href="index.html">the homepage</a>'s noticeboard with a new design, and updated its declared image dimensions to match the new poster's aspect ratio.</p>
+          <p>Replaced the "St Mary's Lego Club" poster on <a href="/">the homepage</a>'s noticeboard with a new design, and updated its declared image dimensions to match the new poster's aspect ratio.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.13.003</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">13 September 2026</span></div>
@@ -516,11 +520,11 @@
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.13.002</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">13 September 2026</span></div>
-          <p>Swapped the "Film Show of Past Local Events" poster on <a href="index.html">the homepage</a>'s noticeboard for a cleaner version without the "Made with AI" badge.</p>
+          <p>Swapped the "Film Show of Past Local Events" poster on <a href="/">the homepage</a>'s noticeboard for a cleaner version without the "Made with AI" badge.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.13.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">13 September 2026</span></div>
-          <p>Added the "Film Show of Past Local Events" poster to <a href="index.html">the homepage</a>'s What's coming up noticeboard, for St Stephen's, Old Radnor on Saturday 24 October, 7:00pm — Mr Harvey Jones presenting, admission £5 — and added the event to the <a href="calendar.html">calendar</a>.</p>
+          <p>Added the "Film Show of Past Local Events" poster to <a href="/">the homepage</a>'s What's coming up noticeboard, for St Stephen's, Old Radnor on Saturday 24 October, 7:00pm — Mr Harvey Jones presenting, admission £5 — and added the event to the <a href="/calendar">calendar</a>.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.12.003</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">12 September 2026</span></div>
@@ -536,143 +540,143 @@
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.11.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">11 September 2026</span></div>
-          <p>Added the "Hard Hat Tours" poster to <a href="index.html">the homepage</a>'s What's coming up noticeboard, for St Stephen's, Old Radnor on Friday 16 October, 11:00am — and added the event to the <a href="calendar.html">calendar</a>.</p>
+          <p>Added the "Hard Hat Tours" poster to <a href="/">the homepage</a>'s What's coming up noticeboard, for St Stephen's, Old Radnor on Friday 16 October, 11:00am — and added the event to the <a href="/calendar">calendar</a>.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.10.003</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">10 September 2026</span></div>
-          <p>Added the "A Jug of Punch" poster to <a href="index.html">the homepage</a>'s What's coming up noticeboard, for the concert already on the <a href="calendar.html">calendar</a> — Friday 16 October, 7:00pm at St Mary's, Kington, in aid of the church organ fund.</p>
+          <p>Added the "A Jug of Punch" poster to <a href="/">the homepage</a>'s What's coming up noticeboard, for the concert already on the <a href="/calendar">calendar</a> — Friday 16 October, 7:00pm at St Mary's, Kington, in aid of the church organ fund.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.10.002</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">10 September 2026</span></div>
-          <p>Removed Revd Paul Roberts' Organist role and its Get in touch link from <a href="church-kington.html">St Mary's, Kington</a> and <a href="our-people.html">Our People</a> — he keeps his Permission to Officiate (PTO) card, now without a public contact link either.</p>
+          <p>Removed Revd Paul Roberts' Organist role and its Get in touch link from <a href="/church-kington">St Mary's, Kington</a> and <a href="/our-people">Our People</a> — he keeps his Permission to Officiate (PTO) card, now without a public contact link either.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.10.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">10 September 2026</span></div>
-          <p>Added the Coffee Morning poster to <a href="index.html">the homepage</a>'s What's coming up noticeboard, for the fundraiser on Saturday 17 October, 10am–12noon at The Dove &amp; Yarn Barn, 37 High St, Kington, in aid of its renovations — and added the event to the <a href="calendar.html">calendar</a>.</p>
+          <p>Added the Coffee Morning poster to <a href="/">the homepage</a>'s What's coming up noticeboard, for the fundraiser on Saturday 17 October, 10am–12noon at The Dove &amp; Yarn Barn, 37 High St, Kington, in aid of its renovations — and added the event to the <a href="/calendar">calendar</a>.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.09.003</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">9 September 2026</span></div>
-          <p>Added quotes from "Old Radnor Parish Church: A Short History" by J. B. Sinclair and R. W. D. Fenn to <a href="church-old-radnor.html">St Stephen's, Old Radnor</a>'s history section — the rood screen, the organ case, Hugh Mortimer's 1270 hunting licence, and the tenor bell's inscription.</p>
+          <p>Added quotes from "Old Radnor Parish Church: A Short History" by J. B. Sinclair and R. W. D. Fenn to <a href="/church-old-radnor">St Stephen's, Old Radnor</a>'s history section — the rood screen, the organ case, Hugh Mortimer's 1270 hunting licence, and the tenor bell's inscription.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.09.002</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">9 September 2026</span></div>
-          <p>Warmed up the wording of the new Accessibility section on <a href="church-kington.html">St Mary's, Kington</a>'s page.</p>
+          <p>Warmed up the wording of the new Accessibility section on <a href="/church-kington">St Mary's, Kington</a>'s page.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.09.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">9 September 2026</span></div>
-          <p>Added an Accessibility section to <a href="church-kington.html">St Mary's, Kington</a>'s page: disabled parking, the moveable ramp, dogs welcome, the hearing loop, north-side parking conditions with a link to the <a href="parish-hall.html">Parish Hall</a>'s extra parking, large print service sheets, and toilet location.</p>
+          <p>Added an Accessibility section to <a href="/church-kington">St Mary's, Kington</a>'s page: disabled parking, the moveable ramp, dogs welcome, the hearing loop, north-side parking conditions with a link to the <a href="/parish-hall">Parish Hall</a>'s extra parking, large print service sheets, and toilet location.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.08.025</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
-          <p>Renamed <a href="help.html">the Help hub</a>'s heading and page title from "How this website gets updated" to "How to update this website".</p>
+          <p>Renamed <a href="/help">the Help hub</a>'s heading and page title from "How this website gets updated" to "How to update this website".</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.08.024</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
-          <p>Reworded the opening line of the worship welcome on <a href="church-kington.html">St Mary's, Kington</a> and <a href="our-churches.html">Our Churches</a> — "Come as you are — you'll find a warm welcome..." instead of "A warm welcome awaits everyone...".</p>
+          <p>Reworded the opening line of the worship welcome on <a href="/church-kington">St Mary's, Kington</a> and <a href="/our-churches">Our Churches</a> — "Come as you are — you'll find a warm welcome..." instead of "A warm welcome awaits everyone...".</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.08.023</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
-          <p>Brought <a href="our-churches.html">Our Churches</a>' Kington section in line with the welcoming update on <a href="church-kington.html">St Mary's, Kington</a>'s own page: the same Sunday service pattern (Morning Praise on the 3rd Sunday, Praise &amp; Prayer in the Evening on the 1st, a calendar link for the rotating 5th-Sunday Group Eucharist), plus tea, coffee, cake and the children's play area.</p>
+          <p>Brought <a href="/our-churches">Our Churches</a>' Kington section in line with the welcoming update on <a href="/church-kington">St Mary's, Kington</a>'s own page: the same Sunday service pattern (Morning Praise on the 3rd Sunday, Praise &amp; Prayer in the Evening on the 1st, a calendar link for the rotating 5th-Sunday Group Eucharist), plus tea, coffee, cake and the children's play area.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.08.022</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
-          <p>Made <a href="church-kington.html">St Mary's, Kington</a>'s page more welcoming: a new "Join us for worship" section spells out the Sunday pattern (Holy Communion, with Morning Praise on the 3rd Sunday), the 1st-Sunday Praise &amp; Prayer in the Evening service, and a pointer to the calendar for the rotating 5th-Sunday Group Eucharist, plus a mention of tea, coffee, biscuits, squash and cake after the service and the children's play area.</p>
+          <p>Made <a href="/church-kington">St Mary's, Kington</a>'s page more welcoming: a new "Join us for worship" section spells out the Sunday pattern (Holy Communion, with Morning Praise on the 3rd Sunday), the 1st-Sunday Praise &amp; Prayer in the Evening service, and a pointer to the calendar for the rotating 5th-Sunday Group Eucharist, plus a mention of tea, coffee, biscuits, squash and cake after the service and the children's play area.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.08.021</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
-          <p>Added the Kington Creations Lego Club poster to <a href="index.html">the homepage</a>'s What's coming up noticeboard, for the session on Wednesday 16 September, 3:30–5:00pm at St Mary's, Kington.</p>
+          <p>Added the Kington Creations Lego Club poster to <a href="/">the homepage</a>'s What's coming up noticeboard, for the session on Wednesday 16 September, 3:30–5:00pm at St Mary's, Kington.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.08.020</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
-          <p>Added a closing section to <a href="help-technical-details.html#ci-cd">Help / Technical details</a> clarifying there's no GitHub Actions CI in this repository — the build and the full test suite both run locally, before every push, and a push to <code>main</code> only triggers Cloudflare's own deployment of the already-built, already-tested code, not a build or test step of its own.</p>
+          <p>Added a closing section to <a href="/help-technical-details#ci-cd">Help / Technical details</a> clarifying there's no GitHub Actions CI in this repository — the build and the full test suite both run locally, before every push, and a push to <code>main</code> only triggers Cloudflare's own deployment of the already-built, already-tested code, not a build or test step of its own.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.08.019</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
-          <p>Technical audit follow-up: added explicit <code>width</code>/<code>height</code> to the five noticeboard poster images on <a href="index.html">the homepage</a> and <a href="services.html">Services &amp; Events</a>, matching every other image on the site — previously these were the only ones without it, risking layout shift as each poster loaded in.</p>
+          <p>Technical audit follow-up: added explicit <code>width</code>/<code>height</code> to the five noticeboard poster images on <a href="/">the homepage</a> and <a href="/services">Services &amp; Events</a>, matching every other image on the site — previously these were the only ones without it, risking layout shift as each poster loaded in.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.08.018</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
-          <p>Technical audit follow-up: added <code>Event</code> structured data to <a href="calendar.html">the calendar</a> so services and events are eligible for Google's event rich results, moving the calendar's data into a new single source of truth (<code>src/events.config.mjs</code>) that now also generates the interactive calendar's data file and the noscript fallback list, removing a hand-sync step. Also resized 15 oversized photos — <a href="our-churches.html">Our Churches</a>' Old Radnor/Kinnerton/Titley images, <a href="parish-hall.html">Parish Hall</a>'s gallery, and all nine covers on the <a href="parish-news-archive.html">Parish News archive</a> — down to the size they're actually displayed at, cutting roughly 2.7MB off the pages that show them.</p>
+          <p>Technical audit follow-up: added <code>Event</code> structured data to <a href="/calendar">the calendar</a> so services and events are eligible for Google's event rich results, moving the calendar's data into a new single source of truth (<code>src/events.config.mjs</code>) that now also generates the interactive calendar's data file and the noscript fallback list, removing a hand-sync step. Also resized 15 oversized photos — <a href="/our-churches">Our Churches</a>' Old Radnor/Kinnerton/Titley images, <a href="/parish-hall">Parish Hall</a>'s gallery, and all nine covers on the <a href="/parish-news-archive">Parish News archive</a> — down to the size they're actually displayed at, cutting roughly 2.7MB off the pages that show them.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.08.017</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
-          <p>Expanded the "Claude saves it to GitHub" step on <a href="help-making-a-change.html#the-steps">Help / Making a change</a> to mention the version number shown in the site's footer and on <a href="updates.html">/updates</a>, and that it corresponds to a Git tag behind the scenes — a way back to an exact past point in the site's history, in the extremely unlikely event it's ever needed.</p>
+          <p>Expanded the "Claude saves it to GitHub" step on <a href="/help-making-a-change#the-steps">Help / Making a change</a> to mention the version number shown in the site's footer and on <a href="/updates">/updates</a>, and that it corresponds to a Git tag behind the scenes — a way back to an exact past point in the site's history, in the extremely unlikely event it's ever needed.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.08.016</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
-          <p>Fixed the previous build's help-guide search scoping (<a href="help.html">/help</a>) not actually working live: it checked for a <code>.html</code> suffix on the URL, which is how the local dev/test server serves pages but not how the live site does — Cloudflare strips <code>.html</code> from every page's URL in production, so the check silently never matched and every search fell back to ordinary site-only results, even on a help page. The matching logic now tolerates both forms, and is unit-tested against each.</p>
+          <p>Fixed the previous build's help-guide search scoping (<a href="/help">/help</a>) not actually working live: it checked for a <code>.html</code> suffix on the URL, which is how the local dev/test server serves pages but not how the live site does — Cloudflare strips <code>.html</code> from every page's URL in production, so the check silently never matched and every search fell back to ordinary site-only results, even on a help page. The matching logic now tolerates both forms, and is unit-tested against each.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.08.015</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
-          <p>Site search now works inside the hidden <a href="help.html">help guide</a>, scoped to itself: while on a <code>/help*</code> page, the header search box searches only across the guide's own pages (and relabels itself "Search the help guide" to make that clear) — everywhere else, it behaves exactly as before, and the guide stays invisible to ordinary site search either way.</p>
+          <p>Site search now works inside the hidden <a href="/help">help guide</a>, scoped to itself: while on a <code>/help*</code> page, the header search box searches only across the guide's own pages (and relabels itself "Search the help guide" to make that clear) — everywhere else, it behaves exactly as before, and the guide stays invisible to ordinary site search either way.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.08.014</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
-          <p>Added three sections to <a href="help-making-a-change.html">Help / Making a change</a>: which areas of the site archive themselves automatically (the homepage noticeboard, the InSpire Newsletter) versus which don't (Parish News), plus step-by-step walkthroughs for publishing an <a href="newsletter.html">InSpire Newsletter</a> issue and adding a new <a href="parish-news.html">Parish News</a> PDF.</p>
+          <p>Added three sections to <a href="/help-making-a-change">Help / Making a change</a>: which areas of the site archive themselves automatically (the homepage noticeboard, the InSpire Newsletter) versus which don't (Parish News), plus step-by-step walkthroughs for publishing an <a href="/newsletter">InSpire Newsletter</a> issue and adding a new <a href="/parish-news">Parish News</a> PDF.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.08.013</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
-          <p>Added multi-developer guardrails: a <code>users.json</code> roster (first name, last name, GitHub account) that Claude checks before crediting a changelog entry, a standing rule to <code>git pull origin main</code> before starting and before pushing any change, and every changelog entry on this page — past and future — now names its author. Explained the mechanism on <a href="help-technical-details.html#contributors">Help / Technical details</a>.</p>
+          <p>Added multi-developer guardrails: a <code>users.json</code> roster (first name, last name, GitHub account) that Claude checks before crediting a changelog entry, a standing rule to <code>git pull origin main</code> before starting and before pushing any change, and every changelog entry on this page — past and future — now names its author. Explained the mechanism on <a href="/help-technical-details#contributors">Help / Technical details</a>.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.08.012</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
-          <p>Security self-review of <a href="help.html">/help</a>: no secrets, keys or credentials found anywhere in the guide, and everything else there is already public via the GitHub repo or a plain DNS lookup. Fixed one real inconsistency — <a href="help-dns-setup.html">DNS setup</a> had the vicar's email written out in plain text as an example, breaking this site's own rule that every mailto address gets obfuscated against harvester scrapers.</p>
+          <p>Security self-review of <a href="/help">/help</a>: no secrets, keys or credentials found anywhere in the guide, and everything else there is already public via the GitHub repo or a plain DNS lookup. Fixed one real inconsistency — <a href="/help-dns-setup">DNS setup</a> had the vicar's email written out in plain text as an example, breaking this site's own rule that every mailto address gets obfuscated against harvester scrapers.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.08.011</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
-          <p>Added <a href="help-dns-setup.html">Help / DNS setup</a>, linked from <a href="help-technical-details.html#dns">Technical details</a>' DNS section: the actual A/MX/TXT records for <code>kingtonparishes.org.uk</code> (checked via a live public DNS lookup), what each non-A record is for, and that email is handled separately from the website — by 123 Reg/GoDaddy, not Cloudflare. Also corrected the site's previous host, mentioned in <a href="help-technical-details.html">Technical details</a>, past changelog entries and the README — it was Squarespace, not Wix.</p>
+          <p>Added <a href="/help-dns-setup">Help / DNS setup</a>, linked from <a href="/help-technical-details#dns">Technical details</a>' DNS section: the actual A/MX/TXT records for <code>kingtonparishes.org.uk</code> (checked via a live public DNS lookup), what each non-A record is for, and that email is handled separately from the website — by 123 Reg/GoDaddy, not Cloudflare. Also corrected the site's previous host, mentioned in <a href="/help-technical-details">Technical details</a>, past changelog entries and the README — it was Squarespace, not Wix.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.08.010</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
-          <p>Added two new sections to <a href="help-technical-details.html">Help / Technical details</a>: <a href="help-technical-details.html#build-templates">Build &amp; templates</a> (the templated, DRY build pipeline, and why some files under <code>public/</code> should never be hand-edited) and <a href="help-technical-details.html#testing">Testing</a> (reactive/responsive, WCAG AA, functional regressions, and security, all checked before a push). Also renamed "API security" to "MailerLite API security" for clarity, and added a reminder to renew <code>security.txt</code>'s <code>Expires</code> date annually.</p>
+          <p>Added two new sections to <a href="/help-technical-details">Help / Technical details</a>: <a href="/help-technical-details#build-templates">Build &amp; templates</a> (the templated, DRY build pipeline, and why some files under <code>public/</code> should never be hand-edited) and <a href="/help-technical-details#testing">Testing</a> (reactive/responsive, WCAG AA, functional regressions, and security, all checked before a push). Also renamed "API security" to "MailerLite API security" for clarity, and added a reminder to renew <code>security.txt</code>'s <code>Expires</code> date annually.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.08.009</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
-          <p>Simplified <a href="help-getting-set-up.html">Help / Getting set up</a> from five manual steps to four: installing Git and Node.js and cloning the repository are now a single copy-paste block of instructions for Claude Code to carry out itself, rather than separate steps the reader does by hand. Added a reusable <code>.copy-block</code> component (a click-to-select-all textarea, <code>public/css/style.css</code> and <code>public/js/main.js</code>) for it.</p>
+          <p>Simplified <a href="/help-getting-set-up">Help / Getting set up</a> from five manual steps to four: installing Git and Node.js and cloning the repository are now a single copy-paste block of instructions for Claude Code to carry out itself, rather than separate steps the reader does by hand. Added a reusable <code>.copy-block</code> component (a click-to-select-all textarea, <code>public/css/style.css</code> and <code>public/js/main.js</code>) for it.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.08.008</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
-          <p><a href="help-getting-set-up.html">Help / Getting set up</a> now covers installing Git and Node.js (the local tools Claude Code needs) and asking Claude to clone the <a href="https://github.com/magicobject/kington-parishes.git">kington-parishes</a> repository, rather than jumping straight from a GitHub account to "open the Code tab and ask" with no working copy on the laptop yet.</p>
+          <p><a href="/help-getting-set-up">Help / Getting set up</a> now covers installing Git and Node.js (the local tools Claude Code needs) and asking Claude to clone the <a href="https://github.com/magicobject/kington-parishes.git">kington-parishes</a> repository, rather than jumping straight from a GitHub account to "open the Code tab and ask" with no working copy on the laptop yet.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.08.007</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
-          <p>Added <a href="help-when-it-goes-wrong.html">Help / When it goes wrong</a> — ask Claude, revert, or fail forward, plus reassurance that nothing is permanently broken — linked from the <a href="help.html">Help</a> hub and its "undo a change" FAQ entry. Also added a clear reassurance to the Help hub and <a href="help-getting-set-up.html">Getting set up</a> that once a laptop is set up, zero technical knowledge is needed for anything that follows.</p>
+          <p>Added <a href="/help-when-it-goes-wrong">Help / When it goes wrong</a> — ask Claude, revert, or fail forward, plus reassurance that nothing is permanently broken — linked from the <a href="/help">Help</a> hub and its "undo a change" FAQ entry. Also added a clear reassurance to the Help hub and <a href="/help-getting-set-up">Getting set up</a> that once a laptop is set up, zero technical knowledge is needed for anything that follows.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.08.006</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
-          <p>Added 2FA advice to <a href="help-getting-set-up.html">Help / Getting set up</a>'s GitHub account step, and a new, more technical <a href="help-technical-details.html">Help / Technical details</a> page linked from the <a href="help.html">Help</a> hub — Cloudflare Workers hosting and DNS, the MailerLite-powered newsletter, how the <code>/api/subscribe</code> endpoint is secured, and where the source lives on GitHub.</p>
+          <p>Added 2FA advice to <a href="/help-getting-set-up">Help / Getting set up</a>'s GitHub account step, and a new, more technical <a href="/help-technical-details">Help / Technical details</a> page linked from the <a href="/help">Help</a> hub — Cloudflare Workers hosting and DNS, the MailerLite-powered newsletter, how the <code>/api/subscribe</code> endpoint is secured, and where the source lives on GitHub.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.08.005</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
-          <p>Clarified on the <a href="help-getting-set-up.html">Help / Getting set up</a> and <a href="help-making-a-change.html">Help / Making a change</a> pages that it's specifically Claude Desktop's <strong>Code</strong> tab (Claude Code) that reads/edits files and talks to GitHub — an ordinary chat elsewhere in the app can't do either.</p>
+          <p>Clarified on the <a href="/help-getting-set-up">Help / Getting set up</a> and <a href="/help-making-a-change">Help / Making a change</a> pages that it's specifically Claude Desktop's <strong>Code</strong> tab (Claude Code) that reads/edits files and talks to GitHub — an ordinary chat elsewhere in the app can't do either.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.08.004</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
-          <p>Added a hidden, non-technical <a href="help.html">Help</a> guide for the website team — how changes reach the live site via Claude/Git/GitHub in plain English, plus <a href="help-getting-set-up.html">getting a laptop set up</a> and <a href="help-making-a-change.html">making a change day to day</a>. Not linked from anywhere on the main site and marked noindex, same pattern as this changelog.</p>
+          <p>Added a hidden, non-technical <a href="/help">Help</a> guide for the website team — how changes reach the live site via Claude/Git/GitHub in plain English, plus <a href="/help-getting-set-up">getting a laptop set up</a> and <a href="/help-making-a-change">making a change day to day</a>. Not linked from anywhere on the main site and marked noindex, same pattern as this changelog.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.08.003</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
-          <p>Updated the Stay &amp; Play poster on the <a href="index.html">homepage</a> noticeboard with a new design, and lowered its suggested donation from £2 to £1.</p>
+          <p>Updated the Stay &amp; Play poster on the <a href="/">homepage</a> noticeboard with a new design, and lowered its suggested donation from £2 to £1.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.08.002</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
-          <p>Fixed Revd Judith Pollard's PTO card not showing on <a href="church-kington.html">St Mary the Virgin, Kington</a>'s page — she's PTO clergy at Kington, same as Revd Paul Roberts, but was missing the church tag that surfaces a PTO card there.</p>
+          <p>Fixed Revd Judith Pollard's PTO card not showing on <a href="/church-kington">St Mary the Virgin, Kington</a>'s page — she's PTO clergy at Kington, same as Revd Paul Roberts, but was missing the church tag that surfaces a PTO card there.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.08.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">8 September 2026</span></div>
-          <p>Added our clergy with Permission to Officiate (PTO) — Revd Paul Roberts, Revd Judith Pollard and Revd Paul Buckingham — to <a href="our-people.html">Our People</a>, plus <a href="church-kington.html">St Mary the Virgin, Kington</a>'s and <a href="church-huntington.html">St Thomas à Becket, Huntington</a>'s own pages for the PTO clergy tied to each. Also added Rob MacCurrach as Reader to <a href="our-people.html">Our People</a> and <a href="church-kington.html">St Mary the Virgin, Kington</a>'s page.</p>
+          <p>Added our clergy with Permission to Officiate (PTO) — Revd Paul Roberts, Revd Judith Pollard and Revd Paul Buckingham — to <a href="/our-people">Our People</a>, plus <a href="/church-kington">St Mary the Virgin, Kington</a>'s and <a href="/church-huntington">St Thomas à Becket, Huntington</a>'s own pages for the PTO clergy tied to each. Also added Rob MacCurrach as Reader to <a href="/our-people">Our People</a> and <a href="/church-kington">St Mary the Virgin, Kington</a>'s page.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.07.009</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">7 September 2026</span></div>
-          <p>Added the Kington Harvest Festival service (10am, Sunday 4 October, replacing that week's regular Holy Communion slot) and the 'Jug of Punch' October Concert (7pm, Friday 16 October) to the <a href="calendar.html">calendar</a>.</p>
+          <p>Added the Kington Harvest Festival service (10am, Sunday 4 October, replacing that week's regular Holy Communion slot) and the 'Jug of Punch' October Concert (7pm, Friday 16 October) to the <a href="/calendar">calendar</a>.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.07.008</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">7 September 2026</span></div>
-          <p>Answered the 1995 stained-glass window's own question on <a href="church-kington-history.html">St Mary's, Kington's History &amp; Architecture</a> page — it depicts the Holy Spirit as a dove, not just "a bird".</p>
+          <p>Answered the 1995 stained-glass window's own question on <a href="/church-kington-history">St Mary's, Kington's History &amp; Architecture</a> page — it depicts the Holy Spirit as a dove, not just "a bird".</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.07.007</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">7 September 2026</span></div>
-          <p>Added a new <a href="church-kington-history.html">History &amp; Architecture</a> page for St Mary's, Kington, combining the church's own visitor-guide leaflets with the existing history content — linked from <a href="church-kington.html">St Mary's, Kington</a>'s own page, which now carries a shorter overview and a link through. Also corrected the organ's history (Nicholson, 1848; rebuilt by Walkers, 1884; moved 1909; rebuilt again 2024) against the leaflets' account, which conflicted with what was on the site before.</p>
+          <p>Added a new <a href="/church-kington-history">History &amp; Architecture</a> page for St Mary's, Kington, combining the church's own visitor-guide leaflets with the existing history content — linked from <a href="/church-kington">St Mary's, Kington</a>'s own page, which now carries a shorter overview and a link through. Also corrected the organ's history (Nicholson, 1848; rebuilt by Walkers, 1884; moved 1909; rebuilt again 2024) against the leaflets' account, which conflicted with what was on the site before.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.07.006</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">7 September 2026</span></div>
@@ -680,27 +684,27 @@
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.07.005</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">7 September 2026</span></div>
-          <p>Added Stephen Lacey's contact email for the Lego Club to his card on <a href="our-people.html">Our People</a> and <a href="church-kington.html">St Mary the Virgin, Kington</a>'s own page.</p>
+          <p>Added Stephen Lacey's contact email for the Lego Club to his card on <a href="/our-people">Our People</a> and <a href="/church-kington">St Mary the Virgin, Kington</a>'s own page.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.07.004</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">7 September 2026</span></div>
-          <p>Added the <a href="privacy-policy.html">Privacy Policy</a> to the footer's Explore list — previously only reachable from the newsletter signup form's consent text, so it had no link from most of the site. Also changed its Contact us section to <code>web@kingtonparishes.org.uk</code>, a dedicated address instead of the vicar's own.</p>
+          <p>Added the <a href="/privacy-policy">Privacy Policy</a> to the footer's Explore list — previously only reachable from the newsletter signup form's consent text, so it had no link from most of the site. Also changed its Contact us section to <code>web@kingtonparishes.org.uk</code>, a dedicated address instead of the vicar's own.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.07.003</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">7 September 2026</span></div>
-          <p>Added a Cookies section to the <a href="privacy-policy.html">Privacy Policy</a> — the site sets no cookies of its own (verified against live response headers), so no consent banner is needed; noted Cloudflare's rare strictly-necessary security cookie and the third-party requests made to Google Fonts and OpenStreetMap.</p>
+          <p>Added a Cookies section to the <a href="/privacy-policy">Privacy Policy</a> — the site sets no cookies of its own (verified against live response headers), so no consent banner is needed; noted Cloudflare's rare strictly-necessary security cookie and the third-party requests made to Google Fonts and OpenStreetMap.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.07.002</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">7 September 2026</span></div>
-          <p>Added Stephen Lacey as Lego Club Organiser to <a href="our-people.html">Our People</a> and <a href="church-kington.html">St Mary the Virgin, Kington</a>'s own page.</p>
+          <p>Added Stephen Lacey as Lego Club Organiser to <a href="/our-people">Our People</a> and <a href="/church-kington">St Mary the Virgin, Kington</a>'s own page.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.07.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">7 September 2026</span></div>
-          <p>Added Lego Club (3:30-5:00pm, St Mary's, Kington) and Praise &amp; Prayer in the Evening (PPE, 6:00-7:00pm, first Sunday of the month, St Mary's, Kington) to the <a href="calendar.html">calendar</a> for September through December 2026.</p>
+          <p>Added Lego Club (3:30-5:00pm, St Mary's, Kington) and Praise &amp; Prayer in the Evening (PPE, 6:00-7:00pm, first Sunday of the month, St Mary's, Kington) to the <a href="/calendar">calendar</a> for September through December 2026.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.06.005</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">6 September 2026</span></div>
-          <p>Fixed a CSP violation on every page with a Leaflet map — the <a href="index.html">home page</a>'s five-pin map and each church's own single-pin map (e.g. <a href="church-kington.html">St Mary the Virgin, Kington</a>) — where Leaflet's internal 1&times;1 transparent-GIF placeholder was being blocked by <code>img-src</code> (three console errors per load; the map itself still rendered correctly regardless, tiles and marker icon both came from allowed origins). Added <code>data:</code> to <code>img-src</code> in <code>public/_headers</code>, verified clean with <code>wrangler dev</code> since that's the only way to actually exercise <code>_headers</code> locally.</p>
+          <p>Fixed a CSP violation on every page with a Leaflet map — the <a href="/">home page</a>'s five-pin map and each church's own single-pin map (e.g. <a href="/church-kington">St Mary the Virgin, Kington</a>) — where Leaflet's internal 1&times;1 transparent-GIF placeholder was being blocked by <code>img-src</code> (three console errors per load; the map itself still rendered correctly regardless, tiles and marker icon both came from allowed origins). Added <code>data:</code> to <code>img-src</code> in <code>public/_headers</code>, verified clean with <code>wrangler dev</code> since that's the only way to actually exercise <code>_headers</code> locally.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.06.004</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">6 September 2026</span></div>
@@ -708,43 +712,43 @@
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.06.003</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">6 September 2026</span></div>
-          <p>Renamed the Safeguarding Policy from <code>.doc</code> to <code>.docx</code> — the file is genuinely Open XML format, and the mismatched extension could trip a "format doesn't match" warning in Word. Updated the download link on <a href="safeguarding.html">Safeguarding</a> to match.</p>
+          <p>Renamed the Safeguarding Policy from <code>.doc</code> to <code>.docx</code> — the file is genuinely Open XML format, and the mismatched extension could trip a "format doesn't match" warning in Word. Updated the download link on <a href="/safeguarding">Safeguarding</a> to match.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.06.002</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">6 September 2026</span></div>
-          <p>Added a new <code>public/docs/</code> folder (hand-maintained, same as <code>public/pilgrim-paths/</code> and <code>public/parish-news/</code>) holding the PCC-agreed Safeguarding Policy, and linked it from <a href="safeguarding.html">Safeguarding</a> — the one piece of the old site's footer that was deliberately left out until the file itself was supplied.</p>
+          <p>Added a new <code>public/docs/</code> folder (hand-maintained, same as <code>public/pilgrim-paths/</code> and <code>public/parish-news/</code>) holding the PCC-agreed Safeguarding Policy, and linked it from <a href="/safeguarding">Safeguarding</a> — the one piece of the old site's footer that was deliberately left out until the file itself was supplied.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.06.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">6 September 2026</span></div>
-          <p>Added a full safeguarding section to the <a href="index.html">home page</a> (the 999 emergency notice, the "if you're worried" guidance, and the Parish/Diocesan Safeguarding Officer and Herefordshire Council contact cards) — carried over from the bottom of the old site's home page. DRYed up via a new shared <code>safeguarding-essentials.html</code> partial so <a href="safeguarding.html">Safeguarding</a> and the home page render the exact same contact details rather than duplicating them by hand; the home page's small safeguard-strip banner is now skipped in favour of this fuller section. The safeguarding policy document itself (the old site linked a Word doc and a PNG) is intentionally not carried over yet — still waiting on that file.</p>
+          <p>Added a full safeguarding section to the <a href="/">home page</a> (the 999 emergency notice, the "if you're worried" guidance, and the Parish/Diocesan Safeguarding Officer and Herefordshire Council contact cards) — carried over from the bottom of the old site's home page. DRYed up via a new shared <code>safeguarding-essentials.html</code> partial so <a href="/safeguarding">Safeguarding</a> and the home page render the exact same contact details rather than duplicating them by hand; the home page's small safeguard-strip banner is now skipped in favour of this fuller section. The safeguarding policy document itself (the old site linked a Word doc and a PNG) is intentionally not carried over yet — still waiting on that file.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.05.010</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">5 September 2026</span></div>
-          <p>Expanded <a href="church-kinnerton.html">St Mary's, Kinnerton</a>'s page with its Diocese of Hereford / chapel-of-ease context, the churchyard's 1943 extension and yew tree, and its aumbry and piscina — and deliberately did not add a listing grade, since research found no evidence this church is actually Cadw-listed. Fifth and last of the <code>SUGGESTIONS.md</code> reviews to be published — all five churches now done.</p>
+          <p>Expanded <a href="/church-kinnerton">St Mary's, Kinnerton</a>'s page with its Diocese of Hereford / chapel-of-ease context, the churchyard's 1943 extension and yew tree, and its aumbry and piscina — and deliberately did not add a listing grade, since research found no evidence this church is actually Cadw-listed. Fifth and last of the <code>SUGGESTIONS.md</code> reviews to be published — all five churches now done.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.05.009</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">5 September 2026</span></div>
-          <p>Expanded <a href="church-huntington.html">St Thomas à Becket, Huntington</a>'s page with History &amp; Architecture, Bells, Fittings, Stained Glass and Organ sections, plus its Grade II* listing. Corrected the "first recorded in the Domesday Book" claim — Domesday records Huntington the settlement, not the church, which dates from around 1300 — and reframed the Richard le Bret founding story as local tradition rather than fact. Fourth of the <code>SUGGESTIONS.md</code> reviews to be published.</p>
+          <p>Expanded <a href="/church-huntington">St Thomas à Becket, Huntington</a>'s page with History &amp; Architecture, Bells, Fittings, Stained Glass and Organ sections, plus its Grade II* listing. Corrected the "first recorded in the Domesday Book" claim — Domesday records Huntington the settlement, not the church, which dates from around 1300 — and reframed the Richard le Bret founding story as local tradition rather than fact. Fourth of the <code>SUGGESTIONS.md</code> reviews to be published.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.05.008</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">5 September 2026</span></div>
-          <p>Expanded <a href="church-old-radnor.html">St Stephen's, Old Radnor</a>'s page with History &amp; Architecture, Font, Rood Screen, Organ and Monuments &amp; Other Features sections, plus its Grade I (Cadw) listing. The famous "oldest organ case in the UK" claim now cites organ historian Stephen Bicknell's authentication of a case once doubted by Lady Susi Jeans, rather than stating it as flatly uncontested. Third of the <code>SUGGESTIONS.md</code> reviews to be published.</p>
+          <p>Expanded <a href="/church-old-radnor">St Stephen's, Old Radnor</a>'s page with History &amp; Architecture, Font, Rood Screen, Organ and Monuments &amp; Other Features sections, plus its Grade I (Cadw) listing. The famous "oldest organ case in the UK" claim now cites organ historian Stephen Bicknell's authentication of a case once doubted by Lady Susi Jeans, rather than stating it as flatly uncontested. Third of the <code>SUGGESTIONS.md</code> reviews to be published.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.05.007</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">5 September 2026</span></div>
-          <p>Expanded <a href="church-titley.html">St Peter's, Titley</a>'s page with a History &amp; Architecture section (its c.1120 Tironensian priory origin, the 1834 west tower funded by Lady Elizabeth Greenly, and its Grade II listing) and a Monuments section noting the churchyard grave of Hungarian national hero General Lázár Mészáros — carefully hedged, since his remains were reportedly reburied in Hungary in 1991. Second of the <code>SUGGESTIONS.md</code> reviews to be published.</p>
+          <p>Expanded <a href="/church-titley">St Peter's, Titley</a>'s page with a History &amp; Architecture section (its c.1120 Tironensian priory origin, the 1834 west tower funded by Lady Elizabeth Greenly, and its Grade II listing) and a Monuments section noting the churchyard grave of Hungarian national hero General Lázár Mészáros — carefully hedged, since his remains were reportedly reburied in Hungary in 1991. Second of the <code>SUGGESTIONS.md</code> reviews to be published.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.05.006</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">5 September 2026</span></div>
-          <p>Expanded <a href="church-kington.html">St Mary the Virgin, Kington</a>'s page with History &amp; Architecture, Monuments, Bells, Organ and Lychgate sections, and its Grade I listing — the first of the research findings from <code>SUGGESTIONS.md</code> to be reviewed and published.</p>
+          <p>Expanded <a href="/church-kington">St Mary the Virgin, Kington</a>'s page with History &amp; Architecture, Monuments, Bells, Organ and Lychgate sections, and its Grade I listing — the first of the research findings from <code>SUGGESTIONS.md</code> to be reviewed and published.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.05.005</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">5 September 2026</span></div>
-          <p>Added a <code>SUGGESTIONS.md</code> at the repo root: research findings on all five churches (Wikipedia, Historic England/Cadw listings, Wikidata) compared against what <a href="church-kington.html">Kington</a>, <a href="church-titley.html">Titley</a>, <a href="church-old-radnor.html">Old Radnor</a>, <a href="church-kinnerton.html">Kinnerton</a> and <a href="church-huntington.html">Huntington</a>'s own pages currently say — corrections, additions and things worth verifying, awaiting review before anything moves into <code>BACKLOG.md</code>. Process change with no page of its own beyond the ones linked.</p>
+          <p>Added a <code>SUGGESTIONS.md</code> at the repo root: research findings on all five churches (Wikipedia, Historic England/Cadw listings, Wikidata) compared against what <a href="/church-kington">Kington</a>, <a href="/church-titley">Titley</a>, <a href="/church-old-radnor">Old Radnor</a>, <a href="/church-kinnerton">Kinnerton</a> and <a href="/church-huntington">Huntington</a>'s own pages currently say — corrections, additions and things worth verifying, awaiting review before anything moves into <code>BACKLOG.md</code>. Process change with no page of its own beyond the ones linked.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.05.004</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">5 September 2026</span></div>
-          <p>Corrected all five churches' map coordinates on the <a href="index.html">homepage</a> and each church's own portal page (<a href="church-kington.html">Kington</a>, <a href="church-titley.html">Titley</a>, <a href="church-old-radnor.html">Old Radnor</a>, <a href="church-kinnerton.html">Kinnerton</a>, <a href="church-huntington.html">Huntington</a>) — the hand-converted lat/lng from build 2026.09.05.001 had drifted from the real church buildings (Kington was ~850m out, Huntington ~670m), now matched against OpenStreetMap's own building outlines. Also widened the homepage map's zoom slightly.</p>
+          <p>Corrected all five churches' map coordinates on the <a href="/">homepage</a> and each church's own portal page (<a href="/church-kington">Kington</a>, <a href="/church-titley">Titley</a>, <a href="/church-old-radnor">Old Radnor</a>, <a href="/church-kinnerton">Kinnerton</a>, <a href="/church-huntington">Huntington</a>) — the hand-converted lat/lng from build 2026.09.05.001 had drifted from the real church buildings (Kington was ~850m out, Huntington ~670m), now matched against OpenStreetMap's own building outlines. Also widened the homepage map's zoom slightly.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.05.003</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">5 September 2026</span></div>
@@ -752,31 +756,31 @@
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.05.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">5 September 2026</span></div>
-          <p>Replaced the <a href="index.html">homepage</a>'s single-pin Google Maps embed (which couldn't show more than one tagged marker) with a self-hosted Leaflet/OpenStreetMap "Find Us" map showing all five churches, auto-zoomed to fit them all, each pin linking to that church's page. Also added a single-marker map to each church's own portal page: <a href="church-kington.html">Kington</a>, <a href="church-titley.html">Titley</a>, <a href="church-old-radnor.html">Old Radnor</a>, <a href="church-kinnerton.html">Kinnerton</a> and <a href="church-huntington.html">Huntington</a>. Linked Ewan Murray's name to his own website in the organ recital notice.</p>
+          <p>Replaced the <a href="/">homepage</a>'s single-pin Google Maps embed (which couldn't show more than one tagged marker) with a self-hosted Leaflet/OpenStreetMap "Find Us" map showing all five churches, auto-zoomed to fit them all, each pin linking to that church's page. Also added a single-marker map to each church's own portal page: <a href="/church-kington">Kington</a>, <a href="/church-titley">Titley</a>, <a href="/church-old-radnor">Old Radnor</a>, <a href="/church-kinnerton">Kinnerton</a> and <a href="/church-huntington">Huntington</a>. Linked Ewan Murray's name to his own website in the organ recital notice.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.04.010</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">4 September 2026</span></div>
-          <p>Removed the 20 September Wild Church Cook Out from the <a href="calendar.html">Calendar</a> — cancelled.</p>
+          <p>Removed the 20 September Wild Church Cook Out from the <a href="/calendar">Calendar</a> — cancelled.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.04.009</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">4 September 2026</span></div>
-          <p>Added Sunday service times to the <a href="calendar.html">Calendar</a> for September-November 2026: 10am Holy Communion at St Mary's, Kington on every Sunday except the third of the month, which is 10am Morning Praise. Also added the 12 September 7pm organ recital by Ewan Murray at St Mary's, Kington. The calendar beyond November 2026 is still to be sorted out.</p>
+          <p>Added Sunday service times to the <a href="/calendar">Calendar</a> for September-November 2026: 10am Holy Communion at St Mary's, Kington on every Sunday except the third of the month, which is 10am Morning Praise. Also added the 12 September 7pm organ recital by Ewan Murray at St Mary's, Kington. The calendar beyond November 2026 is still to be sorted out.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.04.008</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">4 September 2026</span></div>
-          <p>Fixed a broken link on the <a href="resources.html">Resources</a> page: Everyday Faith now points at the Church of England's current page for it (<code>faith-life/exploring-faith/everyday-faith</code>) instead of the old, dead <code>everydayfaith</code> URL.</p>
+          <p>Fixed a broken link on the <a href="/resources">Resources</a> page: Everyday Faith now points at the Church of England's current page for it (<code>faith-life/exploring-faith/everyday-faith</code>) instead of the old, dead <code>everydayfaith</code> URL.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.04.007</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">4 September 2026</span></div>
-          <p>People fixes on <a href="our-people.html">Our People</a> and <a href="church-kington.html">St Mary's, Kington</a>'s portal page: corrected the Health &amp; Safety Officer's name to Julia Reid (was misspelled Reed), and added a card for Craig Freese, Parish News Compositor, who typesets and lays out the magazine alongside editor David Redmayne.</p>
+          <p>People fixes on <a href="/our-people">Our People</a> and <a href="/church-kington">St Mary's, Kington</a>'s portal page: corrected the Health &amp; Safety Officer's name to Julia Reid (was misspelled Reed), and added a card for Craig Freese, Parish News Compositor, who typesets and lays out the magazine alongside editor David Redmayne.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.04.006</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">4 September 2026</span></div>
-          <p>Added a new <a href="resources.html">Resources</a> page — Alpha, Christianity Explored, the Church of England's Everyday Faith and Learning to Pray resources, plus books (Loving God, Revd Sally Welch) — linked in the primary nav after <a href="get-involved.html">Get Involved</a>.</p>
+          <p>Added a new <a href="/resources">Resources</a> page — Alpha, Christianity Explored, the Church of England's Everyday Faith and Learning to Pray resources, plus books (Loving God, Revd Sally Welch) — linked in the primary nav after <a href="/get-involved">Get Involved</a>.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.04.005</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">4 September 2026</span></div>
-          <p>Newsletter signup: fix misleading "check your email to confirm" copy — double opt-in is currently off in MailerLite, so a successful signup is immediate and no confirmation email is sent. Fixed on the success screen, the <a href="newsletter.html">newsletter page</a>, and the <a href="privacy-policy.html">Privacy Policy</a>; the success message is now read from the server's own response instead of being duplicated as static text. See CLAUDE.md for where this needs to change back if double opt-in is re-enabled.</p>
+          <p>Newsletter signup: fix misleading "check your email to confirm" copy — double opt-in is currently off in MailerLite, so a successful signup is immediate and no confirmation email is sent. Fixed on the success screen, the <a href="/newsletter">newsletter page</a>, and the <a href="/privacy-policy">Privacy Policy</a>; the success message is now read from the server's own response instead of being duplicated as static text. See CLAUDE.md for where this needs to change back if double opt-in is re-enabled.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.04.004</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">4 September 2026</span></div>
@@ -788,19 +792,19 @@
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.04.002</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">4 September 2026</span></div>
-          <p>Newsletter signup UX: a clean, focused confirmation state replaces the form on success, and a repeat failure now offers a fallback contact email. The form is factored into one shared partial (<code>templates/newsletter-signup-form.html</code>) and now also appears on the <a href="index.html">homepage</a>. Renamed <a href="parish-news.html">Parish News</a> to "Parish Magazine" in the nav and footer to better differentiate it from the <a href="newsletter.html">InSpire Newsletter</a>, which now has its own top-nav link ("InSpire").</p>
+          <p>Newsletter signup UX: a clean, focused confirmation state replaces the form on success, and a repeat failure now offers a fallback contact email. The form is factored into one shared partial (<code>templates/newsletter-signup-form.html</code>) and now also appears on the <a href="/">homepage</a>. Renamed <a href="/parish-news">Parish News</a> to "Parish Magazine" in the nav and footer to better differentiate it from the <a href="/newsletter">InSpire Newsletter</a>, which now has its own top-nav link ("InSpire").</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.04.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">4 September 2026</span></div>
-          <p>SEO audit fixes: structured data on <a href="blog.html">Blog</a>, <a href="parish-news.html">Parish News</a> and the <a href="newsletter.html">InSpire Newsletter</a> pages (issue schema computed automatically from <code>src/newsletter.config.mjs</code>); a postal address on the <a href="index.html">homepage</a>'s Organization schema; a PNG favicon fallback and apple-touch-icon (<code>scripts/generate-favicons.mjs</code>); and an automatically generated <a href="sitemap.xml">sitemap.xml</a> on every build.</p>
+          <p>SEO audit fixes: structured data on <a href="/blog">Blog</a>, <a href="/parish-news">Parish News</a> and the <a href="/newsletter">InSpire Newsletter</a> pages (issue schema computed automatically from <code>src/newsletter.config.mjs</code>); a postal address on the <a href="/">homepage</a>'s Organization schema; a PNG favicon fallback and apple-touch-icon (<code>scripts/generate-favicons.mjs</code>); and an automatically generated <a href="sitemap.xml">sitemap.xml</a> on every build.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.03.022</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">3 September 2026</span></div>
-          <p>First InSpire Newsletter issue: <a href="newsletter-2026-09.html">September 2026</a> — 25 years of ministry for Revd Sally Welch, Revd Phillippa Wright's ordination as priest, the Treasurer vacancy, and September's Wild Church. Matching email version drafted in <code>newsletter-templates/</code>, ready for MailerLite.</p>
+          <p>First InSpire Newsletter issue: <a href="/newsletter-2026-09">September 2026</a> — 25 years of ministry for Revd Sally Welch, Revd Phillippa Wright's ordination as priest, the Treasurer vacancy, and September's Wild Church. Matching email version drafted in <code>newsletter-templates/</code>, ready for MailerLite.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.03.021</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">3 September 2026</span></div>
-          <p>Newsletter, phase 6: <a href="newsletter.html">InSpire Newsletter</a> now lists recent issues, and past issues move automatically to the new <a href="newsletter-archive.html">newsletter archive</a> once they're over six months old — driven by <code>src/newsletter.config.mjs</code>, no manual archiving step needed.</p>
+          <p>Newsletter, phase 6: <a href="/newsletter">InSpire Newsletter</a> now lists recent issues, and past issues move automatically to the new <a href="/newsletter-archive">newsletter archive</a> once they're over six months old — driven by <code>src/newsletter.config.mjs</code>, no manual archiving step needed.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.03.020</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">3 September 2026</span></div>
@@ -816,7 +820,7 @@
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.03.017</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">3 September 2026</span></div>
-          <p>Newsletter signup, phase 3: add the public <a href="newsletter.html">InSpire Newsletter</a> signup form (with a honeypot spam field) and a <a href="privacy-policy.html">Privacy Policy</a> page, linked from the footer's Explore list.</p>
+          <p>Newsletter signup, phase 3: add the public <a href="/newsletter">InSpire Newsletter</a> signup form (with a honeypot spam field) and a <a href="/privacy-policy">Privacy Policy</a> page, linked from the footer's Explore list.</p>
         </li>
         <li>
           <div class="changelog-meta"><span class="changelog-build">2026.09.03.016</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">3 September 2026</span></div>
@@ -1172,21 +1176,21 @@
   <div class="wrap">
     <div class="safeguard-strip" role="region" aria-label="Safeguarding notice">
       <p>Concerned about a child or adult's safety? Call <strong>999</strong> in an emergency.</p>
-      <a class="pill-link" href="safeguarding.html">Safeguarding information &amp; contacts</a>
+      <a class="pill-link" href="/safeguarding">Safeguarding information &amp; contacts</a>
     </div>
     <div class="foot-grid">
       <div>
         <p class="foot-heading">Kington Parishes</p>
         <p>The Vicarage, Church Road<br>Kington, Herefordshire HR5 3AG</p>
-        <p class="foot-churches"><a href="our-churches.html#kington">St Mary's Kington</a> &middot; <a href="our-churches.html#titley">St Peter's Titley</a> &middot; <a href="our-churches.html#old-radnor">St Stephen's Old Radnor</a> &middot; <a href="our-churches.html#kinnerton">St Mary's Kinnerton</a> &middot; <a href="our-churches.html#huntington">St Thomas &agrave; Becket Huntington</a></p>
+        <p class="foot-churches"><a href="/our-churches#kington">St Mary's Kington</a> &middot; <a href="/our-churches#titley">St Peter's Titley</a> &middot; <a href="/our-churches#old-radnor">St Stephen's Old Radnor</a> &middot; <a href="/our-churches#kinnerton">St Mary's Kinnerton</a> &middot; <a href="/our-churches#huntington">St Thomas &agrave; Becket Huntington</a></p>
       </div>
       <div>
         <p class="foot-heading">Explore</p>
-        <p><a href="our-churches.html">Our Churches</a><br>
-        <a href="services.html">Services &amp; Events</a><br>
-        <a href="parish-news-archive.html">Parish Magazine</a><br>
-        <a href="newsletter-archive.html">InSpire Newsletter</a><br>
-        <a href="privacy-policy.html">Privacy Policy</a><br>
+        <p><a href="/our-churches">Our Churches</a><br>
+        <a href="/services">Services &amp; Events</a><br>
+        <a href="/parish-news-archive">Parish Magazine</a><br>
+        <a href="/newsletter-archive">InSpire Newsletter</a><br>
+        <a href="/privacy-policy">Privacy Policy</a><br>
         <a href="https://www.youtube.com/@KingtonStMaryLive" target="_blank" rel="noopener">Our YouTube Channel</a><br>
         <a href="https://www.facebook.com/kingtonparishes" target="_blank" rel="noopener">Our Facebook Community</a></p>
       </div>

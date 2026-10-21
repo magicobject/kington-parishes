@@ -127,7 +127,10 @@ export function extractSearchEntries(html, page) {
       .trim();
 
     entries.push({
-      page: `${page.slug}.html`,
+      // The clean public address ("/" for the home page), because it goes
+      // straight into an <a href> in the search dropdown and Cloudflare
+      // 307-redirects the ".html" form.
+      page: page.slug === 'index' ? '/' : `/${page.slug}`,
       // page.title is authored pre-escaped for direct HTML interpolation
       // (see pages.config.mjs, e.g. "Services &amp; Events — ...") — decode
       // it here so the search dropdown shows "&" as text, not "&amp;".

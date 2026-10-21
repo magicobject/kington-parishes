@@ -98,7 +98,7 @@ export function renderJourneyNav({ churches, journey, profile, sketches, scale =
   const minY = labelY - 16;
   const links = placed.map(({ c, x, y, w, h, top }) => {
     const leader = top - labelY > 14 ? `<line class="ridge-leader" x1="${f(x)}" y1="${f(labelY + 6)}" x2="${f(x)}" y2="${f(top - 3)}"/>` : '';
-    return `<a href="our-churches.html#${c.slug}"><rect class="ridge-hit" x="${f(x - Math.max(w, 90) / 2)}" y="${f(labelY - 16)}" width="${f(Math.max(w, 90))}" height="${f(y - labelY + 20)}" rx="6"/>${leader}<image href="/img/journey/${c.slug}.png" x="${f(x - w / 2)}" y="${f(top)}" width="${f(w)}" height="${f(h)}"/><text x="${f(x)}" y="${f(labelY)}" text-anchor="middle" class="ridge-label">${esc(c.locality)}</text></a>`;
+    return `<a href="/our-churches#${c.slug}"><rect class="ridge-hit" x="${f(x - Math.max(w, 90) / 2)}" y="${f(labelY - 16)}" width="${f(Math.max(w, 90))}" height="${f(y - labelY + 20)}" rx="6"/>${leader}<image href="/img/journey/${c.slug}.png" x="${f(x - w / 2)}" y="${f(top)}" width="${f(w)}" height="${f(h)}"/><text x="${f(x)}" y="${f(labelY)}" text-anchor="middle" class="ridge-label">${esc(c.locality)}</text></a>`;
   }).join('');
 
   // Crop the empty headroom above the highest label so the hero doesn't waste screen space.

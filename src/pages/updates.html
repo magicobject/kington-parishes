@@ -13,6 +13,10 @@
     <div class="wrap">
       <ul class="changelog">
         <li>
+          <div class="changelog-meta"><span class="changelog-build">2026.10.21.002</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">21 October 2026</span></div>
+          <p>Every link between pages (the menu, footer, buttons, the five-church map, the home page journey line and site search results) now goes straight to the clean address, such as <code>/contact</code>, instead of the <code>.html</code> form that Cloudflare redirects. Clicking is one fewer round trip and the address bar stays tidy. Affects every page, for example the <a href="index.html">home page</a>, <a href="our-churches.html">Our Churches</a> and <a href="contact.html">Contact</a>. A new test fails if any page links to a <code>.html</code> address, and checks that every link target loads.</p>
+        </li>
+        <li>
           <div class="changelog-meta"><span class="changelog-build">2026.10.21.001</span><span class="changelog-author">Greg Wright</span><span class="changelog-date">21 October 2026</span></div>
           <p>From a site health check: every page's canonical address, its sharing (Open Graph) address, the sitemap and the structured data now use the clean address (<code>/contact</code>, and <code>/</code> for the <a href="index.html">home page</a>) instead of the <code>.html</code> form, which Cloudflare redirects, so search engines get one consistent address per page. Also swapped the Old Radnor film-show poster on the <a href="index.html">home page</a> from a 2.7 MB PNG to a 250 KB WebP, which was most of the page's weight on a phone.</p>
         </li>

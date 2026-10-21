@@ -11,7 +11,7 @@ test('the blog post links to the Treasurer job description page', async ({ page 
   await page.goto('/blog.html');
   await expect(page.getByRole('link', { name: 'Treasurer job description' })).toHaveAttribute(
     'href',
-    'treasurer-job-description.html',
+    '/treasurer-job-description',
   );
 });
 
