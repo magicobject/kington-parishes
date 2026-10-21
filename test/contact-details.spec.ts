@@ -74,10 +74,10 @@ test('the donate link is identical in the header and on Get Involved, and points
 }) => {
   await page.goto('/get-involved.html');
 
-  await expect(page.locator('a.btn-donate')).toHaveAttribute('href', 'donate.html');
+  await expect(page.locator('a.btn-donate')).toHaveAttribute('href', '/donate');
   await expect(page.getByRole('link', { name: 'Choose a church to support' })).toHaveAttribute(
     'href',
-    'donate.html',
+    '/donate',
   );
 });
 

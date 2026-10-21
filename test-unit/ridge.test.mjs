@@ -43,7 +43,7 @@ test('the committed profile is in step with churches.config.mjs', () => {
 
 test('renderJourneyNav: one labelled link per church, in journey order, each to its Our Churches section', () => {
   const svg = renderJourneyNav(args);
-  const hrefs = [...svg.matchAll(/<a href="our-churches\.html#([a-z-]+)"/g)].map((m) => m[1]);
+  const hrefs = [...svg.matchAll(/<a href="\/our-churches#([a-z-]+)"/g)].map((m) => m[1]);
   assert.deepEqual(hrefs, JOURNEY);
   const labels = [...svg.matchAll(/class="ridge-label">([^<]+)</g)].map((m) => m[1]);
   assert.deepEqual(labels, JOURNEY.map((s) => CHURCHES.find((c) => c.slug === s).locality));

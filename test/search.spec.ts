@@ -14,16 +14,16 @@ test('typing a query shows the matching section, ranked first', async ({ page })
   // "Titley" genuinely appears in two sections (the church itself, and its
   // Parish Giving Scheme entry on the Donate page) — both are legitimate
   // results, but the church's own section should rank first.
-  await expect(results.getByRole('option').first()).toHaveAttribute('href', 'our-churches.html#titley');
+  await expect(results.getByRole('option').first()).toHaveAttribute('href', '/our-churches#titley');
 });
 
 test('selecting a result navigates to the right page and the right element is present', async ({ page }) => {
   await page.goto('/index.html');
   await page.getByRole('combobox', { name: 'Search the site' }).fill('Titley');
-  const topResult = page.locator('#site-search-results a[href="our-churches.html#titley"]');
+  const topResult = page.locator('#site-search-results a[href="/our-churches#titley"]');
   await expect(topResult).toBeVisible();
   await topResult.click();
-  await expect(page).toHaveURL(/our-churches\.html#titley$/);
+  await expect(page).toHaveURL(/\/our-churches#titley$/);
   await expect(page.locator('#titley')).toBeVisible();
   await expect(page.locator('#titley').getByRole('heading', { name: 'Titley' })).toBeVisible();
 });
@@ -34,7 +34,7 @@ test('pressing Enter goes straight to the top result', async ({ page }) => {
   await input.fill('Kington');
   await expect(page.locator('#site-search-results')).toBeVisible();
   await input.press('Enter');
-  await expect(page).toHaveURL(/our-churches\.html#kington$/);
+  await expect(page).toHaveURL(/\/our-churches#kington$/);
 });
 
 test('a query matching nothing shows a "no results" message, not an empty or stale dropdown', async ({ page }) => {
@@ -93,7 +93,7 @@ test.describe('the hidden help guide has its own search scope', () => {
     await page.getByRole('combobox', { name: 'Search the help guide' }).fill('under the hood');
     const results = page.locator('#site-search-results');
     await expect(results).toBeVisible();
-    await expect(results.getByRole('option').first()).toHaveAttribute('href', 'help-technical-details.html#under-the-hood');
+    await expect(results.getByRole('option').first()).toHaveAttribute('href', '/help-technical-details#under-the-hood');
   });
 
   test('the search box relabels itself while on a help page', async ({ page }) => {

@@ -17,7 +17,7 @@ test("the 404 page's recovery links lead back into the real site", async ({ page
   await page.goto('/this-page-does-not-exist.html');
 
   await page.getByRole('link', { name: 'Back to the home page' }).click();
-  await expect(page).toHaveURL(/\/index\.html$/);
+  await expect(page).toHaveURL(/\/$/);
   await expect(page).toHaveTitle('Kington Parishes — Five churches on the Herefordshire/Powys border');
 });
 
