@@ -2,6 +2,9 @@ import { test, expect } from './support/fixtures';
 import type { Page } from '@playwright/test';
 import { ALL_PAGES, HOME_PAGE, NAV_PAGES, SAFEGUARDING_PAGE } from './support/pages';
 
+// Nav links use the clean address ("/contact"), not the ".html" file name.
+const cleanPath = (path: string) => path.replace(/\.html$/, '');
+
 async function activeNavLabel(page: Page): Promise<string | null> {
   const active = page.locator('nav.links a[aria-current="page"]');
   const count = await active.count();
@@ -32,7 +35,7 @@ for (const target of NAV_PAGES) {
 
     await page.locator('nav.links').getByRole('link', { name: target.navLabel, exact: true }).click();
 
-    await expect(page).toHaveURL(new RegExp(`${target.path}$`));
+    await expect(page).toHaveURL(new RegExp(`${cleanPath(target.path)}$`));
     await expect(page).toHaveTitle(new RegExp(target.titleContains));
     await expect(page.locator('h1')).toHaveText(target.heading);
     expect(await activeNavLabel(page)).toBe(target.navLabel);
@@ -43,14 +46,14 @@ test('the brand logo links back to the homepage from every page in the nav', asy
   for (const sitePage of NAV_PAGES) {
     await page.goto(sitePage.path);
     await page.locator('a.brand').click();
-    await expect(page).toHaveURL(/\/index\.html$/);
+    await expect(page).toHaveURL(/\/$/);
   }
 });
 
 test('the donate button appears on the homepage and every nav page, and points at the church-picker page', async ({ page }) => {
   for (const sitePage of [HOME_PAGE, ...NAV_PAGES]) {
     await page.goto(sitePage.path);
-    await expect(page.locator('a.btn-donate')).toHaveAttribute('href', 'donate.html');
+    await expect(page.locator('a.btn-donate')).toHaveAttribute('href', '/donate');
   }
 });
 
@@ -72,7 +75,7 @@ test("safeguarding is highlighted in the footer's top row, but not in the primar
   await page.goto('/contact.html');
   await page.locator('footer.site .safeguard-strip').getByRole('link', { name: /Safeguarding information/ }).click();
 
-  await expect(page).toHaveURL(new RegExp(`${SAFEGUARDING_PAGE.path}$`));
+  await expect(page).toHaveURL(new RegExp(`${cleanPath(SAFEGUARDING_PAGE.path)}$`));
   await expect(page).toHaveTitle(new RegExp(SAFEGUARDING_PAGE.titleContains));
   expect(await activeNavLabel(page)).toBeNull();
 });
@@ -110,7 +113,7 @@ test.describe('mobile nav toggle (narrow viewport)', () => {
     await page.goto('/index.html');
     await page.getByRole('button', { name: 'Menu' }).click();
     await page.locator('nav.links').getByRole('link', { name: 'Contact', exact: true }).click();
-    await expect(page).toHaveURL(/\/contact\.html$/);
+    await expect(page).toHaveURL(/\/contact$/);
   });
 
   test('Escape closes the menu and returns focus to the toggle', async ({ page }) => {

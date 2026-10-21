@@ -39,6 +39,17 @@ function publicUrl(slug) {
   return slug === 'index' ? `${SITE_URL}/` : `${SITE_URL}/${slug}`;
 }
 
+// Rewrites every internal link to a page ("x.html", "/x.html#frag") to its
+// clean address ("/x#frag", and "/" for the home page), so a click is one
+// 200 instead of a 307 hop. Done once, on each page's finished HTML, so the
+// source pages, templates and configs can keep the ".html" names they use to
+// refer to files (and `active` matching in the nav keeps working). Links with
+// a scheme ("https://…") or that aren't a page name are left alone.
+const INTERNAL_PAGE_LINK = /(<a\b[^>]*?\bhref=")\/?([a-z0-9][a-z0-9-]*)\.html((?:[#?][^"]*)?")/g;
+function cleanInternalLinks(html) {
+  return html.replace(INTERNAL_PAGE_LINK, (_m, before, slug, after) => `${before}${slug === 'index' ? '/' : `/${slug}`}${after}`);
+}
+
 // Falls back for any page that doesn't set its own `image` — the flagship
 // aerial shot of St Mary's, Kington, representative of the benefice as a
 // whole.
@@ -199,7 +210,7 @@ function renderNewsletterCard({ slug, title, date, summary }) {
           <div class="meta">${formatIssueMonth(date)}</div>
           <h3>${title}</h3>
           <p>${summary}</p>
-          <a class="pill-link" href="${slug}.html">Read this issue</a>
+          <a class="pill-link" href="/${slug}">Read this issue</a>
         </div>`;
 }
 
@@ -243,7 +254,7 @@ function renderJourneyNavToken(html) {
 function renderChurchMapTokens(html) {
   return html
     .replace(/\{\{CHURCHES_MAP\}\}/g, () => {
-      const pins = CHURCHES.map(({ slug, name, lat, lng }) => ({ name, lat, lng, url: `/church-${slug}.html` }));
+      const pins = CHURCHES.map(({ slug, name, lat, lng }) => ({ name, lat, lng, url: `/church-${slug}` }));
       return `<div id="churches-map" class="map-full-embed" role="region" aria-label="Map showing the locations of our five churches" data-churches="${escapeHtml(JSON.stringify(pins))}"></div>`;
     })
     .replace(/\{\{CHURCH_MAP:([a-z-]+)\}\}/g, (_, slug) => {
@@ -449,6 +460,7 @@ for (const page of PAGES) {
 
   html = replaceTokens(html, tokens);
   html = obfuscateMailtoLinks(html);
+  html = cleanInternalLinks(html);
   html = versionAssetUrls(html);
 
   writeFileSync(join(root, 'public', `${page.slug}.html`), html);

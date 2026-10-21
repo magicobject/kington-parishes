@@ -38,22 +38,22 @@
 <header class="site">
   <div class="nav-row">
     <div class="nav-primary">
-      <a class="brand" href="index.html">Kington Parishes</a>
+      <a class="brand" href="/">Kington Parishes</a>
       <nav class="links" id="primary-nav" aria-label="Primary">
-      <a href="our-churches.html">Our Churches</a>
-      <a href="our-people.html">Our People</a>
-      <a href="services.html">Services &amp; Events</a>
-      <a href="parish-news.html">Parish Magazine</a>
-      <a href="newsletter.html">InSpire</a>
-      <a href="blog.html">Blog</a>
-      <a href="life-events.html">Life Events</a>
-      <a href="get-involved.html">Get Involved</a>
-      <a href="vacancies.html">Vacancies</a>
-      <a href="resources.html">Resources</a>
-      <a href="parish-hall.html">Parish Hall</a>
-      <a href="calendar.html">Calendar</a>
-      <a href="walkers.html">Walkers</a>
-      <a href="contact.html">Contact</a>
+      <a href="/our-churches">Our Churches</a>
+      <a href="/our-people">Our People</a>
+      <a href="/services">Services &amp; Events</a>
+      <a href="/parish-news">Parish Magazine</a>
+      <a href="/newsletter">InSpire</a>
+      <a href="/blog">Blog</a>
+      <a href="/life-events">Life Events</a>
+      <a href="/get-involved">Get Involved</a>
+      <a href="/vacancies">Vacancies</a>
+      <a href="/resources">Resources</a>
+      <a href="/parish-hall">Parish Hall</a>
+      <a href="/calendar">Calendar</a>
+      <a href="/walkers">Walkers</a>
+      <a href="/contact">Contact</a>
       </nav>
       <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="primary-nav">
         <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="5" cy="12" r="2.2" fill="currentColor"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/><circle cx="19" cy="12" r="2.2" fill="currentColor"/></svg>
@@ -74,7 +74,7 @@
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10 8.5v7l6-3.5-6-3.5Z" fill="currentColor" stroke="none"/></svg>
           Live Stream
         </a>
-        <a class="btn-donate" href="donate.html">Donate Now</a>
+        <a class="btn-donate" href="/donate">Donate Now</a>
       </div>
     </div>
   </div>
@@ -84,7 +84,7 @@
 
   <div class="page-header">
     <div class="wrap">
-      <div class="kicker"><a href="help.html" style="color:#F8F5EE; text-decoration:underline;">Help</a> / Technical details</div>
+      <div class="kicker"><a href="/help" style="color:#F8F5EE; text-decoration:underline;">Help</a> / Technical details</div>
       <h1 id="under-the-hood">Under the hood</h1>
       <p class="lede">The rest of this guide deliberately stays non-technical. This page doesn't — it's for anyone who wants to understand exactly what this site runs on: hosting and DNS, how it's built from templates, what gets tested before a change goes live, the newsletter, and how the small amount of server-side code is secured.</p>
       <nav class="jump-row" aria-label="Jump to a section">
@@ -108,7 +108,7 @@
         <div class="kicker">Hosting</div>
         <h2>A Cloudflare Worker, not just static hosting</h2>
         <p>The live site is a <a href="https://developers.cloudflare.com/workers/" target="_blank" rel="noopener">Cloudflare Worker</a>. Its configuration (<code>wrangler.jsonc</code>) points Cloudflare's asset handler at <code>public/</code>, the folder the build script generates — so almost every request is served as a plain static file, exactly like conventional web hosting. The one addition is a small JSON API endpoint, <code>/api/subscribe</code>, that the newsletter signup form talks to — see <a href="#newsletter">Newsletter</a> below.</p>
-        <p>Deployment is automatic: Cloudflare's GitHub integration watches the <code>main</code> branch, and every push triggers a fresh build and deploy — no separate deploy step to run by hand, and typically live in well under a minute. This is the mechanism behind step 5 in <a href="help-making-a-change.html#the-steps">Making a change</a> ("the live site rebuilds itself").</p>
+        <p>Deployment is automatic: Cloudflare's GitHub integration watches the <code>main</code> branch, and every push triggers a fresh build and deploy — no separate deploy step to run by hand, and typically live in well under a minute. This is the mechanism behind step 5 in <a href="/help-making-a-change#the-steps">Making a change</a> ("the live site rebuilds itself").</p>
       </div>
     </div>
   </section>
@@ -118,7 +118,7 @@
       <div class="section-head">
         <div class="kicker">DNS</div>
         <h2>Also managed in Cloudflare</h2>
-        <p>The <code>kingtonparishes.org.uk</code> domain's DNS lives in the same Cloudflare account as the Worker, with the domain attached to the Worker as a custom domain. That's a deliberate, common pairing — Cloudflare can issue and renew the site's TLS certificate and route traffic straight to the Worker without a separate DNS provider in the loop. It replaced the previous host (Squarespace) at go-live on 6 September 2026; see <a href="updates.html">/updates</a> for that migration's own build-log entries, and <a href="help-dns-setup.html">DNS setup</a> for a closer look at the domain's actual records.</p>
+        <p>The <code>kingtonparishes.org.uk</code> domain's DNS lives in the same Cloudflare account as the Worker, with the domain attached to the Worker as a custom domain. That's a deliberate, common pairing — Cloudflare can issue and renew the site's TLS certificate and route traffic straight to the Worker without a separate DNS provider in the loop. It replaced the previous host (Squarespace) at go-live on 6 September 2026; see <a href="/updates">/updates</a> for that migration's own build-log entries, and <a href="/help-dns-setup">DNS setup</a> for a closer look at the domain's actual records.</p>
       </div>
     </div>
   </section>
@@ -129,7 +129,7 @@
         <div class="kicker">Build &amp; templates</div>
         <h2>Built from templates, not hand-copied HTML</h2>
         <p>No page's HTML is written out in full anywhere. Each one is assembled at build time (<code>scripts/build.mjs</code>) from four pieces: <code>templates/*.html</code> (the shared header, footer, safeguard banner and page shell), <code>src/pages/*.html</code> (just that page's own content — no <code>&lt;head&gt;</code>, no nav, no footer), <code>src/pages.config.mjs</code> (the nav, each page's title and meta description), and <code>src/site.config.mjs</code> (facts repeated across the site — phone number, email, the donate link — each substituted wherever a matching placeholder appears in a page's content).</p>
-        <p>This is what keeps the site <strong>DRY</strong> ("Don't Repeat Yourself"): a fact like the parish office's phone number, or a person's role and contact details, is typed in exactly one place, and every page that shows it — however many there are — picks it up automatically the next time the site is built. Change the phone number in <code>site.config.mjs</code> once, and it updates on every page that shows it; add a churchwarden to <code>src/people.config.mjs</code> once, and their card appears on both <a href="our-people.html">Our People</a> and their own church's page. Without this, the same fact would need finding and editing by hand on every page that happened to mention it — easy to do consistently once, easy to let quietly drift out of sync after the tenth edit.</p>
+        <p>This is what keeps the site <strong>DRY</strong> ("Don't Repeat Yourself"): a fact like the parish office's phone number, or a person's role and contact details, is typed in exactly one place, and every page that shows it — however many there are — picks it up automatically the next time the site is built. Change the phone number in <code>site.config.mjs</code> once, and it updates on every page that shows it; add a churchwarden to <code>src/people.config.mjs</code> once, and their card appears on both <a href="/our-people">Our People</a> and their own church's page. Without this, the same fact would need finding and editing by hand on every page that happened to mention it — easy to do consistently once, easy to let quietly drift out of sync after the tenth edit.</p>
         <p><strong>Not every file in <code>public/</code> is generated, though</strong> — a handful (the stylesheet, the JavaScript, the images, <code>robots.txt</code>, <code>_headers</code>) are the real, hand-maintained originals, sitting directly in the folder Cloudflare serves, because there's no per-page fact to template: a stylesheet doesn't repeat page to page, it defines how every page looks. Everything else under <code>public/</code> — every <code>*.html</code> file — is a generated build artefact: editing one directly would have no lasting effect, since it gets silently regenerated (and any hand-edit overwritten) the next time anyone builds the site, which happens automatically on every commit via a git hook. Claude already knows this file-by-file — it edits the real source under <code>src/</code>, <code>templates/</code>, or the genuinely hand-maintained files in <code>public/</code>, and never a generated page directly.</p>
       </div>
     </div>
@@ -160,7 +160,7 @@
           <p><code>npm audit</code> blocks any push carrying a known high or critical severity dependency vulnerability (see <a href="#api-security">MailerLite API security</a> below), and the same test suite acts as a regression net for the security headers whenever <code>public/_headers</code> changes.</p>
         </div>
       </div>
-      <p>The quick checks (the unit tests, the type check and the security check) take about a minute, and the full browser suite, which includes the accessibility scan, takes about a minute and a half. They run on the machine making the change and again on GitHub (see <a href="#ci-cd">below</a>), and their result — pass or fail — is what decides whether a change is ready, not a judgement call. See step 3 of <a href="help-making-a-change.html#the-steps">Making a change</a>.</p>
+      <p>The quick checks (the unit tests, the type check and the security check) take about a minute, and the full browser suite, which includes the accessibility scan, takes about a minute and a half. They run on the machine making the change and again on GitHub (see <a href="#ci-cd">below</a>), and their result — pass or fail — is what decides whether a change is ready, not a judgement call. See step 3 of <a href="/help-making-a-change#the-steps">Making a change</a>.</p>
     </div>
   </section>
 
@@ -170,7 +170,7 @@
         <div class="kicker">Multiple contributors</div>
         <h2>Who changed what: <code>users.json</code></h2>
         <p>More than one person now makes changes to this site through Claude Code. <code>users.json</code>, at the root of the repository, is the roster: each entry is a first name, last name and GitHub account name. It's what lets every change be attributed to the person who actually made it, rather than a single generic "the website team".</p>
-        <p>Before adding an entry to the <a href="updates.html">/updates</a> changelog, Claude looks up the GitHub account currently signed in (<code>gh api user</code>) against <code>users.json</code>, and credits that person by name — that's the <code>changelog-author</code> shown next to each build number. If the signed-in account isn't on the roster, Claude asks for it to be added rather than guessing.</p>
+        <p>Before adding an entry to the <a href="/updates">/updates</a> changelog, Claude looks up the GitHub account currently signed in (<code>gh api user</code>) against <code>users.json</code>, and credits that person by name — that's the <code>changelog-author</code> shown next to each build number. If the signed-in account isn't on the roster, Claude asks for it to be added rather than guessing.</p>
         <p>This is a check Claude runs, not a security boundary — it doesn't stop anyone with direct repository access from doing anything, but it does keep an honest, automatic record of who did what, and gives a foundation to later limit what a given contributor is allowed to change.</p>
       </div>
     </div>
@@ -181,7 +181,7 @@
       <div class="section-head">
         <div class="kicker">Newsletter</div>
         <h2>InSpire Newsletter signups, via MailerLite</h2>
-        <p>The <a href="newsletter.html">InSpire Newsletter</a> signup form doesn't talk to <a href="https://www.mailerlite.com/" target="_blank" rel="noopener">MailerLite</a> directly from the browser. Instead:</p>
+        <p>The <a href="/newsletter">InSpire Newsletter</a> signup form doesn't talk to <a href="https://www.mailerlite.com/" target="_blank" rel="noopener">MailerLite</a> directly from the browser. Instead:</p>
       </div>
       <div class="card-grid">
         <div class="card reveal">
@@ -244,7 +244,7 @@
       <div class="section-head">
         <div class="kicker">The code</div>
         <h2>Where it all lives</h2>
-        <p>Every piece of this — page content, templates, the build script, the styling, and the Worker code behind the newsletter API — lives in one public GitHub repository: <a href="https://github.com/magicobject/kington-parishes.git" target="_blank" rel="noopener">github.com/magicobject/kington-parishes</a>. Every commit that reaches <code>main</code> is tagged with its own build number (e.g. <code>build-2026.09.08.005</code>), so any past version of the site can be checked out by name — see <a href="updates.html">/updates</a> for the human-readable version of that same history.</p>
+        <p>Every piece of this — page content, templates, the build script, the styling, and the Worker code behind the newsletter API — lives in one public GitHub repository: <a href="https://github.com/magicobject/kington-parishes.git" target="_blank" rel="noopener">github.com/magicobject/kington-parishes</a>. Every commit that reaches <code>main</code> is tagged with its own build number (e.g. <code>build-2026.09.08.005</code>), so any past version of the site can be checked out by name — see <a href="/updates">/updates</a> for the human-readable version of that same history.</p>
       </div>
     </div>
   </section>
@@ -267,7 +267,7 @@
       <div class="section-head">
         <div class="kicker">Saving your work safely</div>
         <h2>Saving your work safely (commit hooks and worktrees)</h2>
-        <p>Whenever someone saves a change to this website's code, a few small checking programs, called <em>hooks</em>, run by themselves. They exist so that the house rules (every change is written up on the <a href="updates.html">/updates</a> page, every change gets its own build number, and changes are checked before they are sent) are checked by the computer by default rather than left to someone's memory. A person can switch the hooks off for one command (<code>--no-verify</code>), so that should only be done when you know exactly why. The full technical description is in <code>docs/hooks.md</code> in the repository.</p>
+        <p>Whenever someone saves a change to this website's code, a few small checking programs, called <em>hooks</em>, run by themselves. They exist so that the house rules (every change is written up on the <a href="/updates">/updates</a> page, every change gets its own build number, and changes are checked before they are sent) are checked by the computer by default rather than left to someone's memory. A person can switch the hooks off for one command (<code>--no-verify</code>), so that should only be done when you know exactly why. The full technical description is in <code>docs/hooks.md</code> in the repository.</p>
       </div>
       <div class="card-grid">
         <div class="card reveal">
@@ -334,21 +334,21 @@
   <div class="wrap">
     <div class="safeguard-strip" role="region" aria-label="Safeguarding notice">
       <p>Concerned about a child or adult's safety? Call <strong>999</strong> in an emergency.</p>
-      <a class="pill-link" href="safeguarding.html">Safeguarding information &amp; contacts</a>
+      <a class="pill-link" href="/safeguarding">Safeguarding information &amp; contacts</a>
     </div>
     <div class="foot-grid">
       <div>
         <p class="foot-heading">Kington Parishes</p>
         <p>The Vicarage, Church Road<br>Kington, Herefordshire HR5 3AG</p>
-        <p class="foot-churches"><a href="our-churches.html#kington">St Mary's Kington</a> &middot; <a href="our-churches.html#titley">St Peter's Titley</a> &middot; <a href="our-churches.html#old-radnor">St Stephen's Old Radnor</a> &middot; <a href="our-churches.html#kinnerton">St Mary's Kinnerton</a> &middot; <a href="our-churches.html#huntington">St Thomas &agrave; Becket Huntington</a></p>
+        <p class="foot-churches"><a href="/our-churches#kington">St Mary's Kington</a> &middot; <a href="/our-churches#titley">St Peter's Titley</a> &middot; <a href="/our-churches#old-radnor">St Stephen's Old Radnor</a> &middot; <a href="/our-churches#kinnerton">St Mary's Kinnerton</a> &middot; <a href="/our-churches#huntington">St Thomas &agrave; Becket Huntington</a></p>
       </div>
       <div>
         <p class="foot-heading">Explore</p>
-        <p><a href="our-churches.html">Our Churches</a><br>
-        <a href="services.html">Services &amp; Events</a><br>
-        <a href="parish-news-archive.html">Parish Magazine</a><br>
-        <a href="newsletter-archive.html">InSpire Newsletter</a><br>
-        <a href="privacy-policy.html">Privacy Policy</a><br>
+        <p><a href="/our-churches">Our Churches</a><br>
+        <a href="/services">Services &amp; Events</a><br>
+        <a href="/parish-news-archive">Parish Magazine</a><br>
+        <a href="/newsletter-archive">InSpire Newsletter</a><br>
+        <a href="/privacy-policy">Privacy Policy</a><br>
         <a href="https://www.youtube.com/@KingtonStMaryLive" target="_blank" rel="noopener">Our YouTube Channel</a><br>
         <a href="https://www.facebook.com/kingtonparishes" target="_blank" rel="noopener">Our Facebook Community</a></p>
       </div>

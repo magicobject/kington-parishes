@@ -1,7 +1,11 @@
 // Minimal static file server that mirrors the Cloudflare Workers assets
 // behaviour configured in wrangler.jsonc: serve an exact-path file when one
 // exists, otherwise respond with public/404.html and a 404 status
-// (assets.not_found_handling = "404-page").
+// (assets.not_found_handling = "404-page"), and — like Cloudflare's assets
+// handler — answer a clean path ("/contact") with that page's "contact.html".
+// Unlike Cloudflare it does not redirect "/contact.html" to "/contact": both
+// forms get a 200 here, so the specs can still open pages by file name, and
+// test/internal-links.spec.ts is what stops the site linking to ".html".
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { extname, join, resolve, sep } from 'node:path';
@@ -46,8 +50,13 @@ const server = createServer(async (req, res) => {
 
   try {
     if (!filePath) throw new Error('path escapes public/');
-    const body = await readFile(filePath);
-    const type = CONTENT_TYPES[extname(filePath)] ?? 'application/octet-stream';
+    const body = await readFile(filePath).catch(async (error) => {
+      // A clean URL: no file by that name, so try "<name>.html" (still inside ROOT).
+      const withHtml = extname(filePath) === '' ? `${filePath}.html` : null;
+      if (!withHtml || !withHtml.startsWith(ROOT + sep)) throw error;
+      return readFile(withHtml);
+    });
+    const type = CONTENT_TYPES[extname(filePath)] ?? (extname(filePath) === '' ? CONTENT_TYPES['.html'] : 'application/octet-stream');
     res.writeHead(200, { 'Content-Type': type });
     res.end(body);
   } catch {
