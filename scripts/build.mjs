@@ -29,6 +29,16 @@ const read = (path) => readFileSync(join(root, path), 'utf8');
 // preview URL for this build's proof-of-concept phase; see
 // pages.config.mjs's own note on the noindex pages that remain.
 const SITE_URL = 'https://www.kingtonparishes.org.uk';
+
+// The public address of a page: clean, with no ".html" ("/contact", and "/"
+// for the home page). Cloudflare serves the clean form with a 200 and sends
+// the ".html" form to it with a 307, so canonical tags, og:url, the sitemap
+// and structured data must all name the clean one (a canonical or sitemap
+// URL that redirects sends search engines mixed signals).
+function publicUrl(slug) {
+  return slug === 'index' ? `${SITE_URL}/` : `${SITE_URL}/${slug}`;
+}
+
 // Falls back for any page that doesn't set its own `image` — the flagship
 // aerial shot of St Mary's, Kington, representative of the benefice as a
 // whole.
@@ -295,7 +305,7 @@ function newsletterIssueStructuredData(issue) {
     headline: `InSpire Newsletter — ${issue.title}`,
     description: issue.summary,
     datePublished: issue.date,
-    url: `${SITE_URL}/${issue.slug}.html`,
+    url: publicUrl(issue.slug),
     publisher: { '@type': 'Organization', name: SITE.orgName },
   };
 }
@@ -308,7 +318,7 @@ function newsletterListStructuredData(issues, pageUrl) {
     itemListElement: issues.map((issue, i) => ({
       '@type': 'ListItem',
       position: i + 1,
-      url: `${SITE_URL}/${issue.slug}.html`,
+      url: publicUrl(issue.slug),
       name: issue.title,
     })),
   };
@@ -388,7 +398,7 @@ for (const page of PAGES) {
     searchEntries.push(...entries);
   }
 
-  const pageUrl = `${SITE_URL}/${page.slug}.html`;
+  const pageUrl = publicUrl(page.slug);
   const pageImage = `${SITE_URL}${page.image || DEFAULT_OG_IMAGE}`;
 
   // Same "real content, not internal-only" test used for search — sitemap.xml

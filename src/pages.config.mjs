@@ -20,7 +20,7 @@ function churchStructuredData({ slug, name, locality, lat, lng, what3words, same
   return {
     '@type': 'Church',
     name,
-    url: `https://www.kingtonparishes.org.uk/our-churches.html#${slug}`,
+    url: `https://www.kingtonparishes.org.uk/our-churches#${slug}`,
     image: `https://www.kingtonparishes.org.uk/img/our-churches/${slug}.webp`,
     address: { '@type': 'PostalAddress', addressLocality: locality, addressCountry: 'GB' },
     geo: { '@type': 'GeoCoordinates', latitude: lat, longitude: lng },
@@ -76,7 +76,7 @@ export const PAGES = [
       '@context': 'https://schema.org',
       '@type': 'Organization',
       name: 'Kington Parishes',
-      url: 'https://www.kingtonparishes.org.uk/index.html',
+      url: 'https://www.kingtonparishes.org.uk/',
       logo: 'https://www.kingtonparishes.org.uk/img/favicon.svg',
       email: 'vicar@kingtonparishes.org.uk',
       telephone: '+447974439630',
@@ -276,13 +276,13 @@ export const PAGES = [
       '@context': 'https://schema.org',
       '@type': 'Blog',
       name: 'Kington Parishes Blog',
-      url: 'https://www.kingtonparishes.org.uk/blog.html',
+      url: 'https://www.kingtonparishes.org.uk/blog',
       publisher: { '@type': 'Organization', name: 'Kington Parishes' },
       blogPost: [
         {
           '@type': 'BlogPosting',
           headline: "We're recruiting a Treasurer for St Mary's, Kington",
-          url: 'https://www.kingtonparishes.org.uk/blog.html#we-re-recruiting-a-treasurer-for-st-mary-s-kington',
+          url: 'https://www.kingtonparishes.org.uk/blog#we-re-recruiting-a-treasurer-for-st-mary-s-kington',
           datePublished: '2026-09-02',
           author: { '@type': 'Person', name: 'Greg Wright' },
         },
