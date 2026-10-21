@@ -1,5 +1,5 @@
 import { test, expect } from './support/fixtures';
-import { ALL_PAGES, HELP_PAGES } from './support/pages';
+import { ALL_PAGES, HELP_PAGES, cleanPublicUrl } from './support/pages';
 
 // Regression guard: each page's file should show its own title and heading,
 // not another page's — this bit us once on a different site's build script.
@@ -12,13 +12,17 @@ for (const page of ALL_PAGES) {
   });
 }
 
-test('every page links to a unique canonical URL matching its own filename', async ({ page }) => {
+test('every page links to a unique canonical URL matching its own clean (no .html) address', async ({ page }) => {
   for (const sitePage of ALL_PAGES) {
     await page.goto(sitePage.path);
     const canonical = page.locator('link[rel="canonical"]');
     await expect(canonical).toHaveAttribute(
       'href',
-      `https://www.kingtonparishes.org.uk${sitePage.path}`,
+      cleanPublicUrl(sitePage.path),
+    );
+    await expect(page.locator('meta[property="og:url"]')).toHaveAttribute(
+      'content',
+      cleanPublicUrl(sitePage.path),
     );
   }
 });
