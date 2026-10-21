@@ -38,22 +38,22 @@
 <header class="site">
   <div class="nav-row">
     <div class="nav-primary">
-      <a class="brand" href="index.html">Kington Parishes</a>
+      <a class="brand" href="/">Kington Parishes</a>
       <nav class="links" id="primary-nav" aria-label="Primary">
-      <a href="our-churches.html">Our Churches</a>
-      <a href="our-people.html">Our People</a>
-      <a href="services.html">Services &amp; Events</a>
-      <a href="parish-news.html">Parish Magazine</a>
-      <a href="newsletter.html">InSpire</a>
-      <a href="blog.html">Blog</a>
-      <a href="life-events.html">Life Events</a>
-      <a href="get-involved.html">Get Involved</a>
-      <a href="vacancies.html">Vacancies</a>
-      <a href="resources.html">Resources</a>
-      <a href="parish-hall.html">Parish Hall</a>
-      <a href="calendar.html">Calendar</a>
-      <a href="walkers.html">Walkers</a>
-      <a href="contact.html">Contact</a>
+      <a href="/our-churches">Our Churches</a>
+      <a href="/our-people">Our People</a>
+      <a href="/services">Services &amp; Events</a>
+      <a href="/parish-news">Parish Magazine</a>
+      <a href="/newsletter">InSpire</a>
+      <a href="/blog">Blog</a>
+      <a href="/life-events">Life Events</a>
+      <a href="/get-involved">Get Involved</a>
+      <a href="/vacancies">Vacancies</a>
+      <a href="/resources">Resources</a>
+      <a href="/parish-hall">Parish Hall</a>
+      <a href="/calendar">Calendar</a>
+      <a href="/walkers">Walkers</a>
+      <a href="/contact">Contact</a>
       </nav>
       <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="primary-nav">
         <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="5" cy="12" r="2.2" fill="currentColor"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/><circle cx="19" cy="12" r="2.2" fill="currentColor"/></svg>
@@ -74,7 +74,7 @@
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10 8.5v7l6-3.5-6-3.5Z" fill="currentColor" stroke="none"/></svg>
           Live Stream
         </a>
-        <a class="btn-donate" href="donate.html">Donate Now</a>
+        <a class="btn-donate" href="/donate">Donate Now</a>
       </div>
     </div>
   </div>
@@ -84,7 +84,7 @@
 
   <div class="page-header">
     <div class="wrap">
-      <div class="kicker"><a href="help-technical-details.html" style="color:#F8F5EE; text-decoration:underline;">Help / Technical details</a> / DNS setup</div>
+      <div class="kicker"><a href="/help-technical-details" style="color:#F8F5EE; text-decoration:underline;">Help / Technical details</a> / DNS setup</div>
       <h1 id="dns-setup-in-detail">DNS setup, in detail</h1>
       <p class="lede">A closer look at <code>kingtonparishes.org.uk</code>'s actual DNS records — what each one is for, and why the website and the parish's email addresses are handled by two completely different companies. DNS records are public information, so everything below is just a plain lookup anyone can run, not anything confidential.</p>
       <nav class="jump-row" aria-label="Jump to a section">
@@ -100,7 +100,7 @@
       <div class="section-head">
         <div class="kicker">The web address</div>
         <h2>A records point at Cloudflare, not a server</h2>
-        <p>Both <code>kingtonparishes.org.uk</code> and <code>www.kingtonparishes.org.uk</code> resolve to two Cloudflare addresses (currently <code>104.21.13.200</code> and <code>172.67.157.83</code>) — not the Worker's own address, because there isn't one to point at directly. These are shared Cloudflare "proxy" addresses: every visitor's request lands at Cloudflare first (this is also what provides the TLS certificate and the security headers described in <a href="help-technical-details.html#api-security">Technical details</a>), which then hands it internally to the Worker. The domain's nameservers — <code>mustafa.ns.cloudflare.com</code> and <code>suzanne.ns.cloudflare.com</code> — are what makes Cloudflare the authority for every record described on this page, not just the website's own.</p>
+        <p>Both <code>kingtonparishes.org.uk</code> and <code>www.kingtonparishes.org.uk</code> resolve to two Cloudflare addresses (currently <code>104.21.13.200</code> and <code>172.67.157.83</code>) — not the Worker's own address, because there isn't one to point at directly. These are shared Cloudflare "proxy" addresses: every visitor's request lands at Cloudflare first (this is also what provides the TLS certificate and the security headers described in <a href="/help-technical-details#api-security">Technical details</a>), which then hands it internally to the Worker. The domain's nameservers — <code>mustafa.ns.cloudflare.com</code> and <code>suzanne.ns.cloudflare.com</code> — are what makes Cloudflare the authority for every record described on this page, not just the website's own.</p>
       </div>
     </div>
   </section>
@@ -136,7 +136,7 @@
       <div class="card-grid">
         <div class="card reveal">
           <h3>SPF (Sender Policy Framework)</h3>
-          <p>Lists which mail servers are allowed to send email claiming to be from <code>kingtonparishes.org.uk</code> — currently GoDaddy's servers (for real parish email) and MailerLite's sending infrastructure (for the InSpire Newsletter, see <a href="help-technical-details.html#newsletter">Newsletter</a>). Other mail providers check this record to help tell genuine mail from spoofed mail.</p>
+          <p>Lists which mail servers are allowed to send email claiming to be from <code>kingtonparishes.org.uk</code> — currently GoDaddy's servers (for real parish email) and MailerLite's sending infrastructure (for the InSpire Newsletter, see <a href="/help-technical-details#newsletter">Newsletter</a>). Other mail providers check this record to help tell genuine mail from spoofed mail.</p>
         </div>
         <div class="card reveal">
           <h3>DMARC</h3>
@@ -199,21 +199,21 @@
   <div class="wrap">
     <div class="safeguard-strip" role="region" aria-label="Safeguarding notice">
       <p>Concerned about a child or adult's safety? Call <strong>999</strong> in an emergency.</p>
-      <a class="pill-link" href="safeguarding.html">Safeguarding information &amp; contacts</a>
+      <a class="pill-link" href="/safeguarding">Safeguarding information &amp; contacts</a>
     </div>
     <div class="foot-grid">
       <div>
         <p class="foot-heading">Kington Parishes</p>
         <p>The Vicarage, Church Road<br>Kington, Herefordshire HR5 3AG</p>
-        <p class="foot-churches"><a href="our-churches.html#kington">St Mary's Kington</a> &middot; <a href="our-churches.html#titley">St Peter's Titley</a> &middot; <a href="our-churches.html#old-radnor">St Stephen's Old Radnor</a> &middot; <a href="our-churches.html#kinnerton">St Mary's Kinnerton</a> &middot; <a href="our-churches.html#huntington">St Thomas &agrave; Becket Huntington</a></p>
+        <p class="foot-churches"><a href="/our-churches#kington">St Mary's Kington</a> &middot; <a href="/our-churches#titley">St Peter's Titley</a> &middot; <a href="/our-churches#old-radnor">St Stephen's Old Radnor</a> &middot; <a href="/our-churches#kinnerton">St Mary's Kinnerton</a> &middot; <a href="/our-churches#huntington">St Thomas &agrave; Becket Huntington</a></p>
       </div>
       <div>
         <p class="foot-heading">Explore</p>
-        <p><a href="our-churches.html">Our Churches</a><br>
-        <a href="services.html">Services &amp; Events</a><br>
-        <a href="parish-news-archive.html">Parish Magazine</a><br>
-        <a href="newsletter-archive.html">InSpire Newsletter</a><br>
-        <a href="privacy-policy.html">Privacy Policy</a><br>
+        <p><a href="/our-churches">Our Churches</a><br>
+        <a href="/services">Services &amp; Events</a><br>
+        <a href="/parish-news-archive">Parish Magazine</a><br>
+        <a href="/newsletter-archive">InSpire Newsletter</a><br>
+        <a href="/privacy-policy">Privacy Policy</a><br>
         <a href="https://www.youtube.com/@KingtonStMaryLive" target="_blank" rel="noopener">Our YouTube Channel</a><br>
         <a href="https://www.facebook.com/kingtonparishes" target="_blank" rel="noopener">Our Facebook Community</a></p>
       </div>
