@@ -95,6 +95,7 @@ export const RECURRING_SERIES = [
   // Not term-time restricted — runs straight through, including the school
   // holidays Stay and Play skips.
   { title: 'Marches Voices Choir', location: 'The Dove, 37 High Street', weekday: 2, time: '14:00', from: '2026-09-01', until: '2027-12-31' },
+  { title: 'Marches Music Group', location: 'The Dove, 37 High Street', weekday: 2, time: '10:00', from: '2026-11-03', until: '2027-12-31' },
   // Choral Evensong moved to St Thomas à Becket, Huntington, 4th Sunday of the month.
   { title: 'Choral Evensong', location: "St Thomas à Becket, Huntington", weekday: 7, nth: 4, time: '18:00', from: '2026-10-01', until: '2027-12-31' },
 ];
