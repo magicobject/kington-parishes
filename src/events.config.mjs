@@ -59,6 +59,7 @@ export const ONE_OFF_EVENTS = [
   { date: '2026-10-28', time: '10:20', title: 'Visiting Ringers', location: "St Mary's, Kington" },
   { date: '2026-11-01', time: '10:00', title: 'Holy Communion', location: "St Mary's, Kington" },
   { date: '2026-11-01', time: '18:00', title: 'Praise & Prayer in the Evening (PPE)', location: "St Mary's, Kington" },
+  { date: '2026-11-06', time: '10:00', title: 'Pause Café: French conversation, coffee and cake', location: 'The Dove, 37 High Street' },
   { date: '2026-11-08', time: '10:00', title: 'Remembrance Service', location: "St Mary's, Kington" },
   { date: '2026-11-15', time: '10:00', title: 'Morning Praise', location: "St Mary's, Kington" },
   { date: '2026-11-14', allDay: true, title: 'Vision Day', location: "St Mary's Parish Hall" },
@@ -93,7 +94,7 @@ export const RECURRING_SERIES = [
   { title: 'Toddle Time (10am to 12pm)', location: 'The Dove, 37 High Street', weekday: 4, time: '10:00', from: '2026-11-05', until: '2027-12-31', except: ['2026-12-24', '2026-12-31', '2027-02-18', '2027-04-01', '2027-04-08', '2027-06-03', '2027-07-29', '2027-08-05', '2027-08-12', '2027-08-19', '2027-08-26', '2027-10-28', '2027-12-23', '2027-12-30'] },
   // Not term-time restricted — runs straight through, including the school
   // holidays Stay and Play skips.
-  { title: 'Marches Voices Choir', location: 'Kington Parish Hall', weekday: 2, time: '14:00', from: '2026-09-01', until: '2027-12-31' },
+  { title: 'Marches Voices Choir', location: 'The Dove, 37 High Street', weekday: 2, time: '14:00', from: '2026-09-01', until: '2027-12-31' },
   // Choral Evensong moved to St Thomas à Becket, Huntington, 4th Sunday of the month.
   { title: 'Choral Evensong', location: "St Thomas à Becket, Huntington", weekday: 7, nth: 4, time: '18:00', from: '2026-10-01', until: '2027-12-31' },
 ];
