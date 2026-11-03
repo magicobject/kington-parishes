@@ -98,6 +98,9 @@ export const RECURRING_SERIES = [
   // Tuesdays in Herefordshire school holidays (council dates, herefordshire.gov.uk/TermDates).
   { title: 'Marches Voices Choir', location: 'The Dove, 37 High Street', weekday: 2, time: '14:00', from: '2026-09-01', until: '2027-12-31', except: ['2026-10-27', '2026-12-22', '2026-12-29', '2027-02-16', '2027-03-30', '2027-04-06', '2027-06-01', '2027-07-27', '2027-08-03', '2027-08-10', '2027-08-17', '2027-08-24', '2027-08-31', '2027-10-26', '2027-12-21', '2027-12-28'] },
   { title: 'Marches Music Group', location: 'The Dove, 37 High Street', weekday: 2, time: '10:00', from: '2026-11-03', until: '2027-12-31', except: ['2026-12-22', '2026-12-29', '2027-02-16', '2027-03-30', '2027-04-06', '2027-06-01', '2027-07-27', '2027-08-03', '2027-08-10', '2027-08-17', '2027-08-24', '2027-08-31', '2027-10-26', '2027-12-21', '2027-12-28'] },
+  // Coffee Morning in aid of The Dove & Yarn Barn renovations: 3rd Saturday of every month (the
+  // one-off 17 October entry above was the first; the series starts from November).
+  { title: 'Coffee Morning (10am to 12 noon)', location: 'The Dove & Yarn Barn, Kington', weekday: 6, nth: 3, time: '10:00', from: '2026-11-01', until: '2027-12-31' },
   // Choral Evensong moved to St Thomas à Becket, Huntington, 4th Sunday of the month.
   { title: 'Choral Evensong', location: "St Thomas à Becket, Huntington", weekday: 7, nth: 4, time: '18:00', from: '2026-10-01', until: '2027-12-31' },
 ];
