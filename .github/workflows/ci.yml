@@ -33,7 +33,7 @@ jobs:
       # --ignore-scripts: nothing here needs a package's install script (the hooks are wired by "prepare", which CI
       # doesn't want), and a compromised package's install script is exactly what to avoid running.
       - run: npm ci --ignore-scripts
-      - run: npx playwright install --with-deps chromium
+      - run: npx playwright install --with-deps chromium webkit
       - run: npm run build
       # The committed generated files (public/*.html, sitemap, search index, ...) must be what a fresh build makes. The one
       # allowed difference is the calendar's Event data, which depends on the build date (see scripts/ci-drift-check.mjs).
