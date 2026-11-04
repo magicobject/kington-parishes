@@ -949,3 +949,12 @@ footer.site .fine a { color: #C9C3B2; text-decoration: underline; text-underline
   -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4zm-1 14-3.5-3.5 1.4-1.4L11 13.2l4.1-4.1 1.4 1.4L11 16z'/%3E%3C/svg%3E") center / contain no-repeat;
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4zm-1 14-3.5-3.5 1.4-1.4L11 13.2l4.1-4.1 1.4 1.4L11 16z'/%3E%3C/svg%3E") center / contain no-repeat;
 }
+
+/* Help: rota tables (colours reuse --ink on --parchment/--limestone, already AA-checked elsewhere) */
+.rota-scroll { overflow-x: auto; margin: 0 0 32px; }
+.rota-table { border-collapse: collapse; width: 100%; min-width: 560px; background: var(--parchment); }
+.rota-table caption { text-align: left; font-weight: 700; padding: 0 0 10px; }
+.rota-table th, .rota-table td { border: 1px solid var(--line); padding: 10px 12px; text-align: left; vertical-align: top; color: var(--ink); }
+.rota-table thead th { background: var(--limestone); }
+.rota-table tbody th { white-space: nowrap; font-weight: 600; }
+.rota-blank { color: var(--ink-soft); font-style: italic; }
