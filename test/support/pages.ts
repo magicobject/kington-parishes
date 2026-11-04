@@ -129,6 +129,11 @@ export const UPDATES_PAGE: SitePage = {
 // not user-facing" pattern as Updates above.
 export const HELP_PAGES: SitePage[] = [
   { path: '/help.html', navLabel: 'Help', titleContains: 'Help', heading: /^help$/i },
+  { path: '/help-technology.html', navLabel: 'Technology', titleContains: 'Technology', heading: /technology/i },
+  { path: '/help-rotas.html', navLabel: 'Rotas', titleContains: 'Rotas', heading: /^rotas$/i },
+  { path: '/help-churchwarden.html', navLabel: 'Churchwarden', titleContains: 'Churchwarden', heading: /^churchwarden$/i },
+  { path: '/help-treasurer.html', navLabel: 'Treasurer', titleContains: 'Treasurer', heading: /^treasurer$/i },
+  { path: '/help-service-setup.html', navLabel: 'Service setup', titleContains: 'Service Setup', heading: /service setup/i },
   { path: '/help-getting-set-up.html', navLabel: 'Getting set up', titleContains: 'Setting Up Your Laptop', heading: /setting up your laptop/i },
   { path: '/help-making-a-change.html', navLabel: 'Making a change', titleContains: 'Making a Change', heading: /making a change/i },
   { path: '/help-technical-details.html', navLabel: 'Technical details', titleContains: 'Technical Details', heading: /under the hood/i },
