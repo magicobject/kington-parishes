@@ -82,7 +82,7 @@ jobs:
 
       - run: npm ci --ignore-scripts
 
-      - run: npx playwright install --with-deps chromium
+      - run: npx playwright install --with-deps chromium webkit
 
       - name: Run this repo's test gate
         id: tests

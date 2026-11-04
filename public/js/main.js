@@ -70,6 +70,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   var revealEls = document.querySelectorAll('.reveal');
   if ('IntersectionObserver' in window && revealEls.length) {
+    // A ratio threshold (it was 0.12) can never be met by an element taller than ~8x the
+    // viewport, so a long article on a phone stayed at opacity 0 forever. Reveal as soon
+    // as any of it is on screen instead.
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
@@ -77,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
           io.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.12 });
+    }, { threshold: 0, rootMargin: '0px 0px -6% 0px' });
     revealEls.forEach(function (el) { io.observe(el); });
   } else {
     revealEls.forEach(function (el) { el.classList.add('in'); });

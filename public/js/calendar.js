@@ -148,6 +148,12 @@
     selected = btn.getAttribute('data-date');
     renderGrid();
     renderAgenda();
+    // On a phone the agenda sits below the month grid, off screen: bring it into view.
+    var box = agenda.getBoundingClientRect();
+    if (box.bottom > window.innerHeight || box.top < 0) {
+      var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      agenda.scrollIntoView({ behavior: calm ? 'auto' : 'smooth', block: 'nearest' });
+    }
   });
 
   document.getElementById('cal-prev').addEventListener('click', function () {
