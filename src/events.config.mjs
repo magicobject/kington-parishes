@@ -66,6 +66,7 @@ export const ONE_OFF_EVENTS = [
   { date: '2026-11-15', time: '15:30', title: 'Titley Philharmonic Orchestra Concert & Organ Recital (£12, including tea)', location: "St Mary's, Kington" },
   { date: '2026-11-18', time: '15:30', title: 'Lego Club', location: "St Mary's, Kington" },
   { date: '2026-11-22', time: '10:00', title: 'Holy Communion', location: "St Mary's, Kington" },
+  { date: '2026-11-24', time: '19:00', title: 'Barnabas Aid prayer evening for the persecuted church (7 to 9pm; shared curry meal, video, prayer)', location: "St Mary's Parish Hall" },
   { date: '2026-11-29', time: '10:00', title: 'Advent Sunday: combined benefice service', location: "St Mary's, Kinnerton" },
   { date: '2026-11-29', time: '16:00', title: "St Michael's Hospice 'Light up a Life' service", location: "St Mary's, Kington" },
   { date: '2026-12-06', time: '18:00', title: 'Praise & Prayer in the Evening (PPE)', location: "St Mary's, Kington" },
