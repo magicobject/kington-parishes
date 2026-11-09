@@ -61,10 +61,10 @@ describe('searchEntries', () => {
 
   test('ranks an exact heading match above a heading that merely contains the word', () => {
     // Regression: "Kington" used to tie-break on array order between the
-    // exact "Kington" heading and "Kington Zero Waste Food Project", since
+    // exact "Kington" heading and "Kington Community Food Project", since
     // both scored the same flat "heading contains the token" bonus.
     const withLongerHeading = [
-      { heading: 'Kington Zero Waste Food Project', text: 'Free food.' },
+      { heading: 'Kington Community Food Project', text: 'Free food.' },
       { heading: 'Kington', text: 'Sunday service at 10am.' },
     ];
     const results = searchEntries('kington', withLongerHeading);
