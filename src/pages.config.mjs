@@ -392,7 +392,7 @@ export const PAGES = [
   {
     slug: 'help',
     title: 'Help — Kington Parishes',
-    description: 'Guides for volunteers across the parishes: technology, rotas, churchwarden, treasurer and service setup.',
+    description: 'Guides for volunteers across the parishes: technology, rotas, churchwarden, treasurer, advertising and service setup.',
     active: null,
     header: true,
     robots: 'noindex, nofollow',
@@ -425,6 +425,14 @@ export const PAGES = [
     slug: 'help-treasurer',
     title: 'Helping with the money: the PCC Treasurer — Help — Kington Parishes',
     description: "What the St Mary's Kington PCC treasurer does, how the church's finances work, and how you could help.",
+    active: null,
+    header: true,
+    robots: 'noindex, nofollow',
+  },
+  {
+    slug: 'help-advertising',
+    title: 'Advertising in the Parish News — Help — Kington Parishes',
+    description: 'The yearly rate card for advertising in the Parish News, by size of space on an A5 page.',
     active: null,
     header: true,
     robots: 'noindex, nofollow',
