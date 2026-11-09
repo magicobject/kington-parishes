@@ -86,10 +86,6 @@ export const ONE_OFF_EVENTS = [
 // Optional `nth` (e.g. 4) keeps only the nth such weekday of each month —
 // "every 4th Sunday" is weekday 7, nth 4.
 export const RECURRING_SERIES = [
-  // St Mary's Parish Hall — Mondays 12:15-13:00 & Fridays 10:00-11:00 (see
-  // the homepage noticeboard).
-  { title: 'Kington Zero Waste', location: "St Mary's Parish Hall", weekday: 1, time: '12:15', from: '2026-08-31', until: '2027-12-31' },
-  { title: 'Kington Zero Waste', location: "St Mary's Parish Hall", weekday: 5, time: '10:00', from: '2026-09-04', until: '2027-12-31', except: ['2026-12-25'] },
   // Toddle Time is term-time only (per the homepage noticeboard) — skip Herefordshire
   // school holidays (council dates for 2026-27 and 2027-28, herefordshire.gov.uk/TermDates).
   // Update `except` if a school's own dates differ.
