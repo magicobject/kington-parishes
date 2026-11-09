@@ -81,13 +81,13 @@ export const CHURCH_OFFICERS = {
     {
       name: 'Greg Wright',
       role: 'Churchwarden · Interim Treasurer',
-      bio: "Churchwarden at St Mary's, Kington, and currently also serving as Interim Treasurer.",
+      bio: "Churchwarden at St Mary's, Kington, and currently also serving as Interim Treasurer." + contactLink('magicobject@gmail.com'),
       iconSvg: WARDEN_ICON,
     },
     {
       name: 'Margaret Cooke',
       role: 'Churchwarden',
-      bio: "Churchwarden at St Mary's, Kington.",
+      bio: "Churchwarden at St Mary's, Kington." + contactLink('stmarys.kington.churchwarden@gmail.com'),
       iconSvg: WARDEN_ICON,
     },
     {
