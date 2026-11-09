@@ -423,7 +423,7 @@ export const PAGES = [
   },
   {
     slug: 'help-treasurer',
-    title: 'Helping with the money: the PCC Treasurer — Help — Kington Parishes',
+    title: 'Treasurer and Finance — Help — Kington Parishes',
     description: "What the St Mary's Kington PCC treasurer does, how the church's finances work, and how you could help.",
     active: null,
     header: true,
