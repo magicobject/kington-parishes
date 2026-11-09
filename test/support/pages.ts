@@ -132,7 +132,7 @@ export const HELP_PAGES: SitePage[] = [
   { path: '/help-technology.html', navLabel: 'Technology', titleContains: 'Technology', heading: /technology/i },
   { path: '/help-rotas.html', navLabel: 'Rotas', titleContains: 'Rotas', heading: /^rotas$/i },
   { path: '/help-churchwarden.html', navLabel: 'Churchwarden', titleContains: 'Churchwarden', heading: /^churchwarden$/i },
-  { path: '/help-treasurer.html', navLabel: 'Treasurer', titleContains: 'Treasurer', heading: /the pcc treasurer/i },
+  { path: '/help-treasurer.html', navLabel: 'Treasurer and Finance', titleContains: 'Treasurer and Finance', heading: /treasurer and finance/i },
   { path: '/help-advertising.html', navLabel: 'Advertising', titleContains: 'Advertising', heading: /advertising in the parish news/i },
   { path: '/help-service-setup.html', navLabel: 'Service setup', titleContains: 'Service Setup', heading: /service setup/i },
   { path: '/help-getting-set-up.html', navLabel: 'Getting set up', titleContains: 'Setting Up Your Laptop', heading: /setting up your laptop/i },
