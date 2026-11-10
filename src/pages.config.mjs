@@ -446,6 +446,14 @@ export const PAGES = [
     robots: 'noindex, nofollow',
   },
   {
+    slug: 'help-public-documents',
+    title: 'Public Documents — Help — Kington Parishes',
+    description: 'Reports and policies the parishes share openly, as PDFs.',
+    active: null,
+    header: true,
+    robots: 'noindex, nofollow',
+  },
+  {
     slug: 'help-service-setup',
     title: 'Service Setup — Help — Kington Parishes',
     description: 'How to set up for a service: communion, sound, heating, urns, live streaming and more.',
