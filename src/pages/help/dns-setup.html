@@ -2,7 +2,7 @@
 
   <div class="page-header">
     <div class="wrap">
-      <div class="kicker"><a href="help-technical-details.html" style="color:#F8F5EE; text-decoration:underline;">Help / Technical details</a> / DNS setup</div>
+      <div class="kicker"><a href="help/technical-details.html" style="color:#F8F5EE; text-decoration:underline;">Help / Technical details</a> / DNS setup</div>
       <h1>DNS setup, in detail</h1>
       <p class="lede">A closer look at <code>kingtonparishes.org.uk</code>'s actual DNS records — what each one is for, and why the website and the parish's email addresses are handled by two completely different companies. DNS records are public information, so everything below is just a plain lookup anyone can run, not anything confidential.</p>
       <nav class="jump-row" aria-label="Jump to a section">
@@ -18,7 +18,7 @@
       <div class="section-head">
         <div class="kicker">The web address</div>
         <h2>A records point at Cloudflare, not a server</h2>
-        <p>Both <code>kingtonparishes.org.uk</code> and <code>www.kingtonparishes.org.uk</code> resolve to two Cloudflare addresses (currently <code>104.21.13.200</code> and <code>172.67.157.83</code>) — not the Worker's own address, because there isn't one to point at directly. These are shared Cloudflare "proxy" addresses: every visitor's request lands at Cloudflare first (this is also what provides the TLS certificate and the security headers described in <a href="help-technical-details.html#api-security">Technical details</a>), which then hands it internally to the Worker. The domain's nameservers — <code>mustafa.ns.cloudflare.com</code> and <code>suzanne.ns.cloudflare.com</code> — are what makes Cloudflare the authority for every record described on this page, not just the website's own.</p>
+        <p>Both <code>kingtonparishes.org.uk</code> and <code>www.kingtonparishes.org.uk</code> resolve to two Cloudflare addresses (currently <code>104.21.13.200</code> and <code>172.67.157.83</code>) — not the Worker's own address, because there isn't one to point at directly. These are shared Cloudflare "proxy" addresses: every visitor's request lands at Cloudflare first (this is also what provides the TLS certificate and the security headers described in <a href="help/technical-details.html#api-security">Technical details</a>), which then hands it internally to the Worker. The domain's nameservers — <code>mustafa.ns.cloudflare.com</code> and <code>suzanne.ns.cloudflare.com</code> — are what makes Cloudflare the authority for every record described on this page, not just the website's own.</p>
       </div>
     </div>
   </section>
@@ -54,7 +54,7 @@
       <div class="card-grid">
         <div class="card reveal">
           <h3>SPF (Sender Policy Framework)</h3>
-          <p>Lists which mail servers are allowed to send email claiming to be from <code>kingtonparishes.org.uk</code> — currently GoDaddy's servers (for real parish email) and MailerLite's sending infrastructure (for the InSpire Newsletter, see <a href="help-technical-details.html#newsletter">Newsletter</a>). Other mail providers check this record to help tell genuine mail from spoofed mail.</p>
+          <p>Lists which mail servers are allowed to send email claiming to be from <code>kingtonparishes.org.uk</code> — currently GoDaddy's servers (for real parish email) and MailerLite's sending infrastructure (for the InSpire Newsletter, see <a href="help/technical-details.html#newsletter">Newsletter</a>). Other mail providers check this record to help tell genuine mail from spoofed mail.</p>
         </div>
         <div class="card reveal">
           <h3>DMARC</h3>

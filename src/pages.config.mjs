@@ -386,9 +386,8 @@ export const PAGES = [
   // Claude/Git/GitHub, and how to set a laptop up to make one. Same pattern
   // as `updates` above: not in NAV/FOOTER_NAV, and noindex/nofollow since it's internal
   // process documentation, not something a site visitor should search their
-  // way into. Three pages, all prefixed `help-` and cross-linked from the
-  // `help` hub, since this site's build only supports flat `/slug.html`
-  // URLs rather than a real `/help/...` subdirectory.
+  // way into. All live under `/help/` (slug `help/<name>`; the build writes
+  // public/help/<name>.html) and are cross-linked from the `help` hub.
   {
     slug: 'help',
     title: 'Help — Kington Parishes',
@@ -398,7 +397,7 @@ export const PAGES = [
     robots: 'noindex, nofollow',
   },
   {
-    slug: 'help-technology',
+    slug: 'help/technology',
     title: 'Technology — Help — Kington Parishes',
     description: 'How changes reach the live site, and how to set up a laptop to make one, in plain English.',
     active: null,
@@ -406,7 +405,7 @@ export const PAGES = [
     robots: 'noindex, nofollow',
   },
   {
-    slug: 'help-rotas',
+    slug: 'help/rotas',
     title: 'Rotas — Help — Kington Parishes',
     description: 'Who is doing what at the Sunday services: offertory, sidesmen, administration, servers, readers and intercessions.',
     active: null,
@@ -414,7 +413,7 @@ export const PAGES = [
     robots: 'noindex, nofollow',
   },
   {
-    slug: 'help-churchwarden',
+    slug: 'help/churchwarden',
     title: 'Churchwarden — Help — Kington Parishes',
     description: 'Guidance for the churchwardens.',
     active: null,
@@ -422,7 +421,7 @@ export const PAGES = [
     robots: 'noindex, nofollow',
   },
   {
-    slug: 'help-treasurer',
+    slug: 'help/treasurer',
     title: 'Treasurer and Finance — Help — Kington Parishes',
     description: "What the St Mary's Kington PCC treasurer does, how the church's finances work, and how you could help.",
     active: null,
@@ -430,7 +429,7 @@ export const PAGES = [
     robots: 'noindex, nofollow',
   },
   {
-    slug: 'help-advertising',
+    slug: 'help/advertising',
     title: 'Advertising in the Parish News — Help — Kington Parishes',
     description: 'The yearly rate card for advertising in the Parish News, by size of space on an A5 page.',
     active: null,
@@ -438,7 +437,7 @@ export const PAGES = [
     robots: 'noindex, nofollow',
   },
   {
-    slug: 'help-contacts',
+    slug: 'help/contacts',
     title: 'Contacts — Help — Kington Parishes',
     description: 'Who to ask, for the website and for the parishes: names, roles, email and phone.',
     active: null,
@@ -446,7 +445,7 @@ export const PAGES = [
     robots: 'noindex, nofollow',
   },
   {
-    slug: 'help-public-documents',
+    slug: 'help/public-documents',
     title: 'Public Documents — Help — Kington Parishes',
     description: 'Reports and policies the parishes share openly, as PDFs.',
     active: null,
@@ -454,7 +453,15 @@ export const PAGES = [
     robots: 'noindex, nofollow',
   },
   {
-    slug: 'help-service-setup',
+    slug: 'help/public-documents/pcc-minutes/kington',
+    title: 'PCC Minutes (Kington) — Public Documents — Help — Kington Parishes',
+    description: 'Minutes of the Kington PCC, as Word documents.',
+    active: null,
+    header: true,
+    robots: 'noindex, nofollow',
+  },
+  {
+    slug: 'help/service-setup',
     title: 'Service Setup — Help — Kington Parishes',
     description: 'How to set up for a service: communion, sound, heating, urns, live streaming and more.',
     active: null,
@@ -462,7 +469,7 @@ export const PAGES = [
     robots: 'noindex, nofollow',
   },
   {
-    slug: 'help-getting-set-up',
+    slug: 'help/getting-set-up',
     title: 'Setting Up Your Laptop — Help — Kington Parishes',
     description: 'How to install Claude Desktop, create a GitHub account, and paste one block of instructions that gets Claude to set everything else up for you.',
     active: null,
@@ -470,7 +477,7 @@ export const PAGES = [
     robots: 'noindex, nofollow',
   },
   {
-    slug: 'help-making-a-change',
+    slug: 'help/making-a-change',
     title: 'Making a Change — Help — Kington Parishes',
     description: 'What happens, step by step, when you ask Claude to update this website — plus answers to the questions people usually ask first.',
     active: null,
@@ -482,7 +489,7 @@ export const PAGES = [
   // hosting/DNS, MailerLite, API security, the GitHub repo itself) rather
   // than the plain-English framing the rest of the guide sticks to.
   {
-    slug: 'help-technical-details',
+    slug: 'help/technical-details',
     title: 'Technical Details — Help — Kington Parishes',
     description: 'Hosting on Cloudflare Workers, DNS, the templated build that keeps the site DRY, what gets tested before a change goes live, the MailerLite-powered newsletter, how the API is secured, and where the source code lives.',
     active: null,
@@ -497,7 +504,7 @@ export const PAGES = [
   // DNS records are public and verifiable but do drift over time — the page
   // says so and gives the date it was checked.
   {
-    slug: 'help-dns-setup',
+    slug: 'help/dns-setup',
     title: 'DNS Setup — Help — Kington Parishes',
     description: "A closer look at kingtonparishes.org.uk's DNS records: the A records pointing at Cloudflare, the MX records handing email to 123 Reg/GoDaddy, and what the SPF/DMARC/verification TXT records are for.",
     active: null,
@@ -505,7 +512,7 @@ export const PAGES = [
     robots: 'noindex, nofollow',
   },
   {
-    slug: 'help-when-it-goes-wrong',
+    slug: 'help/when-it-goes-wrong',
     title: 'When It Goes Wrong — Help — Kington Parishes',
     description: 'What to do if a change looks wrong: ask Claude, revert it, or fail forward — plus why nothing is ever permanently broken.',
     active: null,

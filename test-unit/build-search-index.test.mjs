@@ -173,11 +173,11 @@ describe('isSearchablePage', () => {
 
   test('excludes the hidden help guide', () => {
     assert.equal(isSearchablePage({ slug: 'help' }), false);
-    assert.equal(isSearchablePage({ slug: 'help-getting-set-up' }), false);
-    assert.equal(isSearchablePage({ slug: 'help-making-a-change' }), false);
-    assert.equal(isSearchablePage({ slug: 'help-technical-details' }), false);
-    assert.equal(isSearchablePage({ slug: 'help-dns-setup' }), false);
-    assert.equal(isSearchablePage({ slug: 'help-when-it-goes-wrong' }), false);
+    assert.equal(isSearchablePage({ slug: 'help/getting-set-up' }), false);
+    assert.equal(isSearchablePage({ slug: 'help/making-a-change' }), false);
+    assert.equal(isSearchablePage({ slug: 'help/technical-details' }), false);
+    assert.equal(isSearchablePage({ slug: 'help/dns-setup' }), false);
+    assert.equal(isSearchablePage({ slug: 'help/when-it-goes-wrong' }), false);
   });
 
   test('includes an ordinary content page', () => {
@@ -193,7 +193,7 @@ describe('isIndexable', () => {
 
   test('includes the help guide (indexed, but in its own search scope)', () => {
     assert.equal(isIndexable({ slug: 'help' }), true);
-    assert.equal(isIndexable({ slug: 'help-technical-details' }), true);
+    assert.equal(isIndexable({ slug: 'help/technical-details' }), true);
   });
 
   test('includes an ordinary content page', () => {
@@ -204,11 +204,11 @@ describe('isIndexable', () => {
 describe('isHelpPage', () => {
   test('identifies every page of the hidden help guide', () => {
     assert.equal(isHelpPage({ slug: 'help' }), true);
-    assert.equal(isHelpPage({ slug: 'help-getting-set-up' }), true);
-    assert.equal(isHelpPage({ slug: 'help-making-a-change' }), true);
-    assert.equal(isHelpPage({ slug: 'help-technical-details' }), true);
-    assert.equal(isHelpPage({ slug: 'help-dns-setup' }), true);
-    assert.equal(isHelpPage({ slug: 'help-when-it-goes-wrong' }), true);
+    assert.equal(isHelpPage({ slug: 'help/getting-set-up' }), true);
+    assert.equal(isHelpPage({ slug: 'help/making-a-change' }), true);
+    assert.equal(isHelpPage({ slug: 'help/technical-details' }), true);
+    assert.equal(isHelpPage({ slug: 'help/dns-setup' }), true);
+    assert.equal(isHelpPage({ slug: 'help/when-it-goes-wrong' }), true);
   });
 
   test('does not match an ordinary page or the changelog', () => {

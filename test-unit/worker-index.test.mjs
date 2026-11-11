@@ -33,6 +33,27 @@ describe('worker routing', () => {
   });
 });
 
+describe('old help URLs', () => {
+  test('/help-<name> and /help-<name>.html redirect 301 to /help/<name>', async () => {
+    const cases = {
+      '/help-public-documents': '/help/public-documents',
+      '/help-public-documents.html': '/help/public-documents',
+      '/help-treasurer/': '/help/treasurer',
+    };
+    for (const [from, to] of Object.entries(cases)) {
+      const response = await worker.fetch(new Request(`https://example.test${from}?x=1`), env);
+      assert.equal(response.status, 301);
+      assert.equal(response.headers.get('location'), `https://example.test${to}?x=1`);
+    }
+  });
+  test('/help and /help/<name> are not redirected', async () => {
+    for (const path of ['/help', '/help/treasurer']) {
+      const response = await worker.fetch(new Request('https://example.test' + path), env);
+      assert.equal(response.status, 200);
+    }
+  });
+});
+
 describe('handleSubscribe', () => {
   const originalFetch = globalThis.fetch;
   afterEach(() => {

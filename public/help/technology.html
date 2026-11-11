@@ -10,19 +10,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Advertising in the Parish News — Help — Kington Parishes</title>
-<meta name="description" content="The yearly rate card for advertising in the Parish News, by size of space on an A5 page.">
+<title>Technology — Help — Kington Parishes</title>
+<meta name="description" content="How changes reach the live site, and how to set up a laptop to make one, in plain English.">
 <meta name="robots" content="noindex, nofollow">
-<link rel="canonical" href="https://www.kingtonparishes.org.uk/help-advertising">
+<link rel="canonical" href="https://www.kingtonparishes.org.uk/help/technology">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Kington Parishes">
-<meta property="og:title" content="Advertising in the Parish News — Help — Kington Parishes">
-<meta property="og:description" content="The yearly rate card for advertising in the Parish News, by size of space on an A5 page.">
-<meta property="og:url" content="https://www.kingtonparishes.org.uk/help-advertising">
+<meta property="og:title" content="Technology — Help — Kington Parishes">
+<meta property="og:description" content="How changes reach the live site, and how to set up a laptop to make one, in plain English.">
+<meta property="og:url" content="https://www.kingtonparishes.org.uk/help/technology">
 <meta property="og:image" content="https://www.kingtonparishes.org.uk/img/our-churches/kington.webp">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Advertising in the Parish News — Help — Kington Parishes">
-<meta name="twitter:description" content="The yearly rate card for advertising in the Parish News, by size of space on an A5 page.">
+<meta name="twitter:title" content="Technology — Help — Kington Parishes">
+<meta name="twitter:description" content="How changes reach the live site, and how to set up a laptop to make one, in plain English.">
 <meta name="twitter:image" content="https://www.kingtonparishes.org.uk/img/our-churches/kington.webp">
 <link rel="icon" href="/img/favicon.svg?v=fe87076eaf" type="image/svg+xml">
 <link rel="icon" href="/img/favicon-32.png?v=44b06b77f0" type="image/png" sizes="32x32">
@@ -84,30 +84,110 @@
 
   <div class="page-header">
     <div class="wrap">
-      <div class="kicker"><a href="/help" style="color:#F8F5EE; text-decoration:underline;">Help</a> / Advertising</div>
-      <h1 id="advertising-in-the-parish-news">Advertising in the Parish News</h1>
-      <p class="lede">The rates for a business or group that wants to advertise in the Parish News, for when someone asks.</p>
+      <div class="kicker"><a href="/help" style="color:#F8F5EE; text-decoration:underline;">Help</a> / Technology</div>
+      <h1 id="technology-how-to-update-this-website">Technology: how to update this website</h1>
+      <p class="lede">You don't need to know how to code. This page explains, in plain English, how changes get made to this site — and how you can make one yourself, with help from an AI assistant called Claude. Once your laptop is <a href="/help/getting-set-up">set up</a> — a one-off job — zero technical knowledge is needed for anything that follows: every future change is just a plain-English conversation, the same way you'd ask a person to do it.</p>
+      <p class="lede"><strong>You will need a Claude Pro subscription</strong> (or higher) to use Claude Code, the part of Claude Desktop used to update the website. The free Claude plan doesn't include it.</p>
+      <nav class="jump-row" aria-label="Jump to a section">
+        <a href="#short-version">The short version</a>
+        <a href="#git-and-github">Git &amp; GitHub, in plain English</a>
+        <a href="#next-steps">Next steps</a>
+      </nav>
     </div>
   </div>
 
-  <section>
+  <section id="short-version">
     <div class="wrap">
       <div class="section-head">
-        <h2 id="rates">Rate card</h2>
+        <div class="kicker">The short version</div>
+        <h2>What happens when you ask for a change</h2>
+        <p>Every change to this website — big or small — follows the same six steps. You only ever do the first one; Claude takes care of the rest.</p>
       </div>
-      <p class="body-text">Advertisements are priced by the size of the space they fill on an A5 page, and the price is for a year.</p>
-      <div class="rota-scroll" role="region" aria-labelledby="rates" tabindex="0">
-        <table class="rota-table">
-          <thead><tr><th scope="col">Size</th><th scope="col">Per year</th></tr></thead>
-          <tbody>
-            <tr><th scope="row">Full A5 page</th><td>&pound;360</td></tr>
-            <tr><th scope="row">Half an A5 page</th><td>&pound;190</td></tr>
-            <tr><th scope="row">Quarter of an A5 page</th><td>&pound;100</td></tr>
-            <tr><th scope="row">Eighth of an A5 page</th><td>&pound;55</td></tr>
-          </tbody>
-        </table>
+      <div class="card-grid">
+        <div class="card reveal">
+          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#A8813C" stroke-width="1.6"><path d="M4 4h16v13H7l-3 3V4Z"/><path d="M8 9h8M8 12.5h5"/></svg></div>
+          <h3>1. You describe the change</h3>
+          <p>In your own words — "add this event to the calendar" or "the phone number on the Contact page is wrong". No technical detail needed.</p>
+        </div>
+        <div class="card reveal">
+          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#A8813C" stroke-width="1.6"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></div>
+          <h3>2. Claude edits the files</h3>
+          <p>On your own laptop, Claude finds the right page and makes the change — you can see exactly what it changed before it goes any further.</p>
+        </div>
+        <div class="card reveal">
+          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#A8813C" stroke-width="1.6"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3Z"/><path d="M9 12l2 2 4-4"/></svg></div>
+          <h3>3. Claude checks its own work</h3>
+          <p>The site's automatic tests run, and Claude checks the page still passes its security and accessibility rules — nothing goes live untested.</p>
+        </div>
+        <div class="card reveal">
+          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#A8813C" stroke-width="1.6"><path d="M12 4v10"/><path d="M8 9l4-5 4 5"/><path d="M5 15v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3"/></svg></div>
+          <h3>4. Claude saves it to GitHub</h3>
+          <p>This step is called a "push" — it's the moment your change leaves your laptop and joins the master copy the live site is built from.</p>
+        </div>
+        <div class="card reveal">
+          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#A8813C" stroke-width="1.6"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></svg></div>
+          <h3>5. The live site rebuilds itself</h3>
+          <p>A process behind the scenes notices the new version on GitHub and publishes it automatically — usually in well under a minute, with nothing more for you to do.</p>
+        </div>
+        <div class="card reveal">
+          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#A8813C" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div>
+          <h3>6. You watch it appear</h3>
+          <p>Keep an eye on <a href="/updates">/updates</a> — every change is logged there, newest first, so you can confirm yours has gone live.</p>
+        </div>
       </div>
-      <p class="body-text">To see the size of the pages and how adverts look, read the latest issue on the <a href="/parish-news">Parish News page</a>.</p>
+    </div>
+  </section>
+
+  <section class="alt" id="git-and-github">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">Two names worth knowing</div>
+        <h2>What are "Git" and "GitHub"?</h2>
+        <p>You'll see these words come up, so it's worth knowing what they mean — even though Claude handles both for you and you'll never need to use either directly.</p>
+      </div>
+      <div class="card-grid">
+        <div class="card reveal">
+          <h3>Git</h3>
+          <p>The record-keeping system behind the website's files. It saves every version of every change ever made, like an extremely thorough undo history — nothing is ever truly lost.</p>
+        </div>
+        <div class="card reveal">
+          <h3>GitHub</h3>
+          <p>The website where those files live online. It's the master copy the live site is built from, and where Claude sends ("pushes") your changes once they're checked and ready.</p>
+          <p><a href="https://github.com/magicobject/kington-parishes" target="_blank" rel="noopener">Our GitHub repository →</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="next-steps">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">Next steps</div>
+        <h2>Ready to get started?</h2>
+        <p>Setup is a one-off, and takes about fifteen minutes. After that, every change follows the six steps above.</p>
+      </div>
+      <div class="card-grid">
+        <div class="card reveal">
+          <h3>Get your laptop set up</h3>
+          <p>Install Claude Desktop, create a free GitHub account, then paste one block of instructions and let Claude do the rest.</p>
+          <a class="pill-link" href="/help/getting-set-up">Read the setup guide</a>
+        </div>
+        <div class="card reveal">
+          <h3>Make a change</h3>
+          <p>A closer look at each of the six steps above, plus answers to the questions people usually ask first.</p>
+          <a class="pill-link" href="/help/making-a-change">Read the day-to-day guide</a>
+        </div>
+        <div class="card reveal">
+          <h3>Something look wrong?</h3>
+          <p>It's very hard to break anything permanently. What to do if a change doesn't look right, in three simple options.</p>
+          <a class="pill-link" href="/help/when-it-goes-wrong">Read what to do</a>
+        </div>
+        <div class="card reveal">
+          <h3>Curious about the technical details?</h3>
+          <p>Not needed to make a change, but if you'd like to know: hosting, DNS, the newsletter, and how the API is secured.</p>
+          <a class="pill-link" href="/help/technical-details">Read the technical guide</a>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -186,7 +266,7 @@
 </footer>
 
 <script src="/js/main.js?v=55968996c8" defer></script>
-<script src="/js/search-match.js?v=01a973faf6" defer></script>
+<script src="/js/search-match.js?v=ac47dbbf1c" defer></script>
 <script src="/js/search-ui.js?v=19d29bd3ff" defer></script>
 </body>
 </html>

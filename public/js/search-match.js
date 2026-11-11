@@ -81,7 +81,7 @@
   // breaks the help guide's search scope in production while still
   // looking correct in every local/test environment — it did, once.
   function isHelpPath(pathname) {
-    return /^\/help(?:-[a-z0-9-]+)?(?:\.html)?$/i.test(String(pathname));
+    return /^\/help(?:\/[a-z0-9-]+)*(?:\.html)?\/?$/i.test(String(pathname));
   }
 
   return { normalize: normalize, tokenize: tokenize, searchEntries: searchEntries, isHelpPath: isHelpPath };

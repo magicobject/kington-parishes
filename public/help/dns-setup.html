@@ -10,19 +10,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Contacts — Help — Kington Parishes</title>
-<meta name="description" content="Who to ask, for the website and for the parishes: names, roles, email and phone.">
+<title>DNS Setup — Help — Kington Parishes</title>
+<meta name="description" content="A closer look at kingtonparishes.org.uk's DNS records: the A records pointing at Cloudflare, the MX records handing email to 123 Reg/GoDaddy, and what the SPF/DMARC/verification TXT records are for.">
 <meta name="robots" content="noindex, nofollow">
-<link rel="canonical" href="https://www.kingtonparishes.org.uk/help-contacts">
+<link rel="canonical" href="https://www.kingtonparishes.org.uk/help/dns-setup">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Kington Parishes">
-<meta property="og:title" content="Contacts — Help — Kington Parishes">
-<meta property="og:description" content="Who to ask, for the website and for the parishes: names, roles, email and phone.">
-<meta property="og:url" content="https://www.kingtonparishes.org.uk/help-contacts">
+<meta property="og:title" content="DNS Setup — Help — Kington Parishes">
+<meta property="og:description" content="A closer look at kingtonparishes.org.uk's DNS records: the A records pointing at Cloudflare, the MX records handing email to 123 Reg/GoDaddy, and what the SPF/DMARC/verification TXT records are for.">
+<meta property="og:url" content="https://www.kingtonparishes.org.uk/help/dns-setup">
 <meta property="og:image" content="https://www.kingtonparishes.org.uk/img/our-churches/kington.webp">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Contacts — Help — Kington Parishes">
-<meta name="twitter:description" content="Who to ask, for the website and for the parishes: names, roles, email and phone.">
+<meta name="twitter:title" content="DNS Setup — Help — Kington Parishes">
+<meta name="twitter:description" content="A closer look at kingtonparishes.org.uk's DNS records: the A records pointing at Cloudflare, the MX records handing email to 123 Reg/GoDaddy, and what the SPF/DMARC/verification TXT records are for.">
 <meta name="twitter:image" content="https://www.kingtonparishes.org.uk/img/our-churches/kington.webp">
 <link rel="icon" href="/img/favicon.svg?v=fe87076eaf" type="image/svg+xml">
 <link rel="icon" href="/img/favicon-32.png?v=44b06b77f0" type="image/png" sizes="32x32">
@@ -84,41 +84,78 @@
 
   <div class="page-header">
     <div class="wrap">
-      <div class="kicker"><a href="/help" style="color:#F8F5EE; text-decoration:underline;">Help</a> / Contacts</div>
-      <h1 id="contacts-2">Contacts</h1>
-      <p class="lede">Who to ask, for the website and for the parishes.</p>
+      <div class="kicker"><a href="/help/technical-details" style="color:#F8F5EE; text-decoration:underline;">Help / Technical details</a> / DNS setup</div>
+      <h1 id="dns-setup-in-detail">DNS setup, in detail</h1>
+      <p class="lede">A closer look at <code>kingtonparishes.org.uk</code>'s actual DNS records — what each one is for, and why the website and the parish's email addresses are handled by two completely different companies. DNS records are public information, so everything below is just a plain lookup anyone can run, not anything confidential.</p>
+      <nav class="jump-row" aria-label="Jump to a section">
+        <a href="#the-web-address">The web address</a>
+        <a href="#email">Email — 123 Reg / GoDaddy</a>
+        <a href="#other-records">The other records</a>
+      </nav>
     </div>
   </div>
 
-  <section>
+  <section id="the-web-address">
     <div class="wrap">
       <div class="section-head">
-        <h2 id="contacts">Who to ask</h2>
+        <div class="kicker">The web address</div>
+        <h2>A records point at Cloudflare, not a server</h2>
+        <p>Both <code>kingtonparishes.org.uk</code> and <code>www.kingtonparishes.org.uk</code> resolve to two Cloudflare addresses (currently <code>104.21.13.200</code> and <code>172.67.157.83</code>) — not the Worker's own address, because there isn't one to point at directly. These are shared Cloudflare "proxy" addresses: every visitor's request lands at Cloudflare first (this is also what provides the TLS certificate and the security headers described in <a href="/help/technical-details#api-security">Technical details</a>), which then hands it internally to the Worker. The domain's nameservers — <code>mustafa.ns.cloudflare.com</code> and <code>suzanne.ns.cloudflare.com</code> — are what makes Cloudflare the authority for every record described on this page, not just the website's own.</p>
       </div>
-      <div class="rota-scroll" role="region" aria-labelledby="contacts" tabindex="0">
-        <table class="rota-table">
-          <thead><tr><th scope="col">Who</th><th scope="col">Role</th><th scope="col">Email</th><th scope="col">Phone</th></tr></thead>
-          <tbody>
-            <tr><th scope="row">Greg Wright</th><td>Churchwarden, Interim Treasurer and website</td><td><a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#109;&#97;&#103;&#105;&#99;&#111;&#98;&#106;&#101;&#99;&#116;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;">Email Greg</a></td><td><a href="tel:+447449301083">07449 301083</a></td></tr>
-            <tr><th scope="row">Margaret Cooke</th><td>Churchwarden, St Mary's Kington</td><td><a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#115;&#116;&#109;&#97;&#114;&#121;&#115;&#46;&#107;&#105;&#110;&#103;&#116;&#111;&#110;&#46;&#99;&#104;&#117;&#114;&#99;&#104;&#119;&#97;&#114;&#100;&#101;&#110;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;">Email Margaret</a></td><td></td></tr>
-            <tr><th scope="row">Website team</th><td>Help with this website</td><td><a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#119;&#101;&#98;&#64;&#107;&#105;&#110;&#103;&#116;&#111;&#110;&#112;&#97;&#114;&#105;&#115;&#104;&#101;&#115;&#46;&#111;&#114;&#103;&#46;&#117;&#107;">Email the website team</a></td><td></td></tr>
-            <tr><th scope="row">Parish Office</th><td>Philip Sell, Parish Administrator</td><td><a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#111;&#102;&#102;&#105;&#99;&#101;&#64;&#107;&#105;&#110;&#103;&#116;&#111;&#110;&#112;&#97;&#114;&#105;&#115;&#104;&#101;&#115;&#46;&#111;&#114;&#103;&#46;&#117;&#107;">Email the office</a></td><td></td></tr>
-            <tr><th scope="row">Revd Sally Welch</th><td>Vicar</td><td><a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#118;&#105;&#99;&#97;&#114;&#64;&#107;&#105;&#110;&#103;&#116;&#111;&#110;&#112;&#97;&#114;&#105;&#115;&#104;&#101;&#115;&#46;&#111;&#114;&#103;&#46;&#117;&#107;">Email the vicar</a></td><td><a href="tel:+447974439630">07974 439630</a></td></tr>
-            <tr><th scope="row">Revd Phillippa Wright</th><td>Curate</td><td><a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#99;&#117;&#114;&#97;&#116;&#101;&#64;&#107;&#105;&#110;&#103;&#116;&#111;&#110;&#112;&#97;&#114;&#105;&#115;&#104;&#101;&#115;&#46;&#111;&#114;&#103;&#46;&#117;&#107;">Email the curate</a></td><td></td></tr>
-            <tr><th scope="row">Christine Robinson</th><td>Parish Safeguarding Officer and Church Secretary</td><td></td><td><a href="tel:+447741463231">07741 463231</a></td></tr>
-            <tr><th scope="row">Penny Halcrow</th><td>Parish hall booking secretary</td><td><a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#112;&#46;&#115;&#46;&#104;&#97;&#108;&#99;&#114;&#111;&#119;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;">Email Penny Halcrow</a></td><td></td></tr>
-            <tr><th scope="row">David Redmayne</th><td>Parish News Editor</td><td><a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#112;&#110;&#46;&#107;&#105;&#110;&#103;&#116;&#111;&#110;&#112;&#97;&#114;&#105;&#115;&#104;&#101;&#115;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;">Email David</a></td><td></td></tr>
-            <tr><th scope="row">Stephen Lacey</th><td>Lego Club Organiser</td><td><a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#108;&#101;&#103;&#111;&#99;&#108;&#117;&#98;&#64;&#107;&#105;&#110;&#103;&#116;&#111;&#110;&#112;&#97;&#114;&#105;&#115;&#104;&#101;&#115;&#46;&#111;&#114;&#103;&#46;&#117;&#107;">Email Stephen</a></td><td></td></tr>
-            <tr><th scope="row">Dick Alford</th><td>Churchwarden, Titley</td><td><a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#100;&#105;&#99;&#107;&#46;&#97;&#108;&#102;&#111;&#114;&#100;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;">Email Dick</a></td><td></td></tr>
-            <tr><th scope="row">Ruth Jones</th><td>Churchwarden and Organist, Kinnerton; Organist, Titley and Old Radnor</td><td><a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#108;&#101;&#119;&#105;&#115;&#106;&#111;&#110;&#101;&#115;&#114;&#117;&#116;&#104;&#64;&#121;&#97;&#104;&#111;&#111;&#46;&#99;&#111;&#46;&#117;&#107;">Email Ruth</a></td><td></td></tr>
-            <tr><th scope="row">Sue Thompson</th><td>Churchwarden and Secretary, Kinnerton</td><td><a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#115;&#117;&#101;&#115;&#117;&#101;&#116;&#104;&#111;&#109;&#112;&#115;&#111;&#110;&#64;&#111;&#117;&#116;&#108;&#111;&#111;&#107;&#46;&#99;&#111;&#109;">Email Sue</a></td><td></td></tr>
-            <tr><th scope="row">Nicola Cavell</th><td>Parish News Editor, Old Radnor and Kinnerton</td><td><a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#110;&#105;&#99;&#111;&#108;&#97;&#46;&#99;&#97;&#118;&#101;&#108;&#108;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;">Email Nicola</a></td><td></td></tr>
-            <tr><th scope="row">Fiona Shone</th><td>Churchwarden and Organist, Huntington</td><td><a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#102;&#105;&#111;&#110;&#97;&#64;&#104;&#117;&#110;&#116;&#105;&#110;&#103;&#116;&#111;&#110;&#99;&#111;&#117;&#114;&#116;&#46;&#99;&#111;&#46;&#117;&#107;">Email Fiona</a></td><td></td></tr>
-            <tr><th scope="row">Peter Kelly</th><td>Churchwarden, Huntington</td><td><a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#112;&#101;&#116;&#101;&#114;&#98;&#107;&#101;&#108;&#108;&#121;&#54;&#52;&#50;&#64;&#104;&#111;&#116;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;">Email Peter</a></td><td></td></tr>
-            <tr><th scope="row">Sue Maiden</th><td>Secretary, Huntington</td><td><a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#115;&#117;&#115;&#97;&#110;&#46;&#101;&#108;&#46;&#109;&#97;&#105;&#100;&#101;&#110;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;">Email Sue</a></td><td></td></tr>
-          </tbody>
-        </table>
+    </div>
+  </section>
+
+  <section class="alt" id="email">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">Email — 123 Reg / GoDaddy</div>
+        <h2>The website and the email are on separate providers</h2>
+        <p>Even though Cloudflare controls the domain's DNS, none of the parish's email actually flows through Cloudflare. Two <strong>MX records</strong> (the record type that says where a domain's email should be delivered) point everything at GoDaddy's mail infrastructure instead:</p>
       </div>
+      <div class="card-grid">
+        <div class="card reveal">
+          <h3>smtp.secureserver.net (priority 0)</h3>
+          <p>The primary mail handler — lower priority numbers are tried first, so this is where incoming mail for the domain is delivered under normal conditions.</p>
+        </div>
+        <div class="card reveal">
+          <h3>mailstore1.secureserver.net (priority 10)</h3>
+          <p>A secondary/backup mail store, tried only if the first is unavailable.</p>
+        </div>
+      </div>
+      <p><code>secureserver.net</code> is GoDaddy's own shared infrastructure — and <strong>123 Reg is a GoDaddy-owned UK brand</strong>, so this is exactly what the parish's registrar handling both domain redirection and mailbox hosting looks like from the DNS side: the parish's real mailboxes live on 123 Reg/GoDaddy's servers, entirely separate from the Cloudflare Worker that serves this website.</p>
+    </div>
+  </section>
+
+  <section id="other-records">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">The other records</div>
+        <h2>What the non-A record lines are for</h2>
+        <p>A domain's DNS carries more than just "where's the website" and "where's the email" — several <strong>TXT records</strong> (plain-text entries that don't route any traffic themselves, just publish information) do other jobs:</p>
+      </div>
+      <div class="card-grid">
+        <div class="card reveal">
+          <h3>SPF (Sender Policy Framework)</h3>
+          <p>Lists which mail servers are allowed to send email claiming to be from <code>kingtonparishes.org.uk</code> — currently GoDaddy's servers (for real parish email) and MailerLite's sending infrastructure (for the InSpire Newsletter, see <a href="/help/technical-details#newsletter">Newsletter</a>). Other mail providers check this record to help tell genuine mail from spoofed mail.</p>
+        </div>
+        <div class="card reveal">
+          <h3>DMARC</h3>
+          <p>Sits alongside SPF and says what should happen to mail that fails those checks. It's currently set to <code>p=none</code> — monitor only, nothing gets rejected because of it yet — with a summary report emailed to a Cloudflare-provided reporting address rather than anyone at the parish having to watch it directly.</p>
+        </div>
+        <div class="card reveal">
+          <h3>Google site verification</h3>
+          <p>Proves to Google Search Console that whoever added this record controls the domain — unrelated to email, and safe to ignore day to day.</p>
+        </div>
+        <div class="card reveal">
+          <h3>MailerLite domain verification</h3>
+          <p>The same idea, for MailerLite: proves domain ownership as part of setting up the newsletter's sending domain.</p>
+        </div>
+        <div class="card reveal">
+          <h3>One unexplained record</h3>
+          <p>A short plain-text value with no obvious purpose from the DNS alone — most likely a leftover verification code from a past service. Worth checking with whoever manages the Cloudflare account before ever removing it, in case it's still quietly relied on by something.</p>
+        </div>
+      </div>
+      <p>DNS records can change, so treat the specifics above as a snapshot taken 8 September 2026, not a permanent fact — a public DNS lookup (the same kind used to write this page) takes Claude moments to re-run if this page might be out of date.</p>
     </div>
   </section>
 
@@ -197,7 +234,7 @@
 </footer>
 
 <script src="/js/main.js?v=55968996c8" defer></script>
-<script src="/js/search-match.js?v=01a973faf6" defer></script>
+<script src="/js/search-match.js?v=ac47dbbf1c" defer></script>
 <script src="/js/search-ui.js?v=19d29bd3ff" defer></script>
 </body>
 </html>

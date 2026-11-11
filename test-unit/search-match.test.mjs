@@ -117,8 +117,8 @@ describe('searchEntries', () => {
 describe('isHelpPath', () => {
   test('matches the help hub and its sub-pages with a .html extension (local dev/test server)', () => {
     assert.equal(isHelpPath('/help.html'), true);
-    assert.equal(isHelpPath('/help-technical-details.html'), true);
-    assert.equal(isHelpPath('/help-getting-set-up.html'), true);
+    assert.equal(isHelpPath('/help/technical-details.html'), true);
+    assert.equal(isHelpPath('/help/getting-set-up.html'), true);
   });
 
   test('matches the same pages with the extension stripped (the live site)', () => {
@@ -128,7 +128,7 @@ describe('isHelpPath', () => {
     // never "/help.html". A pattern that only matched the .html form passed
     // every local/test check yet silently never matched in production.
     assert.equal(isHelpPath('/help'), true);
-    assert.equal(isHelpPath('/help-technical-details'), true);
+    assert.equal(isHelpPath('/help/technical-details'), true);
   });
 
   test('does not match an ordinary page, with or without the extension', () => {

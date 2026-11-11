@@ -162,9 +162,8 @@ export function isIndexable(page) {
 // (public/js/search-ui.js): only surfaced while already on a help page, and
 // hidden everywhere else — a site visitor shouldn't be able to search their
 // way into internal process documentation from an ordinary page.
-const HELP_SLUGS = new Set(['help', 'help-getting-set-up', 'help-making-a-change', 'help-technical-details', 'help-dns-setup', 'help-when-it-goes-wrong']);
 export function isHelpPage(page) {
-  return HELP_SLUGS.has(page.slug);
+  return page.slug === 'help' || page.slug.startsWith('help/');
 }
 
 // True for pages appropriate for site-wide, public search scope, and for
