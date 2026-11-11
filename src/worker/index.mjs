@@ -3,12 +3,25 @@
 // with just the newsletter signup endpoint bolted on.
 import { validateEmail, sanitizeName, subscribeToMailerLite, SUCCESS_MESSAGE } from './subscribe.mjs';
 
+// /help-<name>[.html] -> /help/<name>
+export function movedHelpPath(pathname) {
+  const m = /^\/help-([a-z0-9-]+?)(?:\.html)?\/?$/.exec(pathname);
+  return m ? `/help/${m[1]}` : null;
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
     if (url.pathname === '/api/subscribe' && request.method === 'POST') {
       return handleSubscribe(request, env);
+    }
+
+    // The help guide moved from flat /help-<name> to /help/<name>: keep old links working.
+    const moved = movedHelpPath(url.pathname);
+    if (moved) {
+      url.pathname = moved;
+      return Response.redirect(url.toString(), 301);
     }
 
     return env.ASSETS.fetch(request);

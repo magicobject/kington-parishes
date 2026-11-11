@@ -4,7 +4,7 @@
 // editing anything in templates/ or src/, and commit the regenerated
 // public/*.html — Cloudflare serves that directory as-is.
 
-import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
@@ -45,7 +45,7 @@ function publicUrl(slug) {
 // source pages, templates and configs can keep the ".html" names they use to
 // refer to files (and `active` matching in the nav keeps working). Links with
 // a scheme ("https://…") or that aren't a page name are left alone.
-const INTERNAL_PAGE_LINK = /(<a\b[^>]*?\bhref=")\/?([a-z0-9][a-z0-9-]*)\.html((?:[#?][^"]*)?")/g;
+const INTERNAL_PAGE_LINK = /(<a\b[^>]*?\bhref=")\/?([a-z0-9][a-z0-9/-]*)\.html((?:[#?][^"]*)?")/g;
 function cleanInternalLinks(html) {
   return html.replace(INTERNAL_PAGE_LINK, (_m, before, slug, after) => `${before}${slug === 'index' ? '/' : `/${slug}`}${after}`);
 }
@@ -463,6 +463,7 @@ for (const page of PAGES) {
   html = cleanInternalLinks(html);
   html = versionAssetUrls(html);
 
+  mkdirSync(dirname(join(root, 'public', page.slug)), { recursive: true });
   writeFileSync(join(root, 'public', `${page.slug}.html`), html);
   console.log(`built public/${page.slug}.html`);
 }

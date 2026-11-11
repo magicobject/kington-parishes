@@ -68,7 +68,7 @@ test('the internal changelog is never indexed', async ({ page }) => {
 
 test.describe('the hidden help guide has its own search scope', () => {
   test('an ordinary page never surfaces help-guide content', async ({ page }) => {
-    // "Under the hood" is help-technical-details.html's own h1, and appears
+    // "Under the hood" is help/technical-details.html's own h1, and appears
     // nowhere in the site's real, public-facing content.
     await page.goto('/index.html');
     await page.getByRole('combobox', { name: 'Search the site' }).fill('under the hood');
@@ -87,17 +87,17 @@ test.describe('the hidden help guide has its own search scope', () => {
 
   test('a help page searches across the whole guide, not just its own page', async ({ page }) => {
     // Searched from help.html (the hub), but the match lives on a different
-    // help page (help-technical-details.html) — proves the scope covers the
+    // help page (help/technical-details.html) — proves the scope covers the
     // whole guide, not just whatever page the box happens to be on.
     await page.goto('/help.html');
     await page.getByRole('combobox', { name: 'Search the help guide' }).fill('under the hood');
     const results = page.locator('#site-search-results');
     await expect(results).toBeVisible();
-    await expect(results.getByRole('option').first()).toHaveAttribute('href', '/help-technical-details#under-the-hood');
+    await expect(results.getByRole('option').first()).toHaveAttribute('href', '/help/technical-details#under-the-hood');
   });
 
   test('the search box relabels itself while on a help page', async ({ page }) => {
-    await page.goto('/help-making-a-change.html');
+    await page.goto('/help/making-a-change.html');
     await expect(page.getByRole('combobox', { name: 'Search the help guide' })).toBeVisible();
     await expect(page.getByPlaceholder('Search the help guide')).toBeVisible();
   });

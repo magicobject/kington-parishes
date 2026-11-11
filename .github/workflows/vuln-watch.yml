@@ -1,6 +1,6 @@
 # Daily vulnerability watch — see scripts/vuln-watch.mjs, the "Daily
 # vulnerability watch" section of README.md, and the plain-English note on
-# /help-technical-details.html. Every morning it checks every
+# /help/technical-details.html. Every morning it checks every
 # installed package against the GitHub Advisory Database and OSV, opens one
 # `security-advisory` issue per advisory, and fails the run (so GitHub emails
 # the owner) on anything high or critical. It never changes code itself.

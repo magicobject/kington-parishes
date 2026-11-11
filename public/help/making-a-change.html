@@ -10,19 +10,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Technology — Help — Kington Parishes</title>
-<meta name="description" content="How changes reach the live site, and how to set up a laptop to make one, in plain English.">
+<title>Making a Change — Help — Kington Parishes</title>
+<meta name="description" content="What happens, step by step, when you ask Claude to update this website — plus answers to the questions people usually ask first.">
 <meta name="robots" content="noindex, nofollow">
-<link rel="canonical" href="https://www.kingtonparishes.org.uk/help-technology">
+<link rel="canonical" href="https://www.kingtonparishes.org.uk/help/making-a-change">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Kington Parishes">
-<meta property="og:title" content="Technology — Help — Kington Parishes">
-<meta property="og:description" content="How changes reach the live site, and how to set up a laptop to make one, in plain English.">
-<meta property="og:url" content="https://www.kingtonparishes.org.uk/help-technology">
+<meta property="og:title" content="Making a Change — Help — Kington Parishes">
+<meta property="og:description" content="What happens, step by step, when you ask Claude to update this website — plus answers to the questions people usually ask first.">
+<meta property="og:url" content="https://www.kingtonparishes.org.uk/help/making-a-change">
 <meta property="og:image" content="https://www.kingtonparishes.org.uk/img/our-churches/kington.webp">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Technology — Help — Kington Parishes">
-<meta name="twitter:description" content="How changes reach the live site, and how to set up a laptop to make one, in plain English.">
+<meta name="twitter:title" content="Making a Change — Help — Kington Parishes">
+<meta name="twitter:description" content="What happens, step by step, when you ask Claude to update this website — plus answers to the questions people usually ask first.">
 <meta name="twitter:image" content="https://www.kingtonparishes.org.uk/img/our-churches/kington.webp">
 <link rel="icon" href="/img/favicon.svg?v=fe87076eaf" type="image/svg+xml">
 <link rel="icon" href="/img/favicon-32.png?v=44b06b77f0" type="image/png" sizes="32x32">
@@ -84,108 +84,152 @@
 
   <div class="page-header">
     <div class="wrap">
-      <div class="kicker"><a href="/help" style="color:#F8F5EE; text-decoration:underline;">Help</a> / Technology</div>
-      <h1 id="technology-how-to-update-this-website">Technology: how to update this website</h1>
-      <p class="lede">You don't need to know how to code. This page explains, in plain English, how changes get made to this site — and how you can make one yourself, with help from an AI assistant called Claude. Once your laptop is <a href="/help-getting-set-up">set up</a> — a one-off job — zero technical knowledge is needed for anything that follows: every future change is just a plain-English conversation, the same way you'd ask a person to do it.</p>
-      <p class="lede"><strong>You will need a Claude Pro subscription</strong> (or higher) to use Claude Code, the part of Claude Desktop used to update the website. The free Claude plan doesn't include it.</p>
+      <div class="kicker"><a href="/help" style="color:#F8F5EE; text-decoration:underline;">Help</a> / Day to day</div>
+      <h1 id="making-a-change">Making a change</h1>
+      <p class="lede">Once you're <a href="/help/getting-set-up">set up</a>, here's what actually happens each time you'd like something on the website updated.</p>
       <nav class="jump-row" aria-label="Jump to a section">
-        <a href="#short-version">The short version</a>
-        <a href="#git-and-github">Git &amp; GitHub, in plain English</a>
-        <a href="#next-steps">Next steps</a>
+        <a href="#the-steps">The steps</a>
+        <a href="#archiving">What archives itself</a>
+        <a href="#publish-newsletter">Publish the newsletter</a>
+        <a href="#add-parish-news">Add a Parish News issue</a>
+        <a href="#questions">Questions people ask</a>
       </nav>
     </div>
   </div>
 
-  <section id="short-version">
+  <section id="the-steps">
     <div class="wrap">
       <div class="section-head">
-        <div class="kicker">The short version</div>
-        <h2>What happens when you ask for a change</h2>
-        <p>Every change to this website — big or small — follows the same six steps. You only ever do the first one; Claude takes care of the rest.</p>
+        <div class="kicker">The steps</div>
+        <h2>From a request to a live page</h2>
       </div>
       <div class="card-grid">
         <div class="card reveal">
-          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#A8813C" stroke-width="1.6"><path d="M4 4h16v13H7l-3 3V4Z"/><path d="M8 9h8M8 12.5h5"/></svg></div>
-          <h3>1. You describe the change</h3>
-          <p>In your own words — "add this event to the calendar" or "the phone number on the Contact page is wrong". No technical detail needed.</p>
+          <h3>1. Say what you'd like changed</h3>
+          <p>In plain English, in Claude Desktop's Code tab — "add this event to the calendar" or "the phone number on the Contact page is wrong". No file names or technical terms needed.</p>
         </div>
         <div class="card reveal">
-          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#A8813C" stroke-width="1.6"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></div>
-          <h3>2. Claude edits the files</h3>
-          <p>On your own laptop, Claude finds the right page and makes the change — you can see exactly what it changed before it goes any further.</p>
+          <h3>2. Claude finds and edits the file</h3>
+          <p>You can ask to see the change before it goes any further, and ask for tweaks — nothing is final until you're happy with it.</p>
         </div>
         <div class="card reveal">
-          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#A8813C" stroke-width="1.6"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3Z"/><path d="M9 12l2 2 4-4"/></svg></div>
           <h3>3. Claude checks its own work</h3>
-          <p>The site's automatic tests run, and Claude checks the page still passes its security and accessibility rules — nothing goes live untested.</p>
+          <p>The site's automatic tests run, and Claude confirms the change is secure and stays readable for screen readers and other assistive technology — this site's standing rule is that nothing goes live untested.</p>
         </div>
         <div class="card reveal">
-          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#A8813C" stroke-width="1.6"><path d="M12 4v10"/><path d="M8 9l4-5 4 5"/><path d="M5 15v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3"/></svg></div>
           <h3>4. Claude saves it to GitHub</h3>
-          <p>This step is called a "push" — it's the moment your change leaves your laptop and joins the master copy the live site is built from.</p>
+          <p>This step is called a "push" — the moment your change leaves your laptop and joins the master copy. See <a href="/help/technology#git-and-github">Git &amp; GitHub, in plain English</a> if these words are new to you. Each push also gets its own version number, shown in the site's footer and beside every entry on <a href="/updates">/updates</a> — behind the scenes, that same number tags an exact, permanent snapshot of the site at that point. In the extremely unlikely event you ever needed to step back to a known-good version, that's what would make it possible — just ask Claude.</p>
         </div>
         <div class="card reveal">
-          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#A8813C" stroke-width="1.6"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></svg></div>
           <h3>5. The live site rebuilds itself</h3>
-          <p>A process behind the scenes notices the new version on GitHub and publishes it automatically — usually in well under a minute, with nothing more for you to do.</p>
+          <p>A process behind the scenes notices the new version on GitHub and publishes it automatically — usually in well under a minute. There's nothing for you to do at this step.</p>
         </div>
         <div class="card reveal">
-          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#A8813C" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div>
-          <h3>6. You watch it appear</h3>
-          <p>Keep an eye on <a href="/updates">/updates</a> — every change is logged there, newest first, so you can confirm yours has gone live.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="alt" id="git-and-github">
-    <div class="wrap">
-      <div class="section-head">
-        <div class="kicker">Two names worth knowing</div>
-        <h2>What are "Git" and "GitHub"?</h2>
-        <p>You'll see these words come up, so it's worth knowing what they mean — even though Claude handles both for you and you'll never need to use either directly.</p>
-      </div>
-      <div class="card-grid">
-        <div class="card reveal">
-          <h3>Git</h3>
-          <p>The record-keeping system behind the website's files. It saves every version of every change ever made, like an extremely thorough undo history — nothing is ever truly lost.</p>
-        </div>
-        <div class="card reveal">
-          <h3>GitHub</h3>
-          <p>The website where those files live online. It's the master copy the live site is built from, and where Claude sends ("pushes") your changes once they're checked and ready.</p>
-          <p><a href="https://github.com/magicobject/kington-parishes" target="_blank" rel="noopener">Our GitHub repository →</a></p>
+          <h3>6. Check it went live</h3>
+          <p>Visit <a href="/updates">/updates</a> and look for your change at the top of the list, with today's date. If it's not there after a minute or two, just ask Claude to check.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="next-steps">
+  <section class="alt" id="archiving">
     <div class="wrap">
       <div class="section-head">
-        <div class="kicker">Next steps</div>
-        <h2>Ready to get started?</h2>
-        <p>Setup is a one-off, and takes about fifteen minutes. After that, every change follows the six steps above.</p>
+        <div class="kicker">Automatic housekeeping</div>
+        <h2>What archives itself, and what doesn't</h2>
+        <p>A couple of areas of the site tidy themselves up on a schedule — worth knowing so you don't go looking for a manual step that doesn't exist, and so you know when a manual check really is needed.</p>
       </div>
       <div class="card-grid">
         <div class="card reveal">
-          <h3>Get your laptop set up</h3>
-          <p>Install Claude Desktop, create a free GitHub account, then paste one block of instructions and let Claude do the rest.</p>
-          <a class="pill-link" href="/help-getting-set-up">Read the setup guide</a>
+          <h3>Noticeboard → Services &amp; Events archive</h3>
+          <p>Any noticeboard card on the homepage with an expiry date moves itself to the Archive section of <a href="/services#archive">Services &amp; Events</a> the moment that date passes. No need to remove or move it by hand.</p>
         </div>
         <div class="card reveal">
-          <h3>Make a change</h3>
-          <p>A closer look at each of the six steps above, plus answers to the questions people usually ask first.</p>
-          <a class="pill-link" href="/help-making-a-change">Read the day-to-day guide</a>
+          <h3>InSpire Newsletter → Newsletter archive</h3>
+          <p>Each issue listed on the <a href="/newsletter">InSpire Newsletter</a> page moves itself to the <a href="/newsletter-archive">newsletter archive</a> once it's more than six months old. Nothing to do here either.</p>
         </div>
         <div class="card reveal">
-          <h3>Something look wrong?</h3>
-          <p>It's very hard to break anything permanently. What to do if a change doesn't look right, in three simple options.</p>
-          <a class="pill-link" href="/help-when-it-goes-wrong">Read what to do</a>
+          <h3>Parish News does <em>not</em> archive itself</h3>
+          <p>Unlike the two above, publishing a new <a href="/parish-news">Parish News</a> issue means updating three separate places by hand — the homepage teaser, the Parish News page's latest issue, and the archive. See <a href="#add-parish-news">Add a Parish News issue</a> below, and always check it once it's live.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="publish-newsletter">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">Common task</div>
+        <h2>Publish the InSpire Newsletter</h2>
+        <p>Three steps — the first two happen through Claude, the last one happens directly in MailerLite.</p>
+      </div>
+      <div class="card-grid">
+        <div class="card reveal">
+          <h3>1. Ask Claude to create it</h3>
+          <p>Tell Claude you're ready for the next issue and give it the items to include. Claude adds it to the website as a new InSpire Newsletter issue.</p>
         </div>
         <div class="card reveal">
-          <h3>Curious about the technical details?</h3>
-          <p>Not needed to make a change, but if you'd like to know: hosting, DNS, the newsletter, and how the API is secured.</p>
-          <a class="pill-link" href="/help-technical-details">Read the technical guide</a>
+          <h3>2. Review, then ask for the one-page version</h3>
+          <p>Once the website has been updated, ask Claude for any corrections you'd like. When you're happy with it, ask Claude to create a one-page version of the newsletter — a self-contained file, styled to match, ready for MailerLite.</p>
+        </div>
+        <div class="card reveal">
+          <h3>3. Send it from MailerLite</h3>
+          <p>Upload that file into the correct group in MailerLite and send it out to subscribed users. This last step happens in MailerLite's own dashboard — not something Claude can do on your behalf.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt" id="add-parish-news">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">Common task</div>
+        <h2>Add a Parish News issue</h2>
+        <p>Because this one touches three places by hand (see <a href="#archiving">What archives itself</a> above), it's worth a quick check once it's live.</p>
+      </div>
+      <div class="card-grid">
+        <div class="card reveal">
+          <h3>1. Upload the PDF to Claude</h3>
+          <p>Drop the new issue's PDF into Claude Desktop's Code tab and ask Claude to update the site with it.</p>
+        </div>
+        <div class="card reveal">
+          <h3>2. Claude updates the site</h3>
+          <p>The usual six-step process — Claude updates the homepage teaser, the <a href="/parish-news">Parish News</a> page's latest issue and the <a href="/parish-news-archive">archive</a>, then tests and pushes it live.</p>
+        </div>
+        <div class="card reveal">
+          <h3>3. Check it once it's live</h3>
+          <p>Visit the <a href="/">homepage</a> and the <a href="/parish-news-archive">Parish News archive</a> and confirm the new issue's cover image and download link both look right in all three places.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="questions">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">Questions people ask</div>
+        <h2>A few things worth knowing</h2>
+      </div>
+      <div class="card-grid">
+        <div class="card reveal">
+          <h3>Can I break the website?</h3>
+          <p>It's very hard to. Claude runs the site's tests and its security and accessibility checks before anything goes live, and every change is recorded in Git's full history — so even a mistake can always be undone.</p>
+        </div>
+        <div class="card reveal">
+          <h3>Do I need to remember any commands?</h3>
+          <p>No. Everything happens through ordinary conversation with Claude — you never need to type a technical command yourself.</p>
+        </div>
+        <div class="card reveal">
+          <h3>What if I want to undo a change?</h3>
+          <p>Just ask Claude. Because Git keeps every past version, an earlier version of any page can always be brought back — see <a href="/help/when-it-goes-wrong">When it goes wrong</a> for the full picture, including when it's quicker to just describe the fix instead.</p>
+        </div>
+        <div class="card reveal">
+          <h3>Where do I check my change went live?</h3>
+          <p><a href="/updates">/updates</a> lists every change to the site, newest first, each with the date and a short description of what changed.</p>
+        </div>
+        <div class="card reveal">
+          <h3>Who can see this help page?</h3>
+          <p>This page isn't linked from anywhere on the main site and won't turn up in search, but it isn't password-protected either — treat its address as something to share only with people who'll be helping update the site.</p>
         </div>
       </div>
     </div>
@@ -266,7 +310,7 @@
 </footer>
 
 <script src="/js/main.js?v=55968996c8" defer></script>
-<script src="/js/search-match.js?v=01a973faf6" defer></script>
+<script src="/js/search-match.js?v=ac47dbbf1c" defer></script>
 <script src="/js/search-ui.js?v=19d29bd3ff" defer></script>
 </body>
 </html>

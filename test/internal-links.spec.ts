@@ -10,7 +10,8 @@ import { test, expect } from './support/fixtures';
 // what the build wrote, and it checks all of them, including the help guide.
 
 const PUBLIC = join(__dirname, '..', 'public');
-const pages = readdirSync(PUBLIC).filter((f) => f.endsWith('.html'));
+// Includes pages in subfolders (the help guide lives in public/help/).
+const pages = (readdirSync(PUBLIC, { recursive: true }) as string[]).map((f) => f.replace(/\\/g, '/')).filter((f) => f.endsWith('.html'));
 
 function internalHrefs(html: string): string[] {
   return [...html.matchAll(/<a\b[^>]*?\bhref="([^"]*)"/g)]
@@ -57,7 +58,7 @@ test('search results link to clean URLs, with the home page as /', () => {
   const index = JSON.parse(readFileSync(join(PUBLIC, 'search-index.json'), 'utf8')) as { page: string }[];
   expect(index.length).toBeGreaterThan(50);
   for (const entry of index) {
-    expect(entry.page, `search entry page ${entry.page}`).toMatch(/^\/[a-z0-9-]*$/);
+    expect(entry.page, `search entry page ${entry.page}`).toMatch(/^\/[a-z0-9/-]*$/);
   }
   expect(index.some((entry) => entry.page === '/')).toBe(true);
 });
