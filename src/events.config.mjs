@@ -74,7 +74,7 @@ export const ONE_OFF_EVENTS = [
   { date: '2026-12-09', time: '15:30', title: 'Lego Club', location: "St Mary's, Kington" },
   { date: '2026-12-10', time: '19:30', title: "Kington Community Choir: 'Festive All Sorts' (free entry and raffle)", location: 'The Burton Hotel, Kington' },
   { date: '2026-12-11', time: '18:30', title: 'Carols at the Oxford', location: '' },
-  { date: '2026-12-18', time: '18:00', title: 'A Celebration of Christmas, with Music and Readings', location: '' },
+  { date: '2026-12-18', time: '18:00', title: 'A Celebration of Christmas, with Music and Readings', location: "St Mary's, Kington" },
   { date: '2026-12-27', time: '10:00', title: 'Combined benefice service', location: "St Mary's, Kington" },
   { date: '2027-07-24', time: '14:00', title: 'Wedding', location: "St Mary's, Kington" },
 ];
