@@ -7,6 +7,8 @@ These apply to every change here, not just when explicitly asked for. Judgement 
 - If the change touches page content, structure, or CSS, make sure `test/accessibility.spec.ts` is included in that run and still passes with zero violations.
 - Whenever the whole suite (`npm test`) is run, report the number of tests run and the time taken, prefixed with this repo's name (e.g. "kington-parishes: 121 tests passed in 15.2s") — the count and duration are in Playwright's own summary line, the name prefix makes it scannable when work spans multiple sites in one session — a quick way to notice a regression in either coverage or speed, in the right project.
 
+- `test/iphone.spec.ts` needs Playwright's real WebKit. On Greg's Windows laptop, Smart App Control blocks its unsigned DLLs (error 4551; a Defender exclusion does not help), so `npm test` shows those 2 tests failing at browser launch. Run them with `npm run test:iphone-docker` (needs Docker Desktop running; uses Playwright's official Linux image, ~20s). CI runs them natively. Do not turn Smart App Control off.
+
 ## Accessibility
 - Every page must pass an axe-core scan (`@axe-core/playwright`, via `test/accessibility.spec.ts`) with zero violations. New pages need an entry in `test/support/pages.ts` — the accessibility spec picks them up automatically from there.
 - This site uses a reveal-on-scroll animation (`.reveal` / `.in`). A scan run right after `page.goto()` will false-positive on below-the-fold elements still at `opacity:0`. If you touch the accessibility spec, keep the settle step that force-adds `.in` and kills the transition/opacity/transform inline before scanning — toggling the class alone isn't enough.
