@@ -9,6 +9,7 @@
     "journey:profile": "node scripts/generate-journey-profile.mjs",
     "test": "playwright test",
     "test:unit": "node --import ./scripts/clean-git-env.mjs --test \"test-unit/**/*.test.mjs\"",
+    "test:iphone-docker": "node scripts/test-iphone-docker.mjs",
     "test:ui": "playwright test --ui",
     "test:headed": "playwright test --headed",
     "serve": "tsx test/support/static-server.ts",
